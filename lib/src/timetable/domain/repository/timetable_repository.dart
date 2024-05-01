@@ -8,6 +8,7 @@ abstract class TimetableRepository {
   // from firebase server
   ResultFuture<Timetable> getTimetable();
 
+  // push new timetable to server.
   ResultFuture<void> updateTimetable(Timetable timetable);
 
   // using course id from timetable, get course from server
