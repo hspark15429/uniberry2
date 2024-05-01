@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
@@ -37,7 +38,11 @@ class _TimetableScreenState extends State<TimetableScreen> {
             ),
           );
         },
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is TimetableError) {
+            return CoreUtils.showSnackBar(context, state.message);
+          }
+        },
       ),
     );
   }

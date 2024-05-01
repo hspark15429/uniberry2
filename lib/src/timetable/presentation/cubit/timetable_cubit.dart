@@ -17,7 +17,7 @@ class TimetableCubit extends Cubit<TimetableState> {
     emit(TimetableLoading());
     final course = await _getCourse(courseId);
     course.fold(
-      (failure) => emit(TimetableError(failure.message)),
+      (failure) => emit(TimetableError(failure.errorMessage)),
       (course) => emit(CourseFetched(course)),
     );
   }
