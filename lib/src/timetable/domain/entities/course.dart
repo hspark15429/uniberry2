@@ -20,4 +20,8 @@ class Course extends Equatable {
 
   @override
   List<Object> get props => [code, title];
+
+  @override
+  String toString() =>
+      'Course(code: $code, title: $title, professor: $professor)';
 }

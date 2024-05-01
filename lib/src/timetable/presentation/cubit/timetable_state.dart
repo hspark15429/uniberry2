@@ -11,11 +11,20 @@ final class TimetableInitial extends TimetableState {}
 
 class TimetableLoading extends TimetableState {}
 
-class TimetableLoaded extends TimetableState {
-  const TimetableLoaded(this.timetable);
+class CourseFetched extends TimetableState {
+  const CourseFetched(this.course);
 
-  final Timetable timetable;
+  final Course course;
 
   @override
-  List<Object> get props => [timetable];
+  List<Object> get props => [course];
+}
+
+class TimetableError extends TimetableState {
+  const TimetableError(this.message);
+
+  final String message;
+
+  @override
+  List<Object> get props => [message];
 }
