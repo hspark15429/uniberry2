@@ -5,6 +5,8 @@ import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
+// TODO 1: think about how to achieve this page. copy from uniberry 1
+
 class TimetableScreen extends StatefulWidget {
   const TimetableScreen({super.key});
 
