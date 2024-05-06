@@ -29,15 +29,30 @@ class _TimetableScreenState extends State<TimetableScreen> {
           } else if (state is CourseFetched) {
             return Center(child: Text(state.course.toString()));
           }
-          return Center(
-            child: TextButton(
-              onPressed: () {
-                context.read<TimetableCubit>().getCourse('MATH101');
-              },
-              child: const Text(
-                'Get Course: MATH101',
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    context.read<TimetableCubit>().getCourse('MATH101');
+                  },
+                  child: const Text(
+                    'Get Course: MATH101',
+                  ),
+                ),
               ),
-            ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed('/search');
+                  },
+                  child: const Text(
+                    'Search courses',
+                  ),
+                ),
+              ),
+            ],
           );
         },
         listener: (context, state) {

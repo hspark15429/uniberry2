@@ -12,7 +12,6 @@ class GetCourse implements UsecaseWithParams<Course, String> {
 
   @override
   ResultFuture<Course> call(String code) async {
-    // get courses from courseCatalog.json
     final course = await _repo.getCourse(code);
     return course;
   }

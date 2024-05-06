@@ -11,9 +11,14 @@ abstract class TimetableRepository {
   // push new timetable to server.
   ResultFuture<void> updateTimetable(Timetable timetable);
 
-  // using course id from timetable, get course from server
+  // get course from server using doc id
   ResultFuture<Course> getCourse(String courseId);
 
-  // search course from server by keyword
-  ResultFuture<List<String>> searchCourse(String keyword);
+  // search course from server by keyword. Returns doc id's
+  ResultFuture<List<String>> searchCourses({
+    String? school,
+    String? campus,
+    String? term,
+    String? period,
+  });
 }

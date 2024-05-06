@@ -29,7 +29,12 @@ class TimetableRepositoryImplementation implements TimetableRepository {
   }
 
   @override
-  ResultFuture<List<String>> searchCourse(String keyword) {
+  ResultFuture<List<String>> searchCourses({
+    String? school,
+    String? campus,
+    String? term,
+    String? period,
+  }) {
     // TODO: implement searchCourse
     throw UnimplementedError();
   }

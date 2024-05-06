@@ -70,6 +70,7 @@ dev_dependencies:
   google_sign_in_mocks: ^0.3.0
   fake_cloud_firestore: ^2.5.1
   firebase_storage_mocks: ^0.6.1
+  firedart: ^0.9.8
 
 flutter:
 
