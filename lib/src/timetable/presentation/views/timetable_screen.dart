@@ -65,7 +65,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    context.read<TimetableCubit>().searchCourses(school: "法学部");
+                    context.read<TimetableCubit>().searchCourses(period: "月1");
                   },
                   child: const Text(
                     'Search courses',
