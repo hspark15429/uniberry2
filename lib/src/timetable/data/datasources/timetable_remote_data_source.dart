@@ -52,28 +52,29 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     required String period,
   }) async {
     try {
-      // Start with a base query
+      // Start with a base query on the most selective array field
       Query<DataMap> query = _cloudStoreClient.collection('courses');
 
-      // Conditionally add where clauses based on parameter values
+      // Apply the first arrayContains (choose the one you expect to filter down results the most)
       if (school.isNotEmpty) {
         query = query.where('schools', arrayContains: school);
       }
-      if (campus.isNotEmpty) {
-        query = query.where('campuses', arrayContains: campus);
-      }
-      if (term.isNotEmpty) {
-        query = query.where('term', isEqualTo: term);
-      }
-      if (period.isNotEmpty) {
-        query = query.where('periods', arrayContains: period);
-      }
-// Execute the query
-      return await query.get().then((value) {
-        return value.docs
-            .map((course) => course.data()['courseId'] as String)
-            .toList();
-      });
+
+      // Execute the initial query
+      var results = await query.get();
+      var filteredResults = results.docs
+          .where((doc) {
+            bool matchesCampus = campus.isEmpty ||
+                (doc.data()['campuses'] as List).contains(campus);
+            bool matchesTerm = term.isEmpty || doc.data()['term'] == term;
+            bool matchesPeriod = period.isEmpty ||
+                (doc.data()['periods'] as List).contains(period);
+            return matchesCampus && matchesTerm && matchesPeriod;
+          })
+          .map((doc) => doc.data()['courseId'] as String)
+          .toList();
+
+      return filteredResults;
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '505');
