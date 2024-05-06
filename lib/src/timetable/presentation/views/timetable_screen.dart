@@ -5,8 +5,6 @@ import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
-// TODO 1: think about how to achieve this page. copy from uniberry 1
-
 class TimetableScreen extends StatefulWidget {
   const TimetableScreen({super.key});
 
@@ -30,12 +28,24 @@ class _TimetableScreenState extends State<TimetableScreen> {
             context.read<TimetableCubit>().getCourses(state.courseIds);
             return const Center(child: CircularProgressIndicator());
           } else if (state is CoursesFetched) {
-            return ListView(
-                children: state.courses.map((course) {
-              return ListTile(
-                title: Text(course.toString()),
-              );
-            }).toList());
+            return SafeArea(
+              child: Column(
+                children: [
+                  const Text('Courses'),
+                  Expanded(
+                    child: ListView(
+                        children: state.courses.map((course) {
+                      return ListTile(
+                        onTap: () {},
+                        title: Text(course.toString()),
+                        // title: Text(course.titles.toString()),
+                        // subtitle: Text(course.codes.toString()),
+                      );
+                    }).toList()),
+                  ),
+                ],
+              ),
+            );
           }
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -48,14 +58,14 @@ class _TimetableScreenState extends State<TimetableScreen> {
                         .getCourse('1b8asuduvHpuH2PEqyBT');
                   },
                   child: const Text(
-                    'Get Course: MATH101',
+                    'Get a Course',
                   ),
                 ),
               ),
               Center(
                 child: TextButton(
                   onPressed: () {
-                    context.read<TimetableCubit>().searchCourses(period: "月2");
+                    context.read<TimetableCubit>().searchCourses(school: "法学部");
                   },
                   child: const Text(
                     'Search courses',
