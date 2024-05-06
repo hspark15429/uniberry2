@@ -12,11 +12,7 @@ void main() {
   late DataMap tDataMap;
 
   setUp(() {
-    tCourse = const CourseModel(
-      code: '80128',
-      title: '研究実践Ⅰ (D)',
-      professor: '谷垣 和則',
-    );
+    tCourse = const CourseModel.empty();
     tDataMap = jsonDecode(fixture('course.json')) as DataMap;
   });
 

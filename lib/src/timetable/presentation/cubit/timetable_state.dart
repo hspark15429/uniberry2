@@ -20,6 +20,15 @@ class CourseFetched extends TimetableState {
   List<Object> get props => [course];
 }
 
+class CourseIdsSearched extends TimetableState {
+  const CourseIdsSearched(this.courseIds);
+
+  final List<String> courseIds;
+
+  @override
+  List<Object> get props => [courseIds.toSet()];
+}
+
 class TimetableError extends TimetableState {
   const TimetableError(this.message);
 

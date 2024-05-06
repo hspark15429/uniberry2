@@ -12,10 +12,10 @@ class SearchCourses
   @override
   ResultFuture<List<String>> call(SearchCoursesParams params) async {
     final courses = await _repo.searchCourses(
-      school: params.school,
-      campus: params.campus,
-      term: params.term,
-      period: params.period,
+      school: params.school ?? "",
+      campus: params.campus ?? "",
+      term: params.term ?? "",
+      period: params.period ?? "",
     );
     return courses;
   }

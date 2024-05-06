@@ -57,7 +57,7 @@ class _SearchCourseWidgetState extends State<SearchCourseWidget> {
                           snapshot.data!.docs.map((DocumentSnapshot document) {
                         DataMap data = document.data()! as DataMap;
                         return ListTile(
-                          title: Text(data['course']['titles'].toString()),
+                          // title: Text(data['course']['titles'].toString()),
                           subtitle: Text(data['professors'].toString()),
                         );
                       }).toList(),

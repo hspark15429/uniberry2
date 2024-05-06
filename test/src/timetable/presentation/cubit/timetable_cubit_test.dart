@@ -5,17 +5,27 @@ import 'package:mocktail/mocktail.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
 class MockGetCourse extends Mock implements GetCourse {}
 
+class MockSearchCourses extends Mock implements SearchCourses {}
+
 void main() {
   late GetCourse getCourse;
+  late SearchCourses searchCourses;
   late TimetableCubit cubit;
 
   setUp(() {
     getCourse = MockGetCourse();
-    cubit = TimetableCubit(getCourse: getCourse);
+    searchCourses = MockSearchCourses();
+    cubit = TimetableCubit(
+      getCourse: getCourse,
+      searchCourses: searchCourses,
+    );
+
+    registerFallbackValue(const SearchCoursesParams.empty());
   });
 
   Course tCourse = const CourseModel.empty();
@@ -41,6 +51,28 @@ void main() {
       verify: (_) {
         verify(() => getCourse('code')).called(1);
         verifyNoMoreInteractions(getCourse);
+      },
+    );
+  });
+
+  group('searchCourses', () {
+    blocTest<TimetableCubit, TimetableState>(
+      'emits [TimetableLoading, CourseIdsSearched] when successful',
+      build: () {
+        when(() => searchCourses(any()))
+            .thenAnswer((_) async => const Right(['code']));
+        return cubit;
+      },
+      act: (cubit) => cubit.searchCourses(school: 'Engineering'),
+      expect: () => [
+        TimetableLoading(),
+        const CourseIdsSearched(['code'])
+      ],
+      verify: (_) {
+        verify(() =>
+                searchCourses(const SearchCoursesParams(school: 'Engineering')))
+            .called(1);
+        verifyNoMoreInteractions(searchCourses);
       },
     );
   });

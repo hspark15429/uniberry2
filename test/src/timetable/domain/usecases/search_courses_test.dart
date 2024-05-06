@@ -18,29 +18,28 @@ void main() {
     registerFallbackValue(tParams);
   });
 
+  const tCourseIds = ['DaEBpyYgtZsiqXEJrB1m', 'HfriePN36BDqAFS6GbVw'];
+
   test(
       'should call [TimetableRepository.searchCourses] '
       'and return List<String> of codes', () async {
     // arrange
     when(() => repo.searchCourses(
-              campus: any(named: 'campus'),
-              period: any(named: 'period'),
-              school: any(named: 'school'),
-              term: any(named: 'term'),
-            ))
-        .thenAnswer((_) async =>
-            const Right(['DaEBpyYgtZsiqXEJrB1m', 'HfriePN36BDqAFS6GbVw']));
+          campus: any(named: 'campus'),
+          period: any(named: 'period'),
+          school: any(named: 'school'),
+          term: any(named: 'term'),
+        )).thenAnswer((_) async => const Right(tCourseIds));
     // act
     final result = await usecase(tParams);
 
     // assert
-    expect(
-        result, const Right(['DaEBpyYgtZsiqXEJrB1m', 'HfriePN36BDqAFS6GbVw']));
+    expect(result, const Right(tCourseIds));
     verify(() => repo.searchCourses(
-          campus: tParams.campus,
-          period: tParams.period,
-          school: tParams.school,
-          term: tParams.term,
+          campus: tParams.campus!,
+          period: tParams.period!,
+          school: tParams.school!,
+          term: tParams.term!,
         )).called(1);
     verifyNoMoreInteractions(repo);
   });

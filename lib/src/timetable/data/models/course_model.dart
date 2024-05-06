@@ -3,45 +3,90 @@ import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 
 class CourseModel extends Course {
   const CourseModel({
-    required super.code,
-    required super.title,
-    required super.professor,
+    required super.courseId,
+    required super.titles,
+    required super.syllabusUrl,
+    required super.schools,
+    required super.codes,
+    required super.term,
+    required super.periods,
+    required super.campuses,
+    required super.professors,
+    required super.languages,
+    required super.credit,
   });
 
   const CourseModel.empty()
       : this(
-          code: '',
-          title: '',
-          professor: '',
+          courseId: '',
+          titles: const [],
+          syllabusUrl: '',
+          schools: const [],
+          codes: const [],
+          term: '',
+          periods: const [],
+          campuses: const [],
+          professors: const [],
+          languages: const [],
+          credit: 0,
         );
 
-  // frommap
   CourseModel.fromMap(DataMap map)
       : this(
-          code: map['code'] as String,
-          title: map['title'] as String,
-          professor: map['professor'] as String,
+          courseId: map['courseId'] as String,
+          titles: List<String>.from(map['titles']),
+          syllabusUrl: map['syllabusUrl'] as String,
+          schools: List<String>.from(map['schools']),
+          codes: List<String>.from(map['codes']),
+          term: map['term'] as String,
+          periods: List<String>.from(map['periods']),
+          campuses: List<String>.from(map['campuses']),
+          professors: List<String>.from(map['professors']),
+          languages: List<String>.from(map['languages']),
+          credit: map['credit'].toInt(),
         );
 
-  // tomap
   DataMap toMap() {
     return {
-      'code': code,
-      'title': title,
-      'professor': professor,
+      'courseId': courseId,
+      'titles': titles,
+      'syllabusUrl': syllabusUrl,
+      'schools': schools,
+      'codes': codes,
+      'term': term,
+      'periods': periods,
+      'campuses': campuses,
+      'professors': professors,
+      'languages': languages,
+      'credit': credit,
     };
   }
 
-  //copywith
   CourseModel copyWith({
-    String? code,
-    String? title,
-    String? professor,
+    String? courseId,
+    List<String>? titles,
+    String? syllabusUrl,
+    List<String>? schools,
+    List<String>? codes,
+    String? term,
+    List<String>? periods,
+    List<String>? campuses,
+    List<String>? professors,
+    List<String>? languages,
+    int? credit,
   }) {
     return CourseModel(
-      code: code ?? this.code,
-      title: title ?? this.title,
-      professor: professor ?? this.professor,
+      courseId: courseId ?? this.courseId,
+      titles: titles ?? this.titles,
+      syllabusUrl: syllabusUrl ?? this.syllabusUrl,
+      schools: schools ?? this.schools,
+      codes: codes ?? this.codes,
+      term: term ?? this.term,
+      periods: periods ?? this.periods,
+      campuses: campuses ?? this.campuses,
+      professors: professors ?? this.professors,
+      languages: languages ?? this.languages,
+      credit: credit ?? this.credit,
     );
   }
 }

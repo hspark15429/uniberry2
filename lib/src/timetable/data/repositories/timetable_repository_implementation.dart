@@ -23,24 +23,33 @@ class TimetableRepositoryImplementation implements TimetableRepository {
   }
 
   @override
-  ResultFuture<Timetable> getTimetable() {
+  ResultFuture<Timetable> getTimetable() async {
     // TODO: implement getTimetable
     throw UnimplementedError();
   }
 
   @override
   ResultFuture<List<String>> searchCourses({
-    String? school,
-    String? campus,
-    String? term,
-    String? period,
-  }) {
-    // TODO: implement searchCourse
-    throw UnimplementedError();
+    required String school,
+    required String campus,
+    required String term,
+    required String period,
+  }) async {
+    try {
+      final result = await _remoteDataSource.searchCourses(
+        campus: campus,
+        period: period,
+        school: school,
+        term: term,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override
-  ResultFuture<void> updateTimetable(Timetable timetable) {
+  ResultFuture<void> updateTimetable(Timetable timetable) async {
     // TODO: implement updateTimetable
     throw UnimplementedError();
   }

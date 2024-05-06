@@ -16,9 +16,9 @@ abstract class TimetableRepository {
 
   // search course from server by keyword. Returns doc id's
   ResultFuture<List<String>> searchCourses({
-    String? school,
-    String? campus,
-    String? term,
-    String? period,
+    required String school,
+    required String campus,
+    required String term,
+    required String period,
   });
 }
