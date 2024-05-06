@@ -43,7 +43,9 @@ class _TimetableScreenState extends State<TimetableScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    context.read<TimetableCubit>().getCourse('MATH101');
+                    context
+                        .read<TimetableCubit>()
+                        .getCourse('1b8asuduvHpuH2PEqyBT');
                   },
                   child: const Text(
                     'Get Course: MATH101',
