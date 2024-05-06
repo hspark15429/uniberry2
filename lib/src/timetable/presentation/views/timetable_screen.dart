@@ -28,6 +28,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
             );
           } else if (state is CourseFetched) {
             return Center(child: Text(state.course.toString()));
+          } else if (state is CourseIdsSearched) {
+            return Center(child: Text(state.courseIds.toString()));
           }
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +47,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacementNamed('/search');
+                    context.read<TimetableCubit>().searchCourses(period: "月1");
                   },
                   child: const Text(
                     'Search courses',
