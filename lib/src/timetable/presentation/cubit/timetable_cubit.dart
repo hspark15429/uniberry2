@@ -27,6 +27,26 @@ class TimetableCubit extends Cubit<TimetableState> {
     );
   }
 
+  Future<void> getCourses(List<String> courseIds) async {
+    emit(TimetableLoading());
+
+    final courses = await Future.wait(courseIds.map((courseId) async {
+      final result = await _getCourse(courseId);
+      return result.fold(
+        (failure) => null,
+        (course) => course,
+      );
+    }));
+
+    final validCourses = courses.whereType<Course>().toList();
+
+    if (validCourses.isEmpty) {
+      emit(const TimetableError('No courses found'));
+      return;
+    }
+    emit(CoursesFetched(validCourses));
+  }
+
   Future<void> searchCourses({
     String? school,
     String? campus,

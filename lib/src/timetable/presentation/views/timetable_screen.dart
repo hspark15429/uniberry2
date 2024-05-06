@@ -23,13 +23,19 @@ class _TimetableScreenState extends State<TimetableScreen> {
       body: BlocConsumer<TimetableCubit, TimetableState>(
         builder: (context, state) {
           if (state is TimetableLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (state is CourseFetched) {
             return Center(child: Text(state.course.toString()));
           } else if (state is CourseIdsSearched) {
-            return Center(child: Text(state.courseIds.toString()));
+            context.read<TimetableCubit>().getCourses(state.courseIds);
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is CoursesFetched) {
+            return ListView(
+                children: state.courses.map((course) {
+              return ListTile(
+                title: Text(course.toString()),
+              );
+            }).toList());
           }
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +53,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    context.read<TimetableCubit>().searchCourses(period: "月1");
+                    context.read<TimetableCubit>().searchCourses(period: "月2");
                   },
                   child: const Text(
                     'Search courses',

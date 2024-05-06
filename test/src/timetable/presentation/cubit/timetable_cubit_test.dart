@@ -76,4 +76,24 @@ void main() {
       },
     );
   });
+
+  group('getCourses', () {
+    blocTest<TimetableCubit, TimetableState>(
+      'emits [TimetableLoading, CoursesFetched] when successful',
+      build: () {
+        when(() => getCourse.call(any()))
+            .thenAnswer((_) async => Right(tCourse));
+        return cubit;
+      },
+      act: (cubit) => cubit.getCourses(['code']),
+      expect: () => [
+        TimetableLoading(),
+        CoursesFetched([tCourse])
+      ],
+      verify: (_) {
+        verify(() => getCourse('code')).called(1);
+        verifyNoMoreInteractions(getCourse);
+      },
+    );
+  });
 }
