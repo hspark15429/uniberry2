@@ -38,6 +38,15 @@ class CourseIdsSearched extends TimetableState {
   List<Object> get props => [courseIds.toSet()];
 }
 
+class SchoolsLoaded extends TimetableState {
+  final List<String> schools;
+
+  const SchoolsLoaded(this.schools);
+
+  @override
+  List<Object> get props => [schools];
+}
+
 class TimetableError extends TimetableState {
   const TimetableError(this.message);
 

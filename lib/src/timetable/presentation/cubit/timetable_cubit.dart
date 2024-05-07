@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 
@@ -67,4 +66,6 @@ class TimetableCubit extends Cubit<TimetableState> {
       (courseIds) => emit(CourseIdsSearched(courseIds)),
     );
   }
+
+  void loadMoreCourses() {}
 }
