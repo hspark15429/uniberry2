@@ -5,8 +5,18 @@ import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 
 part 'timetable_state.dart';
-
 class TimetableCubit extends Cubit<TimetableState> {
+  final GetCourse _getCourse;
+  final SearchCourses _searchCourses;
+  final List<String> _schools = [
+    "法学部",
+    "経済学部",
+    "経営学部",
+    // 다른 학부 추가
+  ];
+
+  String? _selectedSchool; // 선택된 학부 상태
+
   TimetableCubit({
     required GetCourse getCourse,
     required SearchCourses searchCourses,
@@ -14,8 +24,14 @@ class TimetableCubit extends Cubit<TimetableState> {
         _searchCourses = searchCourses,
         super(TimetableInitial());
 
-  final GetCourse _getCourse;
-  final SearchCourses _searchCourses;
+  List<String> get schools => _schools;
+
+  String? get selectedSchool => _selectedSchool; // 선택된 학부를 외부에서 가져올 수 있게 getter 추가
+
+  void setSelectedSchool(String school) {
+    _selectedSchool = school; // 선택된 학부 설정
+    emit(SchoolSelected(_selectedSchool)); // 선택된 학부 상태 업데이트
+  }
 
   Future<void> getCourse(String courseId) async {
     emit(TimetableLoading());
@@ -55,7 +71,7 @@ class TimetableCubit extends Cubit<TimetableState> {
     emit(TimetableLoading());
 
     final courseIds = await _searchCourses(SearchCoursesParams(
-      school: school,
+      school: _selectedSchool ?? school, // 선택된 학부를 사용하도록 수정
       campus: campus,
       term: term,
       period: period,

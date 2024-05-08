@@ -55,3 +55,13 @@ class TimetableError extends TimetableState {
   @override
   List<Object> get props => [message];
 }
+
+// 전공선택
+class SchoolSelected extends TimetableState {
+  final String? selectedSchool;
+
+  const SchoolSelected(this.selectedSchool);
+
+  @override
+  List<Object> get props => [selectedSchool!];
+}
