@@ -65,3 +65,13 @@ class SchoolSelected extends TimetableState {
   @override
   List<Object> get props => [selectedSchool!];
 }
+
+//시간표 저장
+class CoursesUpdated extends TimetableState {
+  final List<Course> courses;
+
+  const CoursesUpdated(this.courses);
+
+  @override
+  List<Object> get props => [courses];
+}

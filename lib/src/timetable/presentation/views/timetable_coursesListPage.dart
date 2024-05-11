@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetalbe_courseDetailPage.dart';
 
+
 class CoursesListPage extends StatefulWidget {
   final String period;
   final String school;
@@ -12,6 +13,7 @@ class CoursesListPage extends StatefulWidget {
   @override
   _CoursesListPageState createState() => _CoursesListPageState();
 }
+
 class _CoursesListPageState extends State<CoursesListPage> {
   @override
   Widget build(BuildContext context) {
@@ -21,16 +23,27 @@ class _CoursesListPageState extends State<CoursesListPage> {
       ),
       body: BlocBuilder<TimetableCubit, TimetableState>(
         builder: (context, state) {
-          if (state is CoursesFetched) {
+          if (state is TimetableLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is CoursesFetched) {
+            if (state.courses.isEmpty) {
+              return const Center(child: Text("No courses available."));
+            }
             return ListView.separated(
               itemCount: state.courses.length,
               itemBuilder: (context, index) {
                 final course = state.courses[index];
                 return ListTile(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => TimetableCourseDetailPage(course: course),
-                    ));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                          value: BlocProvider.of<TimetableCubit>(context),
+                          child: TimetableCourseDetailPage(course: course),
+                        ),
+                      ),
+                    );
                   },
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,12 +61,12 @@ class _CoursesListPageState extends State<CoursesListPage> {
                   ),
                 );
               },
-              separatorBuilder: (context, index) => Divider(),
+              separatorBuilder: (context, index) => const Divider(),
             );
-          } else if (state is TimetableLoading) {
-            return const Center(child: CircularProgressIndicator());
+          } else if (state is TimetableError) {
+            return Center(child: Text(state.message));
           }
-          return const Center(child: Text("No courses available."));
+          return const Center(child: Text("Unable to fetch courses."));
         },
       ),
     );
