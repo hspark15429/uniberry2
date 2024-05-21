@@ -31,15 +31,18 @@ class GradeRateChartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('卒業要件', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          SizedBox(height: 8),
+          const Text('卒業要件', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 16),
           _buildProgressIndicator("必要総単位", totalRequiredCredits, totalCompletedCredits),
+          const SizedBox(height: 16),
           _buildProgressIndicator("教養科目", cultureCreditsRequired, cultureCreditsCompleted),
+          const SizedBox(height: 16),
           _buildProgressIndicator("外国語", foreignLanguageCreditsRequired, foreignLanguageCreditsCompleted),
+          const SizedBox(height: 16),
           _buildProgressIndicator("専門科目", majorCreditsRequired, majorCreditsCompleted),
         ],
       ),
@@ -54,15 +57,19 @@ class GradeRateChartPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold)), // 볼드체로 변경
-        SizedBox(height: 4),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const SizedBox(height: 8),
         LinearProgressIndicator(
           value: percentage / 100.0,
           backgroundColor: Colors.grey[300],
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+          valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF6B6B)),
+          minHeight: 10,
         ),
-        SizedBox(height: 4),
-        Text("必須 $requiredInt 履修 $completedInt (${percentage.toStringAsFixed(1)}%)"),
+        const SizedBox(height: 8),
+        Text(
+          "必須 $requiredInt 履修 $completedInt (${percentage.toStringAsFixed(1)}%)",
+          style: const TextStyle(fontSize: 14, color: Colors.black54),
+        ),
       ],
     );
   }

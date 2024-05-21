@@ -4,7 +4,7 @@ sealed class TimetableState extends Equatable {
   const TimetableState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class TimetableInitial extends TimetableState {}
@@ -17,7 +17,7 @@ class CourseFetched extends TimetableState {
   final Course course;
 
   @override
-  List<Object> get props => [course];
+  List<Object?> get props => [course];
 }
 
 class CoursesFetched extends TimetableState {
@@ -26,7 +26,7 @@ class CoursesFetched extends TimetableState {
   final List<Course> courses;
 
   @override
-  List<Object> get props => [courses.toSet()];
+  List<Object?> get props => [courses];
 }
 
 class CourseIdsSearched extends TimetableState {
@@ -35,7 +35,7 @@ class CourseIdsSearched extends TimetableState {
   final List<String> courseIds;
 
   @override
-  List<Object> get props => [courseIds.toSet()];
+  List<Object?> get props => [courseIds];
 }
 
 class SchoolsLoaded extends TimetableState {
@@ -44,7 +44,7 @@ class SchoolsLoaded extends TimetableState {
   const SchoolsLoaded(this.schools);
 
   @override
-  List<Object> get props => [schools];
+  List<Object?> get props => [schools];
 }
 
 class TimetableError extends TimetableState {
@@ -53,7 +53,7 @@ class TimetableError extends TimetableState {
   final String message;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
 // 전공선택
@@ -63,15 +63,45 @@ class SchoolSelected extends TimetableState {
   const SchoolSelected(this.selectedSchool);
 
   @override
-  List<Object> get props => [selectedSchool!];
+  List<Object?> get props => [selectedSchool];
 }
 
-//시간표 저장
-class CoursesUpdated extends TimetableState {
-  final List<Course> courses;
+// 학기변경
+class SemesterSelected extends TimetableState {
+  final String? selectedSchool;
+  final String semester;
 
-  const CoursesUpdated(this.courses);
+  const SemesterSelected({
+    required this.selectedSchool,
+    required this.semester,
+  });
 
   @override
-  List<Object> get props => [courses];
+  List<Object?> get props => [selectedSchool, semester];
+}
+
+// 시간표 저장
+class CoursesUpdated extends TimetableState {
+  final Map<String, Course?> timetable;
+
+  const CoursesUpdated(this.timetable);
+
+  @override
+  List<Object?> get props => [timetable];
+}
+
+// 새로운 상태 추가
+class TimetableUpdated extends TimetableState {
+  final int periods;
+  final bool includeSaturday;
+  final bool includeSunday;
+
+  const TimetableUpdated({
+    required this.periods,
+    required this.includeSaturday,
+    required this.includeSunday,
+  });
+
+  @override
+  List<Object?> get props => [periods, includeSaturday, includeSunday];
 }

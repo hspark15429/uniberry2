@@ -1,27 +1,62 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_list_page.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/homePage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String initialSemester = _determineInitialSemester();
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Home Screen'),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/timetable');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const homePage()),
+                );
               },
-              child: const Text('Go to Timetable'),
+              child: const Text('homepage'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TimetableScreen(initialSemester: initialSemester),
+                  ),
+                );
+              },
+              child: const Text('timetable'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DMListPage()),
+                );
+              },
+              child: const Text('DM'),
             ),
           ],
         ),
       ),
     );
   }
+
+  String _determineInitialSemester() {
+    DateTime now = DateTime.now();
+    int currentYear = now.year;
+    String semester = now.month < 9 ? "${currentYear}年春学期" : "${currentYear}年秋学期";
+    return semester;
+  }
 }
+
+

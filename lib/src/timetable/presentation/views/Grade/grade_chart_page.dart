@@ -10,6 +10,18 @@ class GradeChartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+          ),
+        ],
+      ),
       child: LineChart(
         LineChartData(
           gridData: const FlGridData(show: false),
@@ -22,9 +34,16 @@ class GradeChartPage extends StatelessWidget {
                   String text = '';
                   if (value.toInt() < semesterGPAList.length) {
                     String semesterKey = semesterGPAList[value.toInt()].keys.first;
-                    text = semesterKey; // Directly use the modified semester key
+                    text = semesterKey;
                   }
-                  return Text(text, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12));
+                  return Text(
+                    text,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  );
                 },
               ),
             ),
@@ -34,12 +53,22 @@ class GradeChartPage extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
-                  return Text(value.toString(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12));
+                  return Text(
+                    value.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  );
                 },
               ),
             ),
           ),
-          borderData: FlBorderData(show: true),
+          borderData: FlBorderData(
+            show: true,
+            border: Border.all(color: Colors.grey, width: 1),
+          ),
           minX: 0,
           maxX: (semesterGPAList.length - 1).toDouble(),
           minY: 0,
@@ -54,8 +83,8 @@ class GradeChartPage extends StatelessWidget {
               isCurved: true,
               gradient: const LinearGradient(
                 colors: [
-                  Color.fromARGB(255, 238, 54, 3),
-                  Color.fromARGB(255, 238, 54, 3),
+                  Color(0xFFFF6B6B),
+                  Color(0xFFFF6B6B),
                 ],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,

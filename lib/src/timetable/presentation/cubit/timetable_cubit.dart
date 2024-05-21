@@ -7,7 +7,6 @@ import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 part 'timetable_state.dart';
 
 class TimetableCubit extends Cubit<TimetableState> {
-  List<Course> timetableCourses = [];
   final GetCourse _getCourse;
   final SearchCourses _searchCourses;
   final List<String> _schools = [
@@ -16,17 +15,32 @@ class TimetableCubit extends Cubit<TimetableState> {
     "経営学部",
     // 다른 학부 추가
   ];
+  
+  final Map<String, Map<String, Course?>> _semesterTimetables = {}; // 학기별 시간표 저장
 
   String? _selectedSchool; // 선택된 학부 상태
+
+  // 설정 관련 상태 초기값
+  int _periods = 5;
+  bool _includeSaturday = false;
+  bool _includeSunday = false;
 
   TimetableCubit({
     required GetCourse getCourse,
     required SearchCourses searchCourses,
   })  : _getCourse = getCourse,
         _searchCourses = searchCourses,
-        super(TimetableInitial());
+        super(TimetableInitial()) {
+    // 초기 상태로 TimetableUpdated 방출
+    emit(TimetableUpdated(
+      periods: _periods,
+      includeSaturday: _includeSaturday,
+      includeSunday: _includeSunday,
+    ));
+  }
 
   List<String> get schools => _schools;
+  Map<String, Map<String, Course?>> get semesterTimetables => _semesterTimetables;
 
   String? get selectedSchool => _selectedSchool; // 선택된 학부를 외부에서 가져올 수 있게 getter 추가
 
@@ -35,9 +49,27 @@ class TimetableCubit extends Cubit<TimetableState> {
     emit(SchoolSelected(_selectedSchool)); // 선택된 학부 상태 업데이트
   }
 
-  void addCourseToTimetable(Course course) {
-    timetableCourses.add(course); // 강의 추가
-    emit(CoursesUpdated(timetableCourses)); // 시간표 업데이트 이벤트 발생
+  void setSemester(String semester) {
+    if (!_semesterTimetables.containsKey(semester)) {
+      _semesterTimetables[semester] = {};
+    }
+    emit(SemesterSelected(
+      selectedSchool: _selectedSchool,
+      semester: semester,
+    ));
+  }
+
+  void addCourseToTimetable(Course course, String period, String semester) {
+    final timetable = _semesterTimetables[semester] ?? {};
+    timetable[period] = course;
+    _semesterTimetables[semester] = timetable;
+    emit(CoursesUpdated(Map.from(timetable)));
+    // 현재 설정 상태 유지
+    emit(TimetableUpdated(
+      periods: _periods,
+      includeSaturday: _includeSaturday,
+      includeSunday: _includeSunday,
+    ));
   }
 
   Future<void> getCourse(String courseId) async {
@@ -47,6 +79,12 @@ class TimetableCubit extends Cubit<TimetableState> {
       (failure) => emit(TimetableError(failure.errorMessage)),
       (course) => emit(CourseFetched(course)),
     );
+    // 현재 설정 상태 유지
+    emit(TimetableUpdated(
+      periods: _periods,
+      includeSaturday: _includeSaturday,
+      includeSunday: _includeSunday,
+    ));
   }
 
   Future<void> getCourses(List<String> courseIds) async {
@@ -67,35 +105,90 @@ class TimetableCubit extends Cubit<TimetableState> {
       return;
     }
     emit(CoursesFetched(validCourses));
-  }
-Future<void> searchCourses({
-    String? school,
-    String? campus,
-    String? term,
-    String? period,
-}) async {
-    emit(TimetableLoading());
-
-    final courseIds = await _searchCourses(SearchCoursesParams(
-      school: _selectedSchool ?? school,
-      campus: campus,
-      term: term,
-      period: period,
+    // 현재 설정 상태 유지
+    emit(TimetableUpdated(
+      periods: _periods,
+      includeSaturday: _includeSaturday,
+      includeSunday: _includeSunday,
     ));
+  }
 
-    courseIds.fold(
-      (failure) => emit(TimetableError(failure.errorMessage)),
-      (courseIds) {
-        if (courseIds.isNotEmpty) {
-            getCourses(courseIds);
+  Future<void> searchCourses({
+  String? school,
+  String? campus,
+  String? term,
+  String? period,
+}) async {
+  emit(TimetableLoading());
+
+  final courseIds = await _searchCourses(SearchCoursesParams(
+    school: _selectedSchool ?? school,
+    campus: campus,
+    term: term,
+    period: period,
+  ));
+
+  courseIds.fold(
+    (failure) => emit(TimetableError(failure.errorMessage)),
+    (courseIds) async {
+      if (courseIds.isNotEmpty) {
+        final courses = await Future.wait(courseIds.map((courseId) async {
+          final result = await _getCourse(courseId);
+          return result.fold(
+            (failure) => null,
+            (course) => course,
+          );
+        }));
+
+        final validCourses = courses.whereType<Course>().toList();
+        if (validCourses.isEmpty) {
+          emit(const TimetableError('No courses found'));
         } else {
-            emit(CoursesFetched([]));
+          emit(CoursesFetched(validCourses));
         }
-    });
+      } else {
+        emit(const CoursesFetched([]));
+      }
+    },
+  );
+  emit(TimetableUpdated(
+    periods: _periods,
+    includeSaturday: _includeSaturday,
+    includeSunday: _includeSunday,
+  ));
 }
 
+  // 추가된 메서드
+  void setPeriods(int periods) {
+    _periods = periods;
+    emit(TimetableUpdated(
+      periods: _periods,
+      includeSaturday: _includeSaturday,
+      includeSunday: _includeSunday,
+    ));
+  }
+
+  void setIncludeSaturday(bool include) {
+    _includeSaturday = include;
+    emit(TimetableUpdated(
+      periods: _periods,
+      includeSaturday: _includeSaturday,
+      includeSunday: _includeSunday,
+    ));
+  }
+
+  void setIncludeSunday(bool include) {
+    _includeSunday = include;
+    emit(TimetableUpdated(
+      periods: _periods,
+      includeSaturday: _includeSaturday,
+      includeSunday: _includeSunday,
+    ));
+  }
+
+  int get periods => _periods;
+  bool get includeSaturday => _includeSaturday;
+  bool get includeSunday => _includeSunday;
 
   void loadMoreCourses() {}
 }
-
-

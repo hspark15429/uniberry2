@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TimetableMenuPage extends StatefulWidget {
+  final Function(String) onTimetableSelected;
+
+  const TimetableMenuPage({super.key, required this.onTimetableSelected});
+
   @override
   _TimetableMenuPageState createState() => _TimetableMenuPageState();
 }
@@ -21,7 +25,8 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('시간표 관리'),
+        title: const Text('시간표 관리', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
       ),
       body: ListView.builder(
         itemCount: _timetableList.length,
@@ -46,52 +51,26 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
               padding: const EdgeInsets.only(right: 20),
               child: const Icon(Icons.delete, color: Colors.white),
             ),
-            child: ListTile(
-              title: Text(_timetableList[index]),
-              onTap: () => _displayEditDialog(context, index),
+            child: Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 3,
+              child: ListTile(
+                title: Text(_timetableList[index], style: const TextStyle(color: Colors.black)),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onTimetableSelected(_timetableList[index]);
+                },
+              ),
             ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displayAddDialog(context),
+        backgroundColor: Colors.black,
         child: const Icon(Icons.add),
-        backgroundColor: Theme.of(context).primaryColor,
       ),
-    );
-  }
-
-  Future<void> _displayEditDialog(BuildContext context, int index) async {
-    TextEditingController _controller = TextEditingController(text: _timetableList[index]);
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('시간표 이름 변경'),
-          content: TextField(
-            controller: _controller,
-            decoration: const InputDecoration(hintText: '새로운 시간표 이름을 입력하세요'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('저장'),
-              onPressed: () {
-                setState(() {
-                  _timetableList[index] = _controller.text;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -109,7 +88,7 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('추가'),
+              child: const Text('추가', style: TextStyle(color: Colors.black)),
               onPressed: () {
                 if (_controller.text.isNotEmpty) {
                   setState(() {
@@ -120,7 +99,7 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
               },
             ),
             TextButton(
-              child: const Text('취소'),
+              child: const Text('취소', style: TextStyle(color: Colors.black)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
