@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/anonymous_thread.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/post_detail.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/Op_database.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/OpportunityDetailPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/detailedInfoPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/todolist_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/notificationPage.dart';
@@ -13,18 +13,20 @@ import 'package:uniberry2/src/timetable/presentation/views/settiing/scrapPage.da
 import 'package:uniberry2/src/timetable/presentation/views/settiing/setting_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class homePage extends StatefulWidget {
-  const homePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   static const String routeName = '/homePage';
 
   @override
-  _homePage createState() => _homePage();
+  _HomePage createState() => _HomePage();
 }
 
-class _homePage extends State<homePage> {
+class _HomePage extends State<HomePage> {
   bool isBoardListExpanded = false;
   int _currentPage = 0;
+  BoardType? selectedBoardType;
+  int currentPageIndex = 0;
 
   Future<void> openUrl(String url) async {
     final Uri _url = Uri.parse(url);
@@ -33,6 +35,19 @@ class _homePage extends State<homePage> {
     } else {
       await launchUrl(_url);
     }
+  }
+
+  List<Post> getFilteredPosts() {
+    if (selectedBoardType == null) {
+      return dummyPosts;
+    }
+    return dummyPosts.where((post) => post.boardType == selectedBoardType).toList();
+  }
+
+  List<Post> getSortedPosts() {
+    List<Post> filteredPosts = getFilteredPosts();
+    filteredPosts.sort((a, b) => b.datePosted.compareTo(a.datePosted));
+    return filteredPosts;
   }
 
   Widget _buildTile(
@@ -126,111 +141,178 @@ class _homePage extends State<homePage> {
   }
 
   Widget _buildBoardListCard(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '掲示板リスト',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        _buildBoardSectionTabs(context),
+        _buildBoardPreviewPosts(context),
+      ],
+    );
+  }
+
+  Widget _buildBoardSectionTabs(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                '掲示板リスト',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      isBoardListExpanded ? Icons.expand_less : Icons.expand_more,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isBoardListExpanded = !isBoardListExpanded;
-                      });
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.search, color: Colors.black),
-                    onPressed: () {
-                      // TODO: 검색 기능을 여기에 구현
-                    },
-                  ),
-                ],
-              ),
-            ],
+          TextButton(
+            onPressed: () {
+              setState(() {
+                selectedBoardType = null;
+              });
+            },
+            child: const Text('ALL', style: TextStyle(color: Colors.black)),
           ),
-          Visibility(
-            visible: isBoardListExpanded,
-            child: Column(
-              children: [
-                _buildBoardSections(context),
-                // 필요한 경우 여기에 더 많은 위젯 추가
-              ],
-            ),
-          ),
+          ...BoardType.values.map((boardType) {
+            return TextButton(
+              onPressed: () {
+                setState(() {
+                  selectedBoardType = boardType;
+                });
+              },
+              child: Text(
+                boardTypeToString(boardType),
+                style: const TextStyle(color: Colors.black),
+              ),
+            );
+          }).toList(),
         ],
       ),
     );
   }
 
-  Widget _buildAllBoardsCard(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '現在注目中の投稿',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          const SizedBox(height: 10),
-          _buildAllPosts(context),
-        ],
-      ),
-    );
-  }
+  Widget _buildBoardPreviewPosts(BuildContext context) {
+    List<Post> sortedPosts = getSortedPosts();
+    List<Post> previewPosts = sortedPosts.take(5).toList();
 
-  Widget _buildBoardSections(BuildContext context) {
-    return ListView(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      children: BoardType.values.map((boardType) {
-        return ListTile(
-          title: Text(boardTypeToString(boardType), style: const TextStyle(color: Colors.black)),
+    return Column(
+      children: previewPosts.map((post) {
+        return InkWell(
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AnonymousThreadPage(currentBoard: boardType.toString().split('.').last)),
+              MaterialPageRoute(
+                builder: (context) => PostDetailPage(post: post),
+              ),
             );
           },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: SizedBox(
+              height: 100, // Reduced height for each post preview
+              child: Row(
+                children: [
+                  if (post.imageUrls.isNotEmpty)
+                    Container(
+                      width: 60,
+                      height: 60,
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(post.imageUrls[0]),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Text(
+                            "#${post.category}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          post.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1, // Limit the title to 1 line
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "작성자: ${post.author} · ${post.datePosted}",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "${post.likesCount}",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                const Icon(Icons.comment, size: 14, color: Colors.grey),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "${post.commentCount}",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "閲覧数 ${post.viewCount}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       }).toList(),
     );
@@ -322,11 +404,47 @@ class _homePage extends State<homePage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "作成日 ${post.datePosted} · 閲覧数 ${post.viewCount}",
+                  "작성자: ${post.author} · ${post.datePosted}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
                   ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
+                        const SizedBox(width: 4),
+                        Text(
+                          "${post.likesCount}",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        const Icon(Icons.comment, size: 14, color: Colors.grey),
+                        const SizedBox(width: 4),
+                        Text(
+                          "${post.commentCount}",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "閲覧数 ${post.viewCount}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -422,55 +540,10 @@ class _homePage extends State<homePage> {
     );
   }
 
-  Widget _buildAdditionalBox(BuildContext context, {required String title}) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 4,
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 50, // 이미지의 너비를 조정하여 오버플로우를 방지합니다.
-            height: 50, // 이미지의 높이를 조정하여 오버플로우를 방지합니다.
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: const DecorationImage(
-                image: AssetImage('assets/RIMIX.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10), // 아이콘과 텍스트 사이의 간격 조정
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                fontFamily: 'Bolt',
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // Set the background color to white
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {},
@@ -629,12 +702,19 @@ class _homePage extends State<homePage> {
                       subtitle: '学割、募集中の部活など',
                       buttons: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailedInfoPage(),
+                              ),
+                            );
+                          },
                           child: const Text(
                             '詳しく見る',
                             style: TextStyle(decoration: TextDecoration.underline, color: Colors.black),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     _buildInfoCard(
@@ -669,10 +749,20 @@ class _homePage extends State<homePage> {
                 ),
               ),
               const SizedBox(height: 20), // 위젯 간격 조정
-              _buildAllBoardsCard(context),
-              const SizedBox(height: 20),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  '現在人気の投稿',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _buildAllPosts(context),
+const SizedBox(height: 30),
               _buildBoardListCard(context),
-              const SizedBox(height: 20),
+const SizedBox(height: 40),
               _buildOpportunitiesBox(context),
             ],
           ),

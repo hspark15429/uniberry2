@@ -65,10 +65,26 @@ class AnonymousThreadPage extends StatefulWidget {
 }
 
 class _AnonymousThreadPageState extends State<AnonymousThreadPage> {
+  List<Post> filteredPosts = [];
+  String searchQuery = "";
+
+  @override
+  void initState() {
+    super.initState();
+    filteredPosts = dummyPosts.where((post) => post.boardType.toString().split('.').last == widget.currentBoard).toList();
+    filteredPosts.sort((a, b) => b.datePosted.compareTo(a.datePosted)); // 최신순 정렬
+  }
+
+  List<Post> _filterPosts(String query) {
+    return dummyPosts.where((post) {
+      return post.boardType.toString().split('.').last == widget.currentBoard &&
+             (post.title.contains(query) || post.content.contains(query));
+    }).toList()
+    ..sort((a, b) => b.datePosted.compareTo(a.datePosted)); // 최신순 정렬
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Post> filteredPosts = dummyPosts.where((post) => post.boardType.toString().split('.').last == widget.currentBoard).toList();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -81,7 +97,13 @@ class _AnonymousThreadPageState extends State<AnonymousThreadPage> {
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
             onPressed: () {
-              // TODO: 게시판 검색 페이지로 이동
+              showSearch(
+                context: context,
+                delegate: PostSearchDelegate(
+                  currentBoard: widget.currentBoard,
+                  filterPosts: _filterPosts,
+                ),
+              );
             },
           ),
           IconButton(
@@ -170,6 +192,67 @@ class _AnonymousThreadPageState extends State<AnonymousThreadPage> {
           );
         },
       ),
+    );
+  }
+}
+
+class PostSearchDelegate extends SearchDelegate {
+  final String currentBoard;
+  final List<Post> Function(String) filterPosts;
+
+  PostSearchDelegate({required this.currentBoard, required this.filterPosts});
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+          showSuggestions(context);
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final filteredPosts = filterPosts(query);
+    return _buildResultsList(filteredPosts);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final filteredPosts = filterPosts(query);
+    return _buildResultsList(filteredPosts);
+  }
+
+  Widget _buildResultsList(List<Post> filteredPosts) {
+    return ListView.builder(
+      itemCount: filteredPosts.length,
+      itemBuilder: (context, index) {
+        final post = filteredPosts[index];
+        return ListTile(
+          title: Text(post.title),
+          subtitle: Text("作成日 ${post.datePosted}\n${post.content}", maxLines: 2, overflow: TextOverflow.ellipsis),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PostDetailPage(post: post)),
+            );
+          },
+        );
+      },
     );
   }
 }

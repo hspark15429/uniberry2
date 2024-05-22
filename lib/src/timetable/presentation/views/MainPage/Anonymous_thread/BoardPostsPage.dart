@@ -31,6 +31,9 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 실제 사용자 정보를 가져오는 로직
+    final String currentUser = "현재 사용자"; // 여기에 실제 사용자 정보를 넣으세요
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -114,7 +117,7 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
                         '작성자: ${post.author}',
                         style: const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
-                      if (post.author == '현재 사용자') // 현재 사용자를 임시로 작성자로 설정
+                      if (post.author == currentUser) // 실제 사용자와 작성자를 비교
                         IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () {

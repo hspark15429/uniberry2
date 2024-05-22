@@ -74,6 +74,7 @@ dependencies:
   flutter_quill: ^9.3.17
   permission_handler: ^11.3.1
   geolocator: ^12.0.0
+  webview_flutter: ^4.7.0
 
 dev_dependencies:
   flutter_test:
@@ -94,4 +95,5 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/uniberry_guide.html
     - assets/start_img.png
