@@ -141,16 +141,24 @@ class _HomePage extends State<HomePage> {
   }
 
   Widget _buildBoardListCard(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '掲示板リスト',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        _buildBoardSectionTabs(context),
-        _buildBoardPreviewPosts(context),
-      ],
+    return Container(
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '掲示板リスト',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          _buildBoardSectionTabs(context),
+          _buildBoardPreviewPosts(context),
+        ],
+      ),
     );
   }
 
@@ -760,9 +768,9 @@ class _HomePage extends State<HomePage> {
                 ),
               ),
               _buildAllPosts(context),
-const SizedBox(height: 30),
+              const SizedBox(height: 20),
               _buildBoardListCard(context),
-const SizedBox(height: 40),
+              const SizedBox(height: 20),
               _buildOpportunitiesBox(context),
             ],
           ),

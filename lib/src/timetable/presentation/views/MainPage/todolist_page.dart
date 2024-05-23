@@ -1,8 +1,8 @@
+import 'package:cell_calendar/cell_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
-
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class TodolistPage extends StatefulWidget {
   final bool openAddDialog;
@@ -15,431 +15,496 @@ class TodolistPage extends StatefulWidget {
 
 class _TodolistPageState extends State<TodolistPage> {
   List<TodoItem> todoList = [];
+  List<TodoItem> unscheduledTodoList = [];
   DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-  Color appBarColor = const Color.fromARGB(255, 7, 173, 135);
   late Map<DateTime, List<TodoItem>> _groupedEvents = {};
-  int _currentPageIndex = 0; // Add this line
-  
+  int _currentIndex = 0;
+  PageController _pageController = PageController();
+
   @override
   void initState() {
     super.initState();
-    // 초기 데이터를 DateTime 객체를 사용하여 추가합니다.
     if (widget.openAddDialog) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        _showAddDialog();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAddBottomSheet();
       });
     }
-    todoList.add(TodoItem(
-        title: '내생일', date: DateTime.now(), tagColor: Colors.green, content: ''));
-    todoList.add(TodoItem(
-        title: '프로젝트 마감일',
-        date: DateTime.now().add(const Duration(days: 7)),
-        tagColor: Colors.red,
-        content: ''));
-    _groupedEvents = _groupEvents(todoList); // Initialize grouped events
+    _groupedEvents = _groupEvents(todoList + unscheduledTodoList);
   }
 
-    Map<DateTime, List<TodoItem>> _groupEvents(List<TodoItem> events) {
-  Map<DateTime, List<TodoItem>> data = {};
-  for (var event in events) {
-    DateTime date = DateTime(event.date.year, event.date.month, event.date.day);
-    if (!data.containsKey(date)) {
-      data[date] = [];
+  Map<DateTime, List<TodoItem>> _groupEvents(List<TodoItem> events) {
+    Map<DateTime, List<TodoItem>> data = {};
+    for (var event in events) {
+      DateTime date = DateTime(event.date.year, event.date.month, event.date.day);
+      if (!data.containsKey(date)) {
+        data[date] = [];
+      }
+      data[date]!.add(event);
     }
-    data[date]!.add(event);
+    return data;
   }
-  return data;
-}
 
-
-   @override
+  @override
   Widget build(BuildContext context) {
+    String formattedDate = DateFormat('MMMM yyyy').format(_selectedDay);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('오늘의 할일'),
-        backgroundColor: appBarColor,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.color_lens),
-            onPressed: _showColorPickerDialog,
-          ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _showAddDialog,
-          ),
-        ],
+        title: const Text('TODOリスト'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildCalendar(),
-          Expanded(
-            child: _buildTodoList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCalendar() {
-    return TableCalendar(
-      locale: 'ja_JP',
-      firstDay: DateTime.utc(2000, 1, 1),
-      lastDay: DateTime.utc(2100, 12, 31),
-      focusedDay: _focusedDay,
-      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-      onDaySelected: (selectedDay, focusedDay) {
-        setState(() {
-          _selectedDay = selectedDay;
-          _focusedDay = focusedDay;
-        });
-      },
-      eventLoader: (day) {
-        return _groupedEvents[day] ?? [];
-      },
-      calendarFormat: CalendarFormat.month,
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      calendarBuilders: CalendarBuilders(
-        markerBuilder: (context, date, events) {
-          if (events.isNotEmpty) {
-            return Positioned(
-              bottom: 1,
-              child: Row(
-                children: events.map((event) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 1.0),
-                    width: 6.0,
-                    height: 6.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: (event as TodoItem).tagColor,
-                    ),
-                  );
-                }).toList(),
-              ),
-            );
-          }
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget _buildTodoList() {
-    List <TodoItem> filteredList = todoList.where((item) {
-    return item.date.month == _focusedDay.month && item.date.year == _focusedDay.year;
-  }).toList();
-  
-  return ListView.builder(
-    itemCount: filteredList.length,
-    itemBuilder: (context, index) {
-      TodoItem todo = filteredList[index];
-        return Dismissible(
-          key: Key(todo.title + index.toString()),
-          direction: DismissDirection.endToStart,
-          onDismissed: (direction) {
-            setState(() {
-              todoList.removeAt(index);
-              _groupedEvents = _groupEvents(todoList);
-            });
-          },
-          background: Container(color: Colors.red),
-          child: ListTile(
-            title: Text(todo.title),
-            subtitle: Text(todo.endDate != null
-                ? '${DateFormat('yyyy-MM-dd').format(todo.date)} - ${DateFormat('yyyy-MM-dd').format(todo.endDate!)}'
-                : DateFormat('yyyy-MM-dd').format(todo.date)),
-            leading: CircleAvatar(
-              backgroundColor: todo.tagColor,
-            ),
-            onTap: () => _showEventDetailsDialog(todo),
-          ),
-        );
-      },
-    );
-  }
-  void _showColorPickerDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('앱바 색상 선택'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: appBarColor,
-              onColorChanged: changeAppBarColor,
-              showLabel: true,
-              pickerAreaHeightPercent: 0.8,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('저장'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void changeAppBarColor(Color color) {
-    setState(() {
-      appBarColor = color;
-    });
-  }
-
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-  setState(() {
-    _selectedDay = selectedDay;
-    _focusedDay = focusedDay;
-    // 필요한 경우 여기에 추가 로직을 구현할 수 있습니다.
-  });
-}
-
-void _addOrUpdateEvent(TodoItem event) {
-  setState(() {
-    todoList.add(event); // 이벤트 리스트에 추가
-    _groupedEvents = _groupEvents(todoList); // 이벤트 그룹 업데이트
-  });
-}
-
-void _deleteEvent(int index) {
-  setState(() {
-    todoList.removeAt(index); // 이벤트 리스트에서 삭제
-    _groupedEvents = _groupEvents(todoList); // 이벤트 그룹 업데이트
-  });
-}
-
-
-
-  void _showAddDialog() {
-  String title = '';
-  String content = '';
-  DateTime? selectedDate;
-  DateTimeRange? selectedDateRange;
-  Color selectedColor = Colors.redAccent; // 기본 색상 설정
-
-  showDialog(
-    context: context,
-    builder: (context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            title: const Text('이벤트 추가'),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
                 children: [
-                  TextField(
-                    decoration: const InputDecoration(labelText: '제목'),
-                    onChanged: (value) => title = value,
-                  ),
-                  TextField(
-                    decoration: const InputDecoration(labelText: '내용 (선택 사항)'),
-                    onChanged: (value) => content = value,
-                  ),
-                  ListTile(
-                    title: const Text('태그 색상 선택'),
-                    trailing: Icon(Icons.circle, color: selectedColor),
-                    onTap: () async {
-                      // 색상 선택 다이얼로그 표시
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('태그 색상 선택'),
-                            content: SingleChildScrollView(
-                              child: ColorPicker(
-                                pickerColor: selectedColor,
-                                onColorChanged: (color) {
-                                  setState(() {
-                                    selectedColor = color;
-                                  });
-                                },
-                                showLabel: true,
-                                pickerAreaHeightPercent: 0.8,
-                              ),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('저장'),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('날짜 범위 선택'),
-                    subtitle: Text(
-                      selectedDateRange != null
-                          ? '선택된 범위: ${DateFormat('yyyy-MM-dd').format(selectedDateRange!.start)} - ${DateFormat('yyyy-MM-dd').format(selectedDateRange!.end)}'
-                          : '날짜 범위를 선택해주세요',
-                    ),
-                    onTap: () async {
-                      final DateTimeRange? pickedRange = await showDateRangePicker(
-                        context: context,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101),
-                      );
-                      if (pickedRange != null) {
-                        setState(() {
-                          selectedDateRange = pickedRange;
-                          selectedDate = null; // 범위 선택 시 단일 날짜 선택 초기화
-                        });
-                      }
-                    },
-                  ),
+                  _buildWeeklyCalendar(),
+                  _buildMonthlyCalendar(),
                 ],
               ),
             ),
-            actions: <Widget>[
-                TextButton(
-                  child: const Text('저장'),
-                  onPressed: () {
-                    if (title.isEmpty ||  (selectedDate == null && selectedDateRange == null)) {
-                      // 필수 필드가 누락된 경우 사용자에게 알림
-                      // 날짜나 날짜 범위 선택이 필수입니다.
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('오류'),
-                            content: const Text('필수 필드를 입력하세요.'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('확인'),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      return;
-                    }
-                    TodoItem newItem;
-                    if (selectedDate != null) {
-                      // 단일 날짜 선택한 경우
-                      newItem = TodoItem(
-                        title: title,
-                        content: content,
-                        date: selectedDate!,
-                        tagColor: selectedColor,
-                      );
-                    } else {
-                      // 날짜 범위 선택한 경우
-                      newItem = TodoItem(
-                        title: title,
-                        content: content,
-                        date: selectedDateRange!.start,
-                        endDate: selectedDateRange!.end,
-                        tagColor: selectedColor,
-                      );
-                    }
-                    setState(() {
-                      todoList.add(newItem);
-                      _groupedEvents = _groupEvents(todoList);
-                    });
-                    Navigator.of(context).pop();
-                  },
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 4.0,
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TextButton(
+              onPressed: () => _goToPage(0),
+              child: Text(
+                '週間',
+                style: TextStyle(
+                  color: _currentIndex == 0 ? Colors.blue : Colors.black,
+                  fontWeight: _currentIndex == 0 ? FontWeight.bold : FontWeight.normal,
                 ),
-                TextButton(
-                  child: const Text('취소'),
-                  onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+            FloatingActionButton(
+              onPressed: _showAddBottomSheet,
+              tooltip: '追加',
+              child: const Icon(Icons.add),
+              backgroundColor: Colors.blue,
+            ),
+            TextButton(
+              onPressed: () => _goToPage(1),
+              child: Text(
+                '月間',
+                style: TextStyle(
+                  color: _currentIndex == 1 ? Colors.blue : Colors.black,
+                  fontWeight: _currentIndex == 1 ? FontWeight.bold : FontWeight.normal,
                 ),
-              ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  void _goToPage(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  Widget _buildWeeklyCalendar() {
+    return Column(
+      children: [
+        Expanded(
+          child: SfCalendar(
+            view: CalendarView.week,
+            dataSource: EventDataSource(todoList),
+            onViewChanged: (ViewChangedDetails details) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() {
+                  _selectedDay = details.visibleDates.first;
+                });
+              });
+            },
+            onTap: (details) {
+              if (details.appointments != null) {
+                final TodoItem event = details.appointments!.first;
+                _showEventDetailsDialog(event);
+              }
+            },
+            headerStyle: CalendarHeaderStyle(
+              textAlign: TextAlign.center,
+              textStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            viewHeaderStyle: ViewHeaderStyle(
+              dayTextStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              dateTextStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              backgroundColor: Colors.grey[200],
+            ),
+          ),
+        ),
+        _buildUnscheduledEvents(),
+      ],
+    );
+  }
+
+  Widget _buildUnscheduledEvents() {
+    if (unscheduledTodoList.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      color: Colors.grey[200],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '時間未指定の予定',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextButton(
+                onPressed: _showAllUnscheduledEventsBottomSheet,
+                child: const Text('全体表示'),
+              ),
+            ],
+          ),
+          ...unscheduledTodoList.take(2).map((event) {
+            return Dismissible(
+              key: Key(event.id),
+              onDismissed: (direction) {
+                setState(() {
+                  unscheduledTodoList.remove(event);
+                  _showUndoSnackbar(event);
+                });
+              },
+              background: Container(color: Colors.red),
+              child: ListTile(
+                title: Text(event.title),
+                trailing: Text(DateFormat('yyyy-MM-dd').format(event.date)),
+                onTap: () => _showEventDetailsDialog(event),
+              ),
             );
-          },
+          }).toList(),
+        ],
+      ),
+    );
+  }
+
+  void _showUndoSnackbar(TodoItem event) {
+    final snackBar = SnackBar(
+      content: Text('${event.title} 削除されました'),
+      action: SnackBarAction(
+        label: '元に戻す',
+        onPressed: () {
+          setState(() {
+            unscheduledTodoList.add(event);
+          });
+        },
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showAllUnscheduledEventsBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('時間未指定の予定 - 全体表示'),
+            automaticallyImplyLeading: false,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          body: ListView.builder(
+            shrinkWrap: true,
+            itemCount: unscheduledTodoList.length,
+            itemBuilder: (context, index) {
+              final event = unscheduledTodoList[index];
+              return ListTile(
+                title: Text(event.title),
+                trailing: Text(DateFormat('yyyy-MM-dd').format(event.date)),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _showEventDetailsDialog(event);
+                },
+              );
+            },
+          ),
         );
       },
     );
   }
 
-  void _showEditEventDialog(TodoItem event) {
-    TextEditingController titleController = TextEditingController(text: event.title);
-    TextEditingController contentController = TextEditingController(text: event.content);
-    Color currentColor = event.tagColor;
-    DateTime selectedDate = event.date;
+  Widget _buildMonthlyCalendar() {
+    final events = _groupedEvents.entries
+        .map((entry) => entry.value
+            .map((item) => CalendarEvent(
+                  eventName: item.title,
+                  eventDate: entry.key,
+                  eventBackgroundColor: item.tagColor,
+                  eventTextStyle: const TextStyle(),
+                ))
+            .toList())
+        .expand((element) => element)
+        .toList();
 
-    showDialog(
+    return CellCalendar(
+      events: events,
+      onCellTapped: (date) {
+        setState(() {
+          _selectedDay = date;
+        });
+      },
+      daysOfTheWeekBuilder: (dayIndex) {
+        final daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        return Center(
+          child: Text(
+            daysOfWeek[dayIndex],
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        );
+      },
+      monthYearLabelBuilder: (datetime) {
+        return Center(
+          child: Text(
+            DateFormat.MMMM().format(datetime!),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAddBottomSheet() {
+    String title = '';
+    String description = '';
+    DateTime selectedDate = DateTime.now();
+    TimeOfDay? startTime;
+    TimeOfDay? endTime;
+    Color selectedColor = Colors.redAccent;
+    bool reminderOneHourBefore = false;
+    bool reminderOneDayBefore = false;
+
+    showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('이벤트 수정'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(labelText: '제목'),
-                ),
-                TextField(
-                  controller: contentController,
-                  decoration: const InputDecoration(labelText: '내용'),
-                ),
-                ListTile(
-                  title: const Text('태그 색상 선택'),
-                  trailing: Icon(Icons.circle, color: currentColor), // 현재 색상 표시
-                  onTap: () async {
-                    // 색상 선택 다이얼로그 표시
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('태그 색상 선택'),
-                          content: SingleChildScrollView(
-                            child: ColorPicker(
-                              pickerColor: currentColor,
-                              onColorChanged: (Color color) {
-                                setState(() {
-                                  currentColor = color;
-                                });
-                              },
-                              showLabel: true,
-                              pickerAreaHeightPercent: 0.8,
-                            ),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('저장'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      decoration: const InputDecoration(labelText: 'タイトル'),
+                      onChanged: (value) => title = value,
+                    ),
+                    TextField(
+                      decoration: const InputDecoration(labelText: '内容'),
+                      onChanged: (value) => description = value,
+                    ),
+                    ListTile(
+                      title: const Text('タグカラー選択'),
+                      trailing: Icon(Icons.circle, color: selectedColor),
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('タグカラー選択'),
+                              content: SingleChildScrollView(
+                                child: BlockPicker(
+                                  pickerColor: selectedColor,
+                                  availableColors: [
+                                    Colors.red[100]!,
+                                    Colors.orange[100]!,
+                                    Colors.yellow[100]!,
+                                    Colors.green[100]!,
+                                    Colors.blue[100]!,
+                                    Colors.indigo[100]!,
+                                    Colors.purple[100]!,
+                                    Colors.black,
+                                    Colors.pink[100]!,
+                                  ],
+                                  onColorChanged: (color) {
+                                    setState(() {
+                                      selectedColor = color;
+                                    });
+                                  },
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('保存'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
+                    ),
+                    ListTile(
+                      title: const Text('日付選択'),
+                      subtitle: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
+                      onTap: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2101),
+                        );
+                        if (pickedDate != null) {
+                          setState(() {
+                            selectedDate = pickedDate;
+                          });
+                        }
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('開始時間選択（オプション）'),
+                      subtitle: Text(startTime != null ? startTime!.format(context) : '時間を選択してください'),
+                      onTap: () async {
+                        final TimeOfDay? pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(selectedDate),
+                        );
+                        if (pickedTime != null) {
+                          setState(() {
+                            startTime = pickedTime;
+                          });
+                        }
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('終了時間選択（オプション）'),
+                      subtitle: Text(endTime != null ? endTime!.format(context) : '時間を選択してください'),
+                      onTap: () async {
+                        final TimeOfDay? pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(selectedDate),
+                        );
+                        if (pickedTime != null) {
+                          setState(() {
+                            endTime = pickedTime;
+                          });
+                        }
+                      },
+                    ),
+                    SwitchListTile(
+                      title: const Text('1時間前にリマインド'),
+                      value: reminderOneHourBefore,
+                      onChanged: (value) {
+                        setState(() {
+                          reminderOneHourBefore = value;
+                        });
+                      },
+                    ),
+                    SwitchListTile(
+                      title: const Text('1日前にリマインド'),
+                      value: reminderOneDayBefore,
+                      onChanged: (value) {
+                        setState(() {
+                          reminderOneDayBefore = value;
+                        });
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          child: const Text('キャンセル'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        ElevatedButton(
+                          child: const Text('保存'),
+                          onPressed: () {
+                            if (title.isEmpty) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('エラー'),
+                                    content: const Text('必須フィールドを入力してください。'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('確認'),
+                                        onPressed: () => Navigator.of(context).pop(),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              return;
+                            }
+                            TodoItem newItem = TodoItem(
+                              id: DateTime.now().toString(),
+                              title: title,
+                              content: description,
+                              date: selectedDate,
+                              tagColor: selectedColor,
+                              startTime: startTime,
+                              endTime: endTime,
+                              reminderOneHourBefore: reminderOneHourBefore,
+                              reminderOneDayBefore: reminderOneDayBefore,
+                            );
+                            setState(() {
+                              if (startTime == null && endTime == null) {
+                                unscheduledTodoList.add(newItem);
+                              } else {
+                                todoList.add(newItem);
+                              }
+                              _groupedEvents = _groupEvents(todoList + unscheduledTodoList);
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('저장'),
-              onPressed: () {
-                setState(() {
-                  event.title = titleController.text;
-                  event.content = contentController.text;
-                  event.tagColor = currentColor;
-                  _groupedEvents = _groupEvents(todoList);
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('취소'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
         );
       },
     );
@@ -450,19 +515,21 @@ void _deleteEvent(int index) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('이벤트 상세 정보'),
+          title: const Text('イベント詳細情報'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('제목: ${event.title}'),
-              Text('날짜: ${DateFormat('yyyy-MM-dd').format(event.date)}'),
-              Text('내용: ${event.content}'),
+              Text('タイトル: ${event.title}'),
+              Text('日付: ${DateFormat('yyyy-MM-dd').format(event.date)}'),
+              Text('開始時間: ${event.startTime != null ? event.startTime!.format(context) : '未指定'}'),
+              Text('終了時間: ${event.endTime != null ? event.endTime!.format(context) : '未指定'}'),
+              Text('内容: ${event.content}'),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('닫기'),
+              child: const Text('閉じる'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -475,17 +542,65 @@ void _deleteEvent(int index) {
 }
 
 class TodoItem {
+  String id;
   String title;
   DateTime date;
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
   Color tagColor;
   String content;
-  DateTime? endDate; // 추가된 필드
+  DateTime? endDate;
+  bool reminderOneHourBefore;
+  bool reminderOneDayBefore;
 
   TodoItem({
+    required this.id,
     required this.title,
     required this.date,
+    this.startTime,
+    this.endTime,
     required this.tagColor,
     required this.content,
     this.endDate,
+    this.reminderOneHourBefore = false,
+    this.reminderOneDayBefore = false,
   });
+}
+
+class EventDataSource extends CalendarDataSource {
+  EventDataSource(List<TodoItem> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    DateTime date = appointments![index].date;
+    TimeOfDay? time = appointments![index].startTime;
+    return DateTime(date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    DateTime date = appointments![index].date;
+    TimeOfDay? time = appointments![index].endTime;
+    return DateTime(date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments![index].title;
+  }
+
+  @override
+  Color getColor(int index) {
+    if (appointments![index].startTime == null) {
+      return Colors.grey;
+    }
+    return appointments![index].tagColor;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return false;
+  }
 }
