@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/coments_page.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -15,11 +15,13 @@ class PostDetailPage extends StatefulWidget {
 class _PostDetailPageState extends State<PostDetailPage> {
   bool hasLiked = false;
   int likesCount = 0;
+  final TextEditingController _commentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     likesCount = widget.post.likesCount; // 초기 좋아요 수 설정
+    timeago.setLocaleMessages('ko', timeago.KoMessages()); // 한글 시간 표시
   }
 
   void _toggleLike() {
@@ -30,6 +32,46 @@ class _PostDetailPageState extends State<PostDetailPage> {
         widget.post.likesCount++; // 실제 데이터에서도 증가시키기 위해 설정
       });
     }
+  }
+
+  void _likeComment(int commentIndex) {
+    setState(() {
+      widget.post.comments[commentIndex].likesCount++;
+    });
+  }
+
+  void _likeReply(int commentIndex, int replyIndex) {
+    setState(() {
+      widget.post.comments[commentIndex].replies[replyIndex].likesCount++;
+    });
+  }
+
+  void _addComment(String content) {
+    final newComment = Comment(
+      content: content,
+      datePosted: DateTime.now().toString(),
+      likesCount: 0,
+    );
+    setState(() {
+      widget.post.comments.add(newComment);
+    });
+  }
+
+  void _addReply(int commentIndex, String replyContent) {
+    final newReply = Comment(
+      content: replyContent,
+      datePosted: DateTime.now().toString(),
+      likesCount: 0,
+    );
+    setState(() {
+      widget.post.comments[commentIndex].replies.add(newReply);
+    });
+  }
+
+  void _toggleReplies(int index) {
+    setState(() {
+      widget.post.comments[index].isExpanded = !widget.post.comments[index].isExpanded;
+    });
   }
 
   @override
@@ -110,53 +152,217 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (context) => CommentsPage(comments: widget.post.comments),
+                        builder: (context) => _buildCommentInputField(),
                       );
                     },
                   ),
-                  Text("${widget.post.commentCount}", style: const TextStyle(color: Colors.black)),
+                  Text("${widget.post.comments.length}", style: const TextStyle(color: Colors.black)),
                 ],
               ),
               const SizedBox(height: 16),
-              ...widget.post.comments.map((comment) => Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: ListTile(
-                      title: Text(comment.content, style: const TextStyle(color: Colors.black)),
-                      subtitle: Text("작성일: ${comment.datePosted}", style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.thumb_up_alt_outlined, size: 20, color: Colors.black),
-                            onPressed: () {
-                              // 댓글에 대한 좋아요 기능 구현
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.comment, size: 20, color: Colors.black),
-                            onPressed: () {
-                              // 답글 기능 구현
-                            },
-                          ),
-                        ],
+              ...widget.post.comments.asMap().entries.map((entry) {
+                final comment = entry.value;
+                final commentIndex = entry.key;
+                final commentTime = timeago.format(DateTime.parse(comment.datePosted), locale: 'ko');
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
                       ),
-                    ),
-                  )),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          comment.content,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.thumb_up, size: 20, color: Colors.black),
+                                      onPressed: () => _likeComment(commentIndex),
+                                    ),
+                                    Text(
+                                      "${comment.likesCount}",
+                                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  commentTime,
+                                  style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            if (comment.replies.isNotEmpty)
+                              GestureDetector(
+                                onTap: () => _toggleReplies(commentIndex),
+                                child: Text(
+                                  comment.isExpanded ? "댓글 숨기기" : "${comment.replies.length}개의 댓글 더보기",
+                                  style: const TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.comment, size: 20, color: Colors.black),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) => _buildReplyInputField(commentIndex),
+                            );
+                          },
+                        ),
+                      ),
+                      if (comment.isExpanded)
+                        ...comment.replies.asMap().entries.map((replyEntry) {
+                          final reply = replyEntry.value;
+                          final replyIndex = replyEntry.key;
+                          final replyTime = timeago.format(DateTime.parse(reply.datePosted), locale: 'ko');
+
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(reply.content, style: const TextStyle(color: Colors.black)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.thumb_up, size: 16, color: Colors.black),
+                                          onPressed: () => _likeReply(commentIndex, replyIndex),
+                                        ),
+                                        Text(
+                                          "${reply.likesCount}",
+                                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.comment, size: 16, color: Colors.black),
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) => _buildReplyInputField(commentIndex),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      replyTime,
+                                      style: const TextStyle(fontSize: 10, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                    ],
+                  ),
+                );
+              }).toList(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCommentInputField() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: _commentController,
+              decoration: const InputDecoration(
+                hintText: "댓글을 입력하세요...",
+                border: InputBorder.none,
+              ),
+              style: const TextStyle(fontSize: 14.0, color: Colors.black),
+              minLines: 1,
+              maxLines: 5,
+            ),
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.send, color: Colors.black),
+            onPressed: () {
+              _addComment(_commentController.text);
+              _commentController.clear();
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReplyInputField(int commentIndex) {
+    final TextEditingController _replyController = TextEditingController();
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: _replyController,
+              decoration: const InputDecoration(
+                hintText: "답글을 입력하세요...",
+                border: InputBorder.none,
+              ),
+              style: const TextStyle(fontSize: 14.0, color: Colors.black),
+              minLines: 1,
+              maxLines: 5,
+            ),
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.send, color: Colors.black),
+            onPressed: () {
+              _addReply(commentIndex, _replyController.text);
+              _replyController.clear();
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }

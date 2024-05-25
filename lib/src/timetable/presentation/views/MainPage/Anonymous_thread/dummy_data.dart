@@ -5,11 +5,11 @@ class Post {
   final String content;
   final List<String> imageUrls;
   final BoardType boardType;
-  final int commentCount;
+  int commentCount; // commentCount도 변경 가능하게 수정
   final String datePosted;
   final int viewCount;
   int likesCount; // final을 제거하여 값을 변경할 수 있도록 함
-  final List<Comment> comments;
+  List<Comment> comments; // const를 제거하여 값을 변경할 수 있도록 함
   final String author;
 
   Post({
@@ -23,28 +23,29 @@ class Post {
     required this.datePosted,
     required this.viewCount,
     this.likesCount = 0,
-    this.comments = const [],
+    List<Comment>? comments, // Nullable로 변경하고 초기화 가능하게 수정
     required this.author,
-  });
-}
+  }) : comments = comments ?? [];
 
+}
 
 class Comment {
   final int? id; // Nullable int로 변경
   final String content;
   final String datePosted;
-  final int likesCount;
-  final List<Comment> replies; // 답글 목록
+  int likesCount; // final을 제거하여 값을 변경할 수 있도록 함
+  List<Comment> replies; // const를 제거하여 값을 변경할 수 있도록 함
+  bool isExpanded; // 추가된 필드
 
   Comment({
     required this.content,
     required this.datePosted,
     this.likesCount = 0,
-    this.replies = const [],
+    List<Comment>? replies, // Nullable로 변경하고 초기화 가능하게 수정
     this.id, // Nullable int로 변경
-  });
+    this.isExpanded = false, // 기본값 설정
+  }) : replies = replies ?? [];
 }
-
 
 enum BoardType {
   freshman,

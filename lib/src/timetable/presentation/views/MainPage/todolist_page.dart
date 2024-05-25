@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -40,20 +41,6 @@ class _TodolistPageState extends State<TodolistPage> {
       data[date]!.add(event);
     }
     return data;
-  }
-
-  List<DateTime> _getWeekendDates(int year, int month) {
-    List<DateTime> weekends = [];
-    DateTime firstDayOfMonth = DateTime(year, month, 1);
-    DateTime lastDayOfMonth = DateTime(year, month + 1, 0);
-
-    for (DateTime date = firstDayOfMonth; date.isBefore(lastDayOfMonth) || date.isAtSameMomentAs(lastDayOfMonth); date = date.add(Duration(days: 1))) {
-      if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
-        weekends.add(date);
-      }
-    }
-
-    return weekends;
   }
 
   @override
@@ -104,15 +91,14 @@ class _TodolistPageState extends State<TodolistPage> {
           ),
         ],
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Expanded(
-              child: _buildCalendar(),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: _buildCalendar(),
+          ),
+          if (_currentView == CalendarView.day || _currentView == CalendarView.week)
+            _buildAllDayEvents(),
+        ],
       ),
     );
   }
@@ -161,7 +147,7 @@ class _TodolistPageState extends State<TodolistPage> {
       ),
       monthViewSettings: MonthViewSettings(
         showAgenda: false,
-        appointmentDisplayCount: 4,
+        appointmentDisplayCount: 3,
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
         dayFormat: 'EEE',
         showTrailingAndLeadingDates: false,
@@ -177,11 +163,13 @@ class _TodolistPageState extends State<TodolistPage> {
         endHour: 24,
         timeFormat: 'h:mm a',
         timeIntervalHeight: 50,
-        timelineAppointmentHeight: 30,
+        timelineAppointmentHeight: 20,
       ),
       appointmentBuilder: (BuildContext context, CalendarAppointmentDetails details) {
         final TodoItem event = details.appointments.first;
         return Container(
+          height: 20,
+          width: details.bounds.width,
           decoration: BoxDecoration(
             color: event.tagColor,
             borderRadius: BorderRadius.circular(4),
@@ -189,10 +177,105 @@ class _TodolistPageState extends State<TodolistPage> {
           padding: const EdgeInsets.all(4),
           margin: const EdgeInsets.symmetric(vertical: 2),
           child: Text(
-            event.title.length > 6 ? event.title.substring(0, 6) : event.title,
-            style: TextStyle(color: Colors.white),
+            event.title.length > 7 ? '${event.title.substring(0, 7)}...' : event.title,
+            style: TextStyle(color: Colors.white, fontSize: 10),
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
+        );
+      },
+    );
+  }
+
+  Widget _buildAllDayEvents() {
+    List<TodoItem> allDayEvents = todoList.where((event) => event.isAllDay && isSameDay(event.date, _selectedDay)).toList();
+    if (allDayEvents.isEmpty) return Container();
+
+    return Container(
+      padding: const EdgeInsets.all(8),
+      color: Colors.grey[200],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '종일 이벤트',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              if (allDayEvents.length > 3)
+                TextButton(
+                  onPressed: () => _showAllDayEventsDialog(allDayEvents),
+                  child: Text(
+                    '더보기',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+            ],
+          ),
+          SizedBox(height: 8),
+          ...allDayEvents.take(3).map((event) => Slidable(
+            key: Key(event.id),
+            endActionPane: ActionPane(
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (context) => _deleteEvent(event),
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: '삭제',
+                ),
+              ],
+            ),
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.all(8),
+              color: event.tagColor,
+              child: ListTile(
+                title: Text(event.title, style: TextStyle(fontSize: 14, color: Colors.white)),
+                onTap: () => _showEventDetailsDialog(event),
+              ),
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  void _showAllDayEventsDialog(List<TodoItem> allDayEvents) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('종일 이벤트'),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: allDayEvents.length,
+              itemBuilder: (context, index) {
+                final event = allDayEvents[index];
+                return ListTile(
+                  title: Text(event.title),
+                  subtitle: Text(event.isAllDay ? '종일' : '${event.startTime?.format(context)} - ${event.endTime?.format(context)}'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    _showEventDetailsDialog(event);
+                  },
+                );
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
@@ -229,7 +312,9 @@ class _TodolistPageState extends State<TodolistPage> {
               final event = eventsOnDate[index];
               return ListTile(
                 title: Text(event.title),
-                subtitle: Text(event.isAllDay ? '終日' : '${event.startTime?.format(context)} - ${event.endTime?.format(context)}'),
+                subtitle: Text(event.isAllDay
+                    ? '종일'
+                    : '${event.startTime?.format(context)} - ${event.endTime?.format(context)}'),
                 onTap: () {
                   Navigator.of(context).pop();
                   _showEventDetailsDialog(event);
@@ -338,7 +423,7 @@ class _TodolistPageState extends State<TodolistPage> {
                       onTap: () async {
                         final TimeOfDay? pickedTime = await showTimePicker(
                           context: context,
-                          initialTime: TimeOfDay.fromDateTime(selectedDate),
+                          initialTime: startTime ?? TimeOfDay.fromDateTime(selectedDate),
                         );
                         if (pickedTime != null) {
                           setState(() {
@@ -516,6 +601,29 @@ class _TodolistPageState extends State<TodolistPage> {
     );
   }
 
+  void _deleteEvent(TodoItem event) {
+    setState(() {
+      todoList.removeWhere((item) => item.id == event.id);
+      _groupedEvents = _groupEvents(todoList);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${event.title} 삭제됨'),
+        action: SnackBarAction(
+          label: '복원',
+          onPressed: () {
+            setState(() {
+              todoList.add(event);
+              _groupedEvents = _groupEvents(todoList);
+            });
+          },
+        ),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   void _showEditBottomSheet(TodoItem event) {
     String title = event.title;
     String description = event.content;
@@ -629,7 +737,7 @@ class _TodolistPageState extends State<TodolistPage> {
                       onTap: () async {
                         final TimeOfDay? pickedTime = await showTimePicker(
                           context: context,
-                          initialTime: endTime ?? TimeOfDay.fromDateTime(selectedDate),
+                          initialTime: TimeOfDay.fromDateTime(selectedDate),
                         );
                         if (pickedTime != null) {
                           setState(() {
