@@ -4,11 +4,9 @@ import 'package:uniberry2/src/home/presentation/views/home_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_rate_chart_page.dart';
+import 'package:uniberry2/src/timetable/presentation/views/timetable/timetableSetting.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_coursesListPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_detailPage.dart';
-import 'package:uniberry2/src/timetable/presentation/views/timetable/timetalbe_menuPage.dart';
-
-import 'timetableSetting.dart';
 
 class TimetableScreen extends StatefulWidget {
   const TimetableScreen({super.key, required this.initialSemester});
@@ -85,11 +83,38 @@ class _TimetableScreenState extends State<TimetableScreen> {
     });
   }
 
+  Future<void> _showTimetableSelectionSheet(BuildContext context) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return TimetableMenuPage(onTimetableSelected: _onTimetableSelected);
+      },
+    );
+  }
+
+  Future<void> _showSettingsSheet(BuildContext context) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const TimetableSettingSheet();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_semester, style: const TextStyle(color: Colors.white)),
+        title: GestureDetector(
+          onTap: () => _showTimetableSelectionSheet(context),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_semester, style: const TextStyle(color: Colors.white)),
+              const Icon(Icons.arrow_drop_down, color: Colors.white),
+            ],
+          ),
+        ),
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -104,11 +129,9 @@ class _TimetableScreenState extends State<TimetableScreen> {
             icon: const Icon(Icons.school, color: Colors.white),
             onPressed: () => _selectSchool(context),
           ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.white),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-            ),
+          IconButton(
+            icon: const Icon(Icons.settings, color: Colors.white),
+            onPressed: () => _showSettingsSheet(context),
           ),
         ],
       ),
@@ -138,7 +161,15 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 _buildDayHeader(days),
                 ...List.generate(periods, (index) => _buildPeriodRow(context, index, days, timetableCubit)),
                 const SizedBox(height: 20),
-                _buildGradeStatusCard(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const GradePage()),
+                    );
+                  },
+                  child: _buildGradeStatusCard(),
+                ),
                 const SizedBox(height: 300),
               ],
             );
@@ -209,7 +240,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
         if (course != null) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (newContext) => TimetableDetailPage(course: course),
+builder: (newContext) => TimetableDetailPage(course: course, period: '', semester: '',),
             ),
           );
         } else {
@@ -353,6 +384,240 @@ class _TimetableScreenState extends State<TimetableScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TimetableSettingSheet extends StatefulWidget {
+  const TimetableSettingSheet({super.key});
+
+  @override
+  State<TimetableSettingSheet> createState() => _TimetableSettingSheetState();
+}
+
+class _TimetableSettingSheetState extends State<TimetableSettingSheet> {
+  int _periods = 5;
+  bool _includeSaturday = false;
+  bool _includeSunday = false;
+
+  void _saveSettings() {
+    context.read<TimetableCubit>().setPeriods(_periods);
+    context.read<TimetableCubit>().setIncludeSaturday(_includeSaturday);
+    context.read<TimetableCubit>().setIncludeSunday(_includeSunday);
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('Select Number of Periods', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Slider(
+            value: _periods.toDouble(),
+            min: 5,
+            max: 12,
+            divisions: 7,
+            label: '$_periods periods',
+            onChanged: (value) {
+              setState(() {
+                _periods = value.toInt();
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Include Saturday', style: TextStyle(fontSize: 16)),
+              Switch(
+                value: _includeSaturday,
+                onChanged: (value) {
+                  setState(() {
+                    _includeSaturday = value;
+                  });
+                },
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Include Sunday', style: TextStyle(fontSize: 16)),
+              Switch(
+                value: _includeSunday,
+                onChanged: (value) {
+                  setState(() {
+                    _includeSunday = value;
+                  });
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: ElevatedButton(
+              onPressed: _saveSettings,
+              child: const Text('Save Settings'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TimetableMenuPage extends StatefulWidget {
+  final Function(String) onTimetableSelected;
+
+  const TimetableMenuPage({super.key, required this.onTimetableSelected});
+
+  @override
+  _TimetableMenuPageState createState() => _TimetableMenuPageState();
+}
+
+class _TimetableMenuPageState extends State<TimetableMenuPage> {
+  late List<String> _timetableList;
+
+  @override
+  void initState() {
+    super.initState();
+    int currentYear = DateTime.now().year;
+    _timetableList = List.generate(4, (int index) => currentYear + index)
+        .expand((year) => ["${year}年春学期", "${year}年秋学期"])
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('시간표 관리', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add, color: Colors.white),
+            onPressed: () => _displayAddDialog(context),
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: _timetableList.length,
+        itemBuilder: (context, index) {
+          return Dismissible(
+            key: Key(_timetableList[index]),
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) {
+              setState(() {
+                _timetableList.removeAt(index);
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${_timetableList[index]}가 삭제되었습니다'),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            },
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            child: Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 3,
+              child: ListTile(
+                title: Text(_timetableList[index], style: const TextStyle(color: Colors.black)),
+                trailing: IconButton(
+                  icon: const Icon(Icons.edit, color: Colors.black),
+                  onPressed: () => _displayEditDialog(context, _timetableList[index], index),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  widget.onTimetableSelected(_timetableList[index]);
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _displayAddDialog(BuildContext context) async {
+    TextEditingController _controller = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('새 시간표 추가'),
+          content: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(hintText: '시간표 이름'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('추가', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                if (_controller.text.isNotEmpty) {
+                  setState(() {
+                    _timetableList.add(_controller.text);
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+            TextButton(
+              child: const Text('취소', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _displayEditDialog(BuildContext context, String initialText, int index) async {
+    TextEditingController _controller = TextEditingController(text: initialText);
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('시간표 이름 수정'),
+          content: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(hintText: '시간표 이름'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('저장', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                if (_controller.text.isNotEmpty) {
+                  setState(() {
+                    _timetableList[index] = _controller.text;
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+            TextButton(
+              child: const Text('취소', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

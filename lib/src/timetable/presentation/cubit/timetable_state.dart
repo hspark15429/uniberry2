@@ -99,7 +99,7 @@ class TimetableUpdated extends TimetableState {
   const TimetableUpdated({
     required this.periods,
     required this.includeSaturday,
-    required this.includeSunday,
+    required this.includeSunday, required Map timetable,
   });
 
   @override

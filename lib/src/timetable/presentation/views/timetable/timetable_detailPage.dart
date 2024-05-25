@@ -2,16 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
+import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_coursesListPage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TimetableDetailPage extends StatefulWidget {
   final Course course;
+  final String period;
+  final String semester;
 
-  const TimetableDetailPage({super.key, required this.course});
+  const TimetableDetailPage({super.key, required this.course, required this.period, required this.semester});
 
   @override
   _TimetableDetailPageState createState() => _TimetableDetailPageState();
@@ -40,6 +45,27 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
     }
   }
 
+  void _deleteCourse(BuildContext context) {
+    context.read<TimetableCubit>().removeCourseFromTimetable(widget.course as String, widget.period, widget.semester);
+    Navigator.pop(context);
+  }
+
+  void _editCourse(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+          value: BlocProvider.of<TimetableCubit>(context),
+          child: CoursesListPage(
+            period: widget.period,
+            school: context.read<TimetableCubit>().selectedSchool ?? '학부 선택 없음',
+            semester: widget.semester,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +73,16 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
         title: Text(widget.course.titles.join(", "), style: const TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.white),
+            onPressed: () => _deleteCourse(context),
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: () => _editCourse(context),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -60,8 +96,8 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-color: Colors.grey.withOpacity(1),
-  spreadRadius: 2,
+                      color: Colors.grey.withOpacity(1),
+                      spreadRadius: 2,
                       blurRadius: 5,
                     ),
                   ],
@@ -122,7 +158,13 @@ color: Colors.grey.withOpacity(1),
             label,
             style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
           ),
-          Text(value, style: const TextStyle(color: Colors.grey)),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(color: Colors.grey),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/post_detail.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/Op_database.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/OpportunityDetailPage.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/detailedInfoPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/todolist_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/notificationPage.dart';
@@ -27,6 +27,7 @@ class _HomePage extends State<HomePage> {
   int _currentPage = 0;
   BoardType? selectedBoardType;
   int currentPageIndex = 0;
+  List<TodoItem> todoList = []; // To-Do 리스트를 위한 추가
 
   Future<void> openUrl(String url) async {
     final Uri _url = Uri.parse(url);
@@ -50,6 +51,13 @@ class _HomePage extends State<HomePage> {
     return filteredPosts;
   }
 
+  List<TodoItem> _getTodayTodoItems() {
+    final DateTime today = DateTime.now();
+    return todoList.where((todo) {
+      return todo.date.year == today.year && todo.date.month == today.month && todo.date.day == today.day;
+    }).toList();
+  }
+
   Widget _buildTile(
     BuildContext context, {
     required IconData icon,
@@ -64,7 +72,7 @@ class _HomePage extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundColor: Colors.grey[300],
+backgroundColor: Colors.white,// Colors.grey[300],
             radius: 30,
             child: Icon(icon, size: 30, color: color),
           ),
@@ -93,49 +101,100 @@ class _HomePage extends State<HomePage> {
     BuildContext context, {
     required String title,
     required String subtitle,
-    required List<Widget> buttons,
+    List<Widget>? buttons,
+    List<TodoItem>? todoItems,
   }) {
-    return Container(
-      width: 250,
-      padding: const EdgeInsets.all(12.0),
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: GoogleFonts.roboto(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+    return GestureDetector(
+      onTap: buttons != null ? () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TodolistPage()),
+        );
+      } : null, // buttons가 있을 때만 동작하도록 설정
+      child: Container(
+        width: 1.2 * 250, // 폭을 1.2배로 설정
+        height: 2 * 100, // 높이를 2배로 설정
+        padding: const EdgeInsets.all(12.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 7,
+              offset: const Offset(0, 3),
             ),
-          ),
-          Text(
-            subtitle,
-            style: GoogleFonts.roboto(
-              fontSize: 12,
-              color: Colors.grey[600],
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.roboto(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                if (buttons != null)
+                  IconButton(
+                    icon: const Icon(Icons.add, color: Colors.black),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TodolistPage(openAddDialog: true),
+                        ),
+                      );
+                    },
+                  ),
+              ],
             ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: buttons,
-          ),
-        ],
+            Text(
+              subtitle,
+              style: GoogleFonts.roboto(
+                fontSize: 12,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (todoItems != null && todoItems.isNotEmpty)
+              ...todoItems.map((todo) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: todo.tagColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        todo.title,
+                        style: TextStyle(
+                          color: todo.tagColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (todo.startTime != null)
+                        Text(
+                          '${todo.startTime?.format(context) ?? ''} - ${todo.endTime?.format(context) ?? ''}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                    ],
+                  ),
+                );
+              }).toList(),
+          ],
+        ),
       ),
     );
   }
@@ -338,127 +397,98 @@ class _HomePage extends State<HomePage> {
 
     List<Post> topPosts = sortedPosts.take(4).toList();
 
-    return ListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: topPosts.length,
-      separatorBuilder: (context, index) => const Divider(color: Colors.grey),
-      itemBuilder: (context, index) {
-        final post = topPosts[index];
-        return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PostDetailPage(post: post),
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "#${post.category}",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey.withOpacity(0.3)), // 연한 선으로 설정
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: topPosts.map((post) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostDetailPage(post: post),
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        post.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "#${post.category}",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    post.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "작성자: ${post.author} · ${post.datePosted}",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
+                          const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${post.likesCount}",
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          const Icon(Icons.comment, size: 14, color: Colors.grey),
+                          const SizedBox(width: 4),
                           Text(
                             "${post.commentCount}",
                             style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const Text(
-                            "コメント",
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
+                              fontSize: 12,
+                              color: Colors.grey,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "작성자: ${post.author} · ${post.datePosted}",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
-                        const SizedBox(width: 4),
-                        Text(
-                          "${post.likesCount}",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
+                      Text(
+                        "閲覧数 ${post.viewCount}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
                         ),
-                        const SizedBox(width: 16),
-                        const Icon(Icons.comment, size: 14, color: Colors.grey),
-                        const SizedBox(width: 4),
-                        Text(
-                          "${post.commentCount}",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "閲覧数 ${post.viewCount}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -550,6 +580,8 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<TodoItem> todayTodoItems = _getTodayTodoItems();
+
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
       appBar: AppBar(
@@ -604,75 +636,77 @@ class _HomePage extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(width: 16), // 아이콘과 화면 좌측 사이의 간격 조정
-                    _buildTile(
-                      context,
-                      icon: Icons.school,
-                      title: 'Manaba+R',
-                      subtitle: '',
-                      onTap: () => openUrl('https://ct.ritsumei.ac.jp/ct/'),
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 16), // 아이콘 사이의 간격 조정
-                    _buildTile(
-                      context,
-                      icon: Icons.shopping_basket,
-                      title: 'フリーマ',
-                      subtitle: '',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FreeMarketPage()),
-                        );
-                      },
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 16), // 아이콘 사이의 간격 조정
-                    _buildTile(
-                      context,
-                      icon: Icons.schedule,
-                      title: '授業',
-                      subtitle: 'スケジュール',
-                      onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=606518'),
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 16), // 아이콘 사이의 간격 조정
-                    _buildTile(
-                      context,
-                      icon: Icons.library_books,
-                      title: '図書館',
-                      subtitle: '',
-                      onTap: () => openUrl('https://runners.ritsumei.ac.jp/opac/opac_search/?lang=0'),
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 16), // 아이콘 사이의 간격 조정
-                    _buildTile(
-                      context,
-                      icon: Icons.directions_bus_filled,
-                      title: 'シャトルバス',
-                      subtitle: '',
-                      onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=566535'),
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 16), // 아이콘 사이의 간격 조정
-                    _buildTile(
-                      context,
-                      icon: Icons.public,
-                      title: '大学',
-                      subtitle: 'ホームページ',
-                      onTap: () => openUrl('https://en.ritsumei.ac.jp/'),
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 16), // 아이콘과 화면 우측 사이의 간격 조정
-                  ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      _buildTile(
+                        context,
+                        icon: Icons.school,
+                        title: 'Manaba+R',
+                        subtitle: '',
+                        onTap: () => openUrl('https://ct.ritsumei.ac.jp/ct/'),
+color: Colors.redAccent,
+                      ),
+                      const SizedBox(width: 16), // 아이콘 사이의 간격 조정
+                      _buildTile(
+                        context,
+                        icon: Icons.shopping_basket,
+                        title: 'フリーマ',
+                        subtitle: '',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => FreeMarketPage()),
+                          );
+                        },
+color: Colors.orangeAccent
+                      ),
+                      const SizedBox(width: 16), // 아이콘 사이의 간격 조정
+                      _buildTile(
+                        context,
+                        icon: Icons.schedule,
+                        title: '授業',
+                        subtitle: 'スケジュール',
+                        onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=606518'),
+color: Colors.green,
+                      ),
+                      const SizedBox(width: 16), // 아이콘 사이의 간격 조정
+                      _buildTile(
+                        context,
+                        icon: Icons.library_books,
+                        title: '図書館',
+                        subtitle: '',
+                        onTap: () => openUrl('https://runners.ritsumei.ac.jp/opac/opac_search/?lang=0'),
+color: Colors.blueAccent,
+                      ),
+                      const SizedBox(width: 16), // 아이콘 사이의 간격 조정
+                      _buildTile(
+                        context,
+                        icon: Icons.directions_bus_filled,
+                        title: 'シャトルバス',
+                        subtitle: '',
+                        onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=566535'),
+color: Colors.blueGrey,
+                      ),
+                      const SizedBox(width: 16), // 아이콘 사이의 간격 조정
+                      _buildTile(
+                        context,
+                        icon: Icons.public,
+                        title: '大学',
+                        subtitle: 'ホームページ',
+                        onTap: () => openUrl('https://en.ritsumei.ac.jp/'),
+color: Colors.purpleAccent,
+                      ),
+                      const SizedBox(width: 16), // 아이콘과 화면 우측 사이의 간격 조정
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10), // 조정된 간격
+              const SizedBox(height: 20), // 앱바와 아이콘 간의 간격
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -680,78 +714,24 @@ class _HomePage extends State<HomePage> {
                     _buildInfoCard(
                       context,
                       title: '今日の予定',
-                      subtitle: '2月 22日(木)',
-                      buttons: [
-                        IconButton(
-                          icon: const Icon(Icons.add, color: Colors.black),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const TodolistPage(openAddDialog: true),
-                              ),
-                            );
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.list, color: Colors.black),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const TodolistPage()),
-                            );
-                          },
-                        ),
-                      ],
+                      subtitle: DateFormat('M月 d日(E)', 'ja').format(DateTime.now()), // 오늘 날짜를 표시
+                      buttons: [], // 아이콘을 삭제했으므로 빈 리스트
+                      todoItems: todayTodoItems, // 오늘 일정을 보여주기 위해 추가
                     ),
                     _buildInfoCard(
                       context,
                       title: '新学期を始めよう!',
                       subtitle: '学割、募集中の部活など',
-                      buttons: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailedInfoPage(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            '詳しく見る',
-                            style: TextStyle(decoration: TextDecoration.underline, color: Colors.black),
-                          ),
-                        ),
-                      ],
                     ),
                     _buildInfoCard(
                       context,
                       title: '時間割をDIYしよう',
                       subtitle: '講義選びのコツや効率的な時間割作成方法など',
-                      buttons: [
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            '詳しく見る',
-                            style: TextStyle(decoration: TextDecoration.underline, color: Colors.black),
-                          ),
-                        )
-                      ],
                     ),
                     _buildInfoCard(
                       context,
                       title: '卒業生後もユニベリと一緒に',
                       subtitle: '卒業生アカウントに転換する',
-                      buttons: [
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            '詳しく見る',
-                            style: TextStyle(decoration: TextDecoration.underline, color: Colors.black),
-                          ),
-                        )
-                      ],
                     ),
                   ],
                 ),
@@ -778,4 +758,22 @@ class _HomePage extends State<HomePage> {
       ),
     );
   }
+}
+
+class TodoItem {
+  final String title;
+  final bool isAllDay;
+  final TimeOfDay? startTime;
+  final TimeOfDay? endTime;
+  final Color tagColor;
+  final DateTime date;
+
+  TodoItem({
+    required this.title,
+    this.isAllDay = false,
+    this.startTime,
+    this.endTime,
+    required this.tagColor,
+    required this.date,
+  });
 }
