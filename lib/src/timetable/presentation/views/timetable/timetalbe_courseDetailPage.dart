@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_coursesListPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,30 +19,14 @@ class TimetableCourseDetailPage extends StatelessWidget {
     }
   }
 
-  void _deleteCourse(BuildContext context) {
+  void _saveCourse(BuildContext context) {
     String currentSemester = '2024年春学期';
-    context.read<TimetableCubit>().removeCourseFromTimetable(course as String, period, currentSemester);
+    context.read<TimetableCubit>().addCourseToTimetable(course, period, currentSemester);
 
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => TimetableScreen(initialSemester: currentSemester)),
       (Route<dynamic> route) => false,
-    );
-  }
-
-  void _editCourse(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: BlocProvider.of<TimetableCubit>(context),
-          child: CoursesListPage(
-            period: period,
-            school: context.read<TimetableCubit>().selectedSchool ?? '학부 선택 없음',
-            semester: '2024年春学期',
-          ),
-        ),
-      ),
     );
   }
 
@@ -59,25 +42,8 @@ class TimetableCourseDetailPage extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete, color: Colors.white),
-            onPressed: () => _deleteCourse(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.white),
-            onPressed: () => _editCourse(context),
-          ),
-          IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              String currentSemester = '2024年春学期';
-              context.read<TimetableCubit>().addCourseToTimetable(course, period, currentSemester);
-
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => TimetableScreen(initialSemester: currentSemester)),
-                (Route<dynamic> route) => false,
-              );
-            },
+            onPressed: () => _saveCourse(context),
           ),
         ],
       ),

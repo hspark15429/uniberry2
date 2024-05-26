@@ -35,10 +35,14 @@ class _TodolistPageState extends State<TodolistPage> {
     Map<DateTime, List<TodoItem>> data = {};
     for (var event in events) {
       DateTime date = DateTime(event.date.year, event.date.month, event.date.day);
-      if (!data.containsKey(date)) {
-        data[date] = [];
+      DateTime? endDate = event.endDate ?? event.date;
+      while (!date.isAfter(endDate)) {
+        if (!data.containsKey(date)) {
+          data[date] = [];
+        }
+        data[date]!.add(event);
+        date = date.add(const Duration(days: 1));
       }
-      data[date]!.add(event);
     }
     return data;
   }
@@ -57,15 +61,15 @@ class _TodolistPageState extends State<TodolistPage> {
             });
           },
           items: <DropdownMenuItem<CalendarView>>[
-            DropdownMenuItem<CalendarView>(
+            const DropdownMenuItem<CalendarView>(
               value: CalendarView.month,
               child: Text('月間', style: TextStyle(color: Colors.black)),
             ),
-            DropdownMenuItem<CalendarView>(
+            const DropdownMenuItem<CalendarView>(
               value: CalendarView.week,
               child: Text('週間', style: TextStyle(color: Colors.black)),
             ),
-            DropdownMenuItem<CalendarView>(
+            const DropdownMenuItem<CalendarView>(
               value: CalendarView.day,
               child: Text('日間', style: TextStyle(color: Colors.black)),
             ),
@@ -124,30 +128,30 @@ class _TodolistPageState extends State<TodolistPage> {
           _showEventDetailsDialog(event);
         }
       },
-      headerStyle: CalendarHeaderStyle(
+      headerStyle: const CalendarHeaderStyle(
         textAlign: TextAlign.center,
-        textStyle: const TextStyle(
+        textStyle: TextStyle(
           color: Colors.black,
-          fontSize: 20,
+fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      viewHeaderStyle: ViewHeaderStyle(
-        dayTextStyle: const TextStyle(
+      viewHeaderStyle: const ViewHeaderStyle(
+        dayTextStyle: TextStyle(
           color: Colors.black,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
-        dateTextStyle: const TextStyle(
+        dateTextStyle: TextStyle(
           color: Colors.black,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
         backgroundColor: Colors.white,
       ),
-      monthViewSettings: MonthViewSettings(
+      monthViewSettings: const MonthViewSettings(
         showAgenda: false,
-        appointmentDisplayCount: 3,
+        appointmentDisplayCount: 4,
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
         dayFormat: 'EEE',
         showTrailingAndLeadingDates: false,
@@ -158,7 +162,7 @@ class _TodolistPageState extends State<TodolistPage> {
           textStyle: TextStyle(color: Colors.black),
         ),
       ),
-      timeSlotViewSettings: TimeSlotViewSettings(
+      timeSlotViewSettings: const TimeSlotViewSettings(
         startHour: 0,
         endHour: 24,
         timeFormat: 'h:mm a',
@@ -175,12 +179,15 @@ class _TodolistPageState extends State<TodolistPage> {
             borderRadius: BorderRadius.circular(4),
           ),
           padding: const EdgeInsets.all(4),
-          margin: const EdgeInsets.symmetric(vertical: 2),
-          child: Text(
-            event.title.length > 7 ? '${event.title.substring(0, 7)}...' : event.title,
-            style: TextStyle(color: Colors.white, fontSize: 10),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+margin: const EdgeInsets.symmetric(vertical: 0.2),
+          child: Center(
+            child: Text(
+              event.title,
+style: const TextStyle(color: Colors.white, fontSize: 10),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+            ),
           ),
         );
       },
@@ -188,7 +195,7 @@ class _TodolistPageState extends State<TodolistPage> {
   }
 
   Widget _buildAllDayEvents() {
-    List<TodoItem> allDayEvents = todoList.where((event) => event.isAllDay && isSameDay(event.date, _selectedDay)).toList();
+    List<TodoItem> allDayEvents = todoList.where((event) => event.isAllDay && (isSameDay(event.date, _selectedDay) || isBetween(_selectedDay, event.date, event.endDate))).toList();
     if (allDayEvents.isEmpty) return Container();
 
     return Container(
@@ -200,25 +207,25 @@ class _TodolistPageState extends State<TodolistPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 '종일 이벤트',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               if (allDayEvents.length > 3)
                 TextButton(
                   onPressed: () => _showAllDayEventsDialog(allDayEvents),
-                  child: Text(
+                  child: const Text(
                     '더보기',
                     style: TextStyle(color: Colors.blue),
                   ),
                 ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           ...allDayEvents.take(3).map((event) => Slidable(
             key: Key(event.id),
             endActionPane: ActionPane(
-              motion: ScrollMotion(),
+              motion: const ScrollMotion(),
               children: [
                 SlidableAction(
                   onPressed: (context) => _deleteEvent(event),
@@ -234,7 +241,7 @@ class _TodolistPageState extends State<TodolistPage> {
               padding: const EdgeInsets.all(8),
               color: event.tagColor,
               child: ListTile(
-                title: Text(event.title, style: TextStyle(fontSize: 14, color: Colors.white)),
+                title: Text(event.title, style: const TextStyle(fontSize: 14, color: Colors.white)),
                 onTap: () => _showEventDetailsDialog(event),
               ),
             ),
@@ -282,7 +289,7 @@ class _TodolistPageState extends State<TodolistPage> {
   }
 
   void _showEventsOnDate(DateTime date) {
-    final eventsOnDate = todoList.where((event) => isSameDay(event.date, date)).toList();
+    final eventsOnDate = todoList.where((event) => isSameDay(event.date, date) || isBetween(date, event.date, event.endDate)).toList();
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -330,7 +337,9 @@ class _TodolistPageState extends State<TodolistPage> {
   void _showAddBottomSheet() {
     String title = '';
     String description = '';
-    DateTime selectedDate = DateTime.now();
+    String location = '';
+    DateTime startDate = DateTime.now();
+    DateTime? endDate;
     TimeOfDay? startTime;
     TimeOfDay? endTime;
     Color selectedColor = Colors.redAccent;
@@ -347,18 +356,33 @@ class _TodolistPageState extends State<TodolistPage> {
           child: StatefulBuilder(
             builder: (context, setState) {
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextField(
-                      decoration: const InputDecoration(labelText: 'タイトル'),
+                      decoration: const InputDecoration(
+                        labelText: 'タイトル (必須)',
+                        labelStyle: TextStyle(color: Colors.red),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(),
+                      ),
                       onChanged: (value) => title = value,
                     ),
+                    const SizedBox(height: 16),
                     TextField(
-                      decoration: const InputDecoration(labelText: '内容'),
+                      decoration: InputDecoration(
+                        labelText: '内容',
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: const OutlineInputBorder(),
+                      ),
+                      maxLines: 4,
                       onChanged: (value) => description = value,
                     ),
+                    const SizedBox(height: 16),
                     ListTile(
                       title: const Text('タグカラー選択'),
                       trailing: Icon(Icons.circle, color: selectedColor),
@@ -372,15 +396,15 @@ class _TodolistPageState extends State<TodolistPage> {
                                 child: BlockPicker(
                                   pickerColor: selectedColor,
                                   availableColors: [
-                                    Colors.red[100]!,
-                                    Colors.orange[100]!,
-                                    Colors.yellow[100]!,
-                                    Colors.green[100]!,
-                                    Colors.blue[100]!,
-                                    Colors.indigo[100]!,
-                                    Colors.purple[100]!,
+                                    Colors.red[700]!,
+                                    Colors.orange[700]!,
+                                    Colors.yellow[700]!,
+                                    Colors.green[700]!,
+                                    Colors.blue[700]!,
+                                    Colors.indigo[700]!,
+                                    Colors.purple[700]!,
                                     Colors.black,
-                                    Colors.pink[100]!,
+                                    Colors.pink[700]!,
                                   ],
                                   onColorChanged: (color) {
                                     setState(() {
@@ -401,29 +425,33 @@ class _TodolistPageState extends State<TodolistPage> {
                       },
                     ),
                     ListTile(
-                      title: const Text('日付選択'),
-                      subtitle: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
+                      title: const Text('개시날 선택'),
+                      subtitle: Text(
+                        DateFormat('yyyy-MM-dd').format(startDate),
+                      ),
                       onTap: () async {
                         final DateTime? pickedDate = await showDatePicker(
                           context: context,
-                          initialDate: selectedDate,
+                          initialDate: startDate,
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2101),
                         );
                         if (pickedDate != null) {
                           setState(() {
-                            selectedDate = pickedDate;
+                            startDate = pickedDate;
                           });
                         }
                       },
                     ),
                     ListTile(
-                      title: const Text('開始時間選択（オプション）'),
-                      subtitle: Text(startTime != null ? startTime!.format(context) : '時間を選択してください'),
+                      title: const Text('개시 시간 설정'),
+                      subtitle: Text(
+                        startTime != null ? startTime!.format(context) : '시간을 선택해주세요',
+                      ),
                       onTap: () async {
                         final TimeOfDay? pickedTime = await showTimePicker(
                           context: context,
-                          initialTime: startTime ?? TimeOfDay.fromDateTime(selectedDate),
+                          initialTime: startTime ?? TimeOfDay.now(),
                         );
                         if (pickedTime != null) {
                           setState(() {
@@ -433,12 +461,33 @@ class _TodolistPageState extends State<TodolistPage> {
                       },
                     ),
                     ListTile(
-                      title: const Text('終了時間選択（オプション）'),
-                      subtitle: Text(endTime != null ? endTime!.format(context) : '時間を選択してください'),
+                      title: const Text('종료날 선택'),
+                      subtitle: Text(
+                        endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : '날짜를 선택해주세요',
+                      ),
+                      onTap: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: startDate,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2101),
+                        );
+                        if (pickedDate != null) {
+                          setState(() {
+                            endDate = pickedDate;
+                          });
+                        }
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('종료 시간 설정'),
+                      subtitle: Text(
+                        endTime != null ? endTime!.format(context) : '시간을 선택해주세요',
+                      ),
                       onTap: () async {
                         final TimeOfDay? pickedTime = await showTimePicker(
                           context: context,
-                          initialTime: TimeOfDay.fromDateTime(selectedDate),
+                          initialTime: endTime ?? TimeOfDay.now(),
                         );
                         if (pickedTime != null) {
                           setState(() {
@@ -459,6 +508,15 @@ class _TodolistPageState extends State<TodolistPage> {
                           }
                         });
                       },
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: '場所',
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: const OutlineInputBorder(),
+                      ),
+                      onChanged: (value) => location = value,
                     ),
                     SwitchListTile(
                       title: const Text('1時間前にリマインド'),
@@ -510,7 +568,8 @@ class _TodolistPageState extends State<TodolistPage> {
                               id: DateTime.now().toString(),
                               title: title,
                               content: description,
-                              date: selectedDate,
+                              date: startDate,
+                              endDate: endDate,
                               tagColor: selectedColor,
                               isAllDay: isAllDay,
                               startTime: isAllDay ? null : startTime,
@@ -619,7 +678,7 @@ class _TodolistPageState extends State<TodolistPage> {
             });
           },
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -627,7 +686,9 @@ class _TodolistPageState extends State<TodolistPage> {
   void _showEditBottomSheet(TodoItem event) {
     String title = event.title;
     String description = event.content;
-    DateTime selectedDate = event.date;
+    String location = '';
+    DateTime startDate = event.date;
+    DateTime? endDate = event.endDate;
     TimeOfDay? startTime = event.startTime;
     TimeOfDay? endTime = event.endTime;
     Color selectedColor = event.tagColor;
@@ -644,20 +705,35 @@ class _TodolistPageState extends State<TodolistPage> {
           child: StatefulBuilder(
             builder: (context, setState) {
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextField(
-                      decoration: const InputDecoration(labelText: 'タイトル'),
+                      decoration: const InputDecoration(
+                        labelText: 'タイトル (必須)',
+                        labelStyle: TextStyle(color: Colors.red),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(),
+                      ),
                       onChanged: (value) => title = value,
                       controller: TextEditingController(text: title),
                     ),
+                    const SizedBox(height: 16),
                     TextField(
-                      decoration: const InputDecoration(labelText: '内容'),
+                      decoration: InputDecoration(
+                        labelText: '内容',
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: const OutlineInputBorder(),
+                      ),
+                      maxLines: 4,
                       onChanged: (value) => description = value,
                       controller: TextEditingController(text: description),
                     ),
+                    const SizedBox(height: 16),
                     ListTile(
                       title: const Text('タグカラー選択'),
                       trailing: Icon(Icons.circle, color: selectedColor),
@@ -671,15 +747,15 @@ class _TodolistPageState extends State<TodolistPage> {
                                 child: BlockPicker(
                                   pickerColor: selectedColor,
                                   availableColors: [
-                                    Colors.red[100]!,
-                                    Colors.orange[100]!,
-                                    Colors.yellow[100]!,
-                                    Colors.green[100]!,
-                                    Colors.blue[100]!,
-                                    Colors.indigo[100]!,
-                                    Colors.purple[100]!,
+                                    Colors.red[700]!,
+                                    Colors.orange[700]!,
+                                    Colors.yellow[700]!,
+                                    Colors.green[700]!,
+                                    Colors.blue[700]!,
+                                    Colors.indigo[700]!,
+                                    Colors.purple[700]!,
                                     Colors.black,
-                                    Colors.pink[100]!,
+                                    Colors.pink[700]!,
                                   ],
                                   onColorChanged: (color) {
                                     setState(() {
@@ -700,29 +776,33 @@ class _TodolistPageState extends State<TodolistPage> {
                       },
                     ),
                     ListTile(
-                      title: const Text('日付選択'),
-                      subtitle: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
+                      title: const Text('개시날 선택'),
+                      subtitle: Text(
+                        DateFormat('yyyy-MM-dd').format(startDate),
+                      ),
                       onTap: () async {
                         final DateTime? pickedDate = await showDatePicker(
                           context: context,
-                          initialDate: selectedDate,
+                          initialDate: startDate,
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2101),
                         );
                         if (pickedDate != null) {
                           setState(() {
-                            selectedDate = pickedDate;
+                            startDate = pickedDate;
                           });
                         }
                       },
                     ),
                     ListTile(
-                      title: const Text('開始時間選択（オプション）'),
-                      subtitle: Text(startTime != null ? startTime!.format(context) : '時間を選択してください'),
+                      title: const Text('개시 시간 설정'),
+                      subtitle: Text(
+                        startTime != null ? startTime!.format(context) : '시간을 선택해주세요',
+                      ),
                       onTap: () async {
                         final TimeOfDay? pickedTime = await showTimePicker(
                           context: context,
-                          initialTime: startTime ?? TimeOfDay.fromDateTime(selectedDate),
+                          initialTime: startTime ?? TimeOfDay.now(),
                         );
                         if (pickedTime != null) {
                           setState(() {
@@ -732,12 +812,33 @@ class _TodolistPageState extends State<TodolistPage> {
                       },
                     ),
                     ListTile(
-                      title: const Text('終了時間選択（オプション）'),
-                      subtitle: Text(endTime != null ? endTime!.format(context) : '時間を選択してください'),
+                      title: const Text('종료날 선택'),
+                      subtitle: Text(
+                        endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : '날짜를 선택해주세요',
+                      ),
+                      onTap: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: startDate,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2101),
+                        );
+                        if (pickedDate != null) {
+                          setState(() {
+                            endDate = pickedDate;
+                          });
+                        }
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('종료 시간 설정'),
+                      subtitle: Text(
+                        endTime != null ? endTime!.format(context) : '시간을 선택해주세요',
+                      ),
                       onTap: () async {
                         final TimeOfDay? pickedTime = await showTimePicker(
                           context: context,
-                          initialTime: TimeOfDay.fromDateTime(selectedDate),
+                          initialTime: endTime ?? TimeOfDay.now(),
                         );
                         if (pickedTime != null) {
                           setState(() {
@@ -758,6 +859,15 @@ class _TodolistPageState extends State<TodolistPage> {
                           }
                         });
                       },
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: '場所',
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: const OutlineInputBorder(),
+                      ),
+                      onChanged: (value) => location = value,
                     ),
                     SwitchListTile(
                       title: const Text('1時間前にリマインド'),
@@ -811,7 +921,8 @@ class _TodolistPageState extends State<TodolistPage> {
                                 id: event.id,
                                 title: title,
                                 content: description,
-                                date: selectedDate,
+                                date: startDate,
+                                endDate: endDate,
                                 tagColor: selectedColor,
                                 isAllDay: isAllDay,
                                 startTime: isAllDay ? null : startTime,
@@ -841,12 +952,20 @@ class _TodolistPageState extends State<TodolistPage> {
         date1.month == date2.month &&
         date1.day == date2.day;
   }
+
+  bool isBetween(DateTime date, DateTime startDate, DateTime? endDate) {
+    if (endDate == null) {
+      return false;
+    }
+    return (date.isAfter(startDate) && date.isBefore(endDate)) || date == endDate;
+  }
 }
 
 class TodoItem {
   String id;
   String title;
   DateTime date;
+  DateTime? endDate;
   bool isAllDay;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
@@ -859,6 +978,7 @@ class TodoItem {
     required this.id,
     required this.title,
     required this.date,
+    this.endDate,
     this.isAllDay = false,
     this.startTime,
     this.endTime,
@@ -886,7 +1006,7 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   DateTime getEndTime(int index) {
-    DateTime date = appointments![index].date;
+    DateTime date = appointments![index].endDate ?? appointments![index].date;
     if (appointments![index].isAllDay) {
       return DateTime(date.year, date.month, date.day, 23, 59);
     }

@@ -259,19 +259,20 @@ builder: (newContext) => TimetableDetailPage(course: course, period: '', semeste
         }
       },
       child: Container(
-        height: 100, // 교시 크기를 더 키움
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          color: course != null ? Colors.white : Colors.white,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: course != null
-            ? Text(course.titles.join(", "), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black))
-            : const Text(''), // 강의가 없으면 빈 텍스트
-      ),
+  height: 100, // 교시 크기를 더 키움
+  alignment: Alignment.center,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.grey),
+    color: course != null ? Color.fromARGB(255, 244, 131, 131) : Colors.white, 
+    borderRadius: BorderRadius.circular(5),
+  ),
+  child: course != null
+? Text(course.titles.join(", "), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white))
+    : const Text(''), // 강의가 없으면 빈 텍스트
+ ),
     );
   }
+
 
   //이수관리
   Widget _buildGradeStatusCard() {

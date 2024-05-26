@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_coursesListPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TimetableDetailPage extends StatefulWidget {
@@ -46,23 +46,22 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
   }
 
   void _deleteCourse(BuildContext context) {
-    context.read<TimetableCubit>().removeCourseFromTimetable(widget.course as String, widget.period, widget.semester);
-    Navigator.pop(context);
+    String currentSemester = widget.semester;
+    context.read<TimetableCubit>().removeCourseFromTimetable(widget.period, currentSemester);
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => TimetableScreen(initialSemester: currentSemester)),
+      (Route<dynamic> route) => false,
+    );
   }
 
   void _editCourse(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: BlocProvider.of<TimetableCubit>(context),
-          child: CoursesListPage(
-            period: widget.period,
-            school: context.read<TimetableCubit>().selectedSchool ?? '학부 선택 없음',
-            semester: widget.semester,
-          ),
-        ),
-      ),
+    showDialog(
+      context: context,
+      builder: (context) {
+        return EditCourseDialog(course: widget.course, period: widget.period, semester: widget.semester);
+      },
     );
   }
 
@@ -167,6 +166,103 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
           ),
         ],
       ),
+    );
+  }
+}
+
+class EditCourseDialog extends StatefulWidget {
+  final Course course;
+  final String period;
+  final String semester;
+
+  const EditCourseDialog({super.key, required this.course, required this.period, required this.semester});
+
+  @override
+  _EditCourseDialogState createState() => _EditCourseDialogState();
+}
+
+class _EditCourseDialogState extends State<EditCourseDialog> {
+  final _titleController = TextEditingController();
+  final _professorController = TextEditingController();
+  final _codeController = TextEditingController();
+  final _creditController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.course.titles.join(", ");
+    _professorController.text = widget.course.professors.join(", ");
+    _codeController.text = widget.course.codes.join(", ");
+    _creditController.text = widget.course.credit.toString();
+  }
+
+  void _saveCourse() {
+    if (_titleController.text.isEmpty || _professorController.text.isEmpty || _codeController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('강의명, 교수명, 강의코드는 필수 입력 항목입니다.')),
+      );
+      return;
+    }
+
+    final updatedCourse = Course(
+      courseId: widget.course.courseId,
+      titles: [_titleController.text],
+      professors: [_professorController.text],
+      codes: [_codeController.text],
+      campuses: widget.course.campuses,
+      syllabusUrl: widget.course.syllabusUrl,
+      credit: int.tryParse(_creditController.text) ?? widget.course.credit,
+      schools: widget.course.schools,
+      term: widget.course.term,
+      periods: widget.course.periods,
+      languages: widget.course.languages,
+    );
+
+    context.read<TimetableCubit>().addCourseToTimetable(updatedCourse, widget.period, widget.semester);
+
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('강의 수정'),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(labelText: '강의명'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _professorController,
+              decoration: const InputDecoration(labelText: '교수명'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _codeController,
+              decoration: const InputDecoration(labelText: '강의코드'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _creditController,
+              decoration: const InputDecoration(labelText: '학점'),
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('취소'),
+        ),
+        ElevatedButton(
+          onPressed: _saveCourse,
+          child: const Text('저장'),
+        ),
+      ],
     );
   }
 }

@@ -35,7 +35,8 @@ class TimetableCubit extends Cubit<TimetableState> {
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
@@ -68,11 +69,12 @@ includeSunday: _includeSunday, timetable: {},
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
-removeCourseFromTimetable(String period, String semester, String semeste) {
+  void removeCourseFromTimetable(String period, String semester) {
     final timetable = _semesterTimetables[semester];
     if (timetable != null) {
       timetable.remove(period);
@@ -81,7 +83,8 @@ removeCourseFromTimetable(String period, String semester, String semeste) {
       emit(TimetableUpdated(
         periods: _periods,
         includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+        includeSunday: _includeSunday,
+        timetable: _semesterTimetables,
       ));
     }
   }
@@ -97,7 +100,8 @@ includeSunday: _includeSunday, timetable: {},
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
@@ -123,7 +127,8 @@ includeSunday: _includeSunday, timetable: {},
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
@@ -168,7 +173,8 @@ includeSunday: _includeSunday, timetable: {},
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
@@ -177,7 +183,8 @@ includeSunday: _includeSunday, timetable: {},
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
@@ -186,7 +193,8 @@ includeSunday: _includeSunday, timetable: {},
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
@@ -195,7 +203,8 @@ includeSunday: _includeSunday, timetable: {},
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
-includeSunday: _includeSunday, timetable: {},
+      includeSunday: _includeSunday,
+      timetable: _semesterTimetables,
     ));
   }
 
