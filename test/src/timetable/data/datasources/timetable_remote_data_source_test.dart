@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
@@ -23,14 +20,14 @@ void main() {
     documentReference2 = cloudStoreClient.collection('courses').doc();
 
     await documentReference.set(tCourse.copyWith(
-        courseId: documentReference.id, schools: ['Engineering']).toMap());
+        courseId: documentReference.id, schools: ['Engineering'],).toMap(),);
     await documentReference2.set(tCourse
         .copyWith(
           courseId: documentReference2.id,
           schools: ['Medicine'],
           term: 'Spring',
         )
-        .toMap());
+        .toMap(),);
 
     dataSource =
         TimetableRemoteDataSourceImpl(cloudStoreClient: cloudStoreClient);
@@ -46,25 +43,25 @@ void main() {
       expect(
           methodCall('sss'),
           throwsA(const ServerException(
-              message: 'course not found', statusCode: 'no-data')));
+              message: 'course not found', statusCode: 'no-data',),),);
     });
   });
 
   group('searchCourses', () {
     test('searchCourses success', () async {
       final result = await dataSource.searchCourses(
-          school: 'Engineering', campus: '', term: '', period: '');
+          school: 'Engineering', campus: '', term: '', period: '',);
       expect(result, contains(documentReference.id));
 
       final result2 = await dataSource.searchCourses(
-          school: '', campus: '', term: 'Spring', period: '');
+          school: '', campus: '', term: 'Spring', period: '',);
       expect(result2, contains(documentReference2.id));
 
       final result3 = await dataSource.searchCourses(
-          school: '', campus: '', term: '', period: '');
+          school: '', campus: '', term: '', period: '',);
 
       expect(
-          result3, containsAll([documentReference.id, documentReference2.id]));
+          result3, containsAll([documentReference.id, documentReference2.id]),);
     });
   });
 }

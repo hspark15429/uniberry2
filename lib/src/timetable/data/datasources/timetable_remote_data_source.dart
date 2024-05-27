@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
@@ -24,13 +23,13 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
   @override
   Future<CourseModel> getCourse(String courseId) async {
     try {
-      var courseData = await _getCourseData(courseId);
+      final courseData = await _getCourseData(courseId);
 
       if (courseData.exists) {
         return CourseModel.fromMap(courseData.data()!);
       } else {
         throw const ServerException(
-            message: 'course not found', statusCode: 'no-data');
+            message: 'course not found', statusCode: 'no-data',);
       }
     } on ServerException {
       rethrow;
@@ -61,13 +60,13 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       }
 
       // Execute the initial query
-      var results = await query.get();
-      var filteredResults = results.docs
+      final results = await query.get();
+      final filteredResults = results.docs
           .where((doc) {
-            bool matchesCampus = campus.isEmpty ||
+            final matchesCampus = campus.isEmpty ||
                 (doc.data()['campuses'] as List).contains(campus);
-            bool matchesTerm = term.isEmpty || doc.data()['term'] == term;
-            bool matchesPeriod = period.isEmpty ||
+            final matchesTerm = term.isEmpty || doc.data()['term'] == term;
+            final matchesPeriod = period.isEmpty ||
                 (doc.data()['periods'] as List).contains(period);
             return matchesCampus && matchesTerm && matchesPeriod;
           })

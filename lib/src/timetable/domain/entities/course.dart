@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
 
 class Course extends Equatable {
   const Course({
@@ -16,18 +15,6 @@ class Course extends Equatable {
     required this.credit,
   });
 
-  final String courseId;
-  final List<String> titles;
-  final String syllabusUrl;
-  final List<String> schools;
-  final List<String> codes;
-  final String term;
-  final List<String> periods;
-  final List<String> campuses;
-  final List<String> professors;
-  final List<String> languages;
-  final int credit;
-
   const Course.empty()
       : courseId = '',
         titles = const [],
@@ -40,6 +27,18 @@ class Course extends Equatable {
         professors = const [],
         languages = const [],
         credit = 0;
+
+  final String courseId;
+  final List<String> titles;
+  final String syllabusUrl;
+  final List<String> schools;
+  final List<String> codes;
+  final String term;
+  final List<String> periods;
+  final List<String> campuses;
+  final List<String> professors;
+  final List<String> languages;
+  final int credit;
 
   @override
   List<Object> get props => [courseId];

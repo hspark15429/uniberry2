@@ -52,7 +52,7 @@ void main() {
           .thenThrow(const ServerException(
         message: 'some.message',
         statusCode: 'some.code',
-      ));
+      ),);
 
       // act
       final result = await repo.getCourse('80128');
@@ -61,7 +61,7 @@ void main() {
       expect(
           result,
           Left(
-              ServerFailure(message: 'some.message', statusCode: 'some.code')));
+              ServerFailure(message: 'some.message', statusCode: 'some.code'),),);
       verify(() => remoteDataSource.getCourse('80128')).called(1);
       verifyNoMoreInteractions(remoteDataSource);
     });
@@ -74,7 +74,7 @@ void main() {
             period: any(named: 'period'),
             school: any(named: 'school'),
             term: any(named: 'term'),
-          )).thenAnswer((_) async => tCourseIds);
+          ),).thenAnswer((_) async => tCourseIds);
 
       final result = await repo.searchCourses(
         campus: tSearchCoursesParams.campus!,
@@ -89,7 +89,7 @@ void main() {
             period: tSearchCoursesParams.period!,
             school: tSearchCoursesParams.school!,
             term: tSearchCoursesParams.term!,
-          )).called(1);
+          ),).called(1);
       verifyNoMoreInteractions(remoteDataSource);
     });
 
@@ -101,10 +101,10 @@ void main() {
             period: any(named: 'period'),
             school: any(named: 'school'),
             term: any(named: 'term'),
-          )).thenThrow(const ServerException(
+          ),).thenThrow(const ServerException(
         message: 'some.message',
         statusCode: 'some.code',
-      ));
+      ),);
 
       final result = await repo.searchCourses(
         campus: tSearchCoursesParams.campus!,
@@ -116,13 +116,13 @@ void main() {
       expect(
           result,
           Left(
-              ServerFailure(message: 'some.message', statusCode: 'some.code')));
+              ServerFailure(message: 'some.message', statusCode: 'some.code'),),);
       verify(() => remoteDataSource.searchCourses(
             campus: tSearchCoursesParams.campus!,
             period: tSearchCoursesParams.period!,
             school: tSearchCoursesParams.school!,
             term: tSearchCoursesParams.term!,
-          )).called(1);
+          ),).called(1);
       verifyNoMoreInteractions(remoteDataSource);
     });
   });

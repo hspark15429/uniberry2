@@ -114,7 +114,7 @@ class TimetableCubit extends Cubit<TimetableState> {
         (failure) => null,
         (course) => course,
       );
-    }));
+    }),);
 
     final validCourses = courses.whereType<Course>().toList();
 
@@ -145,7 +145,7 @@ class TimetableCubit extends Cubit<TimetableState> {
       campus: campus,
       term: term,
       period: period,
-    ));
+    ),);
 
     courseIds.fold(
       (failure) => emit(TimetableError(failure.errorMessage)),
