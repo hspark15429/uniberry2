@@ -17,8 +17,8 @@ void main() {
     usecase = GetCourse(repo);
   });
 
-  String tCourseCode = '';
-  ServerFailure tFailure =
+  const tCourseCode = '';
+  final tFailure =
       ServerFailure(message: 'message', statusCode: 'statusCode');
 
   test('should call [TimetableRepository.getCourse] and return [Course]',

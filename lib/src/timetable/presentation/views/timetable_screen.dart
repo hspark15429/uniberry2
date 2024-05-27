@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/core/utils/core_utils.dart';
-import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
 class TimetableScreen extends StatefulWidget {
@@ -41,7 +39,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                         // title: Text(course.titles.toString()),
                         // subtitle: Text(course.codes.toString()),
                       );
-                    }).toList()),
+                    }).toList(),),
                   ),
                 ],
               ),
@@ -66,8 +64,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 child: TextButton(
                   onPressed: () {
                     context.read<TimetableCubit>().searchCourses(
-                          period: "月2",
-                          school: "法学部",
+                          period: '月2',
+                          school: '法学部',
                           // // term: "秋２Ｑ",
                           // campus: "衣笠",
                         );

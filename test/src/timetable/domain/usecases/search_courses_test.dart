@@ -10,7 +10,7 @@ void main() {
   late SearchCourses usecase;
   late TimetableRepository repo;
 
-  SearchCoursesParams tParams = const SearchCoursesParams.empty();
+  const tParams = SearchCoursesParams.empty();
 
   setUp(() {
     repo = MockTimetableRepo();
@@ -29,7 +29,7 @@ void main() {
           period: any(named: 'period'),
           school: any(named: 'school'),
           term: any(named: 'term'),
-        )).thenAnswer((_) async => const Right(tCourseIds));
+        ),).thenAnswer((_) async => const Right(tCourseIds));
     // act
     final result = await usecase(tParams);
 
@@ -40,7 +40,7 @@ void main() {
           period: tParams.period!,
           school: tParams.school!,
           term: tParams.term!,
-        )).called(1);
+        ),).called(1);
     verifyNoMoreInteractions(repo);
   });
 }

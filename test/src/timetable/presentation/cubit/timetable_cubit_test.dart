@@ -28,7 +28,7 @@ void main() {
     registerFallbackValue(const SearchCoursesParams.empty());
   });
 
-  Course tCourse = const CourseModel.empty();
+  const Course tCourse = CourseModel.empty();
 
   test('check the initial state', () async {
     expect(cubit.state, TimetableInitial());
@@ -43,11 +43,11 @@ void main() {
       'emits [TimetableLoading, CourseFetched] when successful',
       build: () {
         when(() => getCourse.call(any()))
-            .thenAnswer((_) async => Right(tCourse));
+            .thenAnswer((_) async => const Right(tCourse));
         return cubit;
       },
       act: (cubit) => cubit.getCourse('code'),
-      expect: () => [TimetableLoading(), CourseFetched(tCourse)],
+      expect: () => [TimetableLoading(), const CourseFetched(tCourse)],
       verify: (_) {
         verify(() => getCourse('code')).called(1);
         verifyNoMoreInteractions(getCourse);
@@ -66,11 +66,11 @@ void main() {
       act: (cubit) => cubit.searchCourses(school: 'Engineering'),
       expect: () => [
         TimetableLoading(),
-        const CourseIdsSearched(['code'])
+        const CourseIdsSearched(['code']),
       ],
       verify: (_) {
         verify(() =>
-                searchCourses(const SearchCoursesParams(school: 'Engineering')))
+                searchCourses(const SearchCoursesParams(school: 'Engineering')),)
             .called(1);
         verifyNoMoreInteractions(searchCourses);
       },
@@ -82,13 +82,13 @@ void main() {
       'emits [TimetableLoading, CoursesFetched] when successful',
       build: () {
         when(() => getCourse.call(any()))
-            .thenAnswer((_) async => Right(tCourse));
+            .thenAnswer((_) async => const Right(tCourse));
         return cubit;
       },
       act: (cubit) => cubit.getCourses(['code']),
       expect: () => [
         TimetableLoading(),
-        CoursesFetched([tCourse])
+        const CoursesFetched([tCourse]),
       ],
       verify: (_) {
         verify(() => getCourse('code')).called(1);

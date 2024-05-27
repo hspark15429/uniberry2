@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 
@@ -36,7 +35,7 @@ class TimetableCubit extends Cubit<TimetableState> {
         (failure) => null,
         (course) => course,
       );
-    }));
+    }),);
 
     final validCourses = courses.whereType<Course>().toList();
 
@@ -60,7 +59,7 @@ class TimetableCubit extends Cubit<TimetableState> {
       campus: campus,
       term: term,
       period: period,
-    ));
+    ),);
 
     courseIds.fold(
       (failure) => emit(TimetableError(failure.errorMessage)),

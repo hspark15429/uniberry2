@@ -14,7 +14,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (_) => BlocProvider(
                 create: (_) => sl<TimetableCubit>(),
                 child: const TimetableScreen(),
-              ));
+              ),);
     default:
       return MaterialPageRoute(builder: (_) => const Placeholder());
   }

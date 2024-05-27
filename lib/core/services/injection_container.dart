@@ -17,7 +17,7 @@ Future<void> initTimetable() async {
   // cubit
   sl
     ..registerFactory(
-        () => TimetableCubit(getCourse: sl(), searchCourses: sl()))
+        () => TimetableCubit(getCourse: sl(), searchCourses: sl()),)
 
     // usecases
     ..registerLazySingleton(() => GetCourse(sl()))
@@ -25,11 +25,11 @@ Future<void> initTimetable() async {
 
     // repo impl
     ..registerLazySingleton<TimetableRepository>(
-        () => TimetableRepositoryImplementation(sl()))
+        () => TimetableRepositoryImplementation(sl()),)
 
     // data source impl
     ..registerLazySingleton<TimetableRemoteDataSource>(
-        () => TimetableRemoteDataSourceImpl(cloudStoreClient: sl()))
+        () => TimetableRemoteDataSourceImpl(cloudStoreClient: sl()),)
 
     // external
     ..registerLazySingleton(() => FirebaseFirestore.instance);
