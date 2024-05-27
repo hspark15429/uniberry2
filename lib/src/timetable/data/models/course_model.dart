@@ -34,16 +34,16 @@ class CourseModel extends Course {
   CourseModel.fromMap(DataMap map)
       : this(
           courseId: map['courseId'] as String,
-          titles: List<String>.from(map['titles']),
+          titles: List<String>.from(map['titles'] as List<dynamic>),
           syllabusUrl: map['syllabusUrl'] as String,
-          schools: List<String>.from(map['schools']),
-          codes: List<String>.from(map['codes']),
+          schools: List<String>.from(map['schools'] as List<dynamic>),
+          codes: List<String>.from(map['codes'] as List<dynamic>),
           term: map['term'] as String,
-          periods: List<String>.from(map['periods']),
-          campuses: List<String>.from(map['campuses']),
-          professors: List<String>.from(map['professors']),
-          languages: List<String>.from(map['languages']),
-          credit: map['credit'].toInt(),
+          periods: List<String>.from(map['periods'] as List<dynamic>),
+          campuses: List<String>.from(map['campuses'] as List<dynamic>),
+          professors: List<String>.from(map['professors'] as List<dynamic>),
+          languages: List<String>.from(map['languages'] as List<dynamic>),
+          credit: (map['credit'] as num).toInt(),
         );
 
   DataMap toMap() {
