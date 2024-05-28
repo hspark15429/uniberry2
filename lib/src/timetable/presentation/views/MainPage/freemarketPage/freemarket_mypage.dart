@@ -1,13 +1,15 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket_FavoriteProductsPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket_usersetting.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarkget_itemDetailPage.dart';
 
-import 'freemarket_usersetting.dart';
-import 'freemarkget_productDetailPage.dart';
 
 class FreeMarketMyPage extends StatefulWidget {
   final List<Map<String, dynamic>> favoriteProducts;
@@ -40,7 +42,7 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
   }
 
   Future<void> _pickColor(BuildContext context) async {
-    showDialog(
+    unawaited(showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -50,7 +52,7 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
               pickerColor: Colors.purple[100]!,
               onColorChanged: (Color color) {
                 setState(() {
-                  _image = null;
+                  _image = null; // 이미지를 제거하는 것이 의도한 동작인지 확인하세요.
                 });
                 Navigator.of(context).pop();
               },
@@ -58,7 +60,7 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
           ),
         );
       },
-    );
+    ));
   }
 
   void _toggleFavorite(Map<String, dynamic> product) {
@@ -72,60 +74,55 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('My Page', style: TextStyle(color: Colors.white)),
-      backgroundColor: Colors.black,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.settings, color: Colors.white),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => UserSettingPage(),
-              ),
-            );
-          },
-        ),
-      ],
-    ),
-    body: SingleChildScrollView(
-      child: Container(
-        // Remove the DecorationImage part
-        decoration: const BoxDecoration(
-          // You can add a color if needed
-          // color: Colors.white, // Uncomment and set color if you want
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SafeArea(
-                            child: Wrap(
-                              children: <Widget>[
-                                ListTile(
-                                  leading: const Icon(Icons.photo_library),
-                                  title: const Text('사진 선택'),
-                                  onTap: () {
-                                    _pickImage();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.color_lens),
-                                  title: const Text('배경색 선택'),
-                                  onTap: () {
-                                    _pickColor(context);
-                                    Navigator.of(context).pop();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Page', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserSettingPage(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SafeArea(
+                              child: Wrap(
+                                children: <Widget>[
+                                  ListTile(
+                                    leading: const Icon(Icons.photo_library),
+                                    title: const Text('사진 선택'),
+                                    onTap: () {
+                                      _pickImage();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.color_lens),
+                                    title: const Text('배경색 선택'),
+                                    onTap: () {
+                                      _pickColor(context);
+                                      Navigator.of(context).pop();
                                     },
                                   ),
                                 ],
@@ -266,7 +263,7 @@ Widget build(BuildContext context) {
                           MaterialPageRoute(
                             builder: (context) => FavoriteProductsPage(
                               favoriteProducts: favoriteProducts,
-                              onFavoriteToggle: _toggleFavorite,
+onFavoriteToggle: _toggleFavorite, products: [],
                             ),
                           ),
                         );
@@ -292,9 +289,9 @@ Widget build(BuildContext context) {
                 itemBuilder: (context, index) {
                   final product = favoriteProducts[index];
                   return ListTile(
-                    leading: Image.network(product['image'], width: 50, height: 50, fit: BoxFit.cover),
-                    title: Text(product['name']),
-                    subtitle: Text('¥${product['price']}'),
+                    leading: Image.network(product['image'] as String, width: 50, height: 50, fit: BoxFit.cover),
+                    title: Text(product['name'] as String),
+                    subtitle: Text('¥${product['price'] as int}'),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -304,6 +301,7 @@ Widget build(BuildContext context) {
                             onFavoriteToggle: _toggleFavorite,
                             isFavorited: true,
                             favoriteProducts: favoriteProducts,
+                            products: products, // 추가: 필요한 매개변수 전달
                           ),
                         ),
                       );

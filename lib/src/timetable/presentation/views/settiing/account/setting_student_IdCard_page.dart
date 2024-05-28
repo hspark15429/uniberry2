@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'student_ID_card_back_page.dart';
 import 'student_ID_card_front_page.dart';
 
-
 class SettingStudentIdCardPage extends StatefulWidget {
   @override
   _SettingStudentIdCardPageState createState() => _SettingStudentIdCardPageState();
@@ -22,7 +21,6 @@ class _SettingStudentIdCardPageState extends State<SettingStudentIdCardPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +33,7 @@ class _SettingStudentIdCardPageState extends State<SettingStudentIdCardPage> {
           ),
           IconButton(
             icon: const Icon(Icons.nfc),
-            onPressed: (){},
+            onPressed: () {},
           ),
         ],
       ),
@@ -45,26 +43,27 @@ class _SettingStudentIdCardPageState extends State<SettingStudentIdCardPage> {
           transitionBuilder: (Widget child, Animation<double> animation) {
             const angle = math.pi;
             var tilt = animation.value * angle;
-            
+
             if (animation.value < 0.5) {
               return Transform(
-                transform: Matrix4.rotationY(tilt),
+                transform: Matrix4.rotationY(tilt) as Matrix4,
                 alignment: Alignment.center,
                 child: child,
               );
             } else {
               return Transform(
-                transform: Matrix4.rotationY(tilt) * Matrix4.rotationY(angle),
+                transform: (Matrix4.rotationY(tilt) * Matrix4.rotationY(angle)) as Matrix4,
                 alignment: Alignment.center,
                 child: child,
               );
             }
           },
-          child: isFront 
-              ? const StudentIDCardFrontPage() 
+          child: isFront
+              ? const StudentIDCardFrontPage()
               : StudentIDCardBackPage(enrollmentDate: enrollmentDate), // enrollmentDate 전달
         ),
       ),
     );
   }
 }
+

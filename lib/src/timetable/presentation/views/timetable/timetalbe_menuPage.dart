@@ -75,7 +75,7 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
   }
 
   Future<void> _displayAddDialog(BuildContext context) async {
-    TextEditingController _controller = TextEditingController();
+    final TextEditingController _controller = TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: false,

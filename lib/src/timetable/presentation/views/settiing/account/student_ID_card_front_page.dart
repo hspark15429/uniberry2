@@ -30,20 +30,20 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
       String content = await file.readAsString();
       _parseStudentInfo(content);
     } else {
-      debugPrint("파일을 찾을 수 없습니다.");
+      debugPrint('파일을 찾을 수 없습니다.');
     }
   }
 
   void _parseStudentInfo(String content) {
     try {
       var jsonData = jsonDecode(content);
-      studentName = jsonData['氏名'] ?? '';
-      studentNumber = jsonData['学籍番号'] ?? '';
-      department = jsonData['学部'] ?? '';
-      enrollmentDate = jsonData['入学年度'] ?? '';
+      studentName = jsonData['氏名'] as String? ?? '';
+      studentNumber = jsonData['学籍番号'] as String? ?? '';
+      department = jsonData['学部'] as String? ?? '';
+      enrollmentDate = jsonData['入学年度'] as String? ?? '';
       setState(() {});
     } catch (e) {
-      debugPrint("학생 정보 파싱 중 오류 발생: $e");
+      debugPrint('학생 정보 파싱 중 오류 발생: $e');
     }
   }
 
@@ -65,7 +65,7 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
             height: screenHeight * 0.75,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [Color(0xFF7E1951), Color(0xFFD62F5E)],
@@ -91,6 +91,7 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
     );
   }
 }
+
 class SchoolLogoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -101,17 +102,17 @@ class SchoolLogoSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center, // 가로 정렬을 중앙으로 변경
         children: [
-          Text(
-            "R",
+          const Text(
+            'R',
             style: TextStyle(
               fontSize: 54,
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
-            "立命館大学",
+            '立命館大学',
             style: GoogleFonts.yujiMai(
               fontSize: 38,
               fontWeight: FontWeight.bold,
@@ -123,7 +124,6 @@ class SchoolLogoSection extends StatelessWidget {
     );
   }
 }
-
 
 class SchoolImageSection extends StatelessWidget {
   @override
@@ -151,7 +151,7 @@ class StudentPhotoSection extends StatelessWidget {
     return Positioned(
       top: 250,
       left: (screenWidth * 0.85 - 120) / 2,
-      child: CircleAvatar(
+      child: const CircleAvatar(
         radius: 60,
         backgroundImage: AssetImage('/Users/jjpark/dev/uniberry/assets/PARKJAEJIN.jpg'),
       ),
@@ -182,31 +182,31 @@ class StudentInfoSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "氏名: $studentName",
-            style: TextStyle(
+            '氏名: $studentName',
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
-            "学籍番号: $studentNumber",
-            style: TextStyle(
+            '学籍番号: $studentNumber',
+            style: const TextStyle(
               fontSize: 20,
               color: Colors.white,
             ),
           ),
           Text(
-            "学部: $department",
-            style: TextStyle(
+            '学部: $department',
+            style: const TextStyle(
               fontSize: 20,
               color: Colors.white,
             ),
           ),
           Text(
-            "入学年度: $enrollmentDate",
-            style: TextStyle(
+            '入学年度: $enrollmentDate',
+            style: const TextStyle(
               fontSize: 20,
               color: Colors.white,
             ),
@@ -220,7 +220,7 @@ class StudentInfoSection extends StatelessWidget {
 class AdditionalInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return const Positioned(
       top: 510,
       left: 20,
       right: 20,
@@ -229,28 +229,28 @@ class AdditionalInfoSection extends StatelessWidget {
         children: [
           SizedBox(height: 20),
           Text(
-            "京都府京都市北区等持院北町56-1",
+            '京都府京都市北区等持院北町56-1',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white,
             ),
           ),
           Text(
-            "京都府京都市中京区西ノ京朱雀町１",
+            '京都府京都市中京区西ノ京朱雀町１',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white,
             ),
           ),
           Text(
-            "滋賀県草津市野路東1丁目1-1",
+            '滋賀県草津市野路東1丁目1-1',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white,
             ),
           ),
           Text(
-            "大阪府茨木市岩倉町2-150",
+            '大阪府茨木市岩倉町2-150',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white,

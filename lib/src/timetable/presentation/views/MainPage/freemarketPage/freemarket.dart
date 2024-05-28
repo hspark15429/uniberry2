@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket_mypage.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarkget_productDetailPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarkget_itemDetailPage.dart';
 
 final List<Map<String, dynamic>> products = [
   {
@@ -104,23 +104,22 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
   List<Map<String, dynamic>> favoriteProducts = [];
 
   void _toggleFavorite(Map<String, dynamic> product) {
-  setState(() {
-    if (favoriteProducts.any((item) => item['name'] == product['name'])) {
-      print('Removing favorite: ${product['name']}');
-      favoriteProducts.removeWhere((item) => item['name'] == product['name']);
-    } else {
-      print('Adding favorite: ${product['name']}');
-      favoriteProducts.add(product);
-    }
-  });
-}
-
+    setState(() {
+      if (favoriteProducts.any((item) => item['name'] == product['name'])) {
+        print('Removing favorite: ${product['name']}');
+        favoriteProducts.removeWhere((item) => item['name'] == product['name']);
+      } else {
+        print('Adding favorite: ${product['name']}');
+        favoriteProducts.add(product);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> filteredProducts = _selectedTag == 'ALL'
         ? products
-        : products.where((product) => product['tags'].contains(_selectedTag)).toList();
+        : products.where((product) => (product['tags'] as List<String>).contains(_selectedTag)).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -185,7 +184,7 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
                   child: ChoiceChip(
                     label: Text(tag),
                     selected: _selectedTag == tag,
-                    onSelected: (selected) {
+                    onSelected: (bool selected) {
                       setState(() {
                         _selectedTag = tag;
                       });
@@ -216,7 +215,8 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
                           product: product,
                           onFavoriteToggle: _toggleFavorite,
                           isFavorited: favoriteProducts.any((item) => item['name'] == product['name']),
-                          favoriteProducts: favoriteProducts, // 추가
+                          favoriteProducts: favoriteProducts,
+                          products: products, // 추가
                         ),
                       ),
                     );
@@ -241,7 +241,7 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(
-                              product['image'],
+                              product['image'] as String,
                               fit: BoxFit.cover,
                               width: double.infinity,
                             ),
@@ -253,7 +253,7 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product['name'],
+                                product['name'] as String,
                                 style: GoogleFonts.roboto(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
@@ -263,7 +263,7 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '¥${product['price']}',
+                                '¥${product['price'] as int}',
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,

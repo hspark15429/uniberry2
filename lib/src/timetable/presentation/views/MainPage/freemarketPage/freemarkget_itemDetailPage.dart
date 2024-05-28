@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket.dart';
 
 class FreeMarketItemDetailPage extends StatelessWidget {
   final Map<String, dynamic> product;
   final Function(Map<String, dynamic>) onFavoriteToggle;
   final bool isFavorited;
   final List<Map<String, dynamic>> favoriteProducts;
+  final List<Map<String, dynamic>> products;
 
   const FreeMarketItemDetailPage({
     super.key,
@@ -13,16 +13,13 @@ class FreeMarketItemDetailPage extends StatelessWidget {
     required this.onFavoriteToggle,
     required this.isFavorited,
     required this.favoriteProducts,
+    required this.products,
   });
-
-  
 
   @override
   Widget build(BuildContext context) {
-    // Ensure product['tags'] is a List
     final productTags = product['tags'] as List<dynamic>? ?? [];
 
-    // Filter similar items based on tags
     final List<Map<String, dynamic>> similarItems = products
         .where((item) {
           final itemTags = item['tags'] as List<dynamic>? ?? [];
@@ -30,12 +27,12 @@ class FreeMarketItemDetailPage extends StatelessWidget {
         })
         .toList();
 
-    final createdAt = product['createdAt'] as DateTime;
-    final formattedDate = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
+    final DateTime createdAt = product['createdAt'] as DateTime;
+    final String formattedDate = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product['name'], style: const TextStyle(color: Colors.white)),
+        title: Text(product['name'] as String, style: const TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         actions: [
           IconButton(
@@ -53,13 +50,13 @@ class FreeMarketItemDetailPage extends StatelessWidget {
             SizedBox(
               height: 300,
               child: PageView.builder(
-                itemCount: product['imageUrls'].length,
+                itemCount: (product['imageUrls'] as List<dynamic>).length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
                       // 전체보기 로직
                     },
-                    child: Image.network(product['imageUrls'][index], fit: BoxFit.cover),
+                    child: Image.network((product['imageUrls'] as List<dynamic>)[index] as String, fit: BoxFit.cover),
                   );
                 },
               ),
@@ -70,12 +67,12 @@ class FreeMarketItemDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product['name'],
+                    product['name'] as String,
                     style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '¥${product['price']}',
+                    '¥${product['price'] as int}',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
                   ),
                   const SizedBox(height: 8),
@@ -83,24 +80,23 @@ class FreeMarketItemDetailPage extends StatelessWidget {
                     children: [
                       const Icon(Icons.person, size: 20),
                       const SizedBox(width: 4),
-                      Text(product['seller']['nickname']),
+                      Text(product['seller']['nickname'] as String),
                       const SizedBox(width: 8),
-                      Text('(${product['seller']['campus']})'),
+                      Text('(${product['seller']['campus'] as String})'),
                     ],
                   ),
                   const Divider(),
                   Text(
-                    product['description'],
+                    product['description'] as String,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  Text(product['description']),
                   const SizedBox(height: 16),
                   Text(
                     '작성일: $formattedDate',
                     style: const TextStyle(color: Colors.grey),
                   ),
                   Text(
-                    '조회수: ${product['viewCount']}',
+                    '조회수: ${(product['viewCount'] as int).toString()}',
                     style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
@@ -171,6 +167,7 @@ class FreeMarketItemDetailPage extends StatelessWidget {
                               onFavoriteToggle: onFavoriteToggle,
                               isFavorited: favoriteProducts.any((favoriteItem) => favoriteItem['name'] == item['name']),
                               favoriteProducts: favoriteProducts,
+                              products: products,
                             ),
                           ),
                         );
@@ -180,16 +177,16 @@ class FreeMarketItemDetailPage extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(item['image'], width: 150, height: 150, fit: BoxFit.cover),
+                            child: Image.network((item['imageUrls'] as List<dynamic>)[0] as String, width: 150, height: 150, fit: BoxFit.cover),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            item['name'],
+                            item['name'] as String,
                             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            '¥${item['price']}',
+                            '¥${item['price'] as int}',
                             style: const TextStyle(color: Colors.red),
                           ),
                         ],

@@ -9,7 +9,7 @@ class TimetableCourseDetailPage extends StatelessWidget {
   final Course course;
   final String period;
 
-  const TimetableCourseDetailPage({super.key, required this.course, required this.period});
+  const TimetableCourseDetailPage({required this.course, required this.period, super.key});
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -26,7 +26,7 @@ class TimetableCourseDetailPage extends StatelessWidget {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => TimetableScreen(initialSemester: currentSemester)),
-      (Route<dynamic> route) => false,
+      (route) => false,
     );
   }
 

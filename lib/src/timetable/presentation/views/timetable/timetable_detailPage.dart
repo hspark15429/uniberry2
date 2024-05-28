@@ -512,9 +512,9 @@ class _AssignmentPageState extends State<AssignmentPage> {
     final prefs = await SharedPreferences.getInstance();
     final String? assignmentsJson = prefs.getString('assignments');
     if (assignmentsJson != null) {
-      final List<dynamic> assignmentsList = json.decode(assignmentsJson);
+      final List<dynamic> assignmentsList = json.decode(assignmentsJson) as List<dynamic>;
       setState(() {
-        _assignments.addAll(assignmentsList.map((json) => Assignment.fromJson(json)).toList());
+        _assignments.addAll(assignmentsList.map((json) => Assignment.fromJson(json as Map<String, dynamic>)).toList());
       });
     }
   }
@@ -844,12 +844,12 @@ class Assignment {
 
   factory Assignment.fromJson(Map<String, dynamic> json) {
     return Assignment(
-      type: json['type'],
-      title: json['title'],
-      dueDate: DateTime.parse(json['dueDate']),
-      description: json['description'],
-      reminder: json['reminder'],
-      isComplete: json['isComplete'],
+      type: json['type'] as String,
+      title: json['title'] as String,
+      dueDate: DateTime.parse(json['dueDate'] as String),
+      description: json['description'] as String,
+      reminder: json['reminder'] as int,
+      isComplete: json['isComplete'] as bool,
     );
   }
 

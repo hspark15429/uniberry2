@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -16,7 +18,7 @@ class TodolistPage extends StatefulWidget {
 class _TodolistPageState extends State<TodolistPage> {
   List<TodoItem> todoList = [];
   DateTime _selectedDay = DateTime.now();
-  late Map<DateTime, List<TodoItem>> _groupedEvents = {};
+  Map<DateTime, List<TodoItem>> _groupedEvents = {};
   CalendarView _currentView = CalendarView.month;
   final CalendarController _calendarController = CalendarController();
 
@@ -124,7 +126,7 @@ class _TodolistPageState extends State<TodolistPage> {
         if (details.targetElement == CalendarElement.calendarCell) {
           _showEventsOnDate(details.date!);
         } else if (details.appointments != null && details.appointments!.isNotEmpty) {
-          final TodoItem event = details.appointments!.first;
+          final TodoItem event = details.appointments!.first as TodoItem;
           _showEventDetailsDialog(event);
         }
       },
@@ -132,7 +134,7 @@ class _TodolistPageState extends State<TodolistPage> {
         textAlign: TextAlign.center,
         textStyle: TextStyle(
           color: Colors.black,
-fontSize: 20,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -170,7 +172,7 @@ fontSize: 20,
         timelineAppointmentHeight: 20,
       ),
       appointmentBuilder: (BuildContext context, CalendarAppointmentDetails details) {
-        final TodoItem event = details.appointments.first;
+        final TodoItem event = details.appointments.first as TodoItem;
         return Container(
           height: 20,
           width: details.bounds.width,
@@ -179,11 +181,11 @@ fontSize: 20,
             borderRadius: BorderRadius.circular(4),
           ),
           padding: const EdgeInsets.all(4),
-margin: const EdgeInsets.symmetric(vertical: 0.2),
+          margin: const EdgeInsets.symmetric(vertical: 0.2),
           child: Center(
             child: Text(
               event.title,
-style: const TextStyle(color: Colors.white, fontSize: 10),
+              style: const TextStyle(color: Colors.white, fontSize: 10),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               textAlign: TextAlign.center,
@@ -387,7 +389,7 @@ style: const TextStyle(color: Colors.white, fontSize: 10),
                       title: const Text('タグカラー選択'),
                       trailing: Icon(Icons.circle, color: selectedColor),
                       onTap: () async {
-                        showDialog(
+                        unawaited(showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
@@ -421,7 +423,7 @@ style: const TextStyle(color: Colors.white, fontSize: 10),
                               ],
                             );
                           },
-                        );
+                        ));
                       },
                     ),
                     ListTile(
@@ -694,7 +696,7 @@ style: const TextStyle(color: Colors.white, fontSize: 10),
     Color selectedColor = event.tagColor;
     bool reminderOneHourBefore = event.reminderOneHourBefore;
     bool reminderOneDayBefore = event.reminderOneDayBefore;
-    bool isAllDay = event.isAllDay;
+bool isAllDay = event.isAllDay;
 
     showModalBottomSheet(
       context: context,
@@ -996,36 +998,36 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    DateTime date = appointments![index].date;
-    if (appointments![index].isAllDay) {
+    DateTime date = (appointments![index] as TodoItem).date;
+    if ((appointments![index] as TodoItem).isAllDay) {
       return DateTime(date.year, date.month, date.day, 0, 0);
     }
-    TimeOfDay? time = appointments![index].startTime;
+    TimeOfDay? time = (appointments![index] as TodoItem).startTime;
     return DateTime(date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
   }
 
   @override
   DateTime getEndTime(int index) {
-    DateTime date = appointments![index].endDate ?? appointments![index].date;
-    if (appointments![index].isAllDay) {
+    DateTime date = (appointments![index] as TodoItem).endDate ?? (appointments![index] as TodoItem).date;
+    if ((appointments![index] as TodoItem).isAllDay) {
       return DateTime(date.year, date.month, date.day, 23, 59);
     }
-    TimeOfDay? time = appointments![index].endTime;
+    TimeOfDay? time = (appointments![index] as TodoItem).endTime;
     return DateTime(date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
   }
 
   @override
   String getSubject(int index) {
-    return appointments![index].title;
+    return (appointments![index] as TodoItem).title;
   }
 
   @override
   Color getColor(int index) {
-    return appointments![index].tagColor;
+    return (appointments![index] as TodoItem).tagColor;
   }
 
   @override
   bool isAllDay(int index) {
-    return appointments![index].isAllDay;
+    return (appointments![index] as TodoItem).isAllDay;
   }
 }

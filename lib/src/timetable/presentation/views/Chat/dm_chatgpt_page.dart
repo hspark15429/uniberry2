@@ -67,7 +67,7 @@ class _DMChatGPTPageState extends State<DMChatGPTPage> {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return data['choices'][0]['text'];
+
     } else {
       print('Failed to fetch response: ${response.body}');
       return null;
