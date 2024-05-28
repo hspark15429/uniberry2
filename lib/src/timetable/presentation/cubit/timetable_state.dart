@@ -95,15 +95,15 @@ class TimetableUpdated extends TimetableState {
   final int periods;
   final bool includeSaturday;
   final bool includeSunday;
-  final Map<String, Map<String, Course?>> timetable;
+  final List<String> timetables;
 
   const TimetableUpdated({
     required this.periods,
     required this.includeSaturday,
     required this.includeSunday,
-    required this.timetable,
+    required this.timetables,
   });
 
   @override
-  List<Object?> get props => [periods, includeSaturday, includeSunday, timetable];
+  List<Object?> get props => [periods, includeSaturday, includeSunday, timetables];
 }

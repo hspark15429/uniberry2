@@ -6,8 +6,6 @@ import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart'
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
-  String initialSemester = _determineInitialSemester();
-
   switch (settings.name) {
     case '/':
       return MaterialPageRoute(builder: (_) => const HomeScreen());
@@ -15,12 +13,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
           builder: (_) => BlocProvider(
                 create: (_) => sl<TimetableCubit>(),
-                child: TimetableScreen(initialSemester: initialSemester),
+                child: const TimetableScreen(),
               ));
     default:
       return MaterialPageRoute(builder: (_) => const Placeholder());
   }
 }
+
 
 String _determineInitialSemester() {
   DateTime now = DateTime.now();

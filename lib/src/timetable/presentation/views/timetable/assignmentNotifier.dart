@@ -31,3 +31,4 @@ class Assignment {
     this.isComplete = false,
   });
 }
+

@@ -9,7 +9,7 @@ class TimetableCourseDetailPage extends StatelessWidget {
   final Course course;
   final String period;
 
-  const TimetableCourseDetailPage({required this.course, required this.period, super.key});
+  const TimetableCourseDetailPage({super.key, required this.course, required this.period});
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -17,17 +17,6 @@ class TimetableCourseDetailPage extends StatelessWidget {
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  void _saveCourse(BuildContext context) {
-    String currentSemester = '2024年春学期';
-    context.read<TimetableCubit>().addCourseToTimetable(course, period, currentSemester);
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => TimetableScreen(initialSemester: currentSemester)),
-      (route) => false,
-    );
   }
 
   @override
@@ -43,7 +32,16 @@ class TimetableCourseDetailPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
-            onPressed: () => _saveCourse(context),
+            onPressed: () {
+              String currentSemester = '2024年春学期';
+              context.read<TimetableCubit>().addCourseToTimetable(course, period, currentSemester);
+
+              Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(builder: (context) => TimetableScreen()),
+  (Route<dynamic> route) => false,
+);
+            },
           ),
         ],
       ),
@@ -68,21 +66,19 @@ class TimetableCourseDetailPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "강의 정보",
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "장소: ${course.campuses.join(", ")}",
-                            style: const TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
-                        ],
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "강의 정보",
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "장소: ${course.campuses.join(", ")}",
+                          style: const TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ],
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -113,21 +109,14 @@ class TimetableCourseDetailPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const Text(
-                                "수업명",
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  course.titles.join(", "),
-                                  style: const TextStyle(fontSize: 16, color: Colors.grey),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            "수업명",
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            course.titles.join(", "),
+                            style: const TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -149,21 +138,14 @@ class TimetableCourseDetailPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const Text(
-                                "교수명",
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  course.professors.join(", "),
-                                  style: const TextStyle(fontSize: 16, color: Colors.grey),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            "교수명",
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            course.professors.join(", "),
+                            style: const TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ],
                       ),

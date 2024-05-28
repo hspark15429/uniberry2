@@ -49,11 +49,11 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
     String currentSemester = widget.semester;
     context.read<TimetableCubit>().removeCourseFromTimetable(widget.period, currentSemester);
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => TimetableScreen(initialSemester: currentSemester)),
-      (Route<dynamic> route) => false,
-    );
+  Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(builder: (context) => TimetableScreen()),
+  (Route<dynamic> route) => false,
+);
   }
 
   void _editCourse(BuildContext context) {

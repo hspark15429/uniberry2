@@ -47,10 +47,10 @@ class _AddCoursePageState extends State<AddCoursePage> {
     context.read<TimetableCubit>().addCourseToTimetable(newCourse, widget.period, '2024年春学期');
 
     Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const TimetableScreen(initialSemester: '2024年春学期')),
-      (Route<dynamic> route) => false,
-    );
+  context,
+  MaterialPageRoute(builder: (context) => TimetableScreen()),
+  (Route<dynamic> route) => false,
+);
   }
 
   @override

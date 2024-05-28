@@ -28,11 +28,11 @@ MaterialPageRoute(builder: (context) => const HomePage()),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TimetableScreen(initialSemester: initialSemester),
-                  ),
-                );
+  context,
+  MaterialPageRoute(
+    builder: (context) => const TimetableScreen(),
+  ),
+);
               },
               child: const Text('timetable'),
             ),
