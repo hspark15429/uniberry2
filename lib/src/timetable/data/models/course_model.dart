@@ -46,6 +46,21 @@ class CourseModel extends Course {
           credit: (map['credit'] as num).toInt(),
         );
 
+  CourseModel.fromJson(DataMap json)
+      : this(
+          courseId: json['courseId'] as String,
+          titles: List<String>.from(json['titles'] as List<dynamic>),
+          syllabusUrl: json['syllabusUrl'] as String,
+          schools: List<String>.from(json['schools'] as List<dynamic>),
+          codes: List<String>.from(json['codes'] as List<dynamic>),
+          term: json['term'] as String,
+          periods: List<String>.from(json['periods'] as List<dynamic>),
+          campuses: List<String>.from(json['campuses'] as List<dynamic>),
+          professors: List<String>.from(json['professors'] as List<dynamic>),
+          languages: List<String>.from(json['languages'] as List<dynamic>),
+          credit: json['credit'] as int,
+        );
+
   DataMap toMap() {
     return {
       'courseId': courseId,

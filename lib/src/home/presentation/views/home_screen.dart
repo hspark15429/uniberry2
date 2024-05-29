@@ -18,6 +18,12 @@ class HomeScreen extends StatelessWidget {
               },
               child: const Text('Go to Timetable'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/test');
+              },
+              child: const Text('Go to test'),
+            ),
           ],
         ),
       ),

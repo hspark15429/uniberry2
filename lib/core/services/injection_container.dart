@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source_implementation.dart';
 import 'package:uniberry2/src/timetable/data/repositories/timetable_repository_implementation.dart';
 import 'package:uniberry2/src/timetable/domain/repository/timetable_repository.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
@@ -17,7 +18,8 @@ Future<void> initTimetable() async {
   // cubit
   sl
     ..registerFactory(
-        () => TimetableCubit(getCourse: sl(), searchCourses: sl()),)
+      () => TimetableCubit(getCourse: sl(), searchCourses: sl()),
+    )
 
     // usecases
     ..registerLazySingleton(() => GetCourse(sl()))
@@ -25,11 +27,13 @@ Future<void> initTimetable() async {
 
     // repo impl
     ..registerLazySingleton<TimetableRepository>(
-        () => TimetableRepositoryImplementation(sl()),)
+      () => TimetableRepositoryImplementation(sl()),
+    )
 
     // data source impl
     ..registerLazySingleton<TimetableRemoteDataSource>(
-        () => TimetableRemoteDataSourceImpl(cloudStoreClient: sl()),)
+      () => TimetableRemoteDataSourceImplementation(cloudStoreClient: sl()),
+    )
 
     // external
     ..registerLazySingleton(() => FirebaseFirestore.instance);
