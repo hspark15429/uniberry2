@@ -1,3 +1,4 @@
+import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
@@ -17,7 +18,8 @@ Future<void> initTimetable() async {
   // cubit
   sl
     ..registerFactory(
-        () => TimetableCubit(getCourse: sl(), searchCourses: sl()),)
+      () => TimetableCubit(getCourse: sl(), searchCourses: sl()),
+    )
 
     // usecases
     ..registerLazySingleton(() => GetCourse(sl()))
@@ -25,12 +27,22 @@ Future<void> initTimetable() async {
 
     // repo impl
     ..registerLazySingleton<TimetableRepository>(
-        () => TimetableRepositoryImplementation(sl()),)
+      () => TimetableRepositoryImplementation(sl()),
+    )
 
     // data source impl
     ..registerLazySingleton<TimetableRemoteDataSource>(
-        () => TimetableRemoteDataSourceImpl(cloudStoreClient: sl()),)
+      () => TimetableRemoteDataSourceImpl(
+        cloudStoreClient: sl(),
+        coursesSearcher: sl(),
+      ),
+    )
 
     // external
-    ..registerLazySingleton(() => FirebaseFirestore.instance);
+    ..registerLazySingleton(() => FirebaseFirestore.instance)
+    ..registerLazySingleton(() => HitsSearcher(
+          applicationID: 'K1COUI4FQ4',
+          apiKey: '00383db0c4d34b63decf046026091f32',
+          indexName: 'courses_index',
+        ));
 }
