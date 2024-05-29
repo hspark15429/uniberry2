@@ -1,4 +1,3 @@
-import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
@@ -16,14 +15,10 @@ abstract class TimetableRemoteDataSource {
 }
 
 class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
-  TimetableRemoteDataSourceImpl({
-    required FirebaseFirestore cloudStoreClient,
-    required HitsSearcher coursesSearcher,
-  })  : _cloudStoreClient = cloudStoreClient,
-        _coursesSearcher = coursesSearcher;
+  TimetableRemoteDataSourceImpl({required FirebaseFirestore cloudStoreClient})
+      : _cloudStoreClient = cloudStoreClient;
 
   final FirebaseFirestore _cloudStoreClient;
-  final HitsSearcher _coursesSearcher;
 
   @override
   Future<CourseModel> getCourse(String courseId) async {
@@ -34,9 +29,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         return CourseModel.fromMap(courseData.data()!);
       } else {
         throw const ServerException(
-          message: 'course not found',
-          statusCode: 'no-data',
-        );
+            message: 'course not found', statusCode: 'no-data',);
       }
     } on ServerException {
       rethrow;

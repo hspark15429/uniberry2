@@ -19,21 +19,15 @@ void main() {
     documentReference = cloudStoreClient.collection('courses').doc();
     documentReference2 = cloudStoreClient.collection('courses').doc();
 
-    await documentReference.set(
-      tCourse.copyWith(
-        courseId: documentReference.id,
-        schools: ['Engineering'],
-      ).toMap(),
-    );
-    await documentReference2.set(
-      tCourse
-          .copyWith(
-            courseId: documentReference2.id,
-            schools: ['Medicine'],
-            term: 'Spring',
-          )
-          .toMap(),
-    );
+    await documentReference.set(tCourse.copyWith(
+        courseId: documentReference.id, schools: ['Engineering'],).toMap(),);
+    await documentReference2.set(tCourse
+        .copyWith(
+          courseId: documentReference2.id,
+          schools: ['Medicine'],
+          term: 'Spring',
+        )
+        .toMap(),);
 
     dataSource =
         TimetableRemoteDataSourceImpl(cloudStoreClient: cloudStoreClient);
@@ -47,46 +41,27 @@ void main() {
     test('getCourse fail', () async {
       final methodCall = dataSource.getCourse;
       expect(
-        methodCall('sss'),
-        throwsA(
-          const ServerException(
-            message: 'course not found',
-            statusCode: 'no-data',
-          ),
-        ),
-      );
+          methodCall('sss'),
+          throwsA(const ServerException(
+              message: 'course not found', statusCode: 'no-data',),),);
     });
   });
 
   group('searchCourses', () {
     test('searchCourses success', () async {
       final result = await dataSource.searchCourses(
-        school: 'Engineering',
-        campus: '',
-        term: '',
-        period: '',
-      );
+          school: 'Engineering', campus: '', term: '', period: '',);
       expect(result, contains(documentReference.id));
 
       final result2 = await dataSource.searchCourses(
-        school: '',
-        campus: '',
-        term: 'Spring',
-        period: '',
-      );
+          school: '', campus: '', term: 'Spring', period: '',);
       expect(result2, contains(documentReference2.id));
 
       final result3 = await dataSource.searchCourses(
-        school: '',
-        campus: '',
-        term: '',
-        period: '',
-      );
+          school: '', campus: '', term: '', period: '',);
 
       expect(
-        result3,
-        containsAll([documentReference.id, documentReference2.id]),
-      );
+          result3, containsAll([documentReference.id, documentReference2.id]),);
     });
   });
 }
