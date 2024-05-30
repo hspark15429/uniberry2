@@ -32,8 +32,10 @@ class TimetableRemoteDataSourceImplementationAlgolia
 
     _coursesSearcher.applyState(
       (state) => state.copyWith(
-        query: 'BKC',
+        query: '',
         page: 0,
+        hitsPerPage: 200,
+        facetFilters: ['campuses:$campus'],
       ),
     );
 
