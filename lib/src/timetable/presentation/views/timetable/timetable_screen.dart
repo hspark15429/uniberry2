@@ -134,6 +134,9 @@ class _TimetableScreenState extends State<TimetableScreen> {
               );
             }
 
+            final defaultTimetable = _determineCurrentSemester();
+            final allTimetables = [defaultTimetable, ...timetableList];
+
             return Column(
               children: [
                 Padding(
@@ -159,20 +162,22 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   ),
                 ),
                 Expanded(
-                  child: timetableList.isEmpty
+                  child: allTimetables.isEmpty
                       ? const Center(child: Text('시간표가 없습니다.'))
                       : ListView.builder(
-                          itemCount: timetableList.length,
+                          itemCount: allTimetables.length,
                           itemBuilder: (context, index) {
+                            final timetableName = allTimetables[index];
+                            final isSelected = timetableName == _semester;
                             return Dismissible(
-                              key: Key(timetableList[index]),
-                              direction: DismissDirection.endToStart,
+                              key: Key(timetableName),
+                              direction: index == 0 ? DismissDirection.none : DismissDirection.endToStart,
                               onDismissed: (direction) {
-                                if (timetableList.isNotEmpty) {
-                                  context.read<TimetableCubit>().removeTimetable(timetableList[index]);
+                                if (timetableName != defaultTimetable) {
+                                  context.read<TimetableCubit>().removeTimetable(timetableName);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('${timetableList[index]}가 삭제되었습니다'),
+                                      content: Text('$timetableName가 삭제되었습니다'),
                                       duration: const Duration(seconds: 2),
                                     ),
                                   );
@@ -185,11 +190,12 @@ class _TimetableScreenState extends State<TimetableScreen> {
                                 child: const Icon(Icons.delete, color: Colors.white),
                               ),
                               child: Card(
+                                color: isSelected ? Colors.grey[300] : Colors.white,
                                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 elevation: 3,
                                 child: ListTile(
-                                  title: Text(timetableList[index], style: const TextStyle(color: Colors.black)),
+                                  title: Text(timetableName, style: const TextStyle(color: Colors.black)),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.edit),
                                     onPressed: () {
@@ -198,7 +204,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
-                                    _onTimetableSelected(timetableList[index]);
+                                    _onTimetableSelected(timetableName);
                                   },
                                 ),
                               ),
@@ -227,10 +233,18 @@ class _TimetableScreenState extends State<TimetableScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextButton(
-          onPressed: () => _showTimetableList(context),
-          child: Text(_semester, style: const TextStyle(color: Colors.white)),
+        title: GestureDetector(
+          onTap: () => _showTimetableList(context),
+          child: Text(
+            _semester,
+            style: const TextStyle(
+              fontSize: 24,
+              color: Colors.white,
+              decoration: TextDecoration.underline, // 강조 표시
+            ),
+          ),
         ),
+        centerTitle: true, // 중앙 정렬
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -366,7 +380,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 value: BlocProvider.of<TimetableCubit>(context),
                 child: CoursesListPage(
                   period: period,
-                  school: context.read<TimetableCubit>().selectedSchool ?? '학부 선택 없음',
+                  school: context.read<TimetableCubit>().selectedSchool ?? '학部 선택 없음',
                   semester: _semester, // 추가된 라인
                 ),
               ),
@@ -412,36 +426,18 @@ class _TimetableScreenState extends State<TimetableScreen> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          _buildGpaAndCreditsText(),
-          const SizedBox(height: 16),
           GradeRateChartPage(
-            totalRequiredCredits: 124,
-            totalCompletedCredits: 63,
-            cultureCreditsRequired: 24,
-            cultureCreditsCompleted: 24,
-            foreignLanguageCreditsRequired: 12,
-            foreignLanguageCreditsCompleted: 12,
-            majorCreditsRequired: 68,
-            majorCreditsCompleted: 28,
+            totalRequiredCredits: 124.0,
+            totalCompletedCredits: 0.0,
+            cultureCreditsRequired: 24.0,
+            cultureCreditsCompleted: 0.0,
+            foreignLanguageCreditsRequired: 12.0,
+            foreignLanguageCreditsCompleted: 0.0,
+            majorCreditsRequired: 68.0,
+            majorCreditsCompleted: 0.0,
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildGpaAndCreditsText() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text(
-          '累積GPA: 4.2/5.0',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        Text(
-          '取得単位: 76/124',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-      ],
     );
   }
 }

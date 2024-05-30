@@ -10,7 +10,7 @@ class GradeRateChartPage extends StatelessWidget {
   final double majorCreditsRequired;
   final double majorCreditsCompleted;
 
-  GradeRateChartPage({
+  const GradeRateChartPage({
     required this.totalRequiredCredits,
     required this.totalCompletedCredits,
     required this.cultureCreditsRequired,
