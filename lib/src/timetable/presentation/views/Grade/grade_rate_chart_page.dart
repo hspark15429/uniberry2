@@ -34,16 +34,16 @@ class GradeRateChartPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('卒業要件', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+children: [
+const Text('졸업', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
-          _buildProgressIndicator("必要総単位", totalRequiredCredits, totalCompletedCredits),
+_buildProgressIndicator("필요총학점", totalRequiredCredits, totalCompletedCredits),
           const SizedBox(height: 16),
-          _buildProgressIndicator("教養科目", cultureCreditsRequired, cultureCreditsCompleted),
+_buildProgressIndicator("교양과목", cultureCreditsRequired, cultureCreditsCompleted),
           const SizedBox(height: 16),
-          _buildProgressIndicator("外国語", foreignLanguageCreditsRequired, foreignLanguageCreditsCompleted),
+_buildProgressIndicator("외국어", foreignLanguageCreditsRequired, foreignLanguageCreditsCompleted),
           const SizedBox(height: 16),
-          _buildProgressIndicator("専門科目", majorCreditsRequired, majorCreditsCompleted),
+_buildProgressIndicator("전공", majorCreditsRequired, majorCreditsCompleted),
         ],
       ),
     );
@@ -67,7 +67,7 @@ class GradeRateChartPage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          "必須 $requiredInt 履修 $completedInt (${percentage.toStringAsFixed(1)}%)",
+          "필수 $requiredInt 이수 $completedInt (${percentage.toStringAsFixed(1)}%)",
           style: const TextStyle(fontSize: 14, color: Colors.black54),
         ),
       ],

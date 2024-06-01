@@ -386,14 +386,14 @@ class _TodolistPageState extends State<TodolistPage> {
                     ),
                     const SizedBox(height: 16),
                     ListTile(
-                      title: const Text('タグカラー選択'),
+title: const Text('태그색상선택'),
                       trailing: Icon(Icons.circle, color: selectedColor),
                       onTap: () async {
                         unawaited(showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('タグカラー選択'),
+title: const Text('태그색상선택'),
                               content: SingleChildScrollView(
                                 child: BlockPicker(
                                   pickerColor: selectedColor,
@@ -417,7 +417,7 @@ class _TodolistPageState extends State<TodolistPage> {
                               ),
                               actions: <Widget>[
                                 TextButton(
-                                  child: const Text('保存'),
+child: const Text('저장'),
                                   onPressed: () => Navigator.of(context).pop(),
                                 ),
                               ],
@@ -499,7 +499,7 @@ class _TodolistPageState extends State<TodolistPage> {
                       },
                     ),
                     SwitchListTile(
-                      title: const Text('終日'),
+title: const Text('종일'),
                       value: isAllDay,
                       onChanged: (value) {
                         setState(() {
@@ -513,7 +513,7 @@ class _TodolistPageState extends State<TodolistPage> {
                     ),
                     TextField(
                       decoration: InputDecoration(
-                        labelText: '場所',
+labelText: '장소',
                         filled: true,
                         fillColor: Colors.grey[200],
                         border: const OutlineInputBorder(),
@@ -521,7 +521,7 @@ class _TodolistPageState extends State<TodolistPage> {
                       onChanged: (value) => location = value,
                     ),
                     SwitchListTile(
-                      title: const Text('1時間前にリマインド'),
+title: const Text('1시간전에알림'),
                       value: reminderOneHourBefore,
                       onChanged: (value) {
                         setState(() {
@@ -530,7 +530,7 @@ class _TodolistPageState extends State<TodolistPage> {
                       },
                     ),
                     SwitchListTile(
-                      title: const Text('1日前にリマインド'),
+title: const Text('전날에알림'),
                       value: reminderOneDayBefore,
                       onChanged: (value) {
                         setState(() {
@@ -542,22 +542,22 @@ class _TodolistPageState extends State<TodolistPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          child: const Text('キャンセル'),
+child: const Text('취소'),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         ElevatedButton(
-                          child: const Text('保存'),
+child: const Text('저장'),
                           onPressed: () {
                             if (title.isEmpty) {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: const Text('エラー'),
-                                    content: const Text('必須フィールドを入力してください。'),
+title: const Text('에러'),
+content: const Text('필수필드를입력해주세요'),
                                     actions: <Widget>[
                                       TextButton(
-                                        child: const Text('確認'),
+child: const Text('확인'),
                                         onPressed: () => Navigator.of(context).pop(),
                                       ),
                                     ],
@@ -618,29 +618,29 @@ class _TodolistPageState extends State<TodolistPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('イベント詳細情報'),
+title: const Text('이벤트상세정보'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('タイトル: ${event.title}'),
-              Text('日付: ${DateFormat('yyyy-MM-dd').format(event.date)}'),
+Text('타이틀: ${event.title}'),
+Text('일정: ${DateFormat('yyyy-MM-dd').format(event.date)}'),
               if (!event.isAllDay) ...[
-                Text('開始時間: ${event.startTime?.format(context) ?? '未指定'}'),
-                Text('終了時間: ${event.endTime?.format(context) ?? '未指定'}'),
+Text('개시시간: ${event.startTime?.format(context) ?? '미지정'}'),
+Text('종료시간: ${event.endTime?.format(context) ?? '미지정'}'),
               ],
-              Text('内容: ${event.content}'),
+Text('내용: ${event.content}'),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('閉じる'),
+child: const Text('닫기'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('削除'),
+child: const Text('삭제'),
               onPressed: () {
                 setState(() {
                   todoList.removeWhere((item) => item.id == event.id);
@@ -649,8 +649,8 @@ class _TodolistPageState extends State<TodolistPage> {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              child: const Text('編集'),
+TextButton(
+child: const Text('편집'),
               onPressed: () {
                 Navigator.of(context).pop();
                 _showEditBottomSheet(event);

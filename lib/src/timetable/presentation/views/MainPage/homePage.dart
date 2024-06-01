@@ -211,7 +211,7 @@ backgroundColor: Colors.white,// Colors.grey[300],
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '掲示板リスト',
+'게시판리스트',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           _buildBoardSectionTabs(context),
@@ -232,7 +232,7 @@ backgroundColor: Colors.white,// Colors.grey[300],
                 selectedBoardType = null;
               });
             },
-            child: const Text('ALL', style: TextStyle(color: Colors.black)),
+child: const Text('ALL', style: TextStyle(color: Colors.black)),
           ),
           ...BoardType.values.map((boardType) {
             return TextButton(
@@ -365,7 +365,7 @@ backgroundColor: Colors.white,// Colors.grey[300],
                               ],
                             ),
                             Text(
-                              "閲覧数 ${post.viewCount}",
+                              "조회수 ${post.viewCount}",
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -475,7 +475,7 @@ backgroundColor: Colors.white,// Colors.grey[300],
                         ],
                       ),
                       Text(
-                        "閲覧数 ${post.viewCount}",
+                        "조회수 ${post.viewCount}",
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,
@@ -713,7 +713,7 @@ color: Colors.purpleAccent,
                   children: [
                     _buildInfoCard(
                       context,
-                      title: '今日の予定',
+title: '오늘의예정',
                       subtitle: DateFormat('M月 d日(E)', 'ja').format(DateTime.now()), // 오늘 날짜를 표시
                       buttons: [], // 아이콘을 삭제했으므로 빈 리스트
                       todoItems: todayTodoItems, // 오늘 일정을 보여주기 위해 추가
@@ -740,7 +740,7 @@ color: Colors.purpleAccent,
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  '現在人気の投稿',
+'인기글',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry2/src/home/presentation/views/home_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_page.dart';
@@ -18,12 +19,25 @@ class TimetableScreen extends StatefulWidget {
 }
 
 class _TimetableScreenState extends State<TimetableScreen> {
-  late String _semester;
+  late Future<String> _semesterFuture;
 
   @override
   void initState() {
     super.initState();
-    _semester = _determineCurrentSemester();
+    _semesterFuture = _initializeSemester();
+  }
+
+  Future<String> _initializeSemester() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedSemester = prefs.getString('initialSemester');
+
+    if (savedSemester == null) {
+      final newSemester = _determineCurrentSemester();
+      await prefs.setString('initialSemester', newSemester);
+      return newSemester;
+    } else {
+      return savedSemester;
+    }
   }
 
   String _determineCurrentSemester() {
@@ -32,9 +46,9 @@ class _TimetableScreenState extends State<TimetableScreen> {
     final month = now.month;
 
     if (month >= 3 && month <= 8) {
-      return '$year年春学期';
+return '$year년봄학기';
     } else {
-      return '$year年秋学期';
+return '$year년가을학기';
     }
   }
 
@@ -89,11 +103,11 @@ class _TimetableScreenState extends State<TimetableScreen> {
 
   void _onTimetableSelected(String semester) {
     setState(() {
-      _semester = semester;
+      _semesterFuture = Future.value(semester);
     });
   }
 
-  void _showTimetableList(BuildContext context) {
+  void _showTimetableList(BuildContext context, String semester) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -134,8 +148,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
               );
             }
 
-            final defaultTimetable = _determineCurrentSemester();
-            final allTimetables = [defaultTimetable, ...timetableList];
+            final allTimetables = [semester, ...timetableList];
 
             return Column(
               children: [
@@ -168,12 +181,12 @@ class _TimetableScreenState extends State<TimetableScreen> {
                           itemCount: allTimetables.length,
                           itemBuilder: (context, index) {
                             final timetableName = allTimetables[index];
-                            final isSelected = timetableName == _semester;
+                            final isSelected = timetableName == semester;
                             return Dismissible(
                               key: Key(timetableName),
                               direction: index == 0 ? DismissDirection.none : DismissDirection.endToStart,
                               onDismissed: (direction) {
-                                if (timetableName != defaultTimetable) {
+                                if (timetableName != semester) {
                                   context.read<TimetableCubit>().removeTimetable(timetableName);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -231,80 +244,100 @@ class _TimetableScreenState extends State<TimetableScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: GestureDetector(
-          onTap: () => _showTimetableList(context),
-          child: Text(
-            _semester,
-            style: const TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-              decoration: TextDecoration.underline, // 강조 표시
-            ),
-          ),
-        ),
-        centerTitle: true, // 중앙 정렬
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.school, color: Colors.white),
-            onPressed: () => _selectSchool(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
-            onPressed: () => _showTimetableSettings(context),
-          ),
-        ],
-      ),
-      body: BlocListener<TimetableCubit, TimetableState>(
-        listener: (context, state) {
-          if (state is TimetableError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          }
-        },
-        child: BlocBuilder<TimetableCubit, TimetableState>(
-          builder: (context, state) {
-            final timetableCubit = context.read<TimetableCubit>();
-            final int periods = timetableCubit.periods;
-            final bool includeSaturday = timetableCubit.includeSaturday;
-            final bool includeSunday = timetableCubit.includeSunday;
-
-            final List<String> days = ['月', '火', '水', '木', '金'];
-            if (includeSaturday) days.add('土');
-            if (includeSunday) days.add('日');
-
-            return ListView(
-              padding: const EdgeInsets.all(8.0),
-              children: [
-                _buildDayHeader(days),
-                ...List.generate(periods, (index) => _buildPeriodRow(context, index, days, timetableCubit)),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const GradePage()),
-                    );
-                  },
-                  child: _buildGradeStatusCard(),
+    return FutureBuilder<String>(
+      future: _semesterFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(child: Text('Error: ${snapshot.error}')),
+          );
+        } else if (snapshot.hasData) {
+          final semester = snapshot.data!;
+          return Scaffold(
+            appBar: AppBar(
+              title: GestureDetector(
+                onTap: () => _showTimetableList(context, semester),
+                child: Text(
+                  semester,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    decoration: TextDecoration.underline, // 강조 표시
+                  ),
                 ),
-                const SizedBox(height: 300),
+              ),
+              centerTitle: true, // 중앙 정렬
+              backgroundColor: Colors.black,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  );
+                },
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.school, color: Colors.white),
+                  onPressed: () => _selectSchool(context),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.settings, color: Colors.white),
+                  onPressed: () => _showTimetableSettings(context),
+                ),
               ],
-            );
-          },
-        ),
-      ),
+            ),
+            body: BlocListener<TimetableCubit, TimetableState>(
+              listener: (context, state) {
+                if (state is TimetableError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.message)),
+                  );
+                }
+              },
+              child: BlocBuilder<TimetableCubit, TimetableState>(
+                builder: (context, state) {
+                  final timetableCubit = context.read<TimetableCubit>();
+                  final int periods = timetableCubit.periods;
+                  final bool includeSaturday = timetableCubit.includeSaturday;
+                  final bool includeSunday = timetableCubit.includeSunday;
+
+                  final List<String> days = ['月', '火', '水', '木', '金'];
+                  if (includeSaturday) days.add('土');
+                  if (includeSunday) days.add('日');
+
+                  return ListView(
+                    padding: const EdgeInsets.all(8.0),
+                    children: [
+                      _buildDayHeader(days),
+                      ...List.generate(periods, (index) => _buildPeriodRow(context, index, days, timetableCubit, semester)),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const GradePage()),
+                          );
+                        },
+                        child: _buildGradeStatusCard(),
+                      ),
+                      const SizedBox(height: 300),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        } else {
+          return const Scaffold(
+            body: Center(child: Text('No data')),
+          );
+        }
+      },
     );
   }
 
@@ -324,7 +357,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
     );
   }
 
-  Widget _buildPeriodRow(BuildContext context, int periodIndex, List<String> days, TimetableCubit timetableCubit) {
+  Widget _buildPeriodRow(BuildContext context, int periodIndex, List<String> days, TimetableCubit timetableCubit, String semester) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -348,7 +381,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
           ...days.map((day) => Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0), // 좌우 여백 추가
-              child: _buildDayCell(context, periodIndex, days.indexOf(day), timetableCubit),
+              child: _buildDayCell(context, periodIndex, days.indexOf(day), timetableCubit, semester),
             ),
           )).toList(),
         ],
@@ -356,20 +389,20 @@ class _TimetableScreenState extends State<TimetableScreen> {
     );
   }
 
-  Widget _buildDayCell(BuildContext context, int periodIndex, int dayIndex, TimetableCubit timetableCubit) {
+  Widget _buildDayCell(BuildContext context, int periodIndex, int dayIndex, TimetableCubit timetableCubit, String semester) {
     final List<String> days = ['月', '火', '水', '木', '金'];
     if (timetableCubit.includeSaturday) days.add('土');
     if (timetableCubit.includeSunday) days.add('日');
 
     String period = '${days[dayIndex]}${periodIndex + 1}';
-    final course = timetableCubit.semesterTimetables[_semester]?[period];
+    final course = timetableCubit.semesterTimetables[semester]?[period];
 
     return InkWell(
       onTap: () {
         if (course != null) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (newContext) => TimetableDetailPage(course: course, period: period, semester: _semester),
+              builder: (newContext) => TimetableDetailPage(course: course, period: period, semester: semester),
             ),
           );
         } else {
@@ -381,7 +414,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 child: CoursesListPage(
                   period: period,
                   school: context.read<TimetableCubit>().selectedSchool ?? '학部 선택 없음',
-                  semester: _semester, // 추가된 라인
+                  semester: semester, // 추가된 라인
                 ),
               ),
             ),
@@ -418,14 +451,14 @@ class _TimetableScreenState extends State<TimetableScreen> {
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            '履修状況',
+          Text(
+'이수상황',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           GradeRateChartPage(
             totalRequiredCredits: 124.0,
             totalCompletedCredits: 0.0,

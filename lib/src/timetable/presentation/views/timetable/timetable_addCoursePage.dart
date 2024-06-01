@@ -44,7 +44,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
       languages: const [],
     );
 
-    context.read<TimetableCubit>().addCourseToTimetable(newCourse, widget.period, '2024年春学期');
+context.read<TimetableCubit>().addCourseToTimetable(newCourse, widget.period, '2024년봄학기');
 
     Navigator.pushAndRemoveUntil(
   context,

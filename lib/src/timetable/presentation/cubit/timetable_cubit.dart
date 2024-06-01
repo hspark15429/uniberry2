@@ -76,6 +76,7 @@ class TimetableCubit extends Cubit<TimetableState> {
 
   void addTimetable(String timetable) {
     _timetables.add(timetable);
+    _semesterTimetables[timetable] = {}; // 새로운 시간표를 추가할 때 _semesterTimetables에도 추가
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
@@ -86,12 +87,30 @@ class TimetableCubit extends Cubit<TimetableState> {
 
   void removeTimetable(String timetable) {
     _timetables.remove(timetable);
+    _semesterTimetables.remove(timetable); // 시간표 제거 시 _semesterTimetables에서도 제거
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
       includeSunday: _includeSunday,
       timetables: List.from(_timetables),
     ));
+  }
+
+  void updateTimetable(String oldName, String newName) {
+    final index = _timetables.indexOf(oldName);
+    if (index != -1) {
+      _timetables[index] = newName;
+
+      // _semesterTimetables 키 업데이트
+      _semesterTimetables[newName] = _semesterTimetables.remove(oldName)!;
+
+      emit(TimetableUpdated(
+        periods: _periods,
+        includeSaturday: _includeSaturday,
+        includeSunday: _includeSunday,
+        timetables: List.from(_timetables),
+      ));
+    }
   }
 
   Future<void> getCourse(String courseId) async {

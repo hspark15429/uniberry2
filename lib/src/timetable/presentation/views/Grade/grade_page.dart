@@ -51,7 +51,7 @@ class _GradePageState extends State<GradePage> {
                         },
                       ),
                       const Text(
-                        '時間表を選択',
+'시간표선택',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -59,7 +59,7 @@ class _GradePageState extends State<GradePage> {
                 ),
                 Expanded(
                   child: timetableList.isEmpty
-                      ? const Center(child: Text('時間表がありません。'))
+? const Center(child: Text('시간표가 없습니다.'))
                       : ListView.builder(
                           itemCount: timetableList.length,
                           itemBuilder: (context, index) {

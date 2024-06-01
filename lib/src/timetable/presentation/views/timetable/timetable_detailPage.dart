@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
@@ -51,7 +54,7 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
 
   Navigator.pushAndRemoveUntil(
   context,
-  MaterialPageRoute(builder: (context) => TimetableScreen()),
+  MaterialPageRoute(builder: (context) => const TimetableScreen()),
   (Route<dynamic> route) => false,
 );
   }
@@ -117,7 +120,7 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () => _launchURL(widget.course.syllabusUrl),
-                  child: const Text("シラバスを見る", style: TextStyle(color: Colors.white)),
+child: const Text("시라버스확인", style: TextStyle(color: Colors.white)),
                 ),
               ),
               const SizedBox(height: 16),
@@ -501,11 +504,49 @@ class AssignmentPage extends StatefulWidget {
 
 class _AssignmentPageState extends State<AssignmentPage> {
   final List<Assignment> _assignments = [];
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
     super.initState();
     _loadAssignments();
+    _initializeNotifications();
+  }
+
+  Future<void> _initializeNotifications() async {
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    final DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+          onDidReceiveLocalNotification: (id, title, body, payload) async {
+            // Handle your logic here when a notification is received
+          },
+        );
+    final InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // Handle your logic here when a notification is tapped
+      },
+    );
+    tz.initializeTimeZones();
+
+    // Request permissions for iOS
+    final bool? result = await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+
+    if (result != null && !result) {
+      print('Notification permissions not granted.');
+    }
   }
 
   Future<void> _loadAssignments() async {
@@ -534,6 +575,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
             _assignments.add(assignment);
           });
           _saveAssignments();
+          _scheduleNotification(assignment);
         },
       ),
     );
@@ -557,6 +599,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
             _assignments[index] = updatedAssignment;
           });
           _saveAssignments();
+          _scheduleNotification(updatedAssignment);
         },
       ),
     );
@@ -580,9 +623,36 @@ class _AssignmentPageState extends State<AssignmentPage> {
               _assignments.insert(index, deletedAssignment);
             });
             _saveAssignments();
+            _scheduleNotification(deletedAssignment);
           },
         ),
       ),
+    );
+  }
+
+  Future<void> _scheduleNotification(Assignment assignment) async {
+    final DateTime scheduledTime = assignment.dueDate.subtract(Duration(hours: assignment.reminder));
+    final tz.TZDateTime tzScheduledTime = tz.TZDateTime.from(scheduledTime, tz.local);
+
+    print('Scheduling notification for: $tzScheduledTime'); // 로그 추가
+
+    const androidDetails = AndroidNotificationDetails(
+      'Assignment Reminder',
+      'Reminder for assignment due dates',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const iOSDetails = DarwinNotificationDetails();
+    const notificationDetails = NotificationDetails(android: androidDetails, iOS: iOSDetails);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      assignment.hashCode,
+      '과제 알림',
+      '${assignment.title}의 마감 기한이 다가오고 있습니다.',
+      tzScheduledTime,
+      notificationDetails,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
     );
   }
 
@@ -647,7 +717,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Due: ${DateFormat('yyyy-MM-dd').format(assignment.dueDate)}',
+                      'Due: ${DateFormat('yyyy-MM-dd HH:mm').format(assignment.dueDate)}',
                       style: const TextStyle(color: Colors.grey),
                     ),
                     if (assignment.description.isNotEmpty)
@@ -692,6 +762,7 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
   final _formKey = GlobalKey<FormState>();
   late String _type;
   DateTime? _dueDate;
+  late TimeOfDay _dueTime;
   late String _title;
   late String _description;
   late int _reminder;
@@ -701,6 +772,9 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
     super.initState();
     _type = widget.assignment?.type ?? 'Assignment';
     _dueDate = widget.assignment?.dueDate;
+    _dueTime = widget.assignment != null
+        ? TimeOfDay(hour: widget.assignment!.dueDate.hour, minute: widget.assignment!.dueDate.minute)
+        : TimeOfDay.now();
     _title = widget.assignment?.title ?? '';
     _description = widget.assignment?.description ?? '';
     _reminder = widget.assignment?.reminder ?? 24;
@@ -728,25 +802,32 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
                     _type = value!;
                   });
                 },
-                decoration: InputDecoration(labelText: 'Type'),
+                decoration: const InputDecoration(labelText: 'Type'),
                 validator: (value) => value == null ? '유형을 선택하세요' : null,
               ),
               const SizedBox(height: 8),
               ListTile(
                 title: Text(
-                    _dueDate == null ? '기한 선택' : '기한: ${DateFormat('yyyy-MM-dd').format(_dueDate!)}'),
+                    _dueDate == null ? '기한 선택' : '기한: ${DateFormat('yyyy-MM-dd').format(_dueDate!)} ${_dueTime.format(context)}'),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () async {
-                  DateTime? picked = await showDatePicker(
+                  DateTime? pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime.now().subtract(const Duration(days: 30)),
                     lastDate: DateTime.now().add(const Duration(days: 365)),
                   );
-                  if (picked != null && picked != _dueDate) {
-                    setState(() {
-                      _dueDate = picked;
-                    });
+                  if (pickedDate != null) {
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (pickedTime != null) {
+                      setState(() {
+                        _dueDate = pickedDate;
+                        _dueTime = pickedTime;
+                      });
+                    }
                   }
                 },
               ),
@@ -777,13 +858,16 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
                 items: const [
                   DropdownMenuItem(value: 24, child: Text('1일 전')),
                   DropdownMenuItem(value: 1, child: Text('1시간 전')),
+                  DropdownMenuItem(value: 72, child: Text('3일 전')),
+                  DropdownMenuItem(value: 0, child: Text('1분 전')),
                 ],
                 onChanged: (value) {
                   setState(() {
                     _reminder = value!;
                   });
                 },
-                decoration: InputDecoration(labelText: '리마인더'),
+                decoration: const InputDecoration(labelText: '리마인더'),
+                validator: (value) => value == null ? '리마인더를 선택하세요' : null,
               ),
             ],
           ),
@@ -799,10 +883,17 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate() && _dueDate != null) {
+              final DateTime finalDueDate = DateTime(
+                _dueDate!.year,
+                _dueDate!.month,
+                _dueDate!.day,
+                _dueTime.hour,
+                _dueTime.minute,
+              );
               final assignment = Assignment(
                 type: _type,
                 title: _title,
-                dueDate: _dueDate!,
+                dueDate: finalDueDate,
                 description: _description,
                 reminder: _reminder,
                 isComplete: widget.assignment?.isComplete ?? false,

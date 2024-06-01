@@ -24,7 +24,7 @@ class TimetableCourseDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          course.titles.join(", "),
+          course.titles.join(', '),
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
@@ -33,12 +33,12 @@ class TimetableCourseDetailPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              String currentSemester = '2024年春学期';
+String currentSemester = '2024봄학기';
               context.read<TimetableCubit>().addCourseToTimetable(course, period, currentSemester);
 
               Navigator.pushAndRemoveUntil(
   context,
-  MaterialPageRoute(builder: (context) => TimetableScreen()),
+  MaterialPageRoute(builder: (context) => const TimetableScreen()),
   (Route<dynamic> route) => false,
 );
             },
@@ -69,9 +69,9 @@ class TimetableCourseDetailPage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "강의 정보",
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                        const Text(
+                          '강의 정보',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -83,7 +83,7 @@ class TimetableCourseDetailPage extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                       onPressed: () => _launchURL(course.syllabusUrl),
-                      child: const Text("シラバスを見る", style: TextStyle(color: Colors.white)),
+child: const Text('시라버스확인', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -109,13 +109,13 @@ class TimetableCourseDetailPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "수업명",
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                          const Text(
+                            '수업명',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            course.titles.join(", "),
+                            course.titles.join(', '),
                             style: const TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ],
@@ -138,13 +138,13 @@ class TimetableCourseDetailPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "교수명",
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                          const Text(
+                            '교수명',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            course.professors.join(", "),
+                            course.professors.join(', '),
                             style: const TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ],

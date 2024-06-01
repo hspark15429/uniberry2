@@ -49,7 +49,7 @@ class CustomDataTableWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
               Text(
-                '取得単位: $creditsEarned',
+'취득단위: $creditsEarned',
                 style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
               const SizedBox(height: 16),
@@ -58,11 +58,11 @@ class CustomDataTableWidget extends StatelessWidget {
                 child: DataTable(
                   columnSpacing: 16,
                   columns: const [
-                    DataColumn(label: Text('科目名', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
-                    DataColumn(label: Text('単位数', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
-                    DataColumn(label: Text('成績', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
-                    DataColumn(label: Text('区分', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
-                    DataColumn(label: Text('削除', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+DataColumn(label: Text('과목명', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+DataColumn(label: Text('단위수', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+DataColumn(label: Text('성적', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+DataColumn(label: Text('구분', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
+DataColumn(label: Text('삭제', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
                   ],
                   rows: courses.asMap().entries.map((entry) {
                     int index = entry.key;
@@ -126,7 +126,7 @@ class CustomDataTableWidget extends StatelessWidget {
                             onChanged: (value) {
                               onUpdateCourse(index, nameController.text, credits, grade, value!);
                             },
-                            items: ['専門科目', '教養科目', '外国語']
+items: ['전공과목', '교양과목', '외국어']
                                 .map((e) => DropdownMenuItem(
                                       value: e,
                                       child: Text(e),

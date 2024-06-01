@@ -17,7 +17,7 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
     super.initState();
     int currentYear = DateTime.now().year;
     _timetableList = List.generate(4, (int index) => currentYear + index)
-        .expand((year) => ["${year}年春学期", "${year}年秋学期"])
+.expand((year) => ["${year}년봄학기", "${year}년가을학기"])
         .toList();
   }
 
