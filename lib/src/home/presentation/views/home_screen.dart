@@ -45,6 +45,12 @@ MaterialPageRoute(builder: (context) => const HomePage()),
               },
               child: const Text('DM'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/test');
+              },
+              child: const Text('Go to test'),
+            ),
           ],
         ),
       ),
