@@ -105,5 +105,6 @@ class TimetableUpdated extends TimetableState {
   });
 
   @override
-  List<Object?> get props => [periods, includeSaturday, includeSunday, timetables];
+  List<Object?> get props =>
+      [periods, includeSaturday, includeSunday, timetables];
 }

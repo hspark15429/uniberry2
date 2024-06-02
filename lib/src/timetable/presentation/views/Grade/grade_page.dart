@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Grade/CustomDataTableWidget.dart';
-import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_chart_page.dart' as grade_chart;
-import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_rate_chart_page.dart' as grade_rate;
+import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_chart_page.dart'
+    as grade_chart;
+import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_rate_chart_page.dart'
+    as grade_rate;
 
 class GradePage extends StatefulWidget {
   const GradePage({super.key});
@@ -25,7 +27,18 @@ class _GradePageState extends State<GradePage> {
   List<Map<String, dynamic>> courses = [];
 
   final List<String> semesterNames = [
-    '1S', '1A', '2S', '2A', '3S', '3A', '4S', '4A', '5S', '5A', '6S', '6A',
+    '1S',
+    '1A',
+    '2S',
+    '2A',
+    '3S',
+    '3A',
+    '4S',
+    '4A',
+    '5S',
+    '5A',
+    '6S',
+    '6A',
   ];
 
   void _loadTimetable(BuildContext context) {
@@ -34,7 +47,8 @@ class _GradePageState extends State<GradePage> {
       builder: (BuildContext context) {
         return BlocBuilder<TimetableCubit, TimetableState>(
           builder: (context, state) {
-            final List<String> timetableList = context.read<TimetableCubit>().timetables;
+            final List<String> timetableList =
+                context.read<TimetableCubit>().timetables;
             final TextEditingController _controller = TextEditingController();
 
             return Column(
@@ -51,25 +65,30 @@ class _GradePageState extends State<GradePage> {
                         },
                       ),
                       const Text(
-'시간표선택',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        '시간표선택',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: timetableList.isEmpty
-? const Center(child: Text('시간표가 없습니다.'))
+                      ? const Center(child: Text('시간표가 없습니다.'))
                       : ListView.builder(
                           itemCount: timetableList.length,
                           itemBuilder: (context, index) {
                             final timetableName = timetableList[index];
                             return Card(
-                              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
                               elevation: 3,
                               child: ListTile(
-                                title: Text(timetableName, style: const TextStyle(color: Colors.black)),
+                                title: Text(timetableName,
+                                    style:
+                                        const TextStyle(color: Colors.black)),
                                 onTap: () {
                                   Navigator.pop(context, timetableName);
                                 },
@@ -99,7 +118,8 @@ class _GradePageState extends State<GradePage> {
     });
   }
 
-  void _updateCourse(int index, String name, int credits, String grade, String type) {
+  void _updateCourse(
+      int index, String name, int credits, String grade, String type) {
     setState(() {
       courses[index] = {
         'name': name,
@@ -243,12 +263,16 @@ class _GradePageState extends State<GradePage> {
 
   void _applyGrades() {
     double semesterGPA = cumulativeGPA;
-    int semesterCredits = courses.fold(0, (sum, course) => sum + (course['credits'] as int));
+    int semesterCredits =
+        courses.fold(0, (sum, course) => sum + (course['credits'] as int));
 
     setState(() {
       // 누적 GPA와 취득 단위 업데이트
       totalCompletedCredits += semesterCredits;
-      cumulativeGPA = (cumulativeGPA * (totalCompletedCredits - semesterCredits) + semesterGPA * semesterCredits) / totalCompletedCredits;
+      cumulativeGPA =
+          (cumulativeGPA * (totalCompletedCredits - semesterCredits) +
+                  semesterGPA * semesterCredits) /
+              totalCompletedCredits;
 
       // 각 과목 유형별로 취득 단위 업데이트
       for (var course in courses) {
@@ -269,7 +293,8 @@ class _GradePageState extends State<GradePage> {
       }
 
       // 선택된 학기 성적과 학점 반영
-      semesterGPAList.add({'GPA': semesterGPA, 'Credits': semesterCredits.toDouble()});
+      semesterGPAList
+          .add({'GPA': semesterGPA, 'Credits': semesterCredits.toDouble()});
     });
   }
 
@@ -295,14 +320,20 @@ class _GradePageState extends State<GradePage> {
                 });
               },
               style: OutlinedButton.styleFrom(
-                foregroundColor: selectedSemester == index + 1 ? Colors.white : const Color.fromARGB(255, 107, 255, 228),
-                backgroundColor: selectedSemester == index + 1 ? const Color(0xFFFF6B6B) : null,
+                foregroundColor: selectedSemester == index + 1
+                    ? Colors.white
+                    : const Color.fromARGB(255, 107, 255, 228),
+                backgroundColor: selectedSemester == index + 1
+                    ? const Color(0xFFFF6B6B)
+                    : null,
                 side: const BorderSide(color: Color(0xFFFF6B6B)),
               ),
               child: Text(
                 semesterNames[index],
                 style: TextStyle(
-                  color: selectedSemester == index + 1 ? Colors.white : const Color(0xFFFF6B6B),
+                  color: selectedSemester == index + 1
+                      ? Colors.white
+                      : const Color(0xFFFF6B6B),
                 ),
               ),
             ),
@@ -346,7 +377,8 @@ class _GradePageState extends State<GradePage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('SとAの意味'),
-                    content: const Text('Sは春学期、Aは秋学期を意味します。　　　　　　　　　　　　　ex) 1S = 1年生の春学期, 1A = 1年生の秋学期'),
+                    content: const Text(
+                        'Sは春学期、Aは秋学期を意味します。　　　　　　　　　　　　　ex) 1S = 1年生の春学期, 1A = 1年生の秋学期'),
                     actions: <Widget>[
                       TextButton(
                         child: const Text('닫기'),
@@ -371,7 +403,7 @@ class _GradePageState extends State<GradePage> {
             const SizedBox(height: 20),
             _buildGpaAndCreditsText(),
             const SizedBox(height: 20),
-grade_chart.GradeChartPage(semesterGPAList: semesterGPAList),
+            grade_chart.GradeChartPage(semesterGPAList: semesterGPAList),
             const SizedBox(height: 20),
             grade_rate.GradeRateChartPage(
               totalRequiredCredits: totalRequiredCredits,

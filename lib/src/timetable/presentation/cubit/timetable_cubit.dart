@@ -1,3 +1,5 @@
+library timetable_cubit;
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
@@ -5,8 +7,16 @@ import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 
 part 'timetable_state.dart';
+part 'timetable_cubit.extension.dart';
 
 class TimetableCubit extends Cubit<TimetableState> {
+  TimetableCubit({
+    required GetCourse getCourse,
+    required SearchCourses searchCourses,
+  })  : _getCourse = getCourse,
+        _searchCourses = searchCourses,
+        super(TimetableInitial());
+
   final GetCourse _getCourse;
   final SearchCourses _searchCourses;
   final List<String> _schools = [
@@ -16,6 +26,10 @@ class TimetableCubit extends Cubit<TimetableState> {
     // 다른 학부 추가
   ];
 
+  ///
+  ///
+  ///
+  /// cubit.extension을 위한 변수들 선언
   final Map<String, Map<String, Course?>> _semesterTimetables =
       {}; // 학기별 시간표 저장
   final List<String> _timetables = []; // 시간표 목록 추가
@@ -27,95 +41,21 @@ class TimetableCubit extends Cubit<TimetableState> {
   bool _includeSaturday = false;
   bool _includeSunday = false;
 
-  TimetableCubit({
-    required GetCourse getCourse,
-    required SearchCourses searchCourses,
-  })  : _getCourse = getCourse,
-        _searchCourses = searchCourses,
-        super(TimetableInitial()) {
-    // 초기 상태로 TimetableUpdated 방출
-    // _emitTimetableUpdated();
-  }
-
   List<String> get schools => _schools;
   Map<String, Map<String, Course?>> get semesterTimetables =>
       _semesterTimetables;
   List<String> get timetables => _timetables; // 시간표 목록 getter 추가
-
   String? get selectedSchool =>
       _selectedSchool; // 선택된 학부를 외부에서 가져올 수 있게 getter 추가
 
-  void setSelectedSchool(String school) {
-    _selectedSchool = school; // 선택된 학부 설정
-    emit(SchoolSelected(_selectedSchool)); // 선택된 학부 상태 업데이트
-  }
+  int get periods => _periods;
+  bool get includeSaturday => _includeSaturday;
+  bool get includeSunday => _includeSunday;
 
-  void setSemester(String semester) {
-    if (!_semesterTimetables.containsKey(semester)) {
-      _semesterTimetables[semester] = {};
-    }
-    emit(SemesterSelected(
-      selectedSchool: _selectedSchool,
-      semester: semester,
-    ));
-  }
-
-  void addCourseToTimetable(Course course, String period, String semester) {
-    final timetable = _semesterTimetables[semester] ?? {};
-    timetable[period] = course;
-    _semesterTimetables[semester] = timetable;
-    emit(CoursesUpdated(Map.from(timetable)));
-    _emitTimetableUpdated();
-  }
-
-  void removeCourseFromTimetable(String period, String semester) {
-    final timetable = _semesterTimetables[semester];
-    if (timetable != null) {
-      timetable.remove(period);
-      emit(CoursesUpdated(Map.from(timetable)));
-    }
-    _emitTimetableUpdated();
-  }
-
-  void addTimetable(String timetable) {
-    _timetables.add(timetable);
-    _semesterTimetables[timetable] =
-        {}; // 새로운 시간표를 추가할 때 _semesterTimetables에도 추가
-    emit(TimetableUpdated(
-      periods: _periods,
-      includeSaturday: _includeSaturday,
-      includeSunday: _includeSunday,
-      timetables: List.from(_timetables),
-    ));
-  }
-
-  void removeTimetable(String timetable) {
-    _timetables.remove(timetable);
-    _semesterTimetables.remove(timetable); // 시간표 제거 시 _semesterTimetables에서도 제거
-    emit(TimetableUpdated(
-      periods: _periods,
-      includeSaturday: _includeSaturday,
-      includeSunday: _includeSunday,
-      timetables: List.from(_timetables),
-    ));
-  }
-
-  void updateTimetable(String oldName, String newName) {
-    final index = _timetables.indexOf(oldName);
-    if (index != -1) {
-      _timetables[index] = newName;
-
-      // _semesterTimetables 키 업데이트
-      _semesterTimetables[newName] = _semesterTimetables.remove(oldName)!;
-
-      emit(TimetableUpdated(
-        periods: _periods,
-        includeSaturday: _includeSaturday,
-        includeSunday: _includeSunday,
-        timetables: List.from(_timetables),
-      ));
-    }
-  }
+  /// cubit.extension을 위한 변수들 선언 종료
+  ///
+  ///
+  ///
 
   Future<void> getCourse(String courseId) async {
     emit(TimetableLoading());
@@ -169,35 +109,5 @@ class TimetableCubit extends Cubit<TimetableState> {
       (failure) => emit(TimetableError(failure.errorMessage)),
       (courseIds) => emit(CourseIdsSearched(courseIds)),
     );
-  }
-
-  void setPeriods(int periods) {
-    _periods = periods;
-    _emitTimetableUpdated();
-  }
-
-  void setIncludeSaturday(bool include) {
-    _includeSaturday = include;
-    _emitTimetableUpdated();
-  }
-
-  void setIncludeSunday(bool include) {
-    _includeSunday = include;
-    _emitTimetableUpdated();
-  }
-
-  int get periods => _periods;
-  bool get includeSaturday => _includeSaturday;
-  bool get includeSunday => _includeSunday;
-
-  void loadMoreCourses() {}
-
-  void _emitTimetableUpdated() {
-    emit(TimetableUpdated(
-      periods: _periods,
-      includeSaturday: _includeSaturday,
-      includeSunday: _includeSunday,
-      timetables: List.from(_timetables), // 시간표 목록 포함
-    ));
   }
 }

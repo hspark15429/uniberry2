@@ -27,7 +27,8 @@ class _TimetableSettingPageState extends State<TimetableSettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Timetable Settings', style: TextStyle(color: Colors.white)),
+        title: const Text('Timetable Settings',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
       ),
       body: Padding(
@@ -35,7 +36,8 @@ class _TimetableSettingPageState extends State<TimetableSettingPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Select Number of Periods', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text('Select Number of Periods',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Slider(
               value: _periods.toDouble(),
               min: 5,
@@ -90,4 +92,3 @@ class _TimetableSettingPageState extends State<TimetableSettingPage> {
     );
   }
 }
-

@@ -25,7 +25,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   }
 }
 
-
 String _determineInitialSemester() {
   DateTime now = DateTime.now();
   int currentYear = now.year;

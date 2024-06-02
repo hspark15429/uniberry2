@@ -9,7 +9,8 @@ class TimetableCourseDetailPage extends StatelessWidget {
   final Course course;
   final String period;
 
-  const TimetableCourseDetailPage({super.key, required this.course, required this.period});
+  const TimetableCourseDetailPage(
+      {super.key, required this.course, required this.period});
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -33,14 +34,17 @@ class TimetableCourseDetailPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
-String currentSemester = '2024봄학기';
-              context.read<TimetableCubit>().addCourseToTimetable(course, period, currentSemester);
+              String currentSemester = '2024봄학기';
+              context
+                  .read<TimetableCubit>()
+                  .addCourseToTimetable(course, period, currentSemester);
 
               Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(builder: (context) => const TimetableScreen()),
-  (Route<dynamic> route) => false,
-);
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const TimetableScreen()),
+                (Route<dynamic> route) => false,
+              );
             },
           ),
         ],
@@ -71,19 +75,25 @@ String currentSemester = '2024봄학기';
                       children: [
                         const Text(
                           '강의 정보',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           "장소: ${course.campuses.join(", ")}",
-                          style: const TextStyle(fontSize: 16, color: Colors.grey),
+                          style:
+                              const TextStyle(fontSize: 16, color: Colors.grey),
                         ),
                       ],
                     ),
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black),
                       onPressed: () => _launchURL(course.syllabusUrl),
-child: const Text('시라버스확인', style: TextStyle(color: Colors.white)),
+                      child: const Text('시라버스확인',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -111,12 +121,16 @@ child: const Text('시라버스확인', style: TextStyle(color: Colors.white)),
                         children: [
                           const Text(
                             '수업명',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             course.titles.join(', '),
-                            style: const TextStyle(fontSize: 16, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -140,12 +154,16 @@ child: const Text('시라버스확인', style: TextStyle(color: Colors.white)),
                         children: [
                           const Text(
                             '교수명',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             course.professors.join(', '),
-                            style: const TextStyle(fontSize: 16, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.grey),
                           ),
                         ],
                       ),

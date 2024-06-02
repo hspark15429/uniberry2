@@ -23,7 +23,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
   final _creditController = TextEditingController();
 
   void _saveCourse() {
-    if (_titleController.text.isEmpty || _professorController.text.isEmpty || _codeController.text.isEmpty) {
+    if (_titleController.text.isEmpty ||
+        _professorController.text.isEmpty ||
+        _codeController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('강의명, 교수명, 강의코드는 필수 입력 항목입니다.')),
       );
@@ -35,22 +37,27 @@ class _AddCoursePageState extends State<AddCoursePage> {
       titles: [_titleController.text],
       professors: [_professorController.text],
       codes: [_codeController.text],
-      campuses: _campusController.text.isNotEmpty ? [_campusController.text] : [],
+      campuses:
+          _campusController.text.isNotEmpty ? [_campusController.text] : [],
       syllabusUrl: _syllabusUrlController.text,
-      credit: _creditController.text.isNotEmpty ? int.tryParse(_creditController.text) ?? 0 : 0,
+      credit: _creditController.text.isNotEmpty
+          ? int.tryParse(_creditController.text) ?? 0
+          : 0,
       schools: const [],
       term: '',
       periods: const [],
       languages: const [],
     );
 
-context.read<TimetableCubit>().addCourseToTimetable(newCourse, widget.period, '2024년봄학기');
+    context
+        .read<TimetableCubit>()
+        .addCourseToTimetable(newCourse, widget.period, '2024년봄학기');
 
     Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(builder: (context) => TimetableScreen()),
-  (Route<dynamic> route) => false,
-);
+      context,
+      MaterialPageRoute(builder: (context) => TimetableScreen()),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override

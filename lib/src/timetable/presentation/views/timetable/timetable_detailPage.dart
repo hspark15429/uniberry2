@@ -19,13 +19,18 @@ class TimetableDetailPage extends StatefulWidget {
   final String period;
   final String semester;
 
-  const TimetableDetailPage({super.key, required this.course, required this.period, required this.semester});
+  const TimetableDetailPage(
+      {super.key,
+      required this.course,
+      required this.period,
+      required this.semester});
 
   @override
   _TimetableDetailPageState createState() => _TimetableDetailPageState();
 }
 
-class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTickerProviderStateMixin {
+class _TimetableDetailPageState extends State<TimetableDetailPage>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
   @override
@@ -50,20 +55,25 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
 
   void _deleteCourse(BuildContext context) {
     String currentSemester = widget.semester;
-    context.read<TimetableCubit>().removeCourseFromTimetable(widget.period, currentSemester);
+    context
+        .read<TimetableCubit>()
+        .removeCourseFromTimetable(widget.period, currentSemester);
 
-  Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(builder: (context) => const TimetableScreen()),
-  (Route<dynamic> route) => false,
-);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const TimetableScreen()),
+      (Route<dynamic> route) => false,
+    );
   }
 
   void _editCourse(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
-        return EditCourseDialog(course: widget.course, period: widget.period, semester: widget.semester);
+        return EditCourseDialog(
+            course: widget.course,
+            period: widget.period,
+            semester: widget.semester);
       },
     );
   }
@@ -72,7 +82,8 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.course.titles.join(", "), style: const TextStyle(color: Colors.white)),
+        title: Text(widget.course.titles.join(", "),
+            style: const TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         elevation: 0,
         actions: [
@@ -118,9 +129,11 @@ class _TimetableDetailPageState extends State<TimetableDetailPage> with SingleTi
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () => _launchURL(widget.course.syllabusUrl),
-child: const Text("시라버스확인", style: TextStyle(color: Colors.white)),
+                  child: const Text("시라버스확인",
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
               const SizedBox(height: 16),
@@ -158,7 +171,8 @@ child: const Text("시라버스확인", style: TextStyle(color: Colors.white)),
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.black),
           ),
           Expanded(
             child: Text(
@@ -178,7 +192,11 @@ class EditCourseDialog extends StatefulWidget {
   final String period;
   final String semester;
 
-  const EditCourseDialog({super.key, required this.course, required this.period, required this.semester});
+  const EditCourseDialog(
+      {super.key,
+      required this.course,
+      required this.period,
+      required this.semester});
 
   @override
   _EditCourseDialogState createState() => _EditCourseDialogState();
@@ -200,7 +218,9 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
   }
 
   void _saveCourse() {
-    if (_titleController.text.isEmpty || _professorController.text.isEmpty || _codeController.text.isEmpty) {
+    if (_titleController.text.isEmpty ||
+        _professorController.text.isEmpty ||
+        _codeController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('강의명, 교수명, 강의코드는 필수 입력 항목입니다.')),
       );
@@ -221,7 +241,9 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
       languages: widget.course.languages,
     );
 
-    context.read<TimetableCubit>().addCourseToTimetable(updatedCourse, widget.period, widget.semester);
+    context
+        .read<TimetableCubit>()
+        .addCourseToTimetable(updatedCourse, widget.period, widget.semester);
 
     Navigator.of(context).pop();
   }
@@ -287,7 +309,8 @@ class _MemoPageState extends State<MemoPage> {
 
   @override
   Widget build(BuildContext context) {
-    _memos.sort((a, b) => b.dateTime.compareTo(a.dateTime)); // 최신 메모가 상단에 위치하도록 정렬
+    _memos.sort(
+        (a, b) => b.dateTime.compareTo(a.dateTime)); // 최신 메모가 상단에 위치하도록 정렬
 
     return Scaffold(
       appBar: AppBar(
@@ -326,7 +349,8 @@ class _MemoPageState extends State<MemoPage> {
               child: ListTile(
                 title: Text(
                   memo.title,
-                  style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   DateFormat('yyyy-MM-dd HH:mm').format(memo.dateTime),
@@ -519,11 +543,12 @@ class _AssignmentPageState extends State<AssignmentPage> {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
-          onDidReceiveLocalNotification: (id, title, body, payload) async {
-            // Handle your logic here when a notification is received
-          },
-        );
-    final InitializationSettings initializationSettings = InitializationSettings(
+      onDidReceiveLocalNotification: (id, title, body, payload) async {
+        // Handle your logic here when a notification is received
+      },
+    );
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
@@ -537,7 +562,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
 
     // Request permissions for iOS
     final bool? result = await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
           alert: true,
           badge: true,
@@ -553,16 +579,20 @@ class _AssignmentPageState extends State<AssignmentPage> {
     final prefs = await SharedPreferences.getInstance();
     final String? assignmentsJson = prefs.getString('assignments');
     if (assignmentsJson != null) {
-      final List<dynamic> assignmentsList = json.decode(assignmentsJson) as List<dynamic>;
+      final List<dynamic> assignmentsList =
+          json.decode(assignmentsJson) as List<dynamic>;
       setState(() {
-        _assignments.addAll(assignmentsList.map((json) => Assignment.fromJson(json as Map<String, dynamic>)).toList());
+        _assignments.addAll(assignmentsList
+            .map((json) => Assignment.fromJson(json as Map<String, dynamic>))
+            .toList());
       });
     }
   }
 
   Future<void> _saveAssignments() async {
     final prefs = await SharedPreferences.getInstance();
-    final String assignmentsJson = json.encode(_assignments.map((a) => a.toJson()).toList());
+    final String assignmentsJson =
+        json.encode(_assignments.map((a) => a.toJson()).toList());
     await prefs.setString('assignments', assignmentsJson);
   }
 
@@ -631,8 +661,10 @@ class _AssignmentPageState extends State<AssignmentPage> {
   }
 
   Future<void> _scheduleNotification(Assignment assignment) async {
-    final DateTime scheduledTime = assignment.dueDate.subtract(Duration(hours: assignment.reminder));
-    final tz.TZDateTime tzScheduledTime = tz.TZDateTime.from(scheduledTime, tz.local);
+    final DateTime scheduledTime =
+        assignment.dueDate.subtract(Duration(hours: assignment.reminder));
+    final tz.TZDateTime tzScheduledTime =
+        tz.TZDateTime.from(scheduledTime, tz.local);
 
     print('Scheduling notification for: $tzScheduledTime'); // 로그 추가
 
@@ -643,7 +675,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
       priority: Priority.high,
     );
     const iOSDetails = DarwinNotificationDetails();
-    const notificationDetails = NotificationDetails(android: androidDetails, iOS: iOSDetails);
+    const notificationDetails =
+        NotificationDetails(android: androidDetails, iOS: iOSDetails);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       assignment.hashCode,
@@ -652,7 +685,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
       tzScheduledTime,
       notificationDetails,
       androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.wallClockTime,
     );
   }
 
@@ -704,12 +738,16 @@ class _AssignmentPageState extends State<AssignmentPage> {
                   children: [
                     Text(
                       assignment.title,
-                      style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       assignment.type == 'Exam' ? 'Test' : 'Assignment',
-                      style: TextStyle(color: assignment.type == 'Exam' ? Colors.red : Colors.green),
+                      style: TextStyle(
+                          color: assignment.type == 'Exam'
+                              ? Colors.red
+                              : Colors.green),
                     ),
                   ],
                 ),
@@ -729,7 +767,9 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 ),
                 trailing: IconButton(
                   icon: Icon(
-                    assignment.isComplete ? Icons.check_circle : Icons.check_circle_outline,
+                    assignment.isComplete
+                        ? Icons.check_circle
+                        : Icons.check_circle_outline,
                     color: assignment.isComplete ? Colors.blue : Colors.grey,
                   ),
                   onPressed: () {
@@ -773,7 +813,9 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
     _type = widget.assignment?.type ?? 'Assignment';
     _dueDate = widget.assignment?.dueDate;
     _dueTime = widget.assignment != null
-        ? TimeOfDay(hour: widget.assignment!.dueDate.hour, minute: widget.assignment!.dueDate.minute)
+        ? TimeOfDay(
+            hour: widget.assignment!.dueDate.hour,
+            minute: widget.assignment!.dueDate.minute)
         : TimeOfDay.now();
     _title = widget.assignment?.title ?? '';
     _description = widget.assignment?.description ?? '';
@@ -807,14 +849,16 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
               ),
               const SizedBox(height: 8),
               ListTile(
-                title: Text(
-                    _dueDate == null ? '기한 선택' : '기한: ${DateFormat('yyyy-MM-dd').format(_dueDate!)} ${_dueTime.format(context)}'),
+                title: Text(_dueDate == null
+                    ? '기한 선택'
+                    : '기한: ${DateFormat('yyyy-MM-dd').format(_dueDate!)} ${_dueTime.format(context)}'),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime.now().subtract(const Duration(days: 30)),
+                    firstDate:
+                        DateTime.now().subtract(const Duration(days: 30)),
                     lastDate: DateTime.now().add(const Duration(days: 365)),
                   );
                   if (pickedDate != null) {
@@ -840,7 +884,8 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
                     _title = value;
                   });
                 },
-                validator: (value) => value == null || value.isEmpty ? '제목을 입력하세요' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? '제목을 입력하세요' : null,
               ),
               const SizedBox(height: 8),
               TextFormField(
