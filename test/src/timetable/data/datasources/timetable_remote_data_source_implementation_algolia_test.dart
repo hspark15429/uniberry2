@@ -62,8 +62,7 @@ void main() {
       var result = await dataSource.getCourse(courseId);
       debugPrint(result.toString());
       expect(result, tCourse.copyWith(courseId: courseId));
-      // wait one second
-      // await Future.delayed(const Duration(seconds: 1));
+
       var result2 = await dataSource.getCourse('X1F2Ki4i32RqntQojhp8');
       debugPrint(result2.toString());
       expect(result2, tCourse.copyWith(courseId: 'X1F2Ki4i32RqntQojhp8'));

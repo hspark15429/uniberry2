@@ -16,11 +16,11 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-ElevatedButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               },
               child: const Text('homepage'),
@@ -28,11 +28,11 @@ MaterialPageRoute(builder: (context) => const HomePage()),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => const TimetableScreen(),
-  ),
-);
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TimetableScreen(),
+                  ),
+                );
               },
               child: const Text('timetable'),
             ),
@@ -47,7 +47,7 @@ MaterialPageRoute(builder: (context) => const HomePage()),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/test');
+                Navigator.pushNamed(context, '/forum');
               },
               child: const Text('Go to test'),
             ),
@@ -60,9 +60,8 @@ MaterialPageRoute(builder: (context) => const HomePage()),
   String _determineInitialSemester() {
     DateTime now = DateTime.now();
     int currentYear = now.year;
-String semester = now.month < 9 ? "${currentYear}년봄학기" : "${currentYear}년가을학기";
+    String semester =
+        now.month < 9 ? "${currentYear}년봄학기" : "${currentYear}년가을학기";
     return semester;
   }
 }
-
-
