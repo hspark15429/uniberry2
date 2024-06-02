@@ -8,6 +8,7 @@ import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 
 part 'timetable_state.dart';
 part 'timetable_cubit.extension.dart';
+part 'timetable_state.extension.dart';
 
 class TimetableCubit extends Cubit<TimetableState> {
   TimetableCubit({
