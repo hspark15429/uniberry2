@@ -1,4 +1,5 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
@@ -58,8 +59,14 @@ void main() {
   });
   group('getCourse', () {
     test('getCourse success', () async {
-      final result = await dataSource.getCourse(courseId);
+      var result = await dataSource.getCourse(courseId);
+      debugPrint(result.toString());
       expect(result, tCourse.copyWith(courseId: courseId));
+      // wait one second
+      // await Future.delayed(const Duration(seconds: 1));
+      var result2 = await dataSource.getCourse('X1F2Ki4i32RqntQojhp8');
+      debugPrint(result2.toString());
+      expect(result2, tCourse.copyWith(courseId: 'X1F2Ki4i32RqntQojhp8'));
     });
     test('getCourse fail', () async {
       final methodCall = dataSource.getCourse;

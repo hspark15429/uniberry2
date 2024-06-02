@@ -16,7 +16,8 @@ class TimetableCubit extends Cubit<TimetableState> {
     // 다른 학부 추가
   ];
 
-  final Map<String, Map<String, Course?>> _semesterTimetables = {}; // 학기별 시간표 저장
+  final Map<String, Map<String, Course?>> _semesterTimetables =
+      {}; // 학기별 시간표 저장
   final List<String> _timetables = []; // 시간표 목록 추가
 
   String? _selectedSchool; // 선택된 학부 상태
@@ -33,14 +34,16 @@ class TimetableCubit extends Cubit<TimetableState> {
         _searchCourses = searchCourses,
         super(TimetableInitial()) {
     // 초기 상태로 TimetableUpdated 방출
-    _emitTimetableUpdated();
+    // _emitTimetableUpdated();
   }
 
   List<String> get schools => _schools;
-  Map<String, Map<String, Course?>> get semesterTimetables => _semesterTimetables;
+  Map<String, Map<String, Course?>> get semesterTimetables =>
+      _semesterTimetables;
   List<String> get timetables => _timetables; // 시간표 목록 getter 추가
 
-  String? get selectedSchool => _selectedSchool; // 선택된 학부를 외부에서 가져올 수 있게 getter 추가
+  String? get selectedSchool =>
+      _selectedSchool; // 선택된 학부를 외부에서 가져올 수 있게 getter 추가
 
   void setSelectedSchool(String school) {
     _selectedSchool = school; // 선택된 학부 설정
@@ -76,7 +79,8 @@ class TimetableCubit extends Cubit<TimetableState> {
 
   void addTimetable(String timetable) {
     _timetables.add(timetable);
-    _semesterTimetables[timetable] = {}; // 새로운 시간표를 추가할 때 _semesterTimetables에도 추가
+    _semesterTimetables[timetable] =
+        {}; // 새로운 시간표를 추가할 때 _semesterTimetables에도 추가
     emit(TimetableUpdated(
       periods: _periods,
       includeSaturday: _includeSaturday,
@@ -120,19 +124,20 @@ class TimetableCubit extends Cubit<TimetableState> {
       (failure) => emit(TimetableError(failure.errorMessage)),
       (course) => emit(CourseFetched(course)),
     );
-    _emitTimetableUpdated();
   }
 
   Future<void> getCourses(List<String> courseIds) async {
     emit(TimetableLoading());
 
-    final courses = await Future.wait(courseIds.map((courseId) async {
+    final courses = <Course?>[];
+    for (final courseId in courseIds) {
       final result = await _getCourse(courseId);
-      return result.fold(
+      final course = result.fold(
         (failure) => null,
         (course) => course,
       );
-    }));
+      courses.add(course);
+    }
 
     final validCourses = courses.whereType<Course>().toList();
 
@@ -141,49 +146,30 @@ class TimetableCubit extends Cubit<TimetableState> {
       return;
     }
     emit(CoursesFetched(validCourses));
-    _emitTimetableUpdated();
   }
 
   Future<void> searchCourses({
-  String? school,
-  String? campus,
-  String? term,
-  String? period,
-}) async {
-  emit(TimetableLoading());
+    String? school,
+    String? campus,
+    String? term,
+    String? period,
+  }) async {
+    emit(TimetableLoading());
 
-  final courseIds = await _searchCourses(SearchCoursesParams(
-    school: _selectedSchool ?? school,
-    campus: campus,
-    term: term,
-    period: period,
-  ));
+    final courseIds = await _searchCourses(
+      SearchCoursesParams(
+        school: _selectedSchool ?? school,
+        campus: campus,
+        term: term,
+        period: period,
+      ),
+    );
 
-  courseIds.fold(
-    (failure) => emit(TimetableError(failure.errorMessage)),
-    (courseIds) async {
-      if (courseIds.isNotEmpty) {
-        final courses = await Future.wait(courseIds.map((courseId) async {
-          final result = await _getCourse(courseId);
-          return result.fold(
-            (failure) => null,
-            (course) => course,
-          );
-        }));
-
-        final validCourses = courses.whereType<Course>().toList();
-        if (validCourses.isEmpty) {
-          emit(const TimetableError('No courses found'));
-        } else {
-          emit(CoursesFetched(validCourses));
-        }
-      } else {
-        emit(const CoursesFetched([]));
-      }
-    },
-  );
-  _emitTimetableUpdated();
-}
+    courseIds.fold(
+      (failure) => emit(TimetableError(failure.errorMessage)),
+      (courseIds) => emit(CourseIdsSearched(courseIds)),
+    );
+  }
 
   void setPeriods(int periods) {
     _periods = periods;

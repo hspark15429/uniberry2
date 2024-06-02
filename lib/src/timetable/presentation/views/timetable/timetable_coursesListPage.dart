@@ -3,20 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetalbe_courseDetailPage.dart';
 
-
 class CoursesListPage extends StatefulWidget {
   final String period;
   final String school;
   final String semester;
 
-  const CoursesListPage({super.key, required this.period, required this.school, required this.semester});
+  const CoursesListPage(
+      {super.key,
+      required this.period,
+      required this.school,
+      required this.semester});
 
   @override
   _CoursesListPageState createState() => _CoursesListPageState();
 }
 
 class _CoursesListPageState extends State<CoursesListPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,9 +34,13 @@ class _CoursesListPageState extends State<CoursesListPage> {
         builder: (context, state) {
           if (state is TimetableLoading) {
             return const Center(child: CircularProgressIndicator());
+          } else if (state is CourseIdsSearched) {
+            context.read<TimetableCubit>().getCourses(state.courseIds);
           } else if (state is CoursesFetched) {
             if (state.courses.isEmpty) {
-              return const Center(child: Text("No courses available.", style: TextStyle(fontSize: 18, color: Colors.grey)));
+              return const Center(
+                  child: Text("No courses available.",
+                      style: TextStyle(fontSize: 18, color: Colors.grey)));
             }
             return ListView.builder(
               itemCount: state.courses.length,
@@ -56,7 +62,8 @@ class _CoursesListPageState extends State<CoursesListPage> {
                     );
                   },
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -74,17 +81,22 @@ class _CoursesListPageState extends State<CoursesListPage> {
                       children: [
                         Text(
                           course.titles.join(", "),
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           course.professors.join(", "),
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           course.codes.join(", "),
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -93,12 +105,15 @@ class _CoursesListPageState extends State<CoursesListPage> {
               },
             );
           } else if (state is TimetableError) {
-            return Center(child: Text(state.message, style: const TextStyle(color: Colors.black)));
+            return Center(
+                child: Text(state.message,
+                    style: const TextStyle(color: Colors.black)));
           }
-          return const Center(child: Text("Unable to fetch courses.", style: TextStyle(color: Colors.black)));
+          return const Center(
+              child: Text("Unable to fetch courses.",
+                  style: TextStyle(color: Colors.black)));
         },
       ),
     );
   }
 }
-
