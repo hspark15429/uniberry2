@@ -32,14 +32,15 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   const Text('Courses'),
                   Expanded(
                     child: ListView(
-                        children: state.courses.map((course) {
-                      return ListTile(
-                        onTap: () {},
-                        title: Text(course.toString()),
-                        // title: Text(course.titles.toString()),
-                        // subtitle: Text(course.codes.toString()),
-                      );
-                    }).toList(),),
+                      children: state.courses.map((course) {
+                        return ListTile(
+                          onTap: () {},
+                          title: Text(course.toString()),
+                          // title: Text(course.titles.toString()),
+                          // subtitle: Text(course.codes.toString()),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),

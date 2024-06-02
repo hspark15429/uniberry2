@@ -69,9 +69,9 @@ void main() {
         const CourseIdsSearched(['code']),
       ],
       verify: (_) {
-        verify(() =>
-                searchCourses(const SearchCoursesParams(school: 'Engineering')),)
-            .called(1);
+        verify(
+          () => searchCourses(const SearchCoursesParams(school: 'Engineering')),
+        ).called(1);
         verifyNoMoreInteractions(searchCourses);
       },
     );
@@ -85,13 +85,15 @@ void main() {
             .thenAnswer((_) async => const Right(tCourse));
         return cubit;
       },
-      act: (cubit) => cubit.getCourses(['code']),
+      act: (cubit) => cubit.getCourses(['code1', 'code2', 'code3']),
       expect: () => [
         TimetableLoading(),
-        const CoursesFetched([tCourse]),
+        const CoursesFetched([tCourse, tCourse, tCourse]),
       ],
       verify: (_) {
-        verify(() => getCourse('code')).called(1);
+        verify(() => getCourse('code1')).called(1);
+        verify(() => getCourse('code2')).called(1);
+        verify(() => getCourse('code3')).called(1);
         verifyNoMoreInteractions(getCourse);
       },
     );

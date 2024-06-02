@@ -4,7 +4,7 @@ sealed class TimetableState extends Equatable {
   const TimetableState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class TimetableInitial extends TimetableState {}
@@ -17,7 +17,7 @@ class CourseFetched extends TimetableState {
   final Course course;
 
   @override
-  List<Object> get props => [course];
+  List<Object?> get props => [course];
 }
 
 class CoursesFetched extends TimetableState {
@@ -26,7 +26,7 @@ class CoursesFetched extends TimetableState {
   final List<Course> courses;
 
   @override
-  List<Object> get props => [courses.toSet()];
+  List<Object?> get props => [courses];
 }
 
 class CourseIdsSearched extends TimetableState {
@@ -35,7 +35,7 @@ class CourseIdsSearched extends TimetableState {
   final List<String> courseIds;
 
   @override
-  List<Object> get props => [courseIds.toSet()];
+  List<Object?> get props => [courseIds];
 }
 
 class TimetableError extends TimetableState {
@@ -44,5 +44,5 @@ class TimetableError extends TimetableState {
   final String message;
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
