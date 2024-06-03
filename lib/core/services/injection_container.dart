@@ -7,6 +7,9 @@ import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dar
 import 'package:uniberry2/src/forum/data/repositories/post_repository_implementation.dart';
 import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source_implementation.dart';

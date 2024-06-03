@@ -10,20 +10,22 @@ class Post extends Equatable {
     required this.updatedAt,
   });
 
-  const Post.empty()
-      : postId = '',
-        title = '',
-        content = '',
-        author = '',
-        createdAt = '',
-        updatedAt = '';
+  Post.empty([DateTime? date])
+      : this(
+          postId: '_empty.postId',
+          title: '_empty.title',
+          content: '_empty.content',
+          author: '_empty.author',
+          createdAt: date ?? DateTime.now(),
+          updatedAt: date ?? DateTime.now(),
+        );
 
   final String postId;
   final String title;
   final String content;
   final String author;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   @override
   List<Object> get props => [postId];

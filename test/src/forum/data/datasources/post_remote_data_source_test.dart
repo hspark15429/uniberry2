@@ -5,6 +5,7 @@ import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:uniberry2/core/enums/update_post_enum.dart';
 import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
 
@@ -16,7 +17,7 @@ void main() {
   late MockFirebaseStorage dbClient;
   late PostRemoteDataSource dataSource;
   late DocumentReference<Map<String, dynamic>> docReference;
-  var tPost = const PostModel.empty();
+  var tPost = PostModel.empty();
 
   setUpAll(() async {
     cloudStoreClient = FakeFirebaseFirestore();
@@ -43,8 +44,48 @@ void main() {
       // assert
       final post =
           await cloudStoreClient.collection('posts').doc(tPost.postId).get();
-      debugPrint(post.data().toString());
       expect(post.data()!['postId'], tPost.postId);
+    });
+  });
+
+  group('readPost', () {
+    test('should read a post', () async {
+      // arrange
+
+      // act
+      final post = await dataSource.readPost(tPost.postId);
+      // assert
+      expect(post, tPost);
+    });
+  });
+
+  group('updatePost', () {
+    test('should update a post', () async {
+      // arrange
+
+      // act
+      await dataSource.updatePost(
+        postId: tPost.postId,
+        action: UpdatePostAction.title,
+        postData: 'new title',
+      );
+      // assert
+      final post =
+          await cloudStoreClient.collection('posts').doc(tPost.postId).get();
+      expect(post.data()!['title'], 'new title');
+    });
+  });
+
+  group('deletePost', () {
+    test('should delete a post', () async {
+      // arrange
+
+      // act
+      await dataSource.deletePost(tPost.postId);
+      final post =
+          await cloudStoreClient.collection('posts').doc(tPost.postId).get();
+      // assert
+      expect(post.data(), null);
     });
   });
 }

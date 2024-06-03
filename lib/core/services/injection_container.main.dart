@@ -39,9 +39,19 @@ Future<void> initTimetable() async {
 Future<void> initForum() async {
   // cubit
   sl
-    ..registerFactory(() => PostCubit(createPost: sl()))
+    ..registerFactory(
+      () => PostCubit(
+        createPost: sl(),
+        readPost: sl(),
+        updatePost: sl(),
+        deletePost: sl(),
+      ),
+    )
     // usecases
     ..registerLazySingleton(() => CreatePost(sl()))
+    ..registerLazySingleton(() => ReadPost(sl()))
+    ..registerLazySingleton(() => UpdatePost(sl()))
+    ..registerLazySingleton(() => DeletePost(sl()))
     // repo impl
     ..registerLazySingleton<PostRepository>(
       () => PostRepositoryImplementation(sl()),
