@@ -13,7 +13,7 @@ Future<void> initTimetable() async {
     ..registerFactory(
       () => TimetableCubit(
         getCourse: sl(),
-        searchCourses: sl(instanceName: 'coursesSearcher'),
+        searchCourses: sl(),
       ),
     )
     // usecases
@@ -27,7 +27,8 @@ Future<void> initTimetable() async {
     // data source impl
     ..registerLazySingleton<TimetableRemoteDataSource>(
       () => TimetableRemoteDataSourceImplementationAlgolia(
-          coursesSearcher: sl(instanceName: 'coursesSearcher')),
+        coursesSearcher: sl(instanceName: 'coursesSearcher'),
+      ),
     )
     // external
     ..registerLazySingleton(
