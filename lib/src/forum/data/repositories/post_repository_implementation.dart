@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:uniberry2/core/enums/update_post_enum.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/errors/failures.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
@@ -23,29 +24,58 @@ class PostRepositoryImplementation implements PostRepository {
   }
 
   @override
-  ResultFuture<void> deletePost(String postId) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  ResultFuture<Post> readPost(String postId) async {
+    try {
+      final result = await _remoteDataSource.readPost(postId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override
-  ResultFuture<Post> readPost(String postId) {
-    // TODO: implement readPost
-    throw UnimplementedError();
+  ResultFuture<void> updatePost({
+    required String postId,
+    required UpdatePostAction action,
+    required dynamic postData,
+  }) async {
+    try {
+      final result = await _remoteDataSource.updatePost(
+        postId: postId,
+        action: action,
+        postData: postData,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override
-  ResultFuture<List<String>> searchPosts(
-      {required String author,
-      required String title,
-      required String content}) {
-    // TODO: implement searchPosts
-    throw UnimplementedError();
+  ResultFuture<void> deletePost(String postId) async {
+    try {
+      final result = await _remoteDataSource.deletePost(postId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override
-  ResultFuture<void> updatePost(Post post) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+  ResultFuture<List<String>> searchPosts({
+    required String author,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      final result = await _remoteDataSource.searchPosts(
+        author: author,
+        title: title,
+        content: content,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 }

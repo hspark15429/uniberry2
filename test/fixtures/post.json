@@ -1,8 +1,14 @@
 {
-    "postId": "1",
-    "title": "random post",
-    "content": "haha funny",
-    "author": "anon",
-    "createdAt": "2023",
-    "updatedAt": "2024"
+    "postId": "_empty.postId",
+    "title": "_empty.title",
+    "content": "_empty.content",
+    "author": "_empty.author",
+    "createdAt": {
+        "_seconds": 1677483548,
+        "_nanoseconds": 123456000
+      },
+      "updatedAt": {
+        "_seconds": 1677483548,
+        "_nanoseconds": 123456000
+      }
 }

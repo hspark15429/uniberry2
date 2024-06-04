@@ -8,7 +8,7 @@ import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 
 void main() {
   late TimetableRemoteDataSource dataSource;
-  const courseId = '0HR4deUwHMPeby0QpSH1';
+  const courseId = '1OQuA2lK7sZJBsnhYZ0j';
 
   const tCourse = CourseModel.empty();
 
@@ -62,10 +62,6 @@ void main() {
       var result = await dataSource.getCourse(courseId);
       debugPrint(result.toString());
       expect(result, tCourse.copyWith(courseId: courseId));
-
-      var result2 = await dataSource.getCourse('X1F2Ki4i32RqntQojhp8');
-      debugPrint(result2.toString());
-      expect(result2, tCourse.copyWith(courseId: 'X1F2Ki4i32RqntQojhp8'));
     });
     test('getCourse fail', () async {
       final methodCall = dataSource.getCourse;

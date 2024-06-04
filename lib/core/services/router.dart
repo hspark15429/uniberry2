@@ -28,6 +28,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
       );
 
+    case '/test':
+      return MaterialPageRoute(builder: (_) => const MyHomePage());
+
     default:
       return MaterialPageRoute(builder: (_) => const Placeholder());
   }

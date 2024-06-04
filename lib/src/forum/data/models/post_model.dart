@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
 
@@ -11,32 +12,46 @@ class PostModel extends Post {
     required super.updatedAt,
   });
 
-  const PostModel.empty()
+  PostModel.empty([DateTime? date])
       : this(
-          postId: '',
-          title: '',
-          content: '',
-          author: '',
-          createdAt: '',
-          updatedAt: '',
+          postId: '_empty.postId',
+          title: '_empty.title',
+          content: '_empty.content',
+          author: '_empty.author',
+          createdAt: date ?? DateTime.now(),
+          updatedAt: date ?? DateTime.now(),
         );
+
   PostModel.fromMap(DataMap map)
       : this(
           postId: map['postId'] as String,
           title: map['title'] as String,
           content: map['content'] as String,
           author: map['author'] as String,
-          createdAt: map['createdAt'] as String,
-          updatedAt: map['updatedAt'] as String,
+          createdAt: (map['createdAt'] as Timestamp).toDate(),
+          updatedAt: (map['updatedAt'] as Timestamp).toDate(),
         );
+
+  PostModel.fromJson(Map<String, dynamic> json)
+      : this(
+          postId: json['postId'] as String,
+          title: json['title'] as String,
+          content: json['content'] as String,
+          author: json['author'] as String,
+          createdAt:
+              DateTime.fromMicrosecondsSinceEpoch(json['createdAt'] as int),
+          updatedAt:
+              DateTime.fromMicrosecondsSinceEpoch(json['updatedAt'] as int),
+        );
+
   DataMap toMap() {
     return {
       'postId': postId,
       'title': title,
       'content': content,
       'author': author,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
     };
   }
 
@@ -45,8 +60,8 @@ class PostModel extends Post {
     String? title,
     String? content,
     String? author,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return PostModel(
       postId: postId ?? this.postId,

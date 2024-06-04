@@ -11,7 +11,7 @@ void main() {
   late CreatePost usecase;
   late PostRepository repo;
 
-  const tPost = Post.empty();
+  final tPost = Post.empty();
 
   setUp(() {
     repo = MockPostRepository();

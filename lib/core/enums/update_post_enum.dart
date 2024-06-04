@@ -1,0 +1,4 @@
+enum UpdatePostAction {
+  title,
+  content,
+}

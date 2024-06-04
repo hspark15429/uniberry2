@@ -9,9 +9,31 @@ sealed class PostState extends Equatable {
 
 final class PostInitial extends PostState {}
 
-class CreatingPost extends PostState {}
+class PostLoading extends PostState {}
 
 class PostCreated extends PostState {}
+
+class PostRead extends PostState {
+  const PostRead(this.post);
+
+  final Post post;
+
+  @override
+  List<Object> get props => [post];
+}
+
+class PostUpdated extends PostState {}
+
+class PostDeleted extends PostState {}
+
+class PostsSearched extends PostState {
+  const PostsSearched(this.postIds);
+
+  final List<String> postIds;
+
+  @override
+  List<Object> get props => [postIds];
+}
 
 class PostError extends PostState {
   const PostError(this.message);
