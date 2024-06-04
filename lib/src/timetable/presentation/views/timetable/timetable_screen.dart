@@ -327,30 +327,34 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   final int periods = timetableCubit.periods;
                   final bool includeSaturday = timetableCubit.includeSaturday;
                   final bool includeSunday = timetableCubit.includeSunday;
-
                   final List<String> days = ['月', '火', '水', '木', '金'];
                   if (includeSaturday) days.add('土');
                   if (includeSunday) days.add('日');
-
                   return ListView(
                     padding: const EdgeInsets.all(8.0),
                     children: [
                       _buildDayHeader(days),
                       ...List.generate(
-                          periods,
-                          (index) => _buildPeriodRow(
-                              context, index, days, timetableCubit, semester)),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const GradePage()),
-                          );
-                        },
-                        child: _buildGradeStatusCard(),
+                        periods,
+                        (index) => _buildPeriodRow(
+                          context,
+                          index,
+                          days,
+                          timetableCubit,
+                          semester,
+                        ),
                       ),
+                      const SizedBox(height: 20),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => const GradePage()),
+                      //     );
+                      //   },
+                      //   child: _buildGradeStatusCard(),
+                      // ),
                       const SizedBox(height: 300),
                     ],
                   );
@@ -387,8 +391,13 @@ class _TimetableScreenState extends State<TimetableScreen> {
     );
   }
 
-  Widget _buildPeriodRow(BuildContext context, int periodIndex,
-      List<String> days, TimetableCubit timetableCubit, String semester) {
+  Widget _buildPeriodRow(
+    BuildContext context,
+    int periodIndex,
+    List<String> days,
+    TimetableCubit timetableCubit,
+    String semester,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -406,18 +415,29 @@ class _TimetableScreenState extends State<TimetableScreen> {
       child: Row(
         children: [
           Container(
-              width: 30, // 교시 번호의 너비 조정
-              child: Center(
-                  child: Text('${periodIndex + 1}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)))),
+            width: 30, // 교시 번호의 너비 조정
+            child: Center(
+              child: Text(
+                '${periodIndex + 1}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
           ...days
               .map((day) => Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 4.0), // 좌우 여백 추가
-                      child: _buildDayCell(context, periodIndex,
-                          days.indexOf(day), timetableCubit, semester),
+                      child: _buildDayCell(
+                        context,
+                        periodIndex,
+                        days.indexOf(day),
+                        timetableCubit,
+                        semester,
+                      ),
                     ),
                   ))
               .toList(),
@@ -426,13 +446,19 @@ class _TimetableScreenState extends State<TimetableScreen> {
     );
   }
 
-  Widget _buildDayCell(BuildContext context, int periodIndex, int dayIndex,
-      TimetableCubit timetableCubit, String semester) {
+  Widget _buildDayCell(
+    BuildContext context,
+    int periodIndex,
+    int dayIndex,
+    TimetableCubit timetableCubit,
+    String semester,
+  ) {
     final List<String> days = ['月', '火', '水', '木', '金'];
     if (timetableCubit.includeSaturday) days.add('土');
     if (timetableCubit.includeSunday) days.add('日');
 
     String period = '${days[dayIndex]}${periodIndex + 1}';
+    // 중요
     final course = timetableCubit.semesterTimetables[semester]?[period];
 
     return InkWell(
@@ -443,12 +469,13 @@ class _TimetableScreenState extends State<TimetableScreen> {
               builder: (newContext) => TimetableDetailPage(
                 course: course,
                 period: period,
-                semester: semester,
+                semester: semester, // 2024년봄학기
               ),
             ),
           );
         } else {
           context.read<TimetableCubit>().searchCourses(period: period);
+          // BlockProvider 중복 삽입??
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (newContext) => BlocProvider.value(
@@ -456,8 +483,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 child: CoursesListPage(
                   period: period,
                   school: context.read<TimetableCubit>().selectedSchool ??
-                      '학部 선택 없음',
-                  semester: semester, // 추가된 라인
+                      '학부 선택 없음',
+                  semester: semester, // 2024년봄학기
                 ),
               ),
             ),
@@ -483,7 +510,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
     );
   }
 
-  //이수관리
+  // 이수관리
   Widget _buildGradeStatusCard() {
     return Container(
       padding: const EdgeInsets.all(16),

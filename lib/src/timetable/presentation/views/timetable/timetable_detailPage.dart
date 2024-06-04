@@ -19,11 +19,12 @@ class TimetableDetailPage extends StatefulWidget {
   final String period;
   final String semester;
 
-  const TimetableDetailPage(
-      {super.key,
-      required this.course,
-      required this.period,
-      required this.semester});
+  const TimetableDetailPage({
+    super.key,
+    required this.course,
+    required this.period,
+    required this.semester,
+  });
 
   @override
   _TimetableDetailPageState createState() => _TimetableDetailPageState();

@@ -8,9 +8,14 @@ import 'package:url_launcher/url_launcher.dart';
 class TimetableCourseDetailPage extends StatelessWidget {
   final Course course;
   final String period;
+  final String semester;
 
-  const TimetableCourseDetailPage(
-      {super.key, required this.course, required this.period});
+  const TimetableCourseDetailPage({
+    super.key,
+    required this.course,
+    required this.period,
+    required this.semester,
+  });
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -34,15 +39,14 @@ class TimetableCourseDetailPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              String currentSemester = '2024봄학기';
               context
                   .read<TimetableCubit>()
-                  .addCourseToTimetable(course, period, currentSemester);
-
+                  .addCourseToTimetable(course, period, semester);
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const TimetableScreen()),
+                  builder: (context) => const TimetableScreen(),
+                ),
                 (Route<dynamic> route) => false,
               );
             },

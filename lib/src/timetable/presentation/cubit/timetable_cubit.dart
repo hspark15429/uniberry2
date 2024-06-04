@@ -26,29 +26,27 @@ class TimetableCubit extends Cubit<TimetableState> {
     "経営学部",
     // 다른 학부 추가
   ];
+  List<String> get schools => _schools;
 
   ///
   ///
   ///
   /// cubit.extension을 위한 변수들 선언
-  final Map<String, Map<String, Course?>> _semesterTimetables =
-      {}; // 학기별 시간표 저장
+  // 학기별 시간표 저장
+  final Map<String, Map<String, Course?>> _semesterTimetables = {};
+  Map<String, Map<String, Course?>> get semesterTimetables =>
+      _semesterTimetables;
+
   final List<String> _timetables = []; // 시간표 목록 추가
+  List<String> get timetables => _timetables; // 시간표 목록 getter 추가
 
   String? _selectedSchool; // 선택된 학부 상태
+  String? get selectedSchool => _selectedSchool;
 
   // 설정 관련 상태 초기값
   int _periods = 5;
   bool _includeSaturday = false;
   bool _includeSunday = false;
-
-  List<String> get schools => _schools;
-  Map<String, Map<String, Course?>> get semesterTimetables =>
-      _semesterTimetables;
-  List<String> get timetables => _timetables; // 시간표 목록 getter 추가
-  String? get selectedSchool =>
-      _selectedSchool; // 선택된 학부를 외부에서 가져올 수 있게 getter 추가
-
   int get periods => _periods;
   bool get includeSaturday => _includeSaturday;
   bool get includeSunday => _includeSunday;

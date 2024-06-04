@@ -56,6 +56,7 @@ class _CoursesListPageState extends State<CoursesListPage> {
                           child: TimetableCourseDetailPage(
                             course: course,
                             period: widget.period,
+                            semester: widget.semester,
                           ),
                         ),
                       ),

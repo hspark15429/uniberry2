@@ -6,15 +6,16 @@ extension TimetableCubitExtension on TimetableCubit {
     emit(SchoolSelected(_selectedSchool)); // 선택된 학부 상태 업데이트
   }
 
-  void setSemester(String semester) {
-    if (!_semesterTimetables.containsKey(semester)) {
-      _semesterTimetables[semester] = {};
-    }
-    emit(SemesterSelected(
-      selectedSchool: _selectedSchool,
-      semester: semester,
-    ));
-  }
+  // Unused code
+  // void setSemester(String semester) {
+  //   if (!_semesterTimetables.containsKey(semester)) {
+  //     _semesterTimetables[semester] = {};
+  //   }
+  //   emit(SemesterSelected(
+  //     selectedSchool: _selectedSchool,
+  //     semester: semester,
+  //   ));
+  // }
 
   void addCourseToTimetable(Course course, String period, String semester) {
     final timetable = _semesterTimetables[semester] ?? {};
@@ -35,25 +36,15 @@ extension TimetableCubitExtension on TimetableCubit {
 
   void addTimetable(String timetable) {
     _timetables.add(timetable);
-    _semesterTimetables[timetable] =
-        {}; // 새로운 시간표를 추가할 때 _semesterTimetables에도 추가
-    emit(TimetableUpdated(
-      periods: _periods,
-      includeSaturday: _includeSaturday,
-      includeSunday: _includeSunday,
-      timetables: List.from(_timetables),
-    ));
+    // 새로운 시간표를 추가할 때 _semesterTimetables에도 추가
+    _semesterTimetables[timetable] = {};
+    _emitTimetableUpdated();
   }
 
   void removeTimetable(String timetable) {
     _timetables.remove(timetable);
     _semesterTimetables.remove(timetable); // 시간표 제거 시 _semesterTimetables에서도 제거
-    emit(TimetableUpdated(
-      periods: _periods,
-      includeSaturday: _includeSaturday,
-      includeSunday: _includeSunday,
-      timetables: List.from(_timetables),
-    ));
+    _emitTimetableUpdated();
   }
 
   void updateTimetable(String oldName, String newName) {
@@ -64,12 +55,7 @@ extension TimetableCubitExtension on TimetableCubit {
       // _semesterTimetables 키 업데이트
       _semesterTimetables[newName] = _semesterTimetables.remove(oldName)!;
 
-      emit(TimetableUpdated(
-        periods: _periods,
-        includeSaturday: _includeSaturday,
-        includeSunday: _includeSunday,
-        timetables: List.from(_timetables),
-      ));
+      _emitTimetableUpdated();
     }
   }
 
