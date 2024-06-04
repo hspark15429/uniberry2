@@ -26,8 +26,8 @@ Future<void> initTimetable() async {
 
     // data source impl
     ..registerLazySingleton<TimetableRemoteDataSource>(
-      () =>
-          TimetableRemoteDataSourceImplementationAlgolia(coursesSearcher: sl()),
+      () => TimetableRemoteDataSourceImplementationAlgolia(
+          coursesSearcher: sl(instanceName: 'coursesSearcher')),
     )
     // external
     ..registerLazySingleton(
