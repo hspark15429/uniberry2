@@ -16,6 +16,7 @@ void main() {
   late PostRepositoryImplementation repo;
 
   final tPost = PostModel.empty();
+  final tCourseIds = ['postId1', 'postId2'];
 
   setUp(() {
     remoteDataSource = MockPostRemoteDataSource();
@@ -195,6 +196,42 @@ void main() {
       );
 
       verify(() => remoteDataSource.deletePost('_empty.postId')).called(1);
+      verifyNoMoreInteractions(remoteDataSource);
+    });
+  });
+
+  group('searchPosts', () {
+    test(
+        'should call [remoteDataSource.searchPosts] '
+        'and return success', () async {
+      // arrange
+      when(
+        () => remoteDataSource.searchPosts(
+          author: any(named: 'author'),
+          title: any(named: 'title'),
+          content: any(named: 'content'),
+        ),
+      ).thenAnswer((_) async => tCourseIds);
+
+      // act
+      final result = await repo.searchPosts(
+        author: 'author',
+        title: 'title',
+        content: 'content',
+      );
+
+      // assert
+      expect(
+        result,
+        Right<dynamic, List<String>>(tCourseIds),
+      );
+      verify(
+        () => remoteDataSource.searchPosts(
+          author: 'author',
+          title: 'title',
+          content: 'content',
+        ),
+      ).called(1);
       verifyNoMoreInteractions(remoteDataSource);
     });
   });

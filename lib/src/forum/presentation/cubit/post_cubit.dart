@@ -6,6 +6,7 @@ import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 
 part 'post_state.dart';
@@ -16,16 +17,19 @@ class PostCubit extends Cubit<PostState> {
     required ReadPost readPost,
     required UpdatePost updatePost,
     required DeletePost deletePost,
+    required SearchPosts searchPosts,
   })  : _createPost = createPost,
         _readPost = readPost,
         _updatePost = updatePost,
         _deletePost = deletePost,
+        _searchPosts = searchPosts,
         super(PostInitial());
 
   final CreatePost _createPost;
   final ReadPost _readPost;
   final UpdatePost _updatePost;
   final DeletePost _deletePost;
+  final SearchPosts _searchPosts;
 
   Future<void> createPost({
     required String title,
@@ -87,6 +91,22 @@ class PostCubit extends Cubit<PostState> {
     result.fold(
       (failure) => emit(PostError(failure.message)),
       (_) => emit(PostDeleted()),
+    );
+  }
+
+  Future<void> searchPosts(String query) async {
+    emit(PostLoading());
+    final result = await _searchPosts(
+      SearchPostsParams(
+        title: '',
+        content: query,
+        author: '',
+      ),
+    );
+
+    result.fold(
+      (failure) => emit(PostError(failure.message)),
+      (posts) => emit(PostsSearched(posts)),
     );
   }
 }

@@ -8,7 +8,7 @@ import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 
 void main() {
   late TimetableRemoteDataSource dataSource;
-  const courseId = '0HR4deUwHMPeby0QpSH1';
+  const courseId = '1OQuA2lK7sZJBsnhYZ0j';
 
   const tCourse = CourseModel.empty();
 

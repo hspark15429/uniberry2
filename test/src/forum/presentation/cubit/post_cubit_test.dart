@@ -8,6 +8,7 @@ import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 
@@ -19,11 +20,14 @@ class MockUpdatePost extends Mock implements UpdatePost {}
 
 class MockDeletePost extends Mock implements DeletePost {}
 
+class MockSearchPosts extends Mock implements SearchPosts {}
+
 void main() {
   late CreatePost createPost;
   late ReadPost readPost;
   late UpdatePost updatePost;
   late DeletePost deletePost;
+  late SearchPosts searchPosts;
   late PostCubit cubit;
 
   final tPost = PostModel.empty();
@@ -33,11 +37,13 @@ void main() {
     readPost = MockReadPost();
     updatePost = MockUpdatePost();
     deletePost = MockDeletePost();
+    searchPosts = MockSearchPosts();
     cubit = PostCubit(
       updatePost: updatePost,
       createPost: createPost,
       readPost: readPost,
       deletePost: deletePost,
+      searchPosts: searchPosts,
     );
     registerFallbackValue(PostModel.empty());
     registerFallbackValue(const UpdatePostParams.empty());
@@ -114,6 +120,52 @@ void main() {
           ),
         ).called(1);
         verifyNoMoreInteractions(createPost);
+      },
+    );
+  });
+
+  group('deletePost', () {
+    blocTest<PostCubit, PostState>(
+      'emits [PostLoading, PostDeleted] when successful',
+      build: () {
+        when(() => deletePost.call(any()))
+            .thenAnswer((_) async => const Right(null));
+        return cubit;
+      },
+      act: (cubit) => cubit.deletePost(tPost.postId),
+      expect: () => [PostLoading(), PostDeleted()],
+      verify: (_) {
+        verify(() => deletePost(tPost.postId)).called(1);
+        verifyNoMoreInteractions(deletePost);
+      },
+    );
+  });
+
+  group('searchPosts', () {
+    blocTest<PostCubit, PostState>(
+      'emits [PostLoading, PostsSearched] when successful',
+      build: () {
+        registerFallbackValue(const SearchPostsParams.empty());
+        when(() => searchPosts.call(any()))
+            .thenAnswer((_) async => const Right(['postId']));
+        return cubit;
+      },
+      act: (cubit) => cubit.searchPosts(tPost.title),
+      expect: () => [
+        PostLoading(),
+        const PostsSearched(['postId']),
+      ],
+      verify: (_) {
+        verify(
+          () => searchPosts(
+            SearchPostsParams(
+              title: '',
+              content: tPost.title,
+              author: '',
+            ),
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(searchPosts);
       },
     );
   });

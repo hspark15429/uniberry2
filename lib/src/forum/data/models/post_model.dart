@@ -32,6 +32,18 @@ class PostModel extends Post {
           updatedAt: (map['updatedAt'] as Timestamp).toDate(),
         );
 
+  PostModel.fromJson(Map<String, dynamic> json)
+      : this(
+          postId: json['postId'] as String,
+          title: json['title'] as String,
+          content: json['content'] as String,
+          author: json['author'] as String,
+          createdAt:
+              DateTime.fromMicrosecondsSinceEpoch(json['createdAt'] as int),
+          updatedAt:
+              DateTime.fromMicrosecondsSinceEpoch(json['updatedAt'] as int),
+        );
+
   DataMap toMap() {
     return {
       'postId': postId,

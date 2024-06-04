@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,17 +13,18 @@ import 'package:uniberry2/src/forum/domain/entities/post.dart';
 abstract class PostRemoteDataSource {
   const PostRemoteDataSource();
   Future<void> createPost(Post post);
-  Future<void> deletePost(String postId);
   Future<PostModel> readPost(String postId);
-  Future<List<String>> searchPosts({
-    required String author,
-    required String title,
-    required String content,
-  });
   Future<void> updatePost({
     required String postId,
     required UpdatePostAction action,
     required dynamic postData,
+  });
+  Future<void> deletePost(String postId);
+
+  Future<List<String>> searchPosts({
+    required String author,
+    required String title,
+    required String content,
   });
 }
 
@@ -28,11 +32,21 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
   PostRemoteDataSourceImplementation({
     required FirebaseFirestore cloudStoreClient,
     required FirebaseStorage dbClient,
-  })  : _cloudStoreClient = cloudStoreClient,
+    required HitsSearcher postsSearcher,
+  })  : _postsSearcher = postsSearcher,
+        _cloudStoreClient = cloudStoreClient,
         _dbClient = dbClient;
 
   final FirebaseFirestore _cloudStoreClient;
   final FirebaseStorage _dbClient;
+  final HitsSearcher _postsSearcher;
+
+  final StreamController<HitsPage> _searchResultsController =
+      StreamController<HitsPage>();
+  Stream<HitsPage> get searchResultsStream => _searchResultsController.stream;
+
+  Stream<HitsPage> get _searchPage =>
+      _postsSearcher.responses.map(HitsPage.fromResponse);
 
   @override
   Future<void> createPost(Post post) async {
@@ -131,11 +145,36 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
   }
 
   @override
-  Future<List<String>> searchPosts(
-      {required String author,
-      required String title,
-      required String content}) {
-    // TODO: implement searchPosts
-    throw UnimplementedError();
+  Future<List<String>> searchPosts({
+    required String author,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      _postsSearcher.query(content);
+      final results = await _searchPage.first;
+      final postIds = results.items.map((post) => post.postId).toList();
+      _postsSearcher.rerun();
+
+      return postIds;
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      throw ServerException(message: e.toString(), statusCode: '505');
+    }
   }
+}
+
+class HitsPage {
+  const HitsPage(this.items, this.pageKey, this.nextPageKey);
+
+  factory HitsPage.fromResponse(SearchResponse response) {
+    final items = response.hits.map(PostModel.fromJson).toList();
+    final isLastPage = response.page >= response.nbPages;
+    final nextPageKey = isLastPage ? null : response.page + 1;
+    return HitsPage(items, response.page, nextPageKey);
+  }
+
+  final List<PostModel> items;
+  final int pageKey;
+  final int? nextPageKey;
 }

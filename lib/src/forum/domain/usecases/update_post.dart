@@ -5,7 +5,7 @@ import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
 
 class UpdatePost implements UsecaseWithParams<void, UpdatePostParams> {
-  UpdatePost(this._repo);
+  const UpdatePost(this._repo);
 
   final PostRepository _repo;
 

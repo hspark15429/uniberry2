@@ -1,3 +1,4 @@
+import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,6 +21,12 @@ void main() {
   var tPost = PostModel.empty();
 
   setUpAll(() async {
+    final postsSearcher = HitsSearcher(
+      applicationID: 'K1COUI4FQ4',
+      apiKey: '00383db0c4d34b63decf046026091f32',
+      indexName: 'posts_index',
+    );
+
     cloudStoreClient = FakeFirebaseFirestore();
     docReference = await cloudStoreClient.collection('posts').add(
           tPost.toMap(),
@@ -32,6 +39,7 @@ void main() {
     dataSource = PostRemoteDataSourceImplementation(
       cloudStoreClient: cloudStoreClient,
       dbClient: dbClient,
+      postsSearcher: postsSearcher,
     );
   });
 
@@ -86,6 +94,22 @@ void main() {
           await cloudStoreClient.collection('posts').doc(tPost.postId).get();
       // assert
       expect(post.data(), null);
+    });
+  });
+
+  group('searchPosts', () {
+    test('should search posts', () async {
+      // arrange
+
+      // act
+      final posts = await dataSource.searchPosts(
+        title: '',
+        author: '',
+        content: 'helloworld',
+      );
+      // assert
+      expect(posts, containsAll(['8gxbkrZ0EffayaTyU1NK']));
+      expect(posts, isNot(contains(['9cz1cQBgElhV0Iuknm6e'])));
     });
   });
 }

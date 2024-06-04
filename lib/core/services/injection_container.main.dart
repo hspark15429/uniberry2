@@ -11,7 +11,10 @@ Future<void> initTimetable() async {
   // cubit
   sl
     ..registerFactory(
-      () => TimetableCubit(getCourse: sl(), searchCourses: sl()),
+      () => TimetableCubit(
+        getCourse: sl(),
+        searchCourses: sl(instanceName: 'coursesSearcher'),
+      ),
     )
     // usecases
     ..registerLazySingleton(() => GetCourse(sl()))
@@ -33,6 +36,7 @@ Future<void> initTimetable() async {
         apiKey: '00383db0c4d34b63decf046026091f32',
         indexName: 'courses_index',
       ),
+      instanceName: 'coursesSearcher',
     );
 }
 
@@ -45,6 +49,7 @@ Future<void> initForum() async {
         readPost: sl(),
         updatePost: sl(),
         deletePost: sl(),
+        searchPosts: sl(),
       ),
     )
     // usecases
@@ -52,6 +57,7 @@ Future<void> initForum() async {
     ..registerLazySingleton(() => ReadPost(sl()))
     ..registerLazySingleton(() => UpdatePost(sl()))
     ..registerLazySingleton(() => DeletePost(sl()))
+    ..registerLazySingleton(() => SearchPosts(sl()))
     // repo impl
     ..registerLazySingleton<PostRepository>(
       () => PostRepositoryImplementation(sl()),
@@ -61,10 +67,19 @@ Future<void> initForum() async {
       () => PostRemoteDataSourceImplementation(
         cloudStoreClient: sl(),
         dbClient: sl(),
+        postsSearcher: sl(instanceName: 'postsSearcher'),
       ),
     )
     // external
     ..registerLazySingleton(() => FirebaseAuth.instance)
     ..registerLazySingleton(() => FirebaseFirestore.instance)
-    ..registerLazySingleton(() => FirebaseStorage.instance);
+    ..registerLazySingleton(() => FirebaseStorage.instance)
+    // external
+    ..registerLazySingleton(
+        () => HitsSearcher(
+              applicationID: 'K1COUI4FQ4',
+              apiKey: '00383db0c4d34b63decf046026091f32',
+              indexName: 'posts_index',
+            ),
+        instanceName: 'postsSearcher');
 }

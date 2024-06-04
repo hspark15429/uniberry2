@@ -46,10 +46,44 @@ class _ForumScreenState extends State<ForumScreen> {
             return const Center(child: Text('Post Updated'));
           } else if (state is PostDeleted) {
             return const Center(child: Text('Post Deleted'));
+          } else if (state is PostsSearched) {
+            return ListView.builder(
+              itemCount: state.postIds.length,
+              itemBuilder: (context, index) {
+                final postId = state.postIds[index];
+
+                return ListTile(
+                  onTap: () {
+                    context.read<PostCubit>().readPost(postId);
+                  },
+                  title: Text(postId),
+                );
+              },
+            );
           }
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<PostCubit>().searchPosts('title');
+                  },
+                  child: const Text(
+                    'View All Posts',
+                  ),
+                ),
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<PostCubit>().searchPosts('newtitle');
+                  },
+                  child: const Text(
+                    'View All Posts with newtitle',
+                  ),
+                ),
+              ),
               Center(
                 child: ElevatedButton(
                   onPressed: () {

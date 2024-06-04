@@ -7,9 +7,9 @@ import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 
 class TimetableRemoteDataSourceImplementation
     implements TimetableRemoteDataSource {
-  TimetableRemoteDataSourceImplementation(
-      {required FirebaseFirestore cloudStoreClient})
-      : _cloudStoreClient = cloudStoreClient;
+  TimetableRemoteDataSourceImplementation({
+    required FirebaseFirestore cloudStoreClient,
+  }) : _cloudStoreClient = cloudStoreClient;
 
   final FirebaseFirestore _cloudStoreClient;
 

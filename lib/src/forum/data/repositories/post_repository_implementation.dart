@@ -62,11 +62,20 @@ class PostRepositoryImplementation implements PostRepository {
   }
 
   @override
-  ResultFuture<List<String>> searchPosts(
-      {required String author,
-      required String title,
-      required String content}) {
-    // TODO: implement searchPosts
-    throw UnimplementedError();
+  ResultFuture<List<String>> searchPosts({
+    required String author,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      final result = await _remoteDataSource.searchPosts(
+        author: author,
+        title: title,
+        content: content,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 }
