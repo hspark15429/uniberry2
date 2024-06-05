@@ -37,7 +37,7 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${widget.boardName} 게시판',
+      '${widget.boardName}  ',
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,

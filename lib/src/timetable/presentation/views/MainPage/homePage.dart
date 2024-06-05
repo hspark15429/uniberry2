@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/BoardPostsPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/post_detail.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/Op_database.dart';
@@ -72,7 +73,7 @@ class _HomePage extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-backgroundColor: Colors.white,// Colors.grey[300],
+            backgroundColor: Colors.white, // Colors.grey[300],
             radius: 30,
             child: Icon(icon, size: 30, color: color),
           ),
@@ -211,11 +212,26 @@ backgroundColor: Colors.white,// Colors.grey[300],
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-'게시판리스트',
+            '게시판리스트',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           _buildBoardSectionTabs(context),
           _buildBoardPreviewPosts(context),
+          if (selectedBoardType != null) // 조건 추가: 태그가 ALL이 아닐 때만 버튼을 표시
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BoardPostsPage(boardName: boardTypeToString(selectedBoardType!)),
+                  ),
+                );
+              },
+              child: const Text(
+                '전체 게시물 보기',
+                style: TextStyle(color: Colors.blue),
+              ),
+            ),
         ],
       ),
     );
@@ -232,7 +248,7 @@ backgroundColor: Colors.white,// Colors.grey[300],
                 selectedBoardType = null;
               });
             },
-child: const Text('ALL', style: TextStyle(color: Colors.black)),
+            child: const Text('ALL', style: TextStyle(color: Colors.black)),
           ),
           ...BoardType.values.map((boardType) {
             return TextButton(
@@ -252,138 +268,157 @@ child: const Text('ALL', style: TextStyle(color: Colors.black)),
     );
   }
 
-  Widget _buildBoardPreviewPosts(BuildContext context) {
-    List<Post> sortedPosts = getSortedPosts();
-    List<Post> previewPosts = sortedPosts.take(5).toList();
+ Widget _buildBoardPreviewPosts(BuildContext context) {
+  List<Post> sortedPosts = getSortedPosts();
+  List<Post> previewPosts = sortedPosts.take(5).toList();
 
-    return Column(
-      children: previewPosts.map((post) {
-        return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PostDetailPage(post: post),
-              ),
-            );
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+  String shortenText(String text, int maxLength) {
+    if (text.length > maxLength) {
+      return '${text.substring(0, maxLength)}...';
+    } else {
+      return text;
+    }
+  }
+
+  return Column(
+    children: previewPosts.map((post) {
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PostDetailPage(post: post),
             ),
-            child: SizedBox(
-              height: 100, // Reduced height for each post preview
-              child: Row(
-                children: [
-                  if (post.imageUrls.isNotEmpty)
-                    Container(
-                      width: 60,
-                      height: 60,
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: NetworkImage(post.imageUrls[0]),
-                          fit: BoxFit.cover,
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: SizedBox(
+            height: 150, // 높이를 150으로 설정하여 각 게시물의 높이를 키움
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          "#${post.category}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
                         ),
                       ),
-                    ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Text(
-                            "#${post.category}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
-                          ),
+                      const SizedBox(height: 4),
+                      Text(
+                        shortenText(post.title, 14),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          post.title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1, // 제목을 1줄로 제한
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "작성자: ${post.author} · ${post.datePosted}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Expanded(
+                        child: Text(
+shortenText(post.content, 50),
                           style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
                             color: Colors.black,
                           ),
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 1, // Limit the title to 1 line
+maxLines: 2, // 
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "작성자: ${post.author} · ${post.datePosted}",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.visibility, size: 14, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${post.viewCount}",
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "${post.likesCount}",
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                const Icon(Icons.comment, size: 14, color: Colors.grey),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "${post.commentCount}",
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "조회수 ${post.viewCount}",
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                          const SizedBox(width: 16),
+                          const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${post.likesCount}",
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey),
+                          ),
+                          const SizedBox(width: 16),
+                          const Icon(Icons.comment, size: 14, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${post.commentCount}",
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                if (post.imageUrls.isNotEmpty)
+                  Container(
+                    width: 80,
+                    height: 80,
+                    margin: const EdgeInsets.only(left: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(post.imageUrls[0]),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ],
-              ),
+              ],
             ),
           ),
-        );
-      }).toList(),
-    );
-  }
+        ),
+      );
+    }).toList(),
+  );
+}
+
+
 
   Widget _buildAllPosts(BuildContext context) {
     List<Post> sortedPosts = List.from(dummyPosts)
@@ -449,7 +484,7 @@ child: const Text('ALL', style: TextStyle(color: Colors.black)),
                   ),
                   const SizedBox(height: 4),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
@@ -459,8 +494,7 @@ child: const Text('ALL', style: TextStyle(color: Colors.black)),
                             "${post.likesCount}",
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey,
-                            ),
+                              color: Colors.grey),
                           ),
                           const SizedBox(width: 16),
                           const Icon(Icons.comment, size: 14, color: Colors.grey),
@@ -469,8 +503,7 @@ child: const Text('ALL', style: TextStyle(color: Colors.black)),
                             "${post.commentCount}",
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey,
-                            ),
+                              color: Colors.grey),
                           ),
                         ],
                       ),
@@ -649,7 +682,7 @@ child: const Text('ALL', style: TextStyle(color: Colors.black)),
                         title: 'Manaba+R',
                         subtitle: '',
                         onTap: () => openUrl('https://ct.ritsumei.ac.jp/ct/'),
-color: Colors.redAccent,
+                        color: Colors.redAccent,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
                       _buildTile(
@@ -663,7 +696,7 @@ color: Colors.redAccent,
                             MaterialPageRoute(builder: (context) => FreeMarketPage()),
                           );
                         },
-color: Colors.orangeAccent
+                        color: Colors.orangeAccent,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
                       _buildTile(
@@ -672,7 +705,7 @@ color: Colors.orangeAccent
                         title: '授業',
                         subtitle: 'スケジュール',
                         onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=606518'),
-color: Colors.green,
+                        color: Colors.green,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
                       _buildTile(
@@ -681,7 +714,7 @@ color: Colors.green,
                         title: '図書館',
                         subtitle: '',
                         onTap: () => openUrl('https://runners.ritsumei.ac.jp/opac/opac_search/?lang=0'),
-color: Colors.blueAccent,
+                        color: Colors.blueAccent,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
                       _buildTile(
@@ -690,7 +723,7 @@ color: Colors.blueAccent,
                         title: 'シャトルバス',
                         subtitle: '',
                         onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=566535'),
-color: Colors.blueGrey,
+                        color: Colors.blueGrey,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
                       _buildTile(
@@ -699,7 +732,7 @@ color: Colors.blueGrey,
                         title: '大学',
                         subtitle: 'ホームページ',
                         onTap: () => openUrl('https://en.ritsumei.ac.jp/'),
-color: Colors.purpleAccent,
+                        color: Colors.purpleAccent,
                       ),
                       const SizedBox(width: 16), // 아이콘과 화면 우측 사이의 간격 조정
                     ],
@@ -713,7 +746,7 @@ color: Colors.purpleAccent,
                   children: [
                     _buildInfoCard(
                       context,
-title: '오늘의예정',
+                      title: '오늘의예정',
                       subtitle: DateFormat('M月 d日(E)', 'ja').format(DateTime.now()), // 오늘 날짜를 표시
                       buttons: [], // 아이콘을 삭제했으므로 빈 리스트
                       todoItems: todayTodoItems, // 오늘 일정을 보여주기 위해 추가
@@ -740,7 +773,7 @@ title: '오늘의예정',
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-'인기글',
+                  '인기글',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

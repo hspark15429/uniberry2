@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_addCoursePage.dart'; // AddCoursePage import 추가
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetalbe_courseDetailPage.dart';
 
 class CoursesListPage extends StatefulWidget {
@@ -29,6 +30,19 @@ class _CoursesListPageState extends State<CoursesListPage> {
         ),
         backgroundColor: Colors.black,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddCoursePage(period: widget.period),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<TimetableCubit, TimetableState>(
         builder: (context, state) {
@@ -63,8 +77,7 @@ class _CoursesListPageState extends State<CoursesListPage> {
                     );
                   },
                   child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -90,14 +103,12 @@ class _CoursesListPageState extends State<CoursesListPage> {
                         const SizedBox(height: 4),
                         Text(
                           course.professors.join(", "),
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           course.codes.join(", "),
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),

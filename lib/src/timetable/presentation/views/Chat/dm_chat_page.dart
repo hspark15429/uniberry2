@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -26,7 +27,6 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   bool _showMenu = false; // 메뉴 표시 여부
   Set<String> _readBy = {}; // 읽은 사람들의 ID를 저장하는 Set
-  Set<String> _reactionsVisibleFor = {}; // 반응을 표시하는 메시지 ID
   Map<String, String> _messageReactions = {}; // 각 메시지의 반응
   types.Message? _replyingTo; // 답장 중인 메시지
   int? _lastDate; // 마지막으로 날짜가 표시된 메시지의 timestamp
@@ -66,13 +66,14 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
 
-    final ImagePicker _picker = ImagePicker();
     XFile? pickedFile;
-
     if (fileType == 'image') {
-      pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    } else if (fileType == 'video') {
-      pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
+      pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    } else if (fileType == 'file') {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        pickedFile = XFile(result.files.single.path!);
+      }
     }
 
     if (pickedFile != null) {
@@ -94,12 +95,10 @@ class _ChatPageState extends State<ChatPage> {
 
   Future<bool> _requestPermission(String fileType) async {
     Permission permission;
-    if (fileType == 'image' || fileType == 'video') {
+    if (fileType == 'image') {
       permission = Permission.photos;
     } else if (fileType == 'file') {
       permission = Permission.storage;
-    } else if (fileType == 'map') {
-      permission = Permission.location;
     } else {
       return false;
     }
@@ -108,20 +107,13 @@ class _ChatPageState extends State<ChatPage> {
     return status == PermissionStatus.granted;
   }
 
-  void _toggleMenu() {
-    setState(() {
-      _showMenu = !_showMenu;
-    });
-  }
-
   void _reactToMessage(types.Message message, String reaction) {
     setState(() {
       if (_messageReactions[message.id] == reaction) {
-        _messageReactions.remove(message.id);
+        _messageReactions.remove(message.id); // 반응 취소
       } else {
         _messageReactions[message.id] = reaction;
       }
-      _toggleReactionsVisibility(message.id);
     });
   }
 
@@ -142,13 +134,13 @@ class _ChatPageState extends State<ChatPage> {
     Share.share(text);
   }
 
-  void _selectCopyMessage(String text) {
-    // 선택 복사 기능 로직 추가
-    // 원하는 방식으로 선택 복사 기능 구현
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Message selected and copied to clipboard'),
-    ));
+  void _selectCopyMessage(BuildContext context, String text) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SelectableTextPage(text: text),
+      ),
+    );
   }
 
   void _cancelMessage(types.Message message) {
@@ -190,55 +182,46 @@ class _ChatPageState extends State<ChatPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 공감 아이콘들
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.thumb_up),
+                    icon: Icon(_messageReactions[message.id] == 'like' ? Icons.thumb_up_alt : Icons.thumb_up),
                     onPressed: () {
                       _reactToMessage(message, 'like');
                       Navigator.pop(context);
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Icons.favorite),
+                    icon: Icon(_messageReactions[message.id] == 'love' ? Icons.favorite : Icons.favorite_border),
                     onPressed: () {
                       _reactToMessage(message, 'love');
                       Navigator.pop(context);
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Icons.sentiment_satisfied),
+                    icon: Icon(_messageReactions[message.id] == 'happy' ? Icons.sentiment_satisfied_alt : Icons.sentiment_satisfied),
                     onPressed: () {
                       _reactToMessage(message, 'happy');
                       Navigator.pop(context);
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Icons.sentiment_dissatisfied),
+                    icon: Icon(_messageReactions[message.id] == 'sad' ? Icons.sentiment_very_dissatisfied : Icons.sentiment_dissatisfied),
                     onPressed: () {
                       _reactToMessage(message, 'sad');
                       Navigator.pop(context);
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Icons.check_circle),
+                    icon: Icon(_messageReactions[message.id] == 'confirm' ? Icons.check_circle_outline : Icons.check_circle),
                     onPressed: () {
                       _reactToMessage(message, 'confirm');
                       Navigator.pop(context);
                     },
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.cancel),
-                    onPressed: () {
-                      _reactToMessage(message, 'cancel');
-                      Navigator.pop(context);
-                    },
-                  ),
                 ],
               ),
-              // 기능들
               ListTile(
                 leading: const Icon(Icons.reply),
                 title: const Text('Reply'),
@@ -254,7 +237,7 @@ class _ChatPageState extends State<ChatPage> {
                   if (message is types.TextMessage) {
                     _copyMessage(message.text);
                   } else if (message is types.FileMessage) {
-                    _copyMessage(message.name);
+                    _copyMessage((message as types.FileMessage).name);
                   }
                   Navigator.pop(context);
                 },
@@ -264,9 +247,9 @@ class _ChatPageState extends State<ChatPage> {
                 title: const Text('Select Copy'),
                 onTap: () {
                   if (message is types.TextMessage) {
-                    _selectCopyMessage(message.text);
+                    _selectCopyMessage(context, message.text);
                   } else if (message is types.FileMessage) {
-                    _selectCopyMessage(message.name);
+                    _selectCopyMessage(context, (message as types.FileMessage).name);
                   }
                   Navigator.pop(context);
                 },
@@ -278,7 +261,7 @@ class _ChatPageState extends State<ChatPage> {
                   if (message is types.TextMessage) {
                     _shareMessage(message.text);
                   } else if (message is types.FileMessage) {
-                    _shareMessage(message.name);
+                    _shareMessage((message as types.FileMessage).name);
                   }
                   Navigator.pop(context);
                 },
@@ -299,159 +282,40 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void _toggleReactionsVisibility(String messageId) {
-    setState(() {
-      if (_reactionsVisibleFor.contains(messageId)) {
-        _reactionsVisibleFor.remove(messageId);
-      } else {
-        _reactionsVisibleFor.add(messageId);
-      }
-    });
-  }
-
-  void _createVote(Map<String, dynamic> voteData) {
-    final voteMessage = types.CustomMessage(
-      author: _user,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: const Uuid().v4(),
-      metadata: voteData,
-      status: types.Status.sent,
-    );
-
-    setState(() {
-      _messages.insert(0, voteMessage);
-    });
-  }
-
-  Widget _buildReactions(types.Message message) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.thumb_up),
-          onPressed: () {
-            _reactToMessage(message, 'like');
-            _toggleReactionsVisibility(message.id);
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.favorite),
-          onPressed: () {
-            _reactToMessage(message, 'love');
-            _toggleReactionsVisibility(message.id);
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.sentiment_satisfied),
-          onPressed: () {
-            _reactToMessage(message, 'happy');
-            _toggleReactionsVisibility(message.id);
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.sentiment_dissatisfied),
-          onPressed: () {
-            _reactToMessage(message, 'sad');
-            _toggleReactionsVisibility(message.id);
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.check_circle),
-          onPressed: () {
-            _reactToMessage(message, 'confirm');
-            _toggleReactionsVisibility(message.id);
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.cancel),
-          onPressed: () {
-            _reactToMessage(message, 'cancel');
-            _toggleReactionsVisibility(message.id);
-          },
-        ),
-      ],
-    );
-  }
-
   Widget _buildReactionsSummary(types.Message message) {
-    final reactions = _messageReactions.entries.where((entry) => entry.key == message.id).toList();
-    if (reactions.isEmpty) {
+    final reaction = _messageReactions[message.id];
+    if (reaction == null) {
       return Container();
     }
+
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
       child: Row(
-        children: reactions.map((entry) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2.0),
-            child: Row(
-              children: [
-                Icon(_getReactionIcon(entry.value), size: 14),
-                Text(' 1', style: TextStyle(fontSize: 12)),
-              ],
-            ),
-          );
-        }).toList(),
+        children: [
+          Icon(_getReactionIcon(reaction), size: 14),
+          Text(' 1', style: const TextStyle(fontSize: 12)),
+        ],
       ),
     );
   }
 
-  Widget _buildAttachmentMenu() {
-    return _showMenu
-        ? Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _buildMenuButton(Icons.attach_file, '파일', () {
-                  _sendAttachment('file');
-                }),
-                _buildMenuButton(Icons.image, '사진', () {
-                  _sendAttachment('image');
-                }),
-                _buildMenuButton(Icons.poll, '투표', () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => VotePage(onVoteCreated: _createVote)),
-                  );
-                }),
-                _buildMenuButton(Icons.event, '일정', () {
-                  // 일정 기능 추가 로직
-                }),
-                _buildMenuButton(Icons.phone, '통화', () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute<Widget>(
-                          builder: (context) => Scaffold(
-                              appBar: AppBar(title: const Text('DMCallPage')))));
-                }),
-                _buildMenuButton(Icons.map, '지도', () async {
-                  final status = await _requestPermission('map');
-                  if (status) {
-                    // 지도 기능 추가 로직
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Permission denied for map'),
-                    ));
-                  }
-                }),
-              ],
-            ),
-          )
-        : Container();
-  }
-
-  Widget _buildMenuButton(IconData icon, String label, VoidCallback onPressed) {
-    return Column(
-      children: [
-        IconButton(
-          icon: Icon(icon),
-          onPressed: onPressed,
-        ),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
-    );
+  IconData _getReactionIcon(String reaction) {
+    switch (reaction) {
+      case 'like':
+        return Icons.thumb_up;
+      case 'love':
+        return Icons.favorite;
+      case 'happy':
+        return Icons.sentiment_satisfied;
+      case 'sad':
+        return Icons.sentiment_dissatisfied;
+      case 'confirm':
+        return Icons.check_circle;
+      case 'cancel':
+        return Icons.cancel;
+      default:
+        return Icons.thumb_up;
+    }
   }
 
   Widget _buildMessageItem(types.Message message) {
@@ -471,12 +335,12 @@ class _ChatPageState extends State<ChatPage> {
 
     final replyMessage = message.metadata?['replyingTo'] != null
         ? _messages.firstWhere((msg) => msg.id == message.metadata?['replyingTo'], orElse: () => types.TextMessage(
-        author: _user,
-        createdAt: 0,
-        id: '',
-        text: '삭제된 메시지입니다.',
-        status: types.Status.sent,
-      ))
+      author: _user,
+      createdAt: 0,
+      id: '',
+      text: '삭제된 메시지입니다.',
+      status: types.Status.sent,
+    ))
         : null;
 
     return Column(
@@ -490,8 +354,17 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
         GestureDetector(
-          onTap: () => _toggleReactionsVisibility(message.id),
-          onLongPress: () => _showMessageOptions(message),
+          onDoubleTap: () => _showMessageOptions(message),
+          onLongPress: () {
+            if (message is types.TextMessage) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SelectableTextPage(text: message.text),
+                ),
+              );
+            }
+          },
           child: Container(
             margin: isMine
                 ? const EdgeInsets.only(left: 50, right: 8, top: 5, bottom: 5)
@@ -509,14 +382,13 @@ class _ChatPageState extends State<ChatPage> {
                     child: Text(
                       replyMessage is types.TextMessage
                           ? (replyMessage.text.length > 20
-                              ? replyMessage.text.substring(0, 20) + '...'
-                              : replyMessage.text)
+                          ? replyMessage.text.substring(0, 20) + '...'
+                          : replyMessage.text)
                           : 'Attachment',
                       style: const TextStyle(fontSize: 12, color: Colors.black),
                     ),
                   ),
                 const SizedBox(height: 4),
-                if (_reactionsVisibleFor.contains(message.id)) _buildReactions(message),
                 Row(
                   mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
                   children: [
@@ -601,25 +473,6 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  IconData _getReactionIcon(String reaction) {
-    switch (reaction) {
-      case 'like':
-        return Icons.thumb_up;
-      case 'love':
-        return Icons.favorite;
-      case 'happy':
-        return Icons.sentiment_satisfied;
-      case 'sad':
-        return Icons.sentiment_dissatisfied;
-      case 'confirm':
-        return Icons.check_circle;
-      case 'cancel':
-        return Icons.cancel;
-      default:
-        return Icons.thumb_up;
-    }
-  }
-
   Widget _buildVoteMessage(Map<String, dynamic> voteData) {
     return Text('Vote: ${voteData['question']}');
   }
@@ -682,7 +535,7 @@ class _ChatPageState extends State<ChatPage> {
             children: [
               IconButton(
                 icon: Icon(Icons.add, color: Colors.blue),
-                onPressed: _toggleMenu,
+                onPressed: () => setState(() => _showMenu = !_showMenu),
               ),
               Expanded(
                 child: Container(
@@ -710,6 +563,78 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAttachmentMenu() {
+    return _showMenu
+        ? Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _buildMenuButton(Icons.attach_file, '파일', () {
+                  _sendAttachment('file');
+                }),
+                _buildMenuButton(Icons.image, '사진', () {
+                  _sendAttachment('image');
+                }),
+                _buildMenuButton(Icons.poll, '투표', () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VotePage(onVoteCreated: (voteData) {
+                        final voteMessage = types.CustomMessage(
+                          author: _user,
+                          createdAt: DateTime.now().millisecondsSinceEpoch,
+                          id: const Uuid().v4(),
+                          metadata: voteData,
+                          status: types.Status.sent,
+                        );
+
+                        setState(() {
+                          _messages.insert(0, voteMessage);
+                        });
+                      }),
+                    ),
+                  );
+                }),
+                _buildMenuButton(Icons.event, '일정', () {
+                  // 일정 기능 추가 로직
+                }),
+                _buildMenuButton(Icons.phone, '통화', () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                              appBar: AppBar(title: const Text('DMCallPage')))));
+                }),
+                _buildMenuButton(Icons.map, '지도', () async {
+                  final status = await _requestPermission('map');
+                  if (status) {
+                    // 지도 기능 추가 로직
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Permission denied for map'),
+                    ));
+                  }
+                }),
+              ],
+            ),
+          )
+        : Container();
+  }
+
+  Widget _buildMenuButton(IconData icon, String label, VoidCallback onPressed) {
+    return Column(
+      children: [
+        IconButton(
+          icon: Icon(icon),
+          onPressed: onPressed,
+        ),
+        Text(label, style: const TextStyle(fontSize: 12)),
+      ],
     );
   }
 
@@ -764,7 +689,7 @@ class ChatSearchPage extends SearchDelegate<types.Message?> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: () => close(context, null), 
+      onPressed: () => close(context, null),
       icon: Icon(Icons.arrow_back),
     );
   }
@@ -820,6 +745,36 @@ class ChatSearchPage extends SearchDelegate<types.Message?> {
           ),
         );
       },
+    );
+  }
+}
+
+class SelectableTextPage extends StatelessWidget {
+  final String text;
+
+  const SelectableTextPage({Key? key, required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Selectable Text'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SelectableText(
+          text,
+          style: const TextStyle(fontSize: 16),
+          showCursor: true,
+          cursorColor: Colors.blue,
+          cursorWidth: 2.0,
+          cursorRadius: const Radius.circular(2.0),
+          toolbarOptions: const ToolbarOptions(
+            copy: true,
+            selectAll: true,
+          ),
+        ),
+      ),
     );
   }
 }
