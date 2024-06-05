@@ -3,16 +3,16 @@ import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_list_page.dar
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/homePage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
 
-  static const String routeName = '/';
+  static const String routeName = '/dashboard';
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     String initialSemester = _determineInitialSemester();

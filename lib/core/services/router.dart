@@ -7,7 +7,7 @@ import 'package:uniberry2/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
-import 'package:uniberry2/src/home/presentation/views/home_screen.dart';
+import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/test_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable_screen.dart';
@@ -15,7 +15,8 @@ import 'package:uniberry2/src/timetable/presentation/views/timetable_screen.dart
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return MaterialPageRoute(builder: (_) => const MainScreen());
+      return MaterialPageRoute(builder: (_) => const DashboardScreen());
+
     case TimetableScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => BlocProvider(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uniberry2/src/home/presentation/views/home_screen.dart';
+import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Grade/grade_rate_chart_page.dart';
@@ -298,7 +298,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const MainScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const DashboardScreen()),
                   );
                 },
               ),
