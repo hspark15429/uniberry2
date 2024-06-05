@@ -346,16 +346,16 @@ class _TimetableScreenState extends State<TimetableScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => const GradePage()),
-                      //     );
-                      //   },
-                      //   child: _buildGradeStatusCard(),
-                      // ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const GradePage()),
+                          );
+                        },
+                        child: _buildGradeStatusCard(),
+                      ),
                       const SizedBox(height: 300),
                     ],
                   );
