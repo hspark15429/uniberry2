@@ -3,6 +3,7 @@ part of 'injection_container.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  await initAuthentication();
   await initTimetable();
   await initForum();
 }
@@ -71,10 +72,10 @@ Future<void> initForum() async {
         postsSearcher: sl(instanceName: 'postsSearcher'),
       ),
     )
-    // external
-    ..registerLazySingleton(() => FirebaseAuth.instance)
-    ..registerLazySingleton(() => FirebaseFirestore.instance)
-    ..registerLazySingleton(() => FirebaseStorage.instance)
+    // // external
+    // ..registerLazySingleton(() => FirebaseAuth.instance)
+    // ..registerLazySingleton(() => FirebaseFirestore.instance)
+    // ..registerLazySingleton(() => FirebaseStorage.instance)
     // external
     ..registerLazySingleton(
         () => HitsSearcher(
@@ -83,4 +84,35 @@ Future<void> initForum() async {
               indexName: 'posts_index',
             ),
         instanceName: 'postsSearcher');
+}
+
+Future<void> initAuthentication() async {
+  // cubit
+  sl
+    ..registerFactory(() => AuthenticationCubit(
+          forgotPassword: sl(),
+          signIn: sl(),
+          signUp: sl(),
+          updateUser: sl(),
+        ))
+    // usecases
+    ..registerLazySingleton(() => SignIn(sl()))
+    ..registerLazySingleton(() => SignUp(sl()))
+    ..registerLazySingleton(() => ForgotPassword(sl()))
+    ..registerLazySingleton(() => UpdateUser(sl()))
+    // repo impl
+    ..registerLazySingleton<AuthenticationRepository>(
+      () => AuthenticationRepositoryImplementation(sl()),
+    )
+    // data source impl
+    ..registerLazySingleton<AuthenticationRemoteDataSource>(
+      () => AuthenticationRemoteDataSourceImplementation(
+        authClient: sl(),
+        cloudStoreClient: sl(),
+        dbClient: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => FirebaseAuth.instance)
+    ..registerLazySingleton(() => FirebaseFirestore.instance)
+    ..registerLazySingleton(() => FirebaseStorage.instance);
 }

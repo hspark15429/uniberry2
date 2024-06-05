@@ -10,7 +10,6 @@ import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPa
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket_usersetting.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarkget_itemDetailPage.dart';
 
-
 class FreeMarketMyPage extends StatefulWidget {
   final List<Map<String, dynamic>> favoriteProducts;
 
@@ -134,9 +133,11 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
                       child: CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.purple[100],
-                        backgroundImage: _image != null ? FileImage(_image!) : null,
+                        backgroundImage:
+                            _image != null ? FileImage(_image!) : null,
                         child: _image == null
-                            ? const Icon(Icons.person, size: 40, color: Colors.white)
+                            ? const Icon(Icons.person,
+                                size: 40, color: Colors.white)
                             : null,
                       ),
                     ),
@@ -175,7 +176,7 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.asset(
-                            'assets/start_img.png',
+                            'assets/images/start_img.png',
                             width: 40,
                             height: 40,
                           ),
@@ -220,7 +221,8 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
                             children: [
                               Icon(Icons.add_circle),
                               SizedBox(width: 5),
-                              Text('チャージ', style: TextStyle(color: Colors.white)),
+                              Text('チャージ',
+                                  style: TextStyle(color: Colors.white)),
                             ],
                           ),
                         ),
@@ -239,7 +241,8 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
                             children: [
                               Icon(Icons.credit_card),
                               SizedBox(width: 5),
-                              Text('口座振り込み', style: TextStyle(color: Colors.white)),
+                              Text('口座振り込み',
+                                  style: TextStyle(color: Colors.white)),
                             ],
                           ),
                         ),
@@ -263,15 +266,19 @@ class _FreeMarketMyPageState extends State<FreeMarketMyPage> {
                           MaterialPageRoute(
                             builder: (context) => FavoriteProductsPage(
                               favoriteProducts: favoriteProducts,
-onFavoriteToggle: _toggleFavorite, products: [],
+                              onFavoriteToggle: _toggleFavorite,
+                              products: [],
                             ),
                           ),
                         );
                       },
                     ),
-                    _buildBoxButton(context, Icons.bookmark, '保存一覧', onPressed: () {}),
-                    _buildBoxButton(context, Icons.shopping_cart, '購入リスト', onPressed: () {}),
-                    _buildBoxButton(context, Icons.outbox, '販売リスト', onPressed: () {}),
+                    _buildBoxButton(context, Icons.bookmark, '保存一覧',
+                        onPressed: () {}),
+                    _buildBoxButton(context, Icons.shopping_cart, '購入リスト',
+                        onPressed: () {}),
+                    _buildBoxButton(context, Icons.outbox, '販売リスト',
+                        onPressed: () {}),
                   ],
                 ),
               ),
@@ -279,7 +286,9 @@ onFavoriteToggle: _toggleFavorite, products: [],
                 padding: EdgeInsets.all(16.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('좋아요 목록', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  child: Text('좋아요 목록',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
               ),
               ListView.builder(
@@ -289,7 +298,8 @@ onFavoriteToggle: _toggleFavorite, products: [],
                 itemBuilder: (context, index) {
                   final product = favoriteProducts[index];
                   return ListTile(
-                    leading: Image.network(product['image'] as String, width: 50, height: 50, fit: BoxFit.cover),
+                    leading: Image.network(product['image'] as String,
+                        width: 50, height: 50, fit: BoxFit.cover),
                     title: Text(product['name'] as String),
                     subtitle: Text('¥${product['price'] as int}'),
                     onTap: () {
@@ -328,7 +338,8 @@ onFavoriteToggle: _toggleFavorite, products: [],
     );
   }
 
-  Widget _buildBoxButton(BuildContext context, IconData icon, String label, {required VoidCallback onPressed}) {
+  Widget _buildBoxButton(BuildContext context, IconData icon, String label,
+      {required VoidCallback onPressed}) {
     return Column(
       children: [
         Container(

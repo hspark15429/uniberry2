@@ -3,9 +3,16 @@ import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_list_page.dar
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/homePage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
+  static const String routeName = '/';
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     String initialSemester = _determineInitialSemester();
@@ -49,7 +56,13 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/forum');
               },
-              child: const Text('Go to test'),
+              child: const Text('Go to forums test'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/sign-in');
+              },
+              child: const Text('Go to login test'),
             ),
           ],
         ),
