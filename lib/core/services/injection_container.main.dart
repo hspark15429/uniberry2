@@ -9,6 +9,8 @@ Future<void> init() async {
 }
 
 Future<void> initTimetable() async {
+  final _jsonCourses = await rootBundle.loadString('assets/temp/courses.json');
+
   // cubit
   sl
     ..registerFactory(
@@ -26,20 +28,23 @@ Future<void> initTimetable() async {
     )
 
     // data source impl
+    // ..registerLazySingleton<TimetableRemoteDataSource>(
+    //   () => TimetableRemoteDataSourceImplementationAlgolia(
+    //     coursesSearcher: sl(instanceName: 'coursesSearcher'),
+    //   ),
+    // )
     ..registerLazySingleton<TimetableRemoteDataSource>(
-      () => TimetableRemoteDataSourceImplementationAlgolia(
-        coursesSearcher: sl(instanceName: 'coursesSearcher'),
-      ),
-    )
-    // external
-    ..registerLazySingleton(
-      () => HitsSearcher(
-        applicationID: 'K1COUI4FQ4',
-        apiKey: '00383db0c4d34b63decf046026091f32',
-        indexName: 'courses_index',
-      ),
-      instanceName: 'coursesSearcher',
+      () => TimetableLocalDataSourceImplementation(jsonCourses: _jsonCourses),
     );
+  // external
+  // ..registerLazySingleton(
+  //   () => HitsSearcher(
+  //     applicationID: 'K1COUI4FQ4',
+  //     apiKey: '00383db0c4d34b63decf046026091f32',
+  //     indexName: 'courses_index',
+  //   ),
+  //   instanceName: 'coursesSearcher',
+  // )
 }
 
 Future<void> initForum() async {

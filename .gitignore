@@ -44,3 +44,4 @@ app.*.map.json
 
 # external tools
 /tools
+/assets/temp/courses.json
