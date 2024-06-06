@@ -565,7 +565,7 @@ color: Colors.white,
                 child: CoursesListPage(
                   period: period,
                   school: context.read<TimetableCubit>().selectedSchool ?? '학부 선택 없음',
-                  semester: semester, // 2024년봄학기
+semester: semester, // 2024년봄학기
                 ),
               ),
             ),
