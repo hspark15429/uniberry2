@@ -52,7 +52,7 @@ Future<void> initTimetable() async {
               port: 443,
             ),
           },
-          numRetries: 3,
+          numRetries: 2,
           connectionTimeout: const Duration(seconds: 2),
         ),
       ),

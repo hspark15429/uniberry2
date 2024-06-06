@@ -66,10 +66,10 @@ class TimetableRemoteDataSourceImplementationTypesense
 
       final searchParameters = {
         'q': '',
-        'query_by': 'periods,term,campuses,schools,codes',
+        'query_by': 'periods,term,campuses,schools',
         'filter_by': filterString,
         'include_fields': 'courseId',
-        'per_page': '25',
+        'per_page': '100',
         'group_by': 'codes',
         'group_limit': '1'
       };
@@ -93,8 +93,7 @@ class TimetableRemoteDataSourceImplementationTypesense
           courseIds.add((hit['document'] as DataMap)['courseId'] as String);
         }
       }
-
-      debugPrint(courseIds.toString());
+      debugPrint(courseIds.length.toString());
       return courseIds;
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
