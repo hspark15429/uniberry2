@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:typesense/typesense.dart';
+import 'package:uniberry2/core/utils/typedefs.dart';
 
 void main() async {
   // Replace with your configuration
@@ -23,11 +24,18 @@ void main() async {
   final client = Client(config);
 
   final searchParameters = {
-    'q': '',
-    'query_by': 'periods,term,campuses,schools',
+    'q': '14002',
+    'query_by': 'codes',
     'filter_by': '',
-    'include_fields': 'courseId',
+    // 'include_fields': 'courseId',
+    'per_page': '1',
+    'group_by': 'codes',
+    'group_limit': '1'
   };
-
+  // save to a file
+  final file = File('search_results.json');
+  final result =
+      await client.collection('courses').documents.search(searchParameters);
+  await file.writeAsString(result.toString());
   print(await client.collection('courses').documents.search(searchParameters));
 }

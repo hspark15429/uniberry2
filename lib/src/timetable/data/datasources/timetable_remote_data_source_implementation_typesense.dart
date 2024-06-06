@@ -66,9 +66,12 @@ class TimetableRemoteDataSourceImplementationTypesense
 
       final searchParameters = {
         'q': '',
-        'query_by': 'periods,term,campuses,schools',
+        'query_by': 'periods,term,campuses,schools,codes',
         'filter_by': filterString,
         'include_fields': 'courseId',
+        'per_page': '25',
+        'group_by': 'codes',
+        'group_limit': '1'
       };
 
       final results = await _typesenseClient
@@ -83,10 +86,15 @@ class TimetableRemoteDataSourceImplementationTypesense
         );
       }
       final courseIds = <String>[];
-      for (final (result as DataMap) in results['hits'] as Iterable) {
-        courseIds.add((result['document'] as DataMap)['courseId'] as String);
+
+      for (final (groupedHit as DataMap)
+          in results['grouped_hits'] as Iterable) {
+        for (final (hit as DataMap) in groupedHit['hits'] as Iterable) {
+          courseIds.add((hit['document'] as DataMap)['courseId'] as String);
+        }
       }
 
+      debugPrint(courseIds.toString());
       return courseIds;
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
