@@ -1,18 +1,20 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:typesense/typesense.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source_implementation_typesense.dart';
 
-void main() {
+void main() async {
   late Client typesenseClient;
   late TimetableRemoteDataSource dataSource;
 
-  setUp(() {
-    const host = 'en26j4yxt9m7pfkip-1.a1.typesense.net';
+  setUp(() async {
+    await dotenv.load();
+    final host = dotenv.env['TYPESENSE_HOST']!;
     const protocol = Protocol.https;
     final config = Configuration(
       // Api key
-      '058Tok9mJzeZggOm9u4I80UPGntwEEp1',
+      dotenv.env['TYPESENSE_API_KEY']!,
       nodes: {
         Node(
           protocol,
@@ -35,9 +37,10 @@ void main() {
       // Arrange
 
       // Act
-      final course = await dataSource.getCourse('tE28tbxmAZt6LHi4WTOJ');
+      final course =
+          await dataSource.getCourse('6da609922f8449beb9d4b0d94f53a00a');
       // Assert
-      expect(course.courseId, equals('tE28tbxmAZt6LHi4WTOJ'));
+      expect(course.courseId, equals('6da609922f8449beb9d4b0d94f53a00a'));
     });
   });
   group('searchCourses', () {
@@ -52,7 +55,7 @@ void main() {
         period: '月4',
       );
       // Assert
-      // expect(courseIds, contains('tE28tbxmAZt6LHi4WTOJ'));
+      expect(courseIds, contains('6da609922f8449beb9d4b0d94f53a00a'));
     });
   });
 }

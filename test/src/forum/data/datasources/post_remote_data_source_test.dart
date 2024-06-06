@@ -4,6 +4,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:uniberry2/core/enums/update_post_enum.dart';
@@ -21,9 +22,10 @@ void main() {
   var tPost = PostModel.empty();
 
   setUpAll(() async {
+    await dotenv.load();
     final postsSearcher = HitsSearcher(
-      applicationID: 'K1COUI4FQ4',
-      apiKey: '00383db0c4d34b63decf046026091f32',
+      applicationID: dotenv.env['ALGOLIA_APP_ID']!,
+      apiKey: dotenv.env['ALGOLIA_API_KEY']!,
       indexName: 'posts_index',
     );
 

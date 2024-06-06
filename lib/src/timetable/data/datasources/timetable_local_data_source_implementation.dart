@@ -42,7 +42,6 @@ class TimetableLocalDataSourceImplementation
             campus.isEmpty || course.campuses.contains(campus);
         final matchesTerm = term.isEmpty || course.term == term;
         final matchesPeriod = period.isEmpty || course.periods.contains(period);
-        debugPrint('1');
         return matchesSchool && matchesCampus && matchesTerm && matchesPeriod;
       }).toList();
 

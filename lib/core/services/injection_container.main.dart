@@ -44,12 +44,12 @@ Future<void> initTimetable() async {
     ..registerLazySingleton<Client>(
       () => Client(
         Configuration(
-          '058Tok9mJzeZggOm9u4I80UPGntwEEp1',
+          dotenv.env['TYPESENSE_APP_KEY']!,
           nodes: {
             Node(
               Protocol.https,
-              'en26j4yxt9m7pfkip-1.a1.typesense.net',
-              port: 443,
+              dotenv.env['TYPESENSE_HOST']!,
+              port: dotenv.env['TYPESENSE_PORT']! as int,
             ),
           },
           numRetries: 2,
@@ -57,15 +57,6 @@ Future<void> initTimetable() async {
         ),
       ),
     );
-
-  // ..registerLazySingleton(
-  //   () => HitsSearcher(
-  //     applicationID: 'K1COUI4FQ4',
-  //     apiKey: '00383db0c4d34b63decf046026091f32',
-  //     indexName: 'courses_index',
-  //   ),
-  //   instanceName: 'coursesSearcher',
-  // )
 }
 
 Future<void> initForum() async {
@@ -105,8 +96,8 @@ Future<void> initForum() async {
     // external
     ..registerLazySingleton(
         () => HitsSearcher(
-              applicationID: 'K1COUI4FQ4',
-              apiKey: '00383db0c4d34b63decf046026091f32',
+              applicationID: dotenv.env['ALGOLIA_APP_ID']!,
+              apiKey: dotenv.env['ALGOLIA_API_KEY']!,
               indexName: 'posts_index',
             ),
         instanceName: 'postsSearcher');

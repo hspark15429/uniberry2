@@ -36,6 +36,7 @@ dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.5
   file_picker: ^8.0.0+1
+  flutter_dotenv: ^5.1.0
   font_awesome_flutter: ^10.7.0
   get_it: ^7.7.0
   iconly: ^1.0.1
@@ -109,4 +110,4 @@ flutter:
     - assets/uniberry_guide.html
     - assets/images/start_img.png
     - assets/images/auth_gradient_background.png
-    # - assets/temp/courses.json
+    - .env

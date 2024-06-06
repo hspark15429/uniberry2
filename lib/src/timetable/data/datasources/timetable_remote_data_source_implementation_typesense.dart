@@ -93,7 +93,6 @@ class TimetableRemoteDataSourceImplementationTypesense
           courseIds.add((hit['document'] as DataMap)['courseId'] as String);
         }
       }
-      debugPrint(courseIds.length.toString());
       return courseIds;
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
