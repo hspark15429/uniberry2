@@ -42,12 +42,12 @@ Future<void> initTimetable() async {
     ..registerLazySingleton<Client>(
       () => Client(
         Configuration(
-          dotenv.env['TYPESENSE_APP_KEY']!,
+          dotenv.env['TYPESENSE_API_KEY']!,
           nodes: {
             Node(
               Protocol.https,
               dotenv.env['TYPESENSE_HOST']!,
-              port: dotenv.env['TYPESENSE_PORT']! as int,
+              port: int.parse(dotenv.env['TYPESENSE_PORT']!),
             ),
           },
           numRetries: 2,
