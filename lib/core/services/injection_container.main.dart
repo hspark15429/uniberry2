@@ -26,17 +26,38 @@ Future<void> initTimetable() async {
     ..registerLazySingleton<TimetableRepository>(
       () => TimetableRepositoryImplementation(sl()),
     )
-
     // data source impl
+    ..registerLazySingleton<TimetableRemoteDataSource>(
+      () => TimetableRemoteDataSourceImplementationTypesense(
+        typesenseClient: sl(),
+      ),
+    )
     // ..registerLazySingleton<TimetableRemoteDataSource>(
     //   () => TimetableRemoteDataSourceImplementationAlgolia(
     //     coursesSearcher: sl(instanceName: 'coursesSearcher'),
     //   ),
     // )
-    ..registerLazySingleton<TimetableRemoteDataSource>(
-      () => TimetableLocalDataSourceImplementation(jsonCourses: _jsonCourses),
+    // ..registerLazySingleton<TimetableRemoteDataSource>(
+    //   () => TimetableLocalDataSourceImplementation(jsonCourses: _jsonCourses),
+    // );
+    // external
+    ..registerLazySingleton<Client>(
+      () => Client(
+        Configuration(
+          '058Tok9mJzeZggOm9u4I80UPGntwEEp1',
+          nodes: {
+            Node(
+              Protocol.https,
+              'en26j4yxt9m7pfkip-1.a1.typesense.net',
+              port: 443,
+            ),
+          },
+          numRetries: 3,
+          connectionTimeout: const Duration(seconds: 2),
+        ),
+      ),
     );
-  // external
+
   // ..registerLazySingleton(
   //   () => HitsSearcher(
   //     applicationID: 'K1COUI4FQ4',
@@ -94,12 +115,14 @@ Future<void> initForum() async {
 Future<void> initAuthentication() async {
   // cubit
   sl
-    ..registerFactory(() => AuthenticationCubit(
-          forgotPassword: sl(),
-          signIn: sl(),
-          signUp: sl(),
-          updateUser: sl(),
-        ))
+    ..registerFactory(
+      () => AuthenticationCubit(
+        forgotPassword: sl(),
+        signIn: sl(),
+        signUp: sl(),
+        updateUser: sl(),
+      ),
+    )
     // usecases
     ..registerLazySingleton(() => SignIn(sl()))
     ..registerLazySingleton(() => SignUp(sl()))

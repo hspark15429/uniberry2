@@ -95,8 +95,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (_) => const fui.ForgotPasswordScreen(),
       );
 
-    case '/test':
-      return MaterialPageRoute(builder: (_) => const MyHomePage());
+    // case '/test':
+    //   return MaterialPageRoute(builder: (_) => const MyHomePage());
 
     default:
       return MaterialPageRoute(builder: (_) => const Placeholder());
