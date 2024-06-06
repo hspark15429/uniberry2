@@ -8,10 +8,11 @@ import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_th
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/Op_database.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/OpportunityDetailPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/myPage/myPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/todolist_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/notificationPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/scrapPage.dart';
-import 'package:uniberry2/src/timetable/presentation/views/settiing/setting_page.dart';
+//import 'package:uniberry2/src/timetable/presentation/views/settiing/setting_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,6 +30,7 @@ class _HomePage extends State<HomePage> {
   BoardType? selectedBoardType;
   int currentPageIndex = 0;
   List<TodoItem> todoList = []; // To-Do 리스트를 위한 추가
+List<Map<String, dynamic>> FavoriteProducts = [];
 
   Future<void> openUrl(String url) async {
     final Uri _url = Uri.parse(url);
@@ -652,12 +654,12 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
             },
           ),
           IconButton(
-            icon: const Icon(Icons.settings),
+icon: const Icon(Icons.account_circle),
             color: Colors.white,
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
+MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: FavoriteProducts),),
               );
             },
           ),
@@ -693,7 +695,7 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => FreeMarketPage()),
+                            MaterialPageRoute(builder: (context) => const FreeMarketPage()),
                           );
                         },
                         color: Colors.orangeAccent,
@@ -735,6 +737,7 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         color: Colors.purpleAccent,
                       ),
                       const SizedBox(width: 16), // 아이콘과 화면 우측 사이의 간격 조정
+                      const SizedBox(width: 16), // 아이콘 사이의 간격 조정
                     ],
                   ),
                 ),

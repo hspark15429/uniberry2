@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket_mypage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarkget_itemDetailPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/myPage/myPage.dart';
 
 final List<Map<String, dynamic>> products = [
   {
@@ -138,7 +138,7 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FreeMarketMyPage(favoriteProducts: favoriteProducts),
+builder: (context) => MyPage(favoriteProducts: favoriteProducts),
                 ),
               );
             },
