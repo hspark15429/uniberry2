@@ -84,21 +84,21 @@ Future<void> initForum() async {
       () => PostRemoteDataSourceImplementation(
         cloudStoreClient: sl(),
         dbClient: sl(),
-        postsSearcher: sl(instanceName: 'postsSearcher'),
+        typesenseClient: sl(),
       ),
-    )
-    // // external
-    // ..registerLazySingleton(() => FirebaseAuth.instance)
-    // ..registerLazySingleton(() => FirebaseFirestore.instance)
-    // ..registerLazySingleton(() => FirebaseStorage.instance)
-    // external
-    ..registerLazySingleton(
-        () => HitsSearcher(
-              applicationID: dotenv.env['ALGOLIA_APP_ID']!,
-              apiKey: dotenv.env['ALGOLIA_API_KEY']!,
-              indexName: 'posts_index',
-            ),
-        instanceName: 'postsSearcher');
+    );
+  // // external
+  // ..registerLazySingleton(() => FirebaseAuth.instance)
+  // ..registerLazySingleton(() => FirebaseFirestore.instance)
+  // ..registerLazySingleton(() => FirebaseStorage.instance)
+  // external
+  // ..registerLazySingleton(
+  //     () => HitsSearcher(
+  //           applicationID: dotenv.env['ALGOLIA_APP_ID']!,
+  //           apiKey: dotenv.env['ALGOLIA_API_KEY']!,
+  //           indexName: 'posts_index',
+  //         ),
+  //     instanceName: 'postsSearcher');
 }
 
 Future<void> initAuthentication() async {

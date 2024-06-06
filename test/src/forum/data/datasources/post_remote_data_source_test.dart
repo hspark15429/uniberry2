@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:typesense/typesense.dart';
 import 'package:uniberry2/core/enums/update_post_enum.dart';
 import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
@@ -23,12 +24,26 @@ void main() {
 
   setUpAll(() async {
     await dotenv.load();
-    final postsSearcher = HitsSearcher(
-      applicationID: dotenv.env['ALGOLIA_APP_ID']!,
-      apiKey: dotenv.env['ALGOLIA_API_KEY']!,
-      indexName: 'posts_index',
-    );
 
+    // final postsSearcher = HitsSearcher(
+    //   applicationID: dotenv.env['ALGOLIA_APP_ID']!,
+    //   apiKey: dotenv.env['ALGOLIA_API_KEY']!,
+    //   indexName: 'posts_index',
+    // );
+    final typesenseClient = Client(
+      Configuration(
+        dotenv.env['TYPESENSE_API_KEY']!,
+        nodes: {
+          Node(
+            Protocol.https,
+            dotenv.env['TYPESENSE_HOST']!,
+            port: int.parse(dotenv.env['TYPESENSE_PORT']!),
+          ),
+        },
+        numRetries: 2,
+        connectionTimeout: const Duration(seconds: 2),
+      ),
+    );
     cloudStoreClient = FakeFirebaseFirestore();
     docReference = await cloudStoreClient.collection('posts').add(
           tPost.toMap(),
@@ -41,7 +56,7 @@ void main() {
     dataSource = PostRemoteDataSourceImplementation(
       cloudStoreClient: cloudStoreClient,
       dbClient: dbClient,
-      postsSearcher: postsSearcher,
+      typesenseClient: typesenseClient,
     );
   });
 

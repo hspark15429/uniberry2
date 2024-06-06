@@ -5,8 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:typesense/typesense.dart';
 import 'package:uniberry2/core/enums/update_post_enum.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
+import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
 
@@ -32,21 +34,21 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
   PostRemoteDataSourceImplementation({
     required FirebaseFirestore cloudStoreClient,
     required FirebaseStorage dbClient,
-    required HitsSearcher postsSearcher,
-  })  : _postsSearcher = postsSearcher,
+    required Client typesenseClient,
+  })  : _typesenseClient = typesenseClient,
         _cloudStoreClient = cloudStoreClient,
         _dbClient = dbClient;
 
   final FirebaseFirestore _cloudStoreClient;
   final FirebaseStorage _dbClient;
-  final HitsSearcher _postsSearcher;
+  final Client _typesenseClient;
 
-  final StreamController<HitsPage> _searchResultsController =
-      StreamController<HitsPage>();
-  Stream<HitsPage> get searchResultsStream => _searchResultsController.stream;
+  // final StreamController<HitsPage> _searchResultsController =
+  //     StreamController<HitsPage>();
+  // Stream<HitsPage> get searchResultsStream => _searchResultsController.stream;
 
-  Stream<HitsPage> get _searchPage =>
-      _postsSearcher.responses.map(HitsPage.fromResponse);
+  // Stream<HitsPage> get _searchPage =>
+  //     _postsSearcher.responses.map(HitsPage.fromResponse);
 
   @override
   Future<void> createPost(Post post) async {
@@ -151,15 +153,32 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
     required String content,
   }) async {
     try {
-      _postsSearcher.query(content);
-      final results = await _searchPage.first;
-      final postIds = results.items.map((post) => post.postId).toList();
-      _postsSearcher.rerun();
+      // _postsSearcher.query(content);
+      // final results = await _searchPage.first;
+      // final postIds = results.items.map((post) => post.postId).toList();
+      // _postsSearcher.rerun();
+
+      // return postIds;
+      final searchParameters = {
+        'q': content,
+        'query_by': 'title,content,author',
+        'include_fields': 'postId',
+        'per_page': '50',
+      };
+
+      final results = await _typesenseClient
+          .collection('posts')
+          .documents
+          .search(searchParameters);
+
+      final postIds = (results['hits'] as List)
+          .map((post) => (post as DataMap)['document']['postId'] as String)
+          .toList();
 
       return postIds;
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
-      throw ServerException(message: e.toString(), statusCode: '505');
+      throw ServerException(message: e.toString(), statusCode: '50555');
     }
   }
 }
