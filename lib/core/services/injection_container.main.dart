@@ -9,8 +9,6 @@ Future<void> init() async {
 }
 
 Future<void> initTimetable() async {
-  final _jsonCourses = await rootBundle.loadString('assets/temp/courses.json');
-
   // cubit
   sl
     ..registerFactory(
