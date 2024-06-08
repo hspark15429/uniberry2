@@ -20,6 +20,14 @@ class CoursesListPage extends StatefulWidget {
 }
 
 class _CoursesListPageState extends State<CoursesListPage> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +40,7 @@ class _CoursesListPageState extends State<CoursesListPage> {
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+icon: const Icon(Icons.add),color: Colors.white,
             onPressed: () {
               Navigator.push(
                 context,
@@ -44,87 +52,110 @@ class _CoursesListPageState extends State<CoursesListPage> {
           ),
         ],
       ),
-      body: BlocBuilder<TimetableCubit, TimetableState>(
-        builder: (context, state) {
-          if (state is TimetableLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is CourseIdsSearched) {
-            context.read<TimetableCubit>().getCourses(state.courseIds);
-          } else if (state is CoursesFetched) {
-            if (state.courses.isEmpty) {
-              return const Center(
-                  child: Text("No courses available.",
-                      style: TextStyle(fontSize: 18, color: Colors.grey)));
-            }
-            return ListView.builder(
-              itemCount: state.courses.length,
-              itemBuilder: (context, index) {
-                final course = state.courses[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
-                          value: BlocProvider.of<TimetableCubit>(context),
-                          child: TimetableCourseDetailPage(
-                            course: course,
-                            period: widget.period,
-                            semester: widget.semester,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+hintText: '강의명, 수업코드로검색',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onChanged: (query) {
+                // 검색 기능 함수
+                // context.read<TimetableCubit>().searchCourses(query);
+              },
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<TimetableCubit, TimetableState>(
+              builder: (context, state) {
+                if (state is TimetableLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is CourseIdsSearched) {
+                  context.read<TimetableCubit>().getCourses(state.courseIds);
+                } else if (state is CoursesFetched) {
+                  if (state.courses.isEmpty) {
+                    return const Center(
+                        child: Text("No courses available.",
+                            style: TextStyle(fontSize: 18, color: Colors.grey)));
+                  }
+                  return ListView.builder(
+                    itemCount: state.courses.length,
+                    itemBuilder: (context, index) {
+                      final course = state.courses[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider.value(
+                                value: BlocProvider.of<TimetableCubit>(context),
+                                child: TimetableCourseDetailPage(
+                                  course: course,
+                                  period: widget.period,
+                                  semester: widget.semester,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                course.titles.join(", "),
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                course.professors.join(", "),
+                                style: const TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                course.codes.join(", "),
+                                style: const TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          course.titles.join(", "),
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          course.professors.join(", "),
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          course.codes.join(", "),
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                      );
+                    },
+                  );
+                } else if (state is TimetableError) {
+                  return Center(
+                      child: Text(state.message,
+                          style: const TextStyle(color: Colors.black)));
+                }
+                return const Center(
+                    child: Text("Unable to fetch courses.",
+                        style: TextStyle(color: Colors.black)));
               },
-            );
-          } else if (state is TimetableError) {
-            return Center(
-                child: Text(state.message,
-                    style: const TextStyle(color: Colors.black)));
-          }
-          return const Center(
-              child: Text("Unable to fetch courses.",
-                  style: TextStyle(color: Colors.black)));
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -103,7 +103,7 @@ class _ForumScreenState extends State<ForumScreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    context.read<PostCubit>().readPost('ninwJiBBYaTKaVyRf9VL');
+context.read<PostCubit>().readPost('8gxbkrZ0EffayaTyU1NK');
                   },
                   child: const Text(
                     'Read post #1',

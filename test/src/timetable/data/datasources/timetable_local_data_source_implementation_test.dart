@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_local_data_source_implementation.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/SurveyWritePage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/SurveyWritePage.dart';
 
 class SurveyPreviewPage extends StatelessWidget {
   final List<SurveyQuestion> questions;

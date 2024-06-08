@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/SurveyPreviewPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/SurveyPreviewPage.dart';
 
 class SurveyTheme {
   final Color primaryColor;

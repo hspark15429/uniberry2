@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/BoardPostsPage.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/post_detail.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postListPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postDetail.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/Op_database.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/OpportunityDetailPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket.dart';
@@ -225,7 +225,7 @@ List<Map<String, dynamic>> FavoriteProducts = [];
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BoardPostsPage(boardName: boardTypeToString(selectedBoardType!)),
+builder: (context) => Postlistpage(boardName: boardTypeToString(selectedBoardType!)),
                   ),
                 );
               },
@@ -240,37 +240,69 @@ List<Map<String, dynamic>> FavoriteProducts = [];
   }
 
   Widget _buildBoardSectionTabs(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          TextButton(
-            onPressed: () {
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              selectedBoardType = null;
+            });
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: const Text('인기글', style: TextStyle(color: Colors.black)),
+          ),
+        ),
+        ...BoardType.values.map((boardType) {
+          return GestureDetector(
+            onTap: () {
               setState(() {
-                selectedBoardType = null;
+                selectedBoardType = boardType;
               });
             },
-            child: const Text('ALL', style: TextStyle(color: Colors.black)),
-          ),
-          ...BoardType.values.map((boardType) {
-            return TextButton(
-              onPressed: () {
-                setState(() {
-                  selectedBoardType = boardType;
-                });
-              },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
               child: Text(
                 boardTypeToString(boardType),
                 style: const TextStyle(color: Colors.black),
               ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
+            ),
+          );
+        }).toList(),
+      ],
+    ),
+  );
+}
 
- Widget _buildBoardPreviewPosts(BuildContext context) {
+Widget _buildBoardPreviewPosts(BuildContext context) {
   List<Post> sortedPosts = getSortedPosts();
   List<Post> previewPosts = sortedPosts.take(5).toList();
 
@@ -319,8 +351,9 @@ List<Map<String, dynamic>> FavoriteProducts = [];
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.1),
+color: Colors.red.withOpacity(0.09),
                           borderRadius: BorderRadius.circular(15),
+                         
                         ),
                         child: Text(
                           "#${post.category}",
@@ -337,10 +370,9 @@ List<Map<String, dynamic>> FavoriteProducts = [];
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1, // 제목을 1줄로 제한
+                          color: Colors.black),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -353,13 +385,12 @@ List<Map<String, dynamic>> FavoriteProducts = [];
                       const SizedBox(height: 4),
                       Expanded(
                         child: Text(
-shortenText(post.content, 50),
+                          shortenText(post.content, 50),
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.black,
-                          ),
+                            color: Colors.black),
                           overflow: TextOverflow.ellipsis,
-maxLines: 2, // 
+                          maxLines: 2,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -420,112 +451,6 @@ maxLines: 2, //
   );
 }
 
-
-
-  Widget _buildAllPosts(BuildContext context) {
-    List<Post> sortedPosts = List.from(dummyPosts)
-      ..sort((a, b) {
-        int compare = b.viewCount.compareTo(a.viewCount);
-        if (compare == 0) {
-          return b.commentCount.compareTo(a.commentCount);
-        }
-        return compare;
-      });
-
-    List<Post> topPosts = sortedPosts.take(4).toList();
-
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)), // 연한 선으로 설정
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: topPosts.map((post) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PostDetailPage(post: post),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "#${post.category}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    post.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "작성자: ${post.author} · ${post.datePosted}",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${post.likesCount}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey),
-                          ),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.comment, size: 14, color: Colors.grey),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${post.commentCount}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "조회수 ${post.viewCount}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
 
   Widget _buildOpportunitiesBox(BuildContext context) {
     final PageController pageController = PageController(viewportFraction: 0.8);
@@ -773,18 +698,6 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
                 ),
               ),
               const SizedBox(height: 20), // 위젯 간격 조정
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  '인기글',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _buildAllPosts(context),
-              const SizedBox(height: 20),
               _buildBoardListCard(context),
               const SizedBox(height: 20),
               _buildOpportunitiesBox(context),
