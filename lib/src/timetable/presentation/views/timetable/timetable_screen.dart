@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
@@ -89,63 +89,142 @@ class _TimetableScreenState extends State<TimetableScreen> with SingleTickerProv
     }
   }
 
-  void _selectSchool(BuildContext context) {
-    final List<String> availableSchools = context.read<TimetableCubit>().schools;
-    String? selectedSchool = context.read<TimetableCubit>().selectedSchool;
+void _selectSchool(BuildContext context) {
+  final List<String> availableSchools = context.read<TimetableCubit>().schools;
+  String? selectedSchool = context.read<TimetableCubit>().selectedSchool;
+  TextEditingController searchController = TextEditingController();
+  List<String> filteredSchools = availableSchools;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('전공 선택'),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: availableSchools
-                      .map((school) => RadioListTile<String>(
-                            title: Text(school),
-                            value: school,
-                            groupValue: selectedSchool,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedSchool = value;
-                              });
-                            },
-                          ))
-                      .toList(),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('취소'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    if (selectedSchool != null) {
-                      context.read<TimetableCubit>().setSelectedSchool(selectedSchool!);
-                      final prefs = await SharedPreferences.getInstance();
-await prefs.setString('selectedSchool', selectedSchool!);
-                      setState(() {
-                        _isMajorSelected = true;
-                        _isFirstLaunch = false;
-                        _controller.stop();
-                      });
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text('저장'),
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          void filterSchools(String query) {
+            if (query.isNotEmpty) {
+              setState(() {
+                filteredSchools = availableSchools
+                    .where((school) =>
+                        school.toLowerCase().contains(query.toLowerCase()))
+                    .toList();
+              });
+            } else {
+              setState(() {
+                filteredSchools = availableSchools;
+              });
+            }
+          }
+
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
                 ),
               ],
-            );
-          },
-        );
-      },
-    );
-  }
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 50,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: searchController,
+                  onChanged: filterSchools,
+                  decoration: InputDecoration(
+                    hintText: '전공 검색',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: filteredSchools.length,
+                    itemBuilder: (context, index) {
+                      final school = filteredSchools[index];
+                      return ListTile(
+                        title: Text(school, style: TextStyle(fontWeight: FontWeight.w500)),
+                        leading: Radio<String>(
+                          value: school,
+                          groupValue: selectedSchool,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedSchool = value;
+                            });
+                          },
+                        ),
+                        onTap: () {
+                          setState(() {
+                            selectedSchool = school;
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('취소', style: TextStyle(color: Colors.red)),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (selectedSchool != null) {
+                          context.read<TimetableCubit>().setSelectedSchool(selectedSchool!);
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('selectedSchool', selectedSchool!);
+                          setState(() {
+                            _isMajorSelected = true;
+                            _isFirstLaunch = false;
+                            _controller.stop();
+                          });
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text('저장'),
+                      style: ElevatedButton.styleFrom(
+backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
+
 
   void _onTimetableSelected(String semester) {
     setState(() {
@@ -387,7 +466,7 @@ color: Colors.white,
                                 MaterialPageRoute(builder: (context) => const GradePage()),
                               );
                             },
-                            child: _buildGradeStatusCard(),
+child: _buildGradeStatusCard(),
                           ),
                           const SizedBox(height: 300),
                         ],
@@ -588,7 +667,7 @@ style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color.f
     );
   }
 
-  // 이수관리
+//이수관리 
   Widget _buildGradeStatusCard() {
     return Container(
       padding: const EdgeInsets.all(16),

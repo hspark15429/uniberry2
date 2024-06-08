@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/post_detail.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postDetail.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/scrapDataPsge.dart';
 
 

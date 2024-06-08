@@ -8,6 +8,12 @@ import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/core/services/router.dart';
 import 'package:uniberry2/firebase_options.dart';
+import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
+import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
+import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/assignmentNotifier.dart';
 
@@ -35,8 +41,21 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: BlocProvider(
-        create: (context) => sl<TimetableCubit>(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => sl<TimetableCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => PostCubit(
+              createPost: sl<CreatePost>(),
+              readPost: sl<ReadPost>(),
+              updatePost: sl<UpdatePost>(),
+              deletePost: sl<DeletePost>(),
+              searchPosts: sl<SearchPosts>(),
+            ),
+          ),
+        ],
         child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(

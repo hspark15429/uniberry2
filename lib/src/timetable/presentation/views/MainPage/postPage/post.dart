@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/post_detail.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/thread_write_page.dart';
-
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postWritePage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postDetail.dart';
 class ExpandableText extends StatefulWidget {
   final String text;
   final int maxLines;
@@ -55,16 +54,16 @@ class _ExpandableTextState extends State<ExpandableText> {
   }
 }
 
-class AnonymousThreadPage extends StatefulWidget {
+class PostPage extends StatefulWidget {
   final String currentBoard;
 
-  const AnonymousThreadPage({Key? key, required this.currentBoard}) : super(key: key);
+  const PostPage({Key? key, required this.currentBoard}) : super(key: key);
 
   @override
-  _AnonymousThreadPageState createState() => _AnonymousThreadPageState();
+  _PostPageState createState() => _PostPageState();
 }
 
-class _AnonymousThreadPageState extends State<AnonymousThreadPage> {
+class _PostPageState extends State<PostPage> {
   List<Post> filteredPosts = [];
   String searchQuery = "";
 
@@ -111,7 +110,7 @@ class _AnonymousThreadPageState extends State<AnonymousThreadPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ThreadWritePage()),
+                MaterialPageRoute(builder: (context) => const Postwritepage()),
               );
             },
           ),

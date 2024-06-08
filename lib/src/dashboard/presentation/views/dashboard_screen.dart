@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_list_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/homePage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';

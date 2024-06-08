@@ -1,19 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/post_detail.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/thread_write_page.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postDetail.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postWritePage.dart';
 
-class BoardPostsPage extends StatefulWidget {
+class Postlistpage extends StatefulWidget {
   final String boardName;
-  const BoardPostsPage({Key? key, required this.boardName}) : super(key: key);
+  const Postlistpage({Key? key, required this.boardName}) : super(key: key);
 
   @override
-  _BoardPostsPageState createState() => _BoardPostsPageState();
+  _PostlistpageState createState() => _PostlistpageState();
 }
 
-class _BoardPostsPageState extends State<BoardPostsPage> {
+class _PostlistpageState extends State<Postlistpage> {
   List<Post> boardPosts = [];
 
   @override
@@ -22,22 +22,15 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
     boardPosts = dummyPosts.where((post) => post.category == widget.boardName).toList();
   }
 
-  void _deletePost(String postId) {
-    setState(() {
-      dummyPosts.removeWhere((post) => post.id == postId);
-      boardPosts.removeWhere((post) => post.id == postId);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // 실제 사용자 정보를 가져오는 로직
-    final String currentUser = "현재 사용자"; // 여기에 실제 사용자 정보를 넣으세요
+    // 실제 사용자 정보 필요
+    final String currentUser = "현재 사용자"; // 여기에 실제 사용자 정보를 삽입
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-      '${widget.boardName}  ',
+          '${widget.boardName}  ',
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
@@ -49,7 +42,7 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ThreadWritePage(),
+builder: (context) => const Postwritepage(),
                 ),
               );
             },
@@ -86,7 +79,7 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
                 children: [
                   Text(
                     post.title,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -97,7 +90,7 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "작성일 ${post.datePosted} · 조회수 ${post.viewCount}",
+"작성일 ${post.datePosted} · 조회수 ${post.viewCount}",
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   if (post.imageUrls.isNotEmpty)
@@ -117,12 +110,10 @@ class _BoardPostsPageState extends State<BoardPostsPage> {
                         '작성자: ${post.author}',
                         style: const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
-                      if (post.author == currentUser) // 실제 사용자와 작성자를 비교
+                      if (post.author == currentUser) 
                         IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            _deletePost(post.id);
-                          },
+                          onPressed: () {}, // 삭제 함수 자리
                         ),
                     ],
                   ),

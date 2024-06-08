@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/Anonymous_thread/dummy_data.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
 
 class CommentsPage extends StatefulWidget {
   final List<Comment> comments;
@@ -30,53 +30,13 @@ class _CommentsPageState extends State<CommentsPage> {
     super.dispose();
   }
 
-  void _likeComment(int index) {
-    setState(() {
-      _comments[index].likesCount++;
-    });
-  }
-
-  void _likeReply(int commentIndex, int replyIndex) {
-    setState(() {
-      _comments[commentIndex].replies[replyIndex].likesCount++;
-    });
-  }
-
-  void _addReply(int commentIndex, String replyContent) {
-    final newReply = Comment(
-      content: replyContent,
-      datePosted: DateTime.now().toString(),
-      likesCount: 0,
-    );
-    setState(() {
-      _comments[commentIndex].replies.add(newReply);
-    });
-  }
-
-  void _addComment(String content) {
-    final newComment = Comment(
-      content: content,
-      datePosted: DateTime.now().toString(),
-      likesCount: 0,
-    );
-    setState(() {
-      _comments.add(newComment);
-    });
-  }
-
-  void _toggleReplies(int index) {
-    setState(() {
-      _showReplies[index] = !(_showReplies[index] ?? false);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text(
-          "コメント",
+'댓글',
           style: TextStyle(color: Colors.white, fontSize: 20.0),
         ),
         leading: IconButton(
@@ -128,7 +88,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                     children: [
                                       IconButton(
                                         icon: const Icon(Icons.thumb_up, size: 20, color: Colors.black),
-                                        onPressed: () => _likeComment(index),
+                                        onPressed: () {}, // 좋아요 함수 
                                       ),
                                       Text(
                                         "${comment.likesCount}",
@@ -144,7 +104,7 @@ class _CommentsPageState extends State<CommentsPage> {
                               ),
                               if (comment.replies.isNotEmpty)
                                 GestureDetector(
-                                  onTap: () => _toggleReplies(index),
+                                  onTap: () {}, // 댓글 펼치기/보여주기
                                   child: Text(
                                     showReplies
                                         ? "댓글 숨기기"
@@ -156,12 +116,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           ),
                           trailing: IconButton(
                             icon: const Icon(Icons.comment, size: 20, color: Colors.black),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) => _buildReplyInputField(index),
-                              );
-                            },
+                            onPressed: () {}, // 대댓글 함수
                           ),
                         ),
                         if (showReplies)
@@ -188,7 +143,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                         children: [
                                           IconButton(
                                             icon: const Icon(Icons.thumb_up, size: 16, color: Colors.black),
-                                            onPressed: () => _likeReply(index, replyIndex),
+                                            onPressed: () {}, // 좋아요 함수
                                           ),
                                           Text(
                                             "${reply.likesCount}",
@@ -196,12 +151,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                           ),
                                           IconButton(
                                             icon: const Icon(Icons.comment, size: 16, color: Colors.black),
-                                            onPressed: () {
-                                              showModalBottomSheet(
-                                                context: context,
-                                                builder: (context) => _buildReplyInputField(index),
-                                              );
-                                            },
+                                            onPressed: () {}, // 대댓글 함수
                                           ),
                                         ],
                                       ),
@@ -246,7 +196,7 @@ class _CommentsPageState extends State<CommentsPage> {
               focusNode: _focusNode,
               controller: _commentController,
               decoration: const InputDecoration(
-                hintText: "コメントを入力する...",
+hintText: "댓글달기",
                 border: InputBorder.none,
               ),
               style: const TextStyle(fontSize: 14.0, color: Colors.black),
@@ -257,10 +207,7 @@ class _CommentsPageState extends State<CommentsPage> {
           const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.send, color: Colors.black),
-            onPressed: () {
-              _addComment(_commentController.text);
-              _commentController.clear();
-            },
+            onPressed: () {}, // 댓글 추가 함수 
           ),
         ],
       ),
@@ -282,7 +229,7 @@ class _CommentsPageState extends State<CommentsPage> {
             child: TextFormField(
               controller: _replyController,
               decoration: const InputDecoration(
-                hintText: "返信を入力する...",
+hintText: "보내기",
                 border: InputBorder.none,
               ),
               style: const TextStyle(fontSize: 14.0, color: Colors.black),
@@ -293,11 +240,7 @@ class _CommentsPageState extends State<CommentsPage> {
           const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.send, color: Colors.black),
-            onPressed: () {
-              _addReply(index, _replyController.text);
-              _replyController.clear();
-              Navigator.pop(context);
-            },
+            onPressed: () {}, // 답글 추가 함수 
           ),
         ],
       ),
