@@ -183,17 +183,17 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
   }
 }
 
-class HitsPage {
-  const HitsPage(this.items, this.pageKey, this.nextPageKey);
+// class HitsPage {
+//   const HitsPage(this.items, this.pageKey, this.nextPageKey);
 
-  factory HitsPage.fromResponse(SearchResponse response) {
-    final items = response.hits.map(PostModel.fromJson).toList();
-    final isLastPage = response.page >= response.nbPages;
-    final nextPageKey = isLastPage ? null : response.page + 1;
-    return HitsPage(items, response.page, nextPageKey);
-  }
+//   factory HitsPage.fromResponse(SearchResponse response) {
+//     final items = response.hits.map(PostModel.fromJson).toList();
+//     final isLastPage = response.page >= response.nbPages;
+//     final nextPageKey = isLastPage ? null : response.page + 1;
+//     return HitsPage(items, response.page, nextPageKey);
+//   }
 
-  final List<PostModel> items;
-  final int pageKey;
-  final int? nextPageKey;
-}
+//   final List<PostModel> items;
+//   final int pageKey;
+//   final int? nextPageKey;
+// }

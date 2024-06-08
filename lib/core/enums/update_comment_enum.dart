@@ -1,0 +1,4 @@
+enum UpdateCommentAction {
+  like,
+  dislike,
+}

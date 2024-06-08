@@ -18,7 +18,8 @@ class TimetableScreen extends StatefulWidget {
   State<TimetableScreen> createState() => _TimetableScreenState();
 }
 
-class _TimetableScreenState extends State<TimetableScreen> with SingleTickerProviderStateMixin {
+class _TimetableScreenState extends State<TimetableScreen>
+    with SingleTickerProviderStateMixin {
   late Future<String> _semesterFuture;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -90,7 +91,8 @@ class _TimetableScreenState extends State<TimetableScreen> with SingleTickerProv
   }
 
   void _selectSchool(BuildContext context) {
-    final List<String> availableSchools = context.read<TimetableCubit>().schools;
+    final List<String> availableSchools =
+        context.read<TimetableCubit>().schools;
     String? selectedSchool = context.read<TimetableCubit>().selectedSchool;
 
     showDialog(
@@ -126,9 +128,11 @@ class _TimetableScreenState extends State<TimetableScreen> with SingleTickerProv
                 TextButton(
                   onPressed: () async {
                     if (selectedSchool != null) {
-                      context.read<TimetableCubit>().setSelectedSchool(selectedSchool!);
+                      context
+                          .read<TimetableCubit>()
+                          .setSelectedSchool(selectedSchool!);
                       final prefs = await SharedPreferences.getInstance();
-await prefs.setString('selectedSchool', selectedSchool!);
+                      await prefs.setString('selectedSchool', selectedSchool!);
                       setState(() {
                         _isMajorSelected = true;
                         _isFirstLaunch = false;
@@ -159,7 +163,8 @@ await prefs.setString('selectedSchool', selectedSchool!);
       builder: (BuildContext context) {
         return BlocBuilder<TimetableCubit, TimetableState>(
           builder: (context, state) {
-            final List<String> timetableList = context.read<TimetableCubit>().timetables;
+            final List<String> timetableList =
+                context.read<TimetableCubit>().timetables;
             final TextEditingController _controller = TextEditingController();
 
             void _addTimetable() {
@@ -174,16 +179,20 @@ await prefs.setString('selectedSchool', selectedSchool!);
                     ),
                     actions: <Widget>[
                       TextButton(
-                        child: const Text('추가', style: TextStyle(color: Colors.black)),
+                        child: const Text('추가',
+                            style: TextStyle(color: Colors.black)),
                         onPressed: () {
                           if (_controller.text.isNotEmpty) {
-                            context.read<TimetableCubit>().addTimetable(_controller.text);
+                            context
+                                .read<TimetableCubit>()
+                                .addTimetable(_controller.text);
                             Navigator.of(context).pop();
                           }
                         },
                       ),
                       TextButton(
-                        child: const Text('취소', style: TextStyle(color: Colors.black)),
+                        child: const Text('취소',
+                            style: TextStyle(color: Colors.black)),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -211,7 +220,10 @@ await prefs.setString('selectedSchool', selectedSchool!);
                       ),
                       const Text(
                         '시간표 목록',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       IconButton(
                         icon: const Icon(Icons.add),
@@ -230,10 +242,14 @@ await prefs.setString('selectedSchool', selectedSchool!);
                             final isSelected = timetableName == semester;
                             return Dismissible(
                               key: Key(timetableName),
-                              direction: index == 0 ? DismissDirection.none : DismissDirection.endToStart,
+                              direction: index == 0
+                                  ? DismissDirection.none
+                                  : DismissDirection.endToStart,
                               onDismissed: (direction) {
                                 if (timetableName != semester) {
-                                  context.read<TimetableCubit>().removeTimetable(timetableName);
+                                  context
+                                      .read<TimetableCubit>()
+                                      .removeTimetable(timetableName);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text('$timetableName가 삭제되었습니다'),
@@ -246,15 +262,22 @@ await prefs.setString('selectedSchool', selectedSchool!);
                                 color: Colors.red,
                                 alignment: Alignment.centerRight,
                                 padding: const EdgeInsets.only(right: 20),
-                                child: const Icon(Icons.delete, color: Colors.white),
+                                child: const Icon(Icons.delete,
+                                    color: Colors.white),
                               ),
                               child: Card(
-                                color: isSelected ? Colors.grey[300] : Colors.white,
-                                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                color: isSelected
+                                    ? Colors.grey[300]
+                                    : Colors.white,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 elevation: 3,
                                 child: ListTile(
-                                  title: Text(timetableName, style: const TextStyle(color: Colors.black)),
+                                  title: Text(timetableName,
+                                      style:
+                                          const TextStyle(color: Colors.black)),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.edit),
                                     onPressed: () {
@@ -311,7 +334,7 @@ await prefs.setString('selectedSchool', selectedSchool!);
                   semester,
                   style: const TextStyle(
                     fontSize: 24,
-color: Colors.white,
+                    color: Colors.white,
                     decoration: TextDecoration.underline, // 강조 표시
                   ),
                 ),
@@ -322,7 +345,9 @@ color: Colors.white,
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const DashboardScreen(),
+                    ),
                   );
                 },
               ),
@@ -360,7 +385,8 @@ color: Colors.white,
                     builder: (context, state) {
                       final timetableCubit = context.read<TimetableCubit>();
                       final int periods = timetableCubit.periods;
-                      final bool includeSaturday = timetableCubit.includeSaturday;
+                      final bool includeSaturday =
+                          timetableCubit.includeSaturday;
                       final bool includeSunday = timetableCubit.includeSunday;
                       final List<String> days = ['月', '火', '水', '木', '金'];
                       if (includeSaturday) days.add('土');
@@ -384,7 +410,8 @@ color: Colors.white,
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const GradePage()),
+                                MaterialPageRoute(
+                                    builder: (context) => const GradePage()),
                               );
                             },
                             child: _buildGradeStatusCard(),
@@ -395,8 +422,7 @@ color: Colors.white,
                     },
                   ),
                 ),
-                if (_isFirstLaunch && !_isMajorSelected)
-                  _buildOverlay(context),
+                if (_isFirstLaunch && !_isMajorSelected) _buildOverlay(context),
               ],
             ),
           );
@@ -469,7 +495,8 @@ color: Colors.white,
               .map((day) => Expanded(
                   child: Center(
                       child: Text(day,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)))))
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)))))
               .toList(),
         ],
       ),
@@ -514,7 +541,8 @@ color: Colors.white,
           ...days
               .map((day) => Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0), // 좌우 여백 추가
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0), // 좌우 여백 추가
                       child: _buildDayCell(
                         context,
                         periodIndex,
@@ -564,8 +592,9 @@ color: Colors.white,
                 value: BlocProvider.of<TimetableCubit>(context),
                 child: CoursesListPage(
                   period: period,
-                  school: context.read<TimetableCubit>().selectedSchool ?? '학부 선택 없음',
-semester: semester, // 2024년봄학기
+                  school: context.read<TimetableCubit>().selectedSchool ??
+                      '학부 선택 없음',
+                  semester: semester, // 2024년봄학기
                 ),
               ),
             ),
@@ -577,12 +606,17 @@ semester: semester, // 2024년봄학기
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-color: course != null ? Color.fromARGB(255, 255, 133, 133) : Colors.white10,
+          color: course != null
+              ? Color.fromARGB(255, 255, 133, 133)
+              : Colors.white10,
           borderRadius: BorderRadius.circular(5),
         ),
         child: course != null
-? Text(course.titles.join(', '),
-style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255)))
+            ? Text(course.titles.join(', '),
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 255, 255, 255)))
             : const Text(''), // 강의가 없으면 빈 텍스트
       ),
     );

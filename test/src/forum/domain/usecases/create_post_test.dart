@@ -5,7 +5,7 @@ import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 
-import 'post_repository.mock.dart';
+import 'repository.mock.dart';
 
 void main() {
   late CreatePost usecase;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -19,7 +20,7 @@ void main() {
 
   setUpAll(() async {
     // jsonCourses = await rootBundle.loadString('tools/courses.json');
-    jsonCourses = fixtureTools('courses2.json');
+    jsonCourses = File('assets/temp/courses.json').readAsStringSync();
     dataSource =
         TimetableLocalDataSourceImplementation(jsonCourses: jsonCourses);
   });

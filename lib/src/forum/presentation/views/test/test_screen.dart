@@ -88,9 +88,9 @@ class _ForumScreenState extends State<ForumScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     context.read<PostCubit>().createPost(
-                          title: 'title',
-                          content: 'content',
-                          author: 'author',
+                          title: 'asdkljfdkslafjlksad',
+                          content: 'contenasdl;fkdl;askfl;t',
+                          author: 'authoal;sdkfl;askf;lsadfklr',
                           createdAt: DateTime.now(),
                           updatedAt: DateTime.now(),
                         );
