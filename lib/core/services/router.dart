@@ -13,6 +13,7 @@ import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable_screen.dart';
+import 'package:uniberry2/src/timetable/presentation/views/timetable_screen2.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -61,6 +62,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     case TimetableScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => sl<TimetableCubit>(),
+          child: const TimetableScreen(),
+        ),
+      );
+    case TimetableScreen2.routeName:
       return MaterialPageRoute(
         builder: (_) => BlocProvider(
           create: (_) => sl<TimetableCubit>(),

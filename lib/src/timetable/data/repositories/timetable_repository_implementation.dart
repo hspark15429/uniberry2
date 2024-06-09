@@ -3,6 +3,7 @@ import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/errors/failures.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/domain/repository/timetable_repository.dart';
@@ -20,12 +21,6 @@ class TimetableRepositoryImplementation implements TimetableRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
-  }
-
-  @override
-  ResultFuture<Timetable> getTimetable() async {
-    // TODO: implement getTimetable
-    throw UnimplementedError();
   }
 
   @override
@@ -49,8 +44,30 @@ class TimetableRepositoryImplementation implements TimetableRepository {
   }
 
   @override
+  ResultFuture<void> createTimetable(Timetable timetable) async {
+    try {
+      await _remoteDataSource.createTimetable(timetable);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
+  ResultFuture<Timetable> readTimetable(String timetableId) async {
+    // TODO: implement readTimetables
+    throw UnimplementedError();
+  }
+
+  @override
   ResultFuture<void> updateTimetable(Timetable timetable) async {
     // TODO: implement updateTimetable
+    throw UnimplementedError();
+  }
+
+  @override
+  ResultFuture<void> deleteTimetable(String timetableId) async {
+    // TODO: implement deleteTimetable
     throw UnimplementedError();
   }
 }

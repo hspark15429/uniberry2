@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_list_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/homePage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
+import 'package:uniberry2/src/timetable/presentation/views/timetable_screen2.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -43,6 +44,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 );
               },
               child: const Text('timetable'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TimetableScreen2(),
+                  ),
+                );
+              },
+              child: const Text('timetable2'),
             ),
             ElevatedButton(
               onPressed: () {

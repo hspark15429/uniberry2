@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 
 class LocalUser extends Equatable {
   const LocalUser({
@@ -12,6 +13,7 @@ class LocalUser extends Equatable {
     this.enrolledCourseIds = const [],
     this.following = const [],
     this.followers = const [],
+    this.timetableIds = const [],
   });
 
   const LocalUser.empty()
@@ -26,6 +28,7 @@ class LocalUser extends Equatable {
           enrolledCourseIds: const [],
           following: const [],
           followers: const [],
+          timetableIds: const [],
         );
 
   @override
@@ -44,6 +47,7 @@ class LocalUser extends Equatable {
   final List<String> enrolledCourseIds;
   final List<String> following;
   final List<String> followers;
+  final List<String> timetableIds;
 
   @override
   List<dynamic> get props => [
@@ -57,5 +61,6 @@ class LocalUser extends Equatable {
         enrolledCourseIds.length,
         following.length,
         followers.length,
+        timetableIds.length,
       ];
 }

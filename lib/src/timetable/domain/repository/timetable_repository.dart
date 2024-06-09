@@ -5,12 +5,6 @@ import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 abstract class TimetableRepository {
   const TimetableRepository();
 
-  // from firebase server
-  ResultFuture<Timetable> getTimetable();
-
-  // push new timetable to server.
-  ResultFuture<void> updateTimetable(Timetable timetable);
-
   // get course from server using doc id
   ResultFuture<Course> getCourse(String courseId);
 
@@ -21,4 +15,15 @@ abstract class TimetableRepository {
     required String term,
     required String period,
   });
+
+  // create new timetable
+  ResultFuture<void> createTimetable(Timetable timetable);
+
+  // from firebase server
+  ResultFuture<Timetable> readTimetable(String timetableId);
+
+  // push new timetable to server.
+  ResultFuture<void> updateTimetable(Timetable timetable);
+
+  ResultFuture<void> deleteTimetable(String timetableId);
 }

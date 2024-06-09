@@ -19,6 +19,7 @@ void main() {
     enrolledCourseIds: ['1', '2'],
     following: ['1', '2'],
     followers: ['1', '2'],
+    timetableIds: ['1', '2'],
   );
 
   group('LocalUserModel', () {

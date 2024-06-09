@@ -5,6 +5,7 @@ import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/errors/failures.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
+import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/data/repositories/timetable_repository_implementation.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 
@@ -18,11 +19,13 @@ void main() {
   setUp(() {
     remoteDataSource = MockTimetableRemoteDataSource();
     repo = TimetableRepositoryImplementation(remoteDataSource);
+    registerFallbackValue(TimetableModel.empty());
   });
 
   const tCourseIds = ['DaEBpyYgtZsiqXEJrB1m', 'HfriePN36BDqAFS6GbVw'];
   const tSearchCoursesParams = SearchCoursesParams.empty();
   const tCourseModel = CourseModel.empty();
+  final tTimetableModel = TimetableModel.empty();
 
   group('getCourse', () {
     // Test for [getCourse] success
@@ -138,6 +141,24 @@ void main() {
           term: tSearchCoursesParams.term!,
         ),
       ).called(1);
+      verifyNoMoreInteractions(remoteDataSource);
+    });
+  });
+
+  group('createTimetable', () {
+    test('should call [remoteDataSource.createTimetable]', () async {
+      // arrange
+      when(
+        () => remoteDataSource.createTimetable(any()),
+      ).thenAnswer((_) async => Future.value());
+
+      // act
+      final result = await repo.createTimetable(tTimetableModel);
+
+      // assert
+      expect(result, const Right<dynamic, void>(null));
+      verify(() => remoteDataSource.createTimetable(TimetableModel.empty()))
+          .called(1);
       verifyNoMoreInteractions(remoteDataSource);
     });
   });

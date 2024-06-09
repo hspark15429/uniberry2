@@ -15,11 +15,13 @@ Future<void> initTimetable() async {
       () => TimetableCubit(
         getCourse: sl(),
         searchCourses: sl(),
+        createTimetable: sl(),
       ),
     )
     // usecases
     ..registerLazySingleton(() => GetCourse(sl()))
     ..registerLazySingleton(() => SearchCourses(sl()))
+    ..registerLazySingleton(() => CreateTimetable(sl()))
     // repo impl
     ..registerLazySingleton<TimetableRepository>(
       () => TimetableRepositoryImplementation(sl()),
@@ -28,6 +30,9 @@ Future<void> initTimetable() async {
     ..registerLazySingleton<TimetableRemoteDataSource>(
       () => TimetableRemoteDataSourceImplementationTypesense(
         typesenseClient: sl(),
+        authClient: sl(),
+        cloudStoreClient: sl(),
+        dbClient: sl(),
       ),
     )
     // ..registerLazySingleton<TimetableRemoteDataSource>(
@@ -87,18 +92,6 @@ Future<void> initForum() async {
         typesenseClient: sl(),
       ),
     );
-  // // external
-  // ..registerLazySingleton(() => FirebaseAuth.instance)
-  // ..registerLazySingleton(() => FirebaseFirestore.instance)
-  // ..registerLazySingleton(() => FirebaseStorage.instance)
-  // external
-  // ..registerLazySingleton(
-  //     () => HitsSearcher(
-  //           applicationID: dotenv.env['ALGOLIA_APP_ID']!,
-  //           apiKey: dotenv.env['ALGOLIA_API_KEY']!,
-  //           indexName: 'posts_index',
-  //         ),
-  //     instanceName: 'postsSearcher');
 }
 
 Future<void> initAuthentication() async {

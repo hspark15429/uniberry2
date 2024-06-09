@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
+import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/create_timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
@@ -12,23 +14,30 @@ class MockGetCourse extends Mock implements GetCourse {}
 
 class MockSearchCourses extends Mock implements SearchCourses {}
 
+class MockCreateTimetable extends Mock implements CreateTimetable {}
+
 void main() {
   late GetCourse getCourse;
   late SearchCourses searchCourses;
+  late CreateTimetable createTimetable;
   late TimetableCubit cubit;
 
   setUp(() {
     getCourse = MockGetCourse();
     searchCourses = MockSearchCourses();
+    createTimetable = MockCreateTimetable();
     cubit = TimetableCubit(
       getCourse: getCourse,
       searchCourses: searchCourses,
+      createTimetable: createTimetable,
     );
 
     registerFallbackValue(const SearchCoursesParams.empty());
+    registerFallbackValue(Timetable.empty());
   });
 
   const Course tCourse = CourseModel.empty();
+  final Timetable tTimetable = Timetable.empty();
 
   test('check the initial state', () async {
     expect(cubit.state, TimetableInitial());
@@ -95,6 +104,23 @@ void main() {
         verify(() => getCourse('code2')).called(1);
         verify(() => getCourse('code3')).called(1);
         verifyNoMoreInteractions(getCourse);
+      },
+    );
+  });
+
+  group('createTimetable', () {
+    blocTest<TimetableCubit, TimetableState>(
+      'emits [TimetableLoading, TimetableCreated] when successful',
+      build: () {
+        when(() => createTimetable.call(any()))
+            .thenAnswer((_) async => const Right(null));
+        return cubit;
+      },
+      act: (cubit) => cubit.createTimetable(tTimetable),
+      expect: () => [const TimetableLoading(), const TimetableCreated()],
+      verify: (_) {
+        verify(() => createTimetable(tTimetable)).called(1);
+        verifyNoMoreInteractions(createTimetable);
       },
     );
   });

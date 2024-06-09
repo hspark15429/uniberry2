@@ -1,15 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:typesense/typesense.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
+import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 
 class TimetableRemoteDataSourceImplementationTypesense
     implements TimetableRemoteDataSource {
   TimetableRemoteDataSourceImplementationTypesense({
+    required FirebaseAuth authClient,
+    required FirebaseFirestore cloudStoreClient,
+    required FirebaseStorage dbClient,
     required Client typesenseClient,
-  }) : _typesenseClient = typesenseClient;
+  })  : _typesenseClient = typesenseClient,
+        _authClient = authClient,
+        _cloudStoreClient = cloudStoreClient,
+        _dbClient = dbClient;
+
+  final FirebaseAuth _authClient;
+  final FirebaseFirestore _cloudStoreClient;
+  final FirebaseStorage _dbClient;
   final Client _typesenseClient;
 
   @override
@@ -98,5 +113,53 @@ class TimetableRemoteDataSourceImplementationTypesense
       debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
+  }
+
+  @override
+  Future<void> createTimetable(Timetable timetable) async {
+    try {
+      final docReference = await _cloudStoreClient.collection('timetables').add(
+            (timetable as TimetableModel).toMap(),
+          );
+
+      await _cloudStoreClient
+          .collection('timetables')
+          .doc(docReference.id)
+          .update(
+        {
+          'timetableId': docReference.id,
+          'uid': _authClient.currentUser!.uid,
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      debugPrint(s.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<void> deleteTimetable(String name) {
+    // TODO: implement deleteTimetable
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<TimetableModel>> readTimetables() {
+    // TODO: implement readTimetables
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateTimetable(TimetableModel timetable) {
+    // TODO: implement updateTimetable
+    throw UnimplementedError();
   }
 }

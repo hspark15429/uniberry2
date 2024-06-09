@@ -4,6 +4,8 @@ import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
+import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 
 class TimetableRemoteDataSourceImplementation
     implements TimetableRemoteDataSource {
@@ -73,5 +75,29 @@ class TimetableRemoteDataSourceImplementation
       debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
+  }
+
+  @override
+  Future<void> createTimetable(Timetable timetable) {
+    // TODO: implement createTimetable
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteTimetable(String name) {
+    // TODO: implement deleteTimetable
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<TimetableModel>> readTimetables() {
+    // TODO: implement readTimetables
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateTimetable(TimetableModel timetable) {
+    // TODO: implement updateTimetable
+    throw UnimplementedError();
   }
 }

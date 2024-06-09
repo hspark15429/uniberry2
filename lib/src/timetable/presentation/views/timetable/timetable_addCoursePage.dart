@@ -64,7 +64,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-title: const Text('직접 강의 추가', style: TextStyle(color: Colors.white)),
+        title: const Text('직접 강의 추가', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         actions: [
           IconButton(
