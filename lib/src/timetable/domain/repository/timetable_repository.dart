@@ -23,7 +23,10 @@ abstract class TimetableRepository {
   ResultFuture<Timetable> readTimetable(String timetableId);
 
   // push new timetable to server.
-  ResultFuture<void> updateTimetable(Timetable timetable);
+  ResultFuture<void> updateTimetable({
+    required String timetableId,
+    required Timetable timetable,
+  });
 
   ResultFuture<void> deleteTimetable(String timetableId);
 }

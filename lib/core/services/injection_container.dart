@@ -32,8 +32,11 @@ import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_s
 import 'package:uniberry2/src/timetable/data/repositories/timetable_repository_implementation.dart';
 import 'package:uniberry2/src/timetable/domain/repository/timetable_repository.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/create_timetable.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/delete_timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/read_timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/update_timetable.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
 part 'injection_container.main.dart';

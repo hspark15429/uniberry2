@@ -30,7 +30,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +43,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) => sl<TimetableCubit>(),
-          ),
-          BlocProvider(
-            create: (context) => PostCubit(
-              createPost: sl<CreatePost>(),
-              readPost: sl<ReadPost>(),
-              updatePost: sl<UpdatePost>(),
-              deletePost: sl<DeletePost>(),
-              searchPosts: sl<SearchPosts>(),
-            ),
-          ),
+          BlocProvider(create: (context) => sl<TimetableCubit>()),
+          BlocProvider(create: (context) => sl<PostCubit>()),
         ],
         child: MaterialApp(
           title: 'Flutter Demo',

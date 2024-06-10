@@ -55,19 +55,37 @@ class TimetableRepositoryImplementation implements TimetableRepository {
 
   @override
   ResultFuture<Timetable> readTimetable(String timetableId) async {
-    // TODO: implement readTimetables
-    throw UnimplementedError();
+    try {
+      final result = await _remoteDataSource.readTimetable(timetableId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override
-  ResultFuture<void> updateTimetable(Timetable timetable) async {
-    // TODO: implement updateTimetable
-    throw UnimplementedError();
+  ResultFuture<void> updateTimetable({
+    required String timetableId,
+    required Timetable timetable,
+  }) async {
+    try {
+      await _remoteDataSource.updateTimetable(
+        timetableId: timetableId,
+        timetable: timetable,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override
   ResultFuture<void> deleteTimetable(String timetableId) async {
-    // TODO: implement deleteTimetable
-    throw UnimplementedError();
+    try {
+      await _remoteDataSource.deleteTimetable(timetableId);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 }

@@ -146,20 +146,70 @@ class TimetableRemoteDataSourceImplementationTypesense
   }
 
   @override
-  Future<void> deleteTimetable(String name) {
-    // TODO: implement deleteTimetable
-    throw UnimplementedError();
+  Future<TimetableModel> readTimetable(String timetableId) {
+    try {
+      return _cloudStoreClient
+          .collection('timetables')
+          .doc(timetableId)
+          .get()
+          .then(
+            (value) => TimetableModel.fromMap(value.data()!),
+          );
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      debugPrint(s.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
   }
 
   @override
-  Future<List<TimetableModel>> readTimetables() {
-    // TODO: implement readTimetables
-    throw UnimplementedError();
+  Future<void> updateTimetable({
+    required String timetableId,
+    required Timetable timetable,
+  }) {
+    try {
+      return _cloudStoreClient.collection('timetables').doc(timetableId).update(
+            (timetable as TimetableModel).toMap(),
+          );
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      debugPrint(s.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
   }
 
   @override
-  Future<void> updateTimetable(TimetableModel timetable) {
-    // TODO: implement updateTimetable
-    throw UnimplementedError();
+  Future<void> deleteTimetable(String timetableId) {
+    try {
+      return _cloudStoreClient
+          .collection('timetables')
+          .doc(timetableId)
+          .delete();
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      debugPrint(s.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
   }
 }

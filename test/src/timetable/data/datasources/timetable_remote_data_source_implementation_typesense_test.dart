@@ -44,7 +44,7 @@ void main() async {
   late FakeFirebaseFirestore cloudStoreClient;
   late MockFirebaseStorage dbClient;
   late MockUser mockUser;
-  late DocumentReference<Map<String, dynamic>> docReference;
+  late DocumentReference<Map<String, dynamic>> docReferenceUser;
   late DocumentReference<Map<String, dynamic>> docReferenceTimetable;
   late MockUserCredential tUserCredential;
   const tUser = LocalUserModel.empty();
@@ -73,15 +73,15 @@ void main() async {
     typesenseClient = Client(config);
 
     cloudStoreClient = FakeFirebaseFirestore();
-    docReference = await cloudStoreClient.collection('users').add(
+    docReferenceUser = await cloudStoreClient.collection('users').add(
           tUser.toMap(),
         );
 
-    await cloudStoreClient.collection('users').doc(docReference.id).update(
-      {'uid': docReference.id},
+    await cloudStoreClient.collection('users').doc(docReferenceUser.id).update(
+      {'uid': docReferenceUser.id},
     );
 
-    mockUser = MockUser()..uid = docReference.id;
+    mockUser = MockUser()..uid = docReferenceUser.id;
     tUserCredential = MockUserCredential(mockUser);
     dbClient = MockFirebaseStorage();
     authClient = MockFirebaseAuth();
@@ -135,24 +135,113 @@ void main() async {
       // Act
       await dataSource.createTimetable(tTimetable);
       final timetableMap =
-          await cloudStoreClient.collection('timetables').limit(1).get();
+          (await cloudStoreClient.collection('timetables').limit(1).get())
+              .docs
+              .first
+              .data();
       // Assert
       expect(
-        timetableMap.docs.first.data()['timetableId'],
+        timetableMap['timetableId'],
         isNot(tTimetable.timetableId),
       );
       expect(
-        timetableMap.docs.first.data()['uid'],
+        timetableMap['uid'],
         isNot(tTimetable.uid),
       );
       expect(
-        timetableMap.docs.first.data()['name'],
+        timetableMap['name'],
         equals(tTimetable.name),
       );
       expect(
-        timetableMap.docs.first.data()['timetableMap'],
+        timetableMap['timetableMap'],
         equals({'monday.period1': '_empty.courseId'}),
       );
+    });
+  });
+
+  group('readTimetable', () {
+    test('gets data when successful', () async {
+      // Arrange
+      await dataSource.createTimetable(tTimetable);
+      final timetableMap =
+          (await cloudStoreClient.collection('timetables').limit(1).get())
+              .docs
+              .first
+              .data();
+
+      // Act
+      final timetable =
+          await dataSource.readTimetable(timetableMap['timetableId'] as String);
+      // Assert
+      expect(timetable.timetableId, equals(timetableMap['timetableId']));
+    });
+  });
+
+  group('updateTimetable', () {
+    test('updates data when successful', () async {
+      // Arrange
+      await dataSource.createTimetable(tTimetable);
+      final timetableMap =
+          (await cloudStoreClient.collection('timetables').limit(1).get())
+              .docs
+              .first
+              .data();
+      final updatedTimetable = tTimetable.copyWith(
+        uid: timetableMap['uid'] as String,
+        timetableId: timetableMap['timetableId'] as String,
+        name: 'Updated name',
+      );
+
+      // Act
+      await dataSource.updateTimetable(
+        timetableId: timetableMap['timetableId'] as String,
+        timetable: updatedTimetable,
+      );
+      final updatedTimetableMap =
+          (await cloudStoreClient.collection('timetables').limit(1).get())
+              .docs
+              .first
+              .data();
+      // Assert
+      expect(
+        updatedTimetableMap['timetableId'],
+        equals(timetableMap['timetableId']),
+      );
+      expect(
+        updatedTimetableMap['uid'],
+        equals(timetableMap['uid']),
+      );
+      expect(
+        updatedTimetableMap['name'],
+        equals(updatedTimetable.name),
+      );
+      expect(
+        updatedTimetableMap['timetableMap'],
+        equals({'monday.period1': '_empty.courseId'}),
+      );
+    });
+  });
+
+  group('deleteTimetable', () {
+    test('deletes data when successful', () async {
+      // Arrange
+
+      await dataSource.createTimetable(tTimetable);
+      final timetableMap =
+          (await cloudStoreClient.collection('timetables').limit(1).get())
+              .docs
+              .first
+              .data();
+
+      // Act
+      await dataSource.deleteTimetable(timetableMap['timetableId'] as String);
+      final result = (await cloudStoreClient
+              .collection('timetables')
+              .doc(timetableMap['timetableId'] as String)
+              .get())
+          .exists;
+      // Assert
+      expect(result, isFalse);
     });
   });
 }

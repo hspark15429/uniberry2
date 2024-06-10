@@ -12,7 +12,10 @@ abstract class TimetableRemoteDataSource {
   });
 
   Future<void> createTimetable(Timetable timetable);
-  Future<List<TimetableModel>> readTimetables();
-  Future<void> updateTimetable(TimetableModel timetable);
+  Future<TimetableModel> readTimetable(String timetableId);
+  Future<void> updateTimetable({
+    required String timetableId,
+    required Timetable timetable,
+  });
   Future<void> deleteTimetable(String name);
 }

@@ -44,6 +44,23 @@ class TimetableCreated extends TimetableState {
   const TimetableCreated();
 }
 
+class TimetableRead extends TimetableState {
+  const TimetableRead(this.timetable);
+
+  final Timetable timetable;
+
+  @override
+  List<Object?> get props => [timetable];
+}
+
+class TimetableUpdateCompleted extends TimetableState {
+  const TimetableUpdateCompleted();
+}
+
+class TimetableDeleted extends TimetableState {
+  const TimetableDeleted();
+}
+
 class TimetableError extends TimetableState {
   const TimetableError(this.message);
 

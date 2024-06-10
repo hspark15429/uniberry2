@@ -6,8 +6,11 @@ import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/create_timetable.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/delete_timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/read_timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/update_timetable.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
 class MockGetCourse extends Mock implements GetCourse {}
@@ -16,27 +19,45 @@ class MockSearchCourses extends Mock implements SearchCourses {}
 
 class MockCreateTimetable extends Mock implements CreateTimetable {}
 
+class MockReadTimetable extends Mock implements ReadTimetable {}
+
+class MockUpdateTimetable extends Mock implements UpdateTimetable {}
+
+class MockDeleteTimetable extends Mock implements DeleteTimetable {}
+
 void main() {
   late GetCourse getCourse;
   late SearchCourses searchCourses;
   late CreateTimetable createTimetable;
+  late ReadTimetable readTimetable;
+  late UpdateTimetable updateTimetable;
+  late DeleteTimetable deleteTimetable;
   late TimetableCubit cubit;
 
   setUp(() {
     getCourse = MockGetCourse();
     searchCourses = MockSearchCourses();
     createTimetable = MockCreateTimetable();
+    readTimetable = MockReadTimetable();
+    updateTimetable = MockUpdateTimetable();
+    deleteTimetable = MockDeleteTimetable();
+
     cubit = TimetableCubit(
       getCourse: getCourse,
       searchCourses: searchCourses,
       createTimetable: createTimetable,
+      readTimetable: readTimetable,
+      updateTimetable: updateTimetable,
+      deleteTimetable: deleteTimetable,
     );
 
     registerFallbackValue(const SearchCoursesParams.empty());
     registerFallbackValue(Timetable.empty());
+    registerFallbackValue(UpdateTimetableParams.empty());
   });
 
   const Course tCourse = CourseModel.empty();
+  const String tTimetableId = 'timetableId';
   final Timetable tTimetable = Timetable.empty();
 
   test('check the initial state', () async {
@@ -121,6 +142,70 @@ void main() {
       verify: (_) {
         verify(() => createTimetable(tTimetable)).called(1);
         verifyNoMoreInteractions(createTimetable);
+      },
+    );
+  });
+
+  group('readTimetable', () {
+    blocTest<TimetableCubit, TimetableState>(
+      'emits [TimetableLoading, TimetableRead] when successful',
+      build: () {
+        when(() => readTimetable.call(any()))
+            .thenAnswer((_) async => Right(tTimetable));
+        return cubit;
+      },
+      act: (cubit) => cubit.readTimetable(tTimetableId),
+      expect: () => [TimetableLoading(), TimetableRead(tTimetable)],
+      verify: (_) {
+        verify(() => readTimetable(tTimetableId)).called(1);
+        verifyNoMoreInteractions(readTimetable);
+      },
+    );
+  });
+
+  group('updateTimetable', () {
+    blocTest<TimetableCubit, TimetableState>(
+      'emits [TimetableLoading, TimetableUpdated] when successful',
+      build: () {
+        when(() => updateTimetable.call(any()))
+            .thenAnswer((_) async => const Right(null));
+        return cubit;
+      },
+      act: (cubit) => cubit.updateTimetable(
+        timetableId: tTimetableId,
+        timetable: tTimetable,
+      ),
+      expect: () => [
+        const TimetableLoading(),
+        const TimetableUpdateCompleted(),
+      ],
+      verify: (_) {
+        verify(
+          () => updateTimetable(
+            UpdateTimetableParams(
+              timetableId: tTimetableId,
+              timetable: tTimetable,
+            ),
+          ),
+        ).called(1);
+        verifyNoMoreInteractions(updateTimetable);
+      },
+    );
+  });
+
+  group('deleteTimetable', () {
+    blocTest<TimetableCubit, TimetableState>(
+      'emits [TimetableLoading, TimetableDeleted] when successful',
+      build: () {
+        when(() => deleteTimetable.call(any()))
+            .thenAnswer((_) async => const Right(null));
+        return cubit;
+      },
+      act: (cubit) => cubit.deleteTimetable(tTimetableId),
+      expect: () => [const TimetableLoading(), const TimetableDeleted()],
+      verify: (_) {
+        verify(() => deleteTimetable(tTimetableId)).called(1);
+        verifyNoMoreInteractions(deleteTimetable);
       },
     );
   });

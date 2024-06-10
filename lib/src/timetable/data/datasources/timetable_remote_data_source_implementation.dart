@@ -90,13 +90,16 @@ class TimetableRemoteDataSourceImplementation
   }
 
   @override
-  Future<List<TimetableModel>> readTimetables() {
+  Future<TimetableModel> readTimetable(String timetableId) {
     // TODO: implement readTimetables
     throw UnimplementedError();
   }
 
   @override
-  Future<void> updateTimetable(TimetableModel timetable) {
+  Future<void> updateTimetable({
+    required String timetableId,
+    required Timetable timetable,
+  }) {
     // TODO: implement updateTimetable
     throw UnimplementedError();
   }

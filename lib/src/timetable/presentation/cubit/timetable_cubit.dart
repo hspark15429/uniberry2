@@ -5,8 +5,11 @@ import 'package:equatable/equatable.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/create_timetable.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/delete_timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/read_timetable.dart';
 import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
+import 'package:uniberry2/src/timetable/domain/usecases/update_timetable.dart';
 
 part 'timetable_cubit.extension.dart';
 part 'timetable_state.dart';
@@ -17,14 +20,24 @@ class TimetableCubit extends Cubit<TimetableState> {
     required GetCourse getCourse,
     required SearchCourses searchCourses,
     required CreateTimetable createTimetable,
+    required ReadTimetable readTimetable,
+    required UpdateTimetable updateTimetable,
+    required DeleteTimetable deleteTimetable,
   })  : _getCourse = getCourse,
         _searchCourses = searchCourses,
         _createTimetable = createTimetable,
+        _readTimetable = readTimetable,
+        _updateTimetable = updateTimetable,
+        _deleteTimetable = deleteTimetable,
         super(TimetableInitial());
 
   final GetCourse _getCourse;
   final SearchCourses _searchCourses;
   final CreateTimetable _createTimetable;
+  final ReadTimetable _readTimetable;
+  final UpdateTimetable _updateTimetable;
+  final DeleteTimetable _deleteTimetable;
+
   final List<String> _schools = [
     "法学部",
     "経済学部",
@@ -153,11 +166,46 @@ class TimetableCubit extends Cubit<TimetableState> {
   }
 
   Future<void> createTimetable(Timetable timetable) async {
-    emit(TimetableLoading());
+    emit(const TimetableLoading());
     final result = await _createTimetable(timetable);
     result.fold(
       (failure) => emit(TimetableError(failure.errorMessage)),
-      (_) => emit(TimetableCreated()),
+      (_) => emit(const TimetableCreated()),
+    );
+  }
+
+  Future<void> readTimetable(String timetableId) async {
+    emit(const TimetableLoading());
+    final result = await _readTimetable(timetableId);
+    result.fold(
+      (failure) => emit(TimetableError(failure.errorMessage)),
+      (timetable) => emit(TimetableRead(timetable)),
+    );
+  }
+
+  Future<void> updateTimetable({
+    required String timetableId,
+    required Timetable timetable,
+  }) async {
+    emit(const TimetableLoading());
+    final result = await _updateTimetable(
+      UpdateTimetableParams(
+        timetableId: timetableId,
+        timetable: timetable,
+      ),
+    );
+    result.fold(
+      (failure) => emit(TimetableError(failure.errorMessage)),
+      (_) => emit(const TimetableUpdateCompleted()),
+    );
+  }
+
+  Future<void> deleteTimetable(String timetableId) async {
+    emit(const TimetableLoading());
+    final result = await _deleteTimetable(timetableId);
+    result.fold(
+      (failure) => emit(TimetableError(failure.errorMessage)),
+      (_) => emit(const TimetableDeleted()),
     );
   }
 }

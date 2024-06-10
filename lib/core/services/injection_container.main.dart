@@ -16,12 +16,18 @@ Future<void> initTimetable() async {
         getCourse: sl(),
         searchCourses: sl(),
         createTimetable: sl(),
+        readTimetable: sl(),
+        updateTimetable: sl(),
+        deleteTimetable: sl(),
       ),
     )
     // usecases
     ..registerLazySingleton(() => GetCourse(sl()))
     ..registerLazySingleton(() => SearchCourses(sl()))
     ..registerLazySingleton(() => CreateTimetable(sl()))
+    ..registerLazySingleton(() => ReadTimetable(sl()))
+    ..registerLazySingleton(() => UpdateTimetable(sl()))
+    ..registerLazySingleton(() => DeleteTimetable(sl()))
     // repo impl
     ..registerLazySingleton<TimetableRepository>(
       () => TimetableRepositoryImplementation(sl()),
@@ -35,14 +41,6 @@ Future<void> initTimetable() async {
         dbClient: sl(),
       ),
     )
-    // ..registerLazySingleton<TimetableRemoteDataSource>(
-    //   () => TimetableRemoteDataSourceImplementationAlgolia(
-    //     coursesSearcher: sl(instanceName: 'coursesSearcher'),
-    //   ),
-    // )
-    // ..registerLazySingleton<TimetableRemoteDataSource>(
-    //   () => TimetableLocalDataSourceImplementation(jsonCourses: _jsonCourses),
-    // );
     // external
     ..registerLazySingleton<Client>(
       () => Client(
