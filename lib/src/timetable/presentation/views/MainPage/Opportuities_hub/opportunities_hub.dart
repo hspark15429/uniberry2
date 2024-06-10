@@ -19,12 +19,12 @@ class _OpportunitiesHubPageState extends State<OpportunitiesHubPage> {
         title: const Text('Opportunities Hub', style: TextStyle(color: Colors.white)),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         itemCount: dummyOpportunities.length,
         itemBuilder: (context, index) {
           final opportunity = dummyOpportunities[index];
           return Container(
-            margin: const EdgeInsets.only(bottom: 16.0),
+            margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -37,14 +37,14 @@ class _OpportunitiesHubPageState extends State<OpportunitiesHubPage> {
               ],
             ),
             child: ListTile(
-              contentPadding: const EdgeInsets.all(16.0),
+              contentPadding: const EdgeInsets.all(16),
               leading: opportunity.imageUrls.isNotEmpty
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(
                         opportunity.imageUrls.first,
-                        width: 50.0,
-                        height: 50.0,
+                        width: 50,
+                        height: 50,
                         fit: BoxFit.cover,
                         errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                           return const Icon(Icons.error); // 이미지 로드 실패 시 에러 아이콘 표시
@@ -52,8 +52,8 @@ class _OpportunitiesHubPageState extends State<OpportunitiesHubPage> {
                       ),
                     )
                   : const SizedBox(
-                      width: 50.0,
-                      height: 50.0,
+                      width: 50,
+                      height: 50,
                       child: Icon(Icons.image, color: Colors.grey), // 이미지가 없을 경우 아이콘 표시
                     ),
               title: Text(

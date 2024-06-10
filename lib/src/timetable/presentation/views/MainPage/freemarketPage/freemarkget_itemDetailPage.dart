@@ -1,34 +1,29 @@
 import 'package:flutter/material.dart';
 
 class FreeMarketItemDetailPage extends StatelessWidget {
+
+  const FreeMarketItemDetailPage({
+    required this.product, required this.onFavoriteToggle, required this.isFavorited, required this.favoriteProducts, required this.products, super.key,
+  });
   final Map<String, dynamic> product;
   final Function(Map<String, dynamic>) onFavoriteToggle;
   final bool isFavorited;
   final List<Map<String, dynamic>> favoriteProducts;
   final List<Map<String, dynamic>> products;
 
-  const FreeMarketItemDetailPage({
-    super.key,
-    required this.product,
-    required this.onFavoriteToggle,
-    required this.isFavorited,
-    required this.favoriteProducts,
-    required this.products,
-  });
-
   @override
   Widget build(BuildContext context) {
     final productTags = product['tags'] as List<dynamic>? ?? [];
 
-    final List<Map<String, dynamic>> similarItems = products
+    final similarItems = products
         .where((item) {
           final itemTags = item['tags'] as List<dynamic>? ?? [];
-          return itemTags.any((tag) => productTags.contains(tag)) && item['name'] != product['name'];
+          return itemTags.any(productTags.contains) && item['name'] != product['name'];
         })
         .toList();
 
-    final DateTime createdAt = product['createdAt'] as DateTime;
-    final String formattedDate = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
+    final createdAt = product['createdAt'] as DateTime;
+    final formattedDate = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +57,7 @@ class FreeMarketItemDetailPage extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -96,7 +91,7 @@ class FreeMarketItemDetailPage extends StatelessWidget {
                     style: const TextStyle(color: Colors.grey),
                   ),
                   Text(
-                    '조회수: ${(product['viewCount'] as int).toString()}',
+                    '조회수: ${product['viewCount'] as int}',
                     style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
@@ -144,7 +139,7 @@ class FreeMarketItemDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: Text('유사한 상품', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 8),
@@ -156,7 +151,7 @@ class FreeMarketItemDetailPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = similarItems[index];
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(

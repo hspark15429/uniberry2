@@ -6,8 +6,8 @@ import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/pos
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postWritePage.dart';
 
 class Postlistpage extends StatefulWidget {
+  const Postlistpage({required this.boardName, super.key});
   final String boardName;
-  const Postlistpage({Key? key, required this.boardName}) : super(key: key);
 
   @override
   _PostlistpageState createState() => _PostlistpageState();
@@ -25,7 +25,7 @@ class _PostlistpageState extends State<Postlistpage> {
   @override
   Widget build(BuildContext context) {
     // 실제 사용자 정보 필요
-    final String currentUser = "현재 사용자"; // 여기에 실제 사용자 정보를 삽입
+    const currentUser = '현재 사용자'; // 여기에 실제 사용자 정보를 삽입
 
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +90,7 @@ style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.
                   ),
                   const SizedBox(height: 4),
                   Text(
-"작성일 ${post.datePosted} · 조회수 ${post.viewCount}",
+'작성일 ${post.datePosted} · 조회수 ${post.viewCount}',
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   if (post.imageUrls.isNotEmpty)

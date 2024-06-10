@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postListPage.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postDetail.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/Op_database.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/OpportunityDetailPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarket.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/myPage/myPage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postDetail.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postListPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/todolist_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/notificationPage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/scrapPage.dart';
@@ -30,14 +30,14 @@ class _HomePage extends State<HomePage> {
   BoardType? selectedBoardType;
   int currentPageIndex = 0;
   List<TodoItem> todoList = []; // To-Do 리스트를 위한 추가
-List<Map<String, dynamic>> FavoriteProducts = [];
+  List<Map<String, dynamic>> FavoriteProducts = [];
 
   Future<void> openUrl(String url) async {
-    final Uri _url = Uri.parse(url);
-    if (!await canLaunchUrl(_url)) {
+    final url0 = Uri.parse(url);
+    if (!await canLaunchUrl(url0)) {
       throw 'Could not launch $url';
     } else {
-      await launchUrl(_url);
+      await launchUrl(url0);
     }
   }
 
@@ -45,19 +45,23 @@ List<Map<String, dynamic>> FavoriteProducts = [];
     if (selectedBoardType == null) {
       return dummyPosts;
     }
-    return dummyPosts.where((post) => post.boardType == selectedBoardType).toList();
+    return dummyPosts
+        .where((post) => post.boardType == selectedBoardType)
+        .toList();
   }
 
   List<Post> getSortedPosts() {
-    List<Post> filteredPosts = getFilteredPosts();
+    final filteredPosts = getFilteredPosts();
     filteredPosts.sort((a, b) => b.datePosted.compareTo(a.datePosted));
     return filteredPosts;
   }
 
   List<TodoItem> _getTodayTodoItems() {
-    final DateTime today = DateTime.now();
+    final today = DateTime.now();
     return todoList.where((todo) {
-      return todo.date.year == today.year && todo.date.month == today.month && todo.date.day == today.day;
+      return todo.date.year == today.year &&
+          todo.date.month == today.month &&
+          todo.date.day == today.day;
     }).toList();
   }
 
@@ -108,17 +112,19 @@ List<Map<String, dynamic>> FavoriteProducts = [];
     List<TodoItem>? todoItems,
   }) {
     return GestureDetector(
-      onTap: buttons != null ? () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const TodolistPage()),
-        );
-      } : null, // buttons가 있을 때만 동작하도록 설정
+      onTap: buttons != null
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TodolistPage()),
+              );
+            }
+          : null, // buttons가 있을 때만 동작하도록 설정
       child: Container(
         width: 1.2 * 250, // 폭을 1.2배로 설정
         height: 2 * 100, // 높이를 2배로 설정
-        padding: const EdgeInsets.all(12.0),
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -153,7 +159,8 @@ List<Map<String, dynamic>> FavoriteProducts = [];
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const TodolistPage(openAddDialog: true),
+                          builder: (context) =>
+                              const TodolistPage(openAddDialog: true),
                         ),
                       );
                     },
@@ -172,7 +179,7 @@ List<Map<String, dynamic>> FavoriteProducts = [];
               ...todoItems.map((todo) {
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: todo.tagColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
@@ -195,7 +202,7 @@ List<Map<String, dynamic>> FavoriteProducts = [];
                     ],
                   ),
                 );
-              }).toList(),
+              }),
           ],
         ),
       ),
@@ -215,7 +222,8 @@ List<Map<String, dynamic>> FavoriteProducts = [];
         children: [
           const Text(
             '게시판리스트',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           _buildBoardSectionTabs(context),
           _buildBoardPreviewPosts(context),
@@ -225,7 +233,8 @@ List<Map<String, dynamic>> FavoriteProducts = [];
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-builder: (context) => Postlistpage(boardName: boardTypeToString(selectedBoardType!)),
+                    builder: (context) => Postlistpage(
+                        boardName: boardTypeToString(selectedBoardType!)),
                   ),
                 );
               },
@@ -240,39 +249,14 @@ builder: (context) => Postlistpage(boardName: boardTypeToString(selectedBoardTyp
   }
 
   Widget _buildBoardSectionTabs(BuildContext context) {
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Row(
-      children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              selectedBoardType = null;
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Text('인기글', style: TextStyle(color: Colors.black)),
-          ),
-        ),
-        ...BoardType.values.map((boardType) {
-          return GestureDetector(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          GestureDetector(
             onTap: () {
               setState(() {
-                selectedBoardType = boardType;
+                selectedBoardType = null;
               });
             },
             child: Container(
@@ -290,170 +274,201 @@ builder: (context) => Postlistpage(boardName: boardTypeToString(selectedBoardTyp
                   ),
                 ],
               ),
-              child: Text(
-                boardTypeToString(boardType),
-                style: const TextStyle(color: Colors.black),
-              ),
+              child: const Text('인기글', style: TextStyle(color: Colors.black)),
             ),
-          );
-        }).toList(),
-      ],
-    ),
-  );
-}
-
-Widget _buildBoardPreviewPosts(BuildContext context) {
-  List<Post> sortedPosts = getSortedPosts();
-  List<Post> previewPosts = sortedPosts.take(5).toList();
-
-  String shortenText(String text, int maxLength) {
-    if (text.length > maxLength) {
-      return '${text.substring(0, maxLength)}...';
-    } else {
-      return text;
-    }
+          ),
+          ...BoardType.values.map((boardType) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedBoardType = boardType;
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  boardTypeToString(boardType),
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
   }
 
-  return Column(
-    children: previewPosts.map((post) {
-      return InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PostDetailPage(post: post),
-            ),
-          );
-        },
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 7,
-                offset: const Offset(0, 3),
+  Widget _buildBoardPreviewPosts(BuildContext context) {
+    var sortedPosts = getSortedPosts();
+    var previewPosts = sortedPosts.take(5).toList();
+
+    String shortenText(String text, int maxLength) {
+      if (text.length > maxLength) {
+        return '${text.substring(0, maxLength)}...';
+      } else {
+        return text;
+      }
+    }
+
+    return Column(
+      children: previewPosts.map((post) {
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PostDetailPage(post: post),
               ),
-            ],
-          ),
-          child: SizedBox(
-            height: 150, // 높이를 150으로 설정하여 각 게시물의 높이를 키움
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-color: Colors.red.withOpacity(0.09),
-                          borderRadius: BorderRadius.circular(15),
-                         
-                        ),
-                        child: Text(
-                          "#${post.category}",
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        shortenText(post.title, 14),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "작성자: ${post.author} · ${post.datePosted}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Expanded(
-                        child: Text(
-                          shortenText(post.content, 50),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Icon(Icons.visibility, size: 14, color: Colors.grey),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${post.viewCount}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.thumb_up, size: 14, color: Colors.grey),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${post.likesCount}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey),
-                          ),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.comment, size: 14, color: Colors.grey),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${post.commentCount}",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3),
                 ),
-                if (post.imageUrls.isNotEmpty)
-                  Container(
-                    width: 80,
-                    height: 80,
-                    margin: const EdgeInsets.only(left: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(post.imageUrls[0]),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
               ],
             ),
+            child: SizedBox(
+              height: 150, // 높이를 150으로 설정하여 각 게시물의 높이를 키움
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.09),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Text(
+                            '#${post.category}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          shortenText(post.title, 14),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '작성자: ${post.author} · ${post.datePosted}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Expanded(
+                          child: Text(
+                            shortenText(post.content, 50),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.visibility,
+                                size: 14, color: Colors.grey),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${post.viewCount}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            const Icon(Icons.thumb_up,
+                                size: 14, color: Colors.grey),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${post.likesCount}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            const Icon(Icons.comment,
+                                size: 14, color: Colors.grey),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${post.commentCount}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (post.imageUrls.isNotEmpty)
+                    Container(
+                      width: 80,
+                      height: 80,
+                      margin: const EdgeInsets.only(left: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(post.imageUrls[0]),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-        ),
-      );
-    }).toList(),
-  );
-}
-
+        );
+      }).toList(),
+    );
+  }
 
   Widget _buildOpportunitiesBox(BuildContext context) {
-    final PageController pageController = PageController(viewportFraction: 0.8);
+    final pageController = PageController(viewportFraction: 0.8);
 
     return Column(
       children: [
@@ -491,7 +506,9 @@ color: Colors.red.withOpacity(0.09),
                         ListTile(
                           title: Text(
                             opportunity.title,
-                            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                           subtitle: Text(
                             opportunity.description,
@@ -501,7 +518,8 @@ color: Colors.red.withOpacity(0.09),
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => OpportunityDetailPage(opportunity: opportunity),
+                                builder: (context) => OpportunityDetailPage(
+                                    opportunity: opportunity),
                               ),
                             );
                           },
@@ -513,9 +531,12 @@ color: Colors.red.withOpacity(0.09),
                       bottom: 8,
                       child: Row(
                         children: [
-                          const Icon(Icons.visibility, size: 20, color: Colors.black), // 조회수 아이콘
+                          const Icon(Icons.visibility,
+                              size: 20, color: Colors.black), // 조회수 아이콘
                           const SizedBox(width: 4), // 아이콘과 숫자 사이의 간격
-                          Text('${opportunity.viewCount}', style: const TextStyle(color: Colors.black)), // 조회수 숫자
+                          Text('${opportunity.viewCount}',
+                              style: const TextStyle(
+                                  color: Colors.black)), // 조회수 숫자
                         ],
                       ),
                     ),
@@ -540,7 +561,7 @@ color: Colors.red.withOpacity(0.09),
 
   @override
   Widget build(BuildContext context) {
-    final List<TodoItem> todayTodoItems = _getTodayTodoItems();
+    final todayTodoItems = _getTodayTodoItems();
 
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
@@ -564,7 +585,8 @@ color: Colors.red.withOpacity(0.09),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NotificationPage()),
+                MaterialPageRoute(
+                    builder: (context) => const NotificationPage()),
               );
             },
           ),
@@ -574,17 +596,21 @@ color: Colors.red.withOpacity(0.09),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BookmarkManagerPage()),
+                MaterialPageRoute(
+                    builder: (context) => const BookmarkManagerPage()),
               );
             },
           ),
           IconButton(
-icon: const Icon(Icons.account_circle),
+            icon: const Icon(Icons.account_circle),
             color: Colors.white,
             onPressed: () {
               Navigator.push(
                 context,
-MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: FavoriteProducts),),
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MyPage(favoriteProducts: FavoriteProducts),
+                ),
               );
             },
           ),
@@ -597,11 +623,10 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
             children: [
               const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       _buildTile(
                         context,
@@ -620,7 +645,8 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const FreeMarketPage()),
+                            MaterialPageRoute(
+                                builder: (context) => const FreeMarketPage()),
                           );
                         },
                         color: Colors.orangeAccent,
@@ -631,7 +657,8 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
                         icon: Icons.schedule,
                         title: '授業',
                         subtitle: 'スケジュール',
-                        onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=606518'),
+                        onTap: () => openUrl(
+                            'https://www.ritsumei.ac.jp/file.jsp?id=606518'),
                         color: Colors.green,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
@@ -640,7 +667,8 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
                         icon: Icons.library_books,
                         title: '図書館',
                         subtitle: '',
-                        onTap: () => openUrl('https://runners.ritsumei.ac.jp/opac/opac_search/?lang=0'),
+                        onTap: () => openUrl(
+                            'https://runners.ritsumei.ac.jp/opac/opac_search/?lang=0'),
                         color: Colors.blueAccent,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
@@ -649,7 +677,8 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
                         icon: Icons.directions_bus_filled,
                         title: 'シャトルバス',
                         subtitle: '',
-                        onTap: () => openUrl('https://www.ritsumei.ac.jp/file.jsp?id=566535'),
+                        onTap: () => openUrl(
+                            'https://www.ritsumei.ac.jp/file.jsp?id=566535'),
                         color: Colors.blueGrey,
                       ),
                       const SizedBox(width: 16), // 아이콘 사이의 간격 조정
@@ -675,7 +704,8 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
                     _buildInfoCard(
                       context,
                       title: '오늘의예정',
-                      subtitle: DateFormat('M月 d日(E)', 'ja').format(DateTime.now()), // 오늘 날짜를 표시
+                      subtitle: DateFormat('M月 d日(E)', 'ja')
+                          .format(DateTime.now()), // 오늘 날짜를 표시
                       buttons: [], // 아이콘을 삭제했으므로 빈 리스트
                       todoItems: todayTodoItems, // 오늘 일정을 보여주기 위해 추가
                     ),
@@ -710,19 +740,18 @@ MaterialPageRoute(       builder: (context) => MyPage(favoriteProducts: Favorite
 }
 
 class TodoItem {
+  TodoItem({
+    required this.title,
+    required this.tagColor,
+    required this.date,
+    this.isAllDay = false,
+    this.startTime,
+    this.endTime,
+  });
   final String title;
   final bool isAllDay;
   final TimeOfDay? startTime;
   final TimeOfDay? endTime;
   final Color tagColor;
   final DateTime date;
-
-  TodoItem({
-    required this.title,
-    this.isAllDay = false,
-    this.startTime,
-    this.endTime,
-    required this.tagColor,
-    required this.date,
-  });
 }

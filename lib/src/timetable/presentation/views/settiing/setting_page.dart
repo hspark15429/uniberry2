@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:uniberry2/src/timetable/presentation/views/settiing/account/setting_email_change_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/account/setting_pw_change_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/account/setting_student_IdCard_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/settiing/account/setting_user_id_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'account/setting_email_change_page.dart';
-
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -62,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
             leading: const Icon(Icons.school),
             title: const Text('학생증 인증'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingStudentIdCardPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingStudentIdCardPage()));
             },
           ),
           const ListTile(
@@ -74,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
             leading: const Icon(Icons.edit),
             title: const Text('이메일 변경'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingEmailChangePage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingEmailChangePage()));
             },
           ),
           ListTile(
@@ -82,14 +81,14 @@ class _SettingsPageState extends State<SettingsPage> {
             title: const Text('유저 아이디 설정'),
             onTap: () {
               // 유저 아이디 설정 페이지로 이동
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingUserIdPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingUserIdPage()));
             },
           ),
          ListTile(
             leading: const Icon(Icons.lock),
             title: const Text('비밀번호 변경'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingPwChangePage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPwChangePage()));
             },
           ),
           

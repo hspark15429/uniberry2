@@ -5,15 +5,12 @@ import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_a
 import 'package:uniberry2/src/timetable/presentation/views/timetable/timetalbe_courseDetailPage.dart';
 
 class CoursesListPage extends StatefulWidget {
+
+  const CoursesListPage(
+      {required this.period, required this.school, required this.semester, super.key,});
   final String period;
   final String school;
   final String semester;
-
-  const CoursesListPage(
-      {super.key,
-      required this.period,
-      required this.school,
-      required this.semester});
 
   @override
   _CoursesListPageState createState() => _CoursesListPageState();
@@ -55,12 +52,12 @@ icon: const Icon(Icons.add),color: Colors.white,
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
 hintText: '강의명, 수업코드로검색',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -81,8 +78,8 @@ hintText: '강의명, 수업코드로검색',
                 } else if (state is CoursesFetched) {
                   if (state.courses.isEmpty) {
                     return const Center(
-                        child: Text("No courses available.",
-                            style: TextStyle(fontSize: 18, color: Colors.grey)));
+                        child: Text('No courses available.',
+                            style: TextStyle(fontSize: 18, color: Colors.grey),),);
                   }
                   return ListView.builder(
                     itemCount: state.courses.length,
@@ -122,20 +119,20 @@ hintText: '강의명, 수업코드로검색',
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                course.titles.join(", "),
+                                course.titles.join(', '),
                                 style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                                    color: Colors.black,),
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                course.professors.join(", "),
+                                course.professors.join(', '),
                                 style: const TextStyle(fontSize: 14, color: Colors.grey),
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                course.codes.join(", "),
+                                course.codes.join(', '),
                                 style: const TextStyle(fontSize: 14, color: Colors.grey),
                               ),
                             ],
@@ -147,11 +144,11 @@ hintText: '강의명, 수업코드로검색',
                 } else if (state is TimetableError) {
                   return Center(
                       child: Text(state.message,
-                          style: const TextStyle(color: Colors.black)));
+                          style: const TextStyle(color: Colors.black),),);
                 }
                 return const Center(
-                    child: Text("Unable to fetch courses.",
-                        style: TextStyle(color: Colors.black)));
+                    child: Text('Unable to fetch courses.',
+                        style: TextStyle(color: Colors.black),),);
               },
             ),
           ),

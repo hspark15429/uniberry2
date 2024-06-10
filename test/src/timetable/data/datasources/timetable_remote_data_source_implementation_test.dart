@@ -37,7 +37,7 @@ void main() {
     );
 
     dataSource = TimetableRemoteDataSourceImplementation(
-        cloudStoreClient: cloudStoreClient);
+        cloudStoreClient: cloudStoreClient,);
   });
 
   group('getCourse', () {

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StudentIDCardFrontPage extends StatefulWidget {
-  const StudentIDCardFrontPage({Key? key}) : super(key: key);
+  const StudentIDCardFrontPage({super.key});
 
   @override
   _StudentIDCardFrontPageState createState() => _StudentIDCardFrontPageState();
@@ -23,11 +23,11 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
     _loadStudentInfo();
   }
 
-  void _loadStudentInfo() async {
-    String filePath = '/Users/jjpark/dev/uniberry/assets/studentDB(PARK Jaejin).json';
-    File file = File(filePath);
+  Future<void> _loadStudentInfo() async {
+    const filePath = '/Users/jjpark/dev/uniberry/assets/studentDB(PARK Jaejin).json';
+    final file = File(filePath);
     if (await file.exists()) {
-      String content = await file.readAsString();
+      final content = await file.readAsString();
       _parseStudentInfo(content);
     } else {
       debugPrint('파일을 찾을 수 없습니다.');
@@ -36,7 +36,7 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
 
   void _parseStudentInfo(String content) {
     try {
-      var jsonData = jsonDecode(content);
+      final jsonData = jsonDecode(content);
       studentName = jsonData['氏名'] as String? ?? '';
       studentNumber = jsonData['学籍番号'] as String? ?? '';
       department = jsonData['学部'] as String? ?? '';
@@ -49,22 +49,22 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Card(
-          elevation: 10.0,
+          elevation: 10,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
             width: screenWidth * 0.85,
             height: screenHeight * 0.75,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(20),
               gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -73,16 +73,16 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
             ),
             child: Stack(
               children: [
-                SchoolLogoSection(), // 학교 로고 및 학교명 섹션
-                SchoolImageSection(), // 학교 사진 섹션
-                StudentPhotoSection(), // 학생 사진 섹션
+                const SchoolLogoSection(), // 학교 로고 및 학교명 섹션
+                const SchoolImageSection(), // 학교 사진 섹션
+                const StudentPhotoSection(), // 학생 사진 섹션
                 StudentInfoSection( // 학생 정보 섹션
                   studentName: studentName,
                   studentNumber: studentNumber,
                   department: department,
                   enrollmentDate: enrollmentDate,
                 ),
-                AdditionalInfoSection(), // 추가 정보 섹션
+                const AdditionalInfoSection(), // 추가 정보 섹션
               ],
             ),
           ),
@@ -93,6 +93,8 @@ class _StudentIDCardFrontPageState extends State<StudentIDCardFrontPage> {
 }
 
 class SchoolLogoSection extends StatelessWidget {
+  const SchoolLogoSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -126,6 +128,8 @@ class SchoolLogoSection extends StatelessWidget {
 }
 
 class SchoolImageSection extends StatelessWidget {
+  const SchoolImageSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -145,9 +149,11 @@ class SchoolImageSection extends StatelessWidget {
 }
 
 class StudentPhotoSection extends StatelessWidget {
+  const StudentPhotoSection({super.key});
+
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Positioned(
       top: 250,
       left: (screenWidth * 0.85 - 120) / 2,
@@ -160,17 +166,13 @@ class StudentPhotoSection extends StatelessWidget {
 }
 
 class StudentInfoSection extends StatelessWidget {
+
+  const StudentInfoSection({required this.studentName, required this.studentNumber, required this.department, required this.enrollmentDate, super.key,
+  });
   final String studentName;
   final String studentNumber;
   final String department;
   final String enrollmentDate;
-
-  StudentInfoSection({
-    required this.studentName,
-    required this.studentNumber,
-    required this.department,
-    required this.enrollmentDate,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +181,6 @@ class StudentInfoSection extends StatelessWidget {
       left: 20,
       right: 20,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '氏名: $studentName',
@@ -218,6 +219,8 @@ class StudentInfoSection extends StatelessWidget {
 }
 
 class AdditionalInfoSection extends StatelessWidget {
+  const AdditionalInfoSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Positioned(
@@ -225,7 +228,6 @@ class AdditionalInfoSection extends StatelessWidget {
       left: 20,
       right: 20,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 20),
           Text(

@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/SurveyPreviewPage.dart';
 
 class SurveyTheme {
-  final Color primaryColor;
-  final Color backgroundColor;
-  final TextStyle questionStyle;
-  final TextStyle answerStyle;
 
   SurveyTheme({
     required this.primaryColor,
@@ -13,6 +9,10 @@ class SurveyTheme {
     required this.questionStyle,
     required this.answerStyle,
   });
+  final Color primaryColor;
+  final Color backgroundColor;
+  final TextStyle questionStyle;
+  final TextStyle answerStyle;
 }
 
 final SurveyTheme defaultSurveyTheme = SurveyTheme(
@@ -23,16 +23,16 @@ final SurveyTheme defaultSurveyTheme = SurveyTheme(
 );
 
 class SurveyWritePage extends StatefulWidget {
-  final SurveyTheme theme;
-  final TextEditingController titleController;
-  final TextEditingController descriptionController;
 
   const SurveyWritePage({
     required this.theme,
     required this.titleController,
     required this.descriptionController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+  final SurveyTheme theme;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
 
   @override
   _SurveyWritePageState createState() => _SurveyWritePageState();
@@ -127,7 +127,7 @@ class _SurveyWritePageState extends State<SurveyWritePage> {
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: ReorderableListView(
             onReorder: (oldIndex, newIndex) {
               if (oldIndex < newIndex) {
@@ -154,7 +154,7 @@ class _SurveyWritePageState extends State<SurveyWritePage> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: SurveyQuestionWidget(
                     question: question,
                     onDelete: () => _deleteQuestion(index),
@@ -188,31 +188,31 @@ enum SurveyQuestionType {
 }
 
 class SurveyQuestion {
-  SurveyQuestionType type;
-  final TextEditingController controller;
-  final List<String> options = [];
-  bool isRequired = false;
 
   SurveyQuestion({
     required this.type,
     required this.controller,
     this.isRequired = false,
   });
+  SurveyQuestionType type;
+  final TextEditingController controller;
+  final List<String> options = [];
+  bool isRequired = false;
 }
 
 class SurveyQuestionWidget extends StatefulWidget {
-  final SurveyQuestion question;
-  final VoidCallback onDelete;
-  final VoidCallback onMoveUp;
-  final VoidCallback onMoveDown;
 
   const SurveyQuestionWidget({
     required this.question,
     required this.onDelete,
     required this.onMoveUp,
     required this.onMoveDown,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+  final SurveyQuestion question;
+  final VoidCallback onDelete;
+  final VoidCallback onMoveUp;
+  final VoidCallback onMoveDown;
 
   @override
   _SurveyQuestionWidgetState createState() => _SurveyQuestionWidgetState();
@@ -326,7 +326,7 @@ class _SurveyQuestionWidgetState extends State<SurveyQuestionWidget> {
               },
             ),
           );
-        }).toList(),
+        }),
         IconButton(
           icon: const Icon(Icons.add, color: Colors.black),
           onPressed: () {

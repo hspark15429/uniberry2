@@ -57,8 +57,8 @@ void main() {
   });
 
   const Course tCourse = CourseModel.empty();
-  const String tTimetableId = 'timetableId';
-  final Timetable tTimetable = Timetable.empty();
+  const tTimetableId = 'timetableId';
+  final tTimetable = Timetable.empty();
 
   test('check the initial state', () async {
     expect(cubit.state, TimetableInitial());
@@ -77,7 +77,7 @@ void main() {
         return cubit;
       },
       act: (cubit) => cubit.getCourse('code'),
-      expect: () => [TimetableLoading(), const CourseFetched(tCourse)],
+      expect: () => [const TimetableLoading(), const CourseFetched(tCourse)],
       verify: (_) {
         verify(() => getCourse('code')).called(1);
         verifyNoMoreInteractions(getCourse);
@@ -95,7 +95,7 @@ void main() {
       },
       act: (cubit) => cubit.searchCourses(school: 'Engineering'),
       expect: () => [
-        TimetableLoading(),
+        const TimetableLoading(),
         const CourseIdsSearched(['code']),
       ],
       verify: (_) {
@@ -117,7 +117,7 @@ void main() {
       },
       act: (cubit) => cubit.getCourses(['code1', 'code2', 'code3']),
       expect: () => [
-        TimetableLoading(),
+        const TimetableLoading(),
         const CoursesFetched([tCourse, tCourse, tCourse]),
       ],
       verify: (_) {
@@ -155,7 +155,7 @@ void main() {
         return cubit;
       },
       act: (cubit) => cubit.readTimetable(tTimetableId),
-      expect: () => [TimetableLoading(), TimetableRead(tTimetable)],
+      expect: () => [const TimetableLoading(), TimetableRead(tTimetable)],
       verify: (_) {
         verify(() => readTimetable(tTimetableId)).called(1);
         verifyNoMoreInteractions(readTimetable);

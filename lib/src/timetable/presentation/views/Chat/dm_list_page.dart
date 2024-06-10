@@ -4,10 +4,6 @@ import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_chatgpt_page.
 import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_user_search_page.dart';
 
 class ChatUser {
-  final String name;
-  final String messageText;
-  final String imageUrl;
-  final String time;
 
   ChatUser({
     required this.name,
@@ -15,6 +11,10 @@ class ChatUser {
     required this.imageUrl,
     required this.time,
   });
+  final String name;
+  final String messageText;
+  final String imageUrl;
+  final String time;
 }
 
 
@@ -30,16 +30,16 @@ class DMListPage extends StatefulWidget {
 class _DMListPageState extends State<DMListPage> {
   List<ChatUser> chatUsers = [
     ChatUser(
-      name: "UniberryAI",
-      messageText: "Uniberry AIを試す",
-      imageUrl: "https://img4.yna.co.kr/etc/inner/KR/2023/01/30/AKR20230130074900017_01_i_P4.jpg",
-      time: "Now",
+      name: 'UniberryAI',
+      messageText: 'Uniberry AIを試す',
+      imageUrl: 'https://img4.yna.co.kr/etc/inner/KR/2023/01/30/AKR20230130074900017_01_i_P4.jpg',
+      time: 'Now',
     ),
     ChatUser(
-      name: "UniberryTeam",
-      messageText: "Uniberryにお問合せする！",
-      imageUrl: "https://www.uniberry.site/wp-content/uploads/2024/01/light-3.png",
-      time: "Now",)
+      name: 'UniberryTeam',
+      messageText: 'Uniberryにお問合せする！',
+      imageUrl: 'https://www.uniberry.site/wp-content/uploads/2024/01/light-3.png',
+      time: 'Now',),
   ];
 
   @override
@@ -51,7 +51,7 @@ class _DMListPageState extends State<DMListPage> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DMUserSearchPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const DMUserSearchPage()));
             },
           ),
           IconButton(
@@ -67,7 +67,7 @@ class _DMListPageState extends State<DMListPage> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(
-                hintText: "検索",
+                hintText: '検索',
               ),
             ),
             // 사용자 목록을 표시하는 위젯 추가 예정
@@ -106,7 +106,7 @@ class _DMListPageState extends State<DMListPage> {
             trailing: Text(chatUsers[index].time),
             onTap: () {
               // Uniberry 사용자를 탭했을 때 DMChatGPTPage로 이동
-              if (chatUsers[index].name == "UniberryAI") {
+              if (chatUsers[index].name == 'UniberryAI') {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const DMChatGPTPage()));
               } else {
                 // 다른 사용자를 탭했을 때의 로직

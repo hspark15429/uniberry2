@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/Opportuities_hub/Op_database.dart'; // 가정: 기회 모델 정의 파일
 
 class OpportunityDetailPage extends StatelessWidget {
-  final Opportunity opportunity;
 
-  const OpportunityDetailPage({super.key, required this.opportunity});
+  const OpportunityDetailPage({required this.opportunity, super.key});
+  final Opportunity opportunity;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class OpportunityDetailPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -33,7 +33,7 @@ class OpportunityDetailPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "#${opportunity.category}",
+                    '#${opportunity.category}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -45,7 +45,7 @@ class OpportunityDetailPage extends StatelessWidget {
                     children: [
                       const Icon(Icons.visibility, color: Colors.grey),
                       const SizedBox(width: 4),
-                      Text("${opportunity.viewCount}", style: const TextStyle(color: Colors.grey)),
+                      Text('${opportunity.viewCount}', style: const TextStyle(color: Colors.grey)),
                     ],
                   ),
                 ],
@@ -80,7 +80,7 @@ class OpportunityDetailPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                opportunity.additionalInfo ?? "추가 정보 없음",
+                opportunity.additionalInfo ?? '추가 정보 없음',
                 style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ],

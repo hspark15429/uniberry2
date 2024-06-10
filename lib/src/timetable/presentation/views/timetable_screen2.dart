@@ -7,13 +7,13 @@ class TimetableScreen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final semester = '2024년봄학기';
+    const semester = '2024년봄학기';
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           semester,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             color: Colors.white,
             decoration: TextDecoration.underline,
@@ -39,12 +39,12 @@ class TimetableScreen2 extends StatelessWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         children: [
           _buildDayHeader(),
           ...List.generate(
             6,
-            (index) => _buildPeriodRow(index),
+            _buildPeriodRow,
           ),
           const SizedBox(height: 20),
           _buildGradeStatusCard(),
@@ -55,7 +55,7 @@ class TimetableScreen2 extends StatelessWidget {
   }
 
   Widget _buildDayHeader() {
-    final List<String> days = ['월', '화', '수', '목', '금', '토', '일'];
+    final days = <String>['월', '화', '수', '목', '금', '토', '일'];
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -64,20 +64,26 @@ class TimetableScreen2 extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           const SizedBox(width: 30),
-          ...days
-              .map((day) => Expanded(
-                  child: Center(
-                      child: Text(day,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)))))
-              .toList(),
+          ...days.map(
+            (day) => Expanded(
+              child: Center(
+                child: Text(
+                  day,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildPeriodRow(int periodIndex) {
-    final List<String> days = ['월', '화', '수', '목', '금', '토', '일'];
+    final days = <String>['월', '화', '수', '목', '금', '토', '일'];
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -95,7 +101,7 @@ class TimetableScreen2 extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: 30,
             child: Center(
               child: Text(
@@ -107,23 +113,23 @@ class TimetableScreen2 extends StatelessWidget {
               ),
             ),
           ),
-          ...days
-              .map((day) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Container(
-                        height: 100,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.white10,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: const Text(''),
-                      ),
-                    ),
-                  ))
-              .toList(),
+          ...days.map(
+            (day) => Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Container(
+                  height: 100,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.white10,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Text(''),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -144,7 +150,6 @@ class TimetableScreen2 extends StatelessWidget {
         ],
       ),
       child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '이수상황',

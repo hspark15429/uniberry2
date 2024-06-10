@@ -1,11 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/errors/failures.dart';
 import 'package:uniberry2/src/forum/domain/entities/comment.dart';
 import 'package:uniberry2/src/forum/domain/repository/comment_repository.dart';
 import 'package:uniberry2/src/forum/domain/usecases/post_usecases/get_comments_by_post_id.dart';
-import 'package:collection/collection.dart';
 
 import '../repository.mock.dart';
 

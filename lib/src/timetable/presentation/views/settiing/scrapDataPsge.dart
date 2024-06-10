@@ -1,8 +1,8 @@
 class BookmarkService {
+  factory BookmarkService() => _instance;
   // 싱글톤 패턴 구현
   BookmarkService._privateConstructor();
   static final BookmarkService _instance = BookmarkService._privateConstructor();
-  factory BookmarkService() => _instance;
 
   
   // 북마크된 게시물 ID 목록

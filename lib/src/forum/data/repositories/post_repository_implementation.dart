@@ -4,7 +4,6 @@ import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/errors/failures.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
 

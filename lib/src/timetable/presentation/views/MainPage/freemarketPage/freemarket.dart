@@ -11,7 +11,7 @@ final List<Map<String, dynamic>> products = [
     'image': 'https://5.imimg.com/data5/PZ/PK/QD/SELLER-16254184/used-apple-ipad-air-2-wifi-only-with-64gb-500x500.jpeg',
     'imageUrls': [
       'https://5.imimg.com/data5/PZ/PK/QD/SELLER-16254184/used-apple-ipad-air-2-wifi-only-with-64gb-500x500.jpeg',
-      'https://image.shutterstock.com/image-photo/apple-ipad-4th-generation-on-260nw-1695646073.jpg'
+      'https://image.shutterstock.com/image-photo/apple-ipad-4th-generation-on-260nw-1695646073.jpg',
     ],
     'seller': {'nickname': 'JohnDoe', 'campus': 'OIC'},
     'viewCount': 123,
@@ -25,7 +25,7 @@ final List<Map<String, dynamic>> products = [
     'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8aELcMxsvgqpQFLUmHh0caNuRBLBHFRieog&usqp=CAU',
     'imageUrls': [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8aELcMxsvgqpQFLUmHh0caNuRBLBHFRieog&usqp=CAU',
-      'https://example.com/sonycamera2.jpg'
+      'https://example.com/sonycamera2.jpg',
     ],
     'seller': {'nickname': 'JaneSmith', 'campus': 'KIC'},
     'viewCount': 89,
@@ -39,7 +39,7 @@ final List<Map<String, dynamic>> products = [
     'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ4FauYwivfNVQGFAjmMzrr5VzYRQrIjB2mA&usqp=CAU',
     'imageUrls': [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ4FauYwivfNVQGFAjmMzrr5VzYRQrIjB2mA&usqp=CAU',
-      'https://example.com/polo2.jpg'
+      'https://example.com/polo2.jpg',
     ],
     'seller': {'nickname': 'TaroYamada', 'campus': 'BKC'},
     'viewCount': 47,
@@ -53,7 +53,7 @@ final List<Map<String, dynamic>> products = [
     'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWnRWomUw6niJ7W9ZHC9YSmJ_Qx9i3fI8iHw&usqp=CAU',
     'imageUrls': [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWnRWomUw6niJ7W9ZHC9YSmJ_Qx9i3fI8iHw&usqp=CAU',
-      'https://example.com/imac2.jpg'
+      'https://example.com/imac2.jpg',
     ],
     'seller': {'nickname': 'MikeJohnson', 'campus': 'OIC'},
     'viewCount': 105,
@@ -67,7 +67,7 @@ final List<Map<String, dynamic>> products = [
     'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeyT_tG8Fc_DOdXqR5FzXpd2Z1_YL-Jxk9oQ&usqp=CAU',
     'imageUrls': [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeyT_tG8Fc_DOdXqR5FzXpd2Z1_YL-Jxk9oQ&usqp=CAU',
-      'https://example.com/item5-2.jpg'
+      'https://example.com/item5-2.jpg',
     ],
     'seller': {'nickname': 'SakuraTanaka', 'campus': 'KIC'},
     'viewCount': 67,
@@ -81,7 +81,7 @@ final List<Map<String, dynamic>> products = [
     'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJfBzwTz_00Qg1hIiaYlJRPQ_zFNB0Npx6nQ&usqp=CAU',
     'imageUrls': [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJfBzwTz_00Qg1hIiaYlJRPQ_zFNB0Npx6nQ&usqp=CAU',
-      'https://example.com/item6-2.jpg'
+      'https://example.com/item6-2.jpg',
     ],
     'seller': {'nickname': 'KenjiMori', 'campus': 'BKC'},
     'viewCount': 89,
@@ -117,7 +117,7 @@ class _FreeMarketPageState extends State<FreeMarketPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> filteredProducts = _selectedTag == 'ALL'
+    final filteredProducts = _selectedTag == 'ALL'
         ? products
         : products.where((product) => (product['tags'] as List<String>).contains(_selectedTag)).toList();
 
@@ -148,7 +148,7 @@ builder: (context) => MyPage(favoriteProducts: favoriteProducts),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -180,7 +180,7 @@ builder: (context) => MyPage(favoriteProducts: favoriteProducts),
             child: Row(
               children: tags.map((tag) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: ChoiceChip(
                     label: Text(tag),
                     selected: _selectedTag == tag,
@@ -196,7 +196,7 @@ builder: (context) => MyPage(favoriteProducts: favoriteProducts),
           ),
           Expanded(
             child: GridView.builder(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               itemCount: filteredProducts.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -248,7 +248,7 @@ builder: (context) => MyPage(favoriteProducts: favoriteProducts),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

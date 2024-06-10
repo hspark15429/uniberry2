@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SettingEmailChangePage extends StatefulWidget {
+  const SettingEmailChangePage({super.key});
+
   @override
   _SettingEmailChangePageState createState() => _SettingEmailChangePageState();
 }
@@ -20,54 +22,54 @@ class _SettingEmailChangePageState extends State<SettingEmailChangePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('이메일 변경'),
+        title: const Text('이메일 변경'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               '이메일',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '본인의 이메일 입력',
               ),
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               '계정 비밀번호',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '계정 비밀번호',
               ),
               obscureText: true, // 비밀번호를 숨김 처리
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               '※반드시 본인의 이메일을 입력해주세요.\n※계정 분실 시 아이디/비밀번호 찾기, 개인정보 관련 주요 고지사항 안내 등에 사용됩니다.',
               style: TextStyle(color: Colors.grey),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
   onPressed: () {
     // 이메일 입력하지 않은 경우
     if (_emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('이메일을 입력해주세요.')),
+        const SnackBar(content: Text('이메일을 입력해주세요.')),
       );
     }
     // 비밀번호를 입력하지 않은 경우
     else if (_passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('계정 비밀번호를 입력해주세요.')),
+        const SnackBar(content: Text('계정 비밀번호를 입력해주세요.')),
       );
     }
     // 모든 조건을 만족하는 경우 (이메일 변경 로직 구현)
@@ -77,7 +79,7 @@ class _SettingEmailChangePageState extends State<SettingEmailChangePage> {
       // 예: 서버에 이메일 변경 요청 보내기
     }
   },
-  child: Text('이메일 변경'),
+  child: const Text('이메일 변경'),
 ),
 
           ],

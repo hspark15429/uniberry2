@@ -3,7 +3,6 @@ import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/errors/failures.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/domain/repository/timetable_repository.dart';

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class DMUserSearchPage extends StatelessWidget {
+  const DMUserSearchPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("유저 검색"),
+        title: const Text('유저 검색'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: TextField(
-          decoration: InputDecoration(
-            hintText: "검색...",
+          decoration: const InputDecoration(
+            hintText: '검색...',
             border: OutlineInputBorder(),
             suffixIcon: Icon(Icons.search),
           ),

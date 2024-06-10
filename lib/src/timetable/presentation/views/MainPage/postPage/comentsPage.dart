@@ -3,9 +3,9 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
 
 class CommentsPage extends StatefulWidget {
-  final List<Comment> comments;
 
-  const CommentsPage({Key? key, required this.comments}) : super(key: key);
+  const CommentsPage({required this.comments, super.key});
+  final List<Comment> comments;
 
   @override
   _CommentsPageState createState() => _CommentsPageState();
@@ -15,7 +15,7 @@ class _CommentsPageState extends State<CommentsPage> {
   final TextEditingController _commentController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   List<Comment> _comments = [];
-  Map<int, bool> _showReplies = {};
+  final Map<int, bool> _showReplies = {};
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _CommentsPageState extends State<CommentsPage> {
         backgroundColor: Colors.black,
         title: const Text(
 '댓글',
-          style: TextStyle(color: Colors.white, fontSize: 20.0),
+          style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -76,7 +76,7 @@ class _CommentsPageState extends State<CommentsPage> {
                           contentPadding: EdgeInsets.zero,
                           title: Text(
                             comment.content,
-                            style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                            style: const TextStyle(fontSize: 16, color: Colors.black),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,14 +91,14 @@ class _CommentsPageState extends State<CommentsPage> {
                                         onPressed: () {}, // 좋아요 함수 
                                       ),
                                       Text(
-                                        "${comment.likesCount}",
+                                        '${comment.likesCount}',
                                         style: const TextStyle(fontSize: 12, color: Colors.grey),
                                       ),
                                     ],
                                   ),
                                   Text(
                                     commentTime,
-                                    style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -107,8 +107,8 @@ class _CommentsPageState extends State<CommentsPage> {
                                   onTap: () {}, // 댓글 펼치기/보여주기
                                   child: Text(
                                     showReplies
-                                        ? "댓글 숨기기"
-                                        : "${comment.replies.length}개의 댓글 더보기",
+                                        ? '댓글 숨기기'
+                                        : '${comment.replies.length}개의 댓글 더보기',
                                     style: const TextStyle(color: Colors.blue),
                                   ),
                                 ),
@@ -126,8 +126,8 @@ class _CommentsPageState extends State<CommentsPage> {
                             final replyTime = timeago.format(DateTime.parse(reply.datePosted), locale: 'ko');
 
                             return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                              padding: const EdgeInsets.all(8.0),
+                              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                              padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.grey[100],
                                 borderRadius: BorderRadius.circular(8),
@@ -146,7 +146,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                             onPressed: () {}, // 좋아요 함수
                                           ),
                                           Text(
-                                            "${reply.likesCount}",
+                                            '${reply.likesCount}',
                                             style: const TextStyle(fontSize: 12, color: Colors.grey),
                                           ),
                                           IconButton(
@@ -164,7 +164,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                 ],
                               ),
                             );
-                          }).toList(),
+                          }),
                       ],
                     ),
                   );
@@ -172,7 +172,7 @@ class _CommentsPageState extends State<CommentsPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: _buildCommentInputField(),
             ),
           ],
@@ -183,11 +183,11 @@ class _CommentsPageState extends State<CommentsPage> {
 
   Widget _buildCommentInputField() {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
@@ -196,10 +196,10 @@ class _CommentsPageState extends State<CommentsPage> {
               focusNode: _focusNode,
               controller: _commentController,
               decoration: const InputDecoration(
-hintText: "댓글달기",
+hintText: '댓글달기',
                 border: InputBorder.none,
               ),
-              style: const TextStyle(fontSize: 14.0, color: Colors.black),
+              style: const TextStyle(fontSize: 14, color: Colors.black),
               minLines: 1,
               maxLines: 5,
             ),
@@ -215,24 +215,24 @@ hintText: "댓글달기",
   }
 
   Widget _buildReplyInputField(int index) {
-    final TextEditingController _replyController = TextEditingController();
+    final replyController = TextEditingController();
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
           Expanded(
             child: TextFormField(
-              controller: _replyController,
+              controller: replyController,
               decoration: const InputDecoration(
-hintText: "보내기",
+hintText: '보내기',
                 border: InputBorder.none,
               ),
-              style: const TextStyle(fontSize: 14.0, color: Colors.black),
+              style: const TextStyle(fontSize: 14, color: Colors.black),
               minLines: 1,
               maxLines: 5,
             ),

@@ -1,8 +1,6 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
@@ -11,7 +9,7 @@ import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 class TimetableRemoteDataSourceImplementationAlgolia
     implements TimetableRemoteDataSource {
   TimetableRemoteDataSourceImplementationAlgolia(
-      {required HitsSearcher coursesSearcher})
+      {required HitsSearcher coursesSearcher,})
       : _coursesSearcher = coursesSearcher;
 
   final HitsSearcher _coursesSearcher;

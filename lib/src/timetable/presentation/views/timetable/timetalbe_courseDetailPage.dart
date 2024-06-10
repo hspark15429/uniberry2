@@ -6,16 +6,13 @@ import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_s
 import 'package:url_launcher/url_launcher.dart';
 
 class TimetableCourseDetailPage extends StatelessWidget {
+
+  const TimetableCourseDetailPage({
+    required this.course, required this.period, required this.semester, super.key,
+  });
   final Course course;
   final String period;
   final String semester;
-
-  const TimetableCourseDetailPage({
-    super.key,
-    required this.course,
-    required this.period,
-    required this.semester,
-  });
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -55,7 +52,7 @@ class TimetableCourseDetailPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Container(
@@ -82,7 +79,7 @@ class TimetableCourseDetailPage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                              color: Colors.black,),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -94,10 +91,10 @@ class TimetableCourseDetailPage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black),
+                          backgroundColor: Colors.black,),
                       onPressed: () => _launchURL(course.syllabusUrl),
                       child: const Text('시라버스확인',
-                          style: TextStyle(color: Colors.white)),
+                          style: TextStyle(color: Colors.white),),
                     ),
                   ],
                 ),
@@ -128,13 +125,13 @@ class TimetableCourseDetailPage extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                                color: Colors.black,),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             course.titles.join(', '),
                             style: const TextStyle(
-                                fontSize: 16, color: Colors.grey),
+                                fontSize: 16, color: Colors.grey,),
                           ),
                         ],
                       ),
@@ -161,13 +158,13 @@ class TimetableCourseDetailPage extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                                color: Colors.black,),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             course.professors.join(', '),
                             style: const TextStyle(
-                                fontSize: 16, color: Colors.grey),
+                                fontSize: 16, color: Colors.grey,),
                           ),
                         ],
                       ),

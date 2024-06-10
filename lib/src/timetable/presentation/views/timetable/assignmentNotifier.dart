@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class AssignmentNotifier extends ChangeNotifier {
-  List<Assignment> _assignments = [];
+  final List<Assignment> _assignments = [];
 
   List<Assignment> get assignments => _assignments;
 
@@ -17,11 +17,6 @@ class AssignmentNotifier extends ChangeNotifier {
 }
 
 class Assignment {
-  String title;
-  DateTime dueDate;
-  String description;
-  int reminder;
-  bool isComplete;
 
   Assignment({
     required this.title,
@@ -30,5 +25,10 @@ class Assignment {
     required this.reminder,
     this.isComplete = false,
   });
+  String title;
+  DateTime dueDate;
+  String description;
+  int reminder;
+  bool isComplete;
 }
 

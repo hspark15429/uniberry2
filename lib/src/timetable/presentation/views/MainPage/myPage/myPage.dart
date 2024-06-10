@@ -9,9 +9,8 @@ import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPa
 import 'package:uniberry2/src/timetable/presentation/views/settiing/setting_page.dart';
 
 class MyPage extends StatefulWidget {
+  const MyPage({required this.favoriteProducts, super.key});
   final List<Map<String, dynamic>> favoriteProducts;
-
-  const MyPage({super.key, required this.favoriteProducts});
 
   @override
   _MyPageState createState() => _MyPageState();
@@ -37,10 +36,10 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   ];
 
   final List<Widget> tabs = [
-    ContentTab(),
-    CommunityTab(),
-    FreeMarketTab(),
-    AchievementsTab(),
+    const ContentTab(),
+    const CommunityTab(),
+    const FreeMarketTab(),
+    const AchievementsTab(),
   ];
 
   @override
@@ -54,11 +53,13 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
     );
     _offsetAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: const Offset(0.0, 0.5),
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+      end: const Offset(0, 0.5),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   Future<void> _pickImage() async {
@@ -72,25 +73,27 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _pickColor(BuildContext context) async {
-    unawaited(showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('색상 선택'),
-          content: SingleChildScrollView(
-            child: BlockPicker(
-              pickerColor: Colors.purple[100]!,
-              onColorChanged: (Color color) {
-                setState(() {
-                  _image = null; // 이미지를 제거하는 것이 의도한 동작인지 확인하세요.
-                });
-                Navigator.of(context).pop();
-              },
+    unawaited(
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('색상 선택'),
+            content: SingleChildScrollView(
+              child: BlockPicker(
+                pickerColor: Colors.purple[100],
+                onColorChanged: (Color color) {
+                  setState(() {
+                    _image = null; // 이미지를 제거하는 것이 의도한 동작인지 확인하세요.
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        },
+      ),
+    );
   }
 
   void _toggleFavorite(Map<String, dynamic> product) {
@@ -109,7 +112,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         selectedIndex = -1; // 현재 선택된 탭을 다시 선택하면 초기화
       } else {
         selectedIndex = index;
-        _controller.forward(from: 0.0);
+        _controller.forward(from: 0);
       }
       selectedListIndex = -1; // 리스트 인덱스를 초기화
     });
@@ -129,7 +132,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   }
 
   void _showNicknameDialog(BuildContext context) {
-    TextEditingController _nicknameController = TextEditingController();
+    final nicknameController = TextEditingController();
 
     showDialog(
       context: context,
@@ -137,7 +140,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         return AlertDialog(
           title: const Text('닉네임 설정'),
           content: TextField(
-            controller: _nicknameController,
+            controller: nicknameController,
             decoration: const InputDecoration(hintText: '닉네임을 입력하세요'),
           ),
           actions: [
@@ -149,7 +152,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             ),
             TextButton(
               onPressed: () {
-                _setNickname(_nicknameController.text);
+                _setNickname(nicknameController.text);
                 Navigator.of(context).pop();
               },
               child: const Text('설정'),
@@ -187,7 +190,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         children: [
           Row(
             children: [
@@ -202,7 +205,9 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       ),
                       Text(
                         nickname,
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), // 글씨 크기 줄임
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold), // 글씨 크기 줄임
                       ),
                       if (!nicknameSet)
                         TextButton(
@@ -262,8 +267,8 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             ],
           ),
           Container(
-            margin: const EdgeInsets.all(16.0),
-            padding: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -367,10 +372,12 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                       return GestureDetector(
                         onTap: () => _onItemTapped(index),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           child: Text(
                             tabTitles[index],
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), // 글씨 크기 줄임
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold), // 글씨 크기 줄임
                           ),
                         ),
                       );
@@ -381,7 +388,9 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                     child: Center(
                       child: Text(
                         tabTitles[selectedIndex],
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), // 글씨 크기 줄임
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold), // 글씨 크기 줄임
                       ),
                     ),
                   ),
@@ -394,7 +403,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             ),
           if (selectedIndex == 2) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -436,13 +445,14 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             ),
             const Divider(),
             if (selectedListIndex == 0) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
+                  child: Text(
                     '좋아요 목록',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
                   ),
                 ),
               ),
@@ -479,25 +489,27 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                 },
               ),
             ] else if (selectedListIndex == 1) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
+                  child: Text(
                     '구입 리스트',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
                   ),
                 ),
               ),
               // 구입 리스트 화면을 구현하세요.
             ] else if (selectedListIndex == 2) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
+                  child: Text(
                     '판매 리스트',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
                   ),
                 ),
               ),
@@ -521,24 +533,27 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
 }
 
 class ContentTab extends StatelessWidget {
+  const ContentTab({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildContentSection(context, '내가 작성한 게시물', PostsTab()),
+        _buildContentSection(context, '내가 작성한 게시물', const PostsTab()),
         const Divider(),
-        _buildContentSection(context, '내가 작성한 댓글', CommentsTab()),
+        _buildContentSection(context, '내가 작성한 댓글', const CommentsTab()),
       ],
     );
   }
 
-  Widget _buildContentSection(BuildContext context, String title, Widget content) {
+  Widget _buildContentSection(
+      BuildContext context, String title, Widget content) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
             title,
             style: GoogleFonts.roboto(
@@ -548,7 +563,7 @@ class ContentTab extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -569,15 +584,16 @@ class ContentTab extends StatelessWidget {
 }
 
 class CommunityTab extends StatelessWidget {
+  const CommunityTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Align(
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Align(),
           ),
         ],
       ),
@@ -586,18 +602,21 @@ class CommunityTab extends StatelessWidget {
 }
 
 class AchievementsTab extends StatelessWidget {
+  const AchievementsTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: const Text(
+              child: Text(
                 '업적',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
+                style: TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.bold), // 글씨 크기 줄임
               ),
             ),
           ),
@@ -609,15 +628,16 @@ class AchievementsTab extends StatelessWidget {
 }
 
 class FreeMarketTab extends StatelessWidget {
+  const FreeMarketTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Align(
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Align(),
           ),
         ],
       ),
@@ -626,40 +646,39 @@ class FreeMarketTab extends StatelessWidget {
 }
 
 class PostsTab extends StatelessWidget {
+  const PostsTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    bool hasPosts = false;
+    var hasPosts = false;
     return Center(
-      child: hasPosts
-          ? const Text('내가 작성한 게시물이 있습니다.')
-          : const Text('작성한 게시물이 없습니다.'),
+      child: hasPosts ? Text('내가 작성한 게시물이 있습니다.') : Text('작성한 게시물이 없습니다.'),
     );
   }
 }
 
 class CommentsTab extends StatelessWidget {
+  const CommentsTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    bool hasComments = false;
-    return Center(
-      child: hasComments
-          ? const Text('내가 작성한 댓글이 있습니다.')
-          : const Text('작성한 댓글이 없습니다.'),
+    const hasComments = false;
+    return const Center(
+      child: hasComments ? Text('내가 작성한 댓글이 있습니다.') : Text('작성한 댓글이 없습니다.'),
     );
   }
 }
 
 class FavoriteProductsPage extends StatelessWidget {
-  final List<Map<String, dynamic>> favoriteProducts;
-  final Function(Map<String, dynamic>) onFavoriteToggle;
-  final List<Map<String, dynamic>> products;
-
   const FavoriteProductsPage({
-    super.key,
     required this.favoriteProducts,
     required this.onFavoriteToggle,
     required this.products,
+    super.key,
   });
+  final List<Map<String, dynamic>> favoriteProducts;
+  final Function(Map<String, dynamic>) onFavoriteToggle;
+  final List<Map<String, dynamic>> products;
 
   @override
   Widget build(BuildContext context) {
@@ -673,7 +692,8 @@ class FavoriteProductsPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final product = favoriteProducts[index];
           return ListTile(
-            leading: Image.network(product['image'] as String, width: 50, height: 50, fit: BoxFit.cover),
+            leading: Image.network(product['image'] as String,
+                width: 50, height: 50, fit: BoxFit.cover),
             title: Text(product['name'] as String),
             subtitle: Text('¥${product['price'] as int}'),
             onTap: () {
@@ -683,7 +703,7 @@ class FavoriteProductsPage extends StatelessWidget {
                   builder: (context) => FreeMarketItemDetailPage(
                     product: product,
                     onFavoriteToggle: onFavoriteToggle,
-                    isFavorited: true, 
+                    isFavorited: true,
                     favoriteProducts: favoriteProducts,
                     products: products,
                   ),

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class Postwritepage extends StatelessWidget {
-const Postwritepage({Key? key}) : super(key: key);
+const Postwritepage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,23 +75,23 @@ const Postwritepage({Key? key}) : super(key: key);
                 child: Image.file(File('dummy_image_path')),
               ),
             ),
-            Wrap(
+            const Wrap(
               spacing: 10,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.image, color: Colors.black),
+                  icon: Icon(Icons.image, color: Colors.black),
                   onPressed: null,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.attach_file, color: Colors.black),
+                  icon: Icon(Icons.attach_file, color: Colors.black),
                   onPressed: null,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.location_on, color: Colors.black),
+                  icon: Icon(Icons.location_on, color: Colors.black),
                   onPressed: null,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.poll, color: Colors.black),
+                  icon: Icon(Icons.poll, color: Colors.black),
                   onPressed: null,
                 ),
               ],
@@ -112,7 +112,7 @@ const Postwritepage({Key? key}) : super(key: key);
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(10),),
               ),
               onPressed: null,
               child: const Text('게시물 작성', style: TextStyle(color: Colors.white)),

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 
 class LocalUser extends Equatable {
   const LocalUser({

@@ -2,9 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class GradeChartPage extends StatelessWidget {
-  final List<Map<String, double>> semesterGPAList;
 
-  const GradeChartPage({Key? key, required this.semesterGPAList}) : super(key: key);
+  const GradeChartPage({required this.semesterGPAList, super.key});
+  final List<Map<String, double>> semesterGPAList;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +29,10 @@ class GradeChartPage extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 22,
                 getTitlesWidget: (value, meta) {
-                  String text = '';
+                  var text = '';
                   if (value.toInt() < semesterGPAList.length) {
-                    String semesterKey = semesterGPAList[value.toInt()].keys.first;
+                    final semesterKey = semesterGPAList[value.toInt()].keys.first;
                     text = semesterKey;
                   }
                   return Text(
@@ -47,8 +46,8 @@ class GradeChartPage extends StatelessWidget {
                 },
               ),
             ),
-            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: const AxisTitles(),
+            topTitles: const AxisTitles(),
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -67,12 +66,12 @@ class GradeChartPage extends StatelessWidget {
           ),
           borderData: FlBorderData(
             show: true,
-            border: Border.all(color: Colors.grey, width: 1),
+            border: Border.all(color: Colors.grey),
           ),
           minX: 0,
           maxX: (semesterGPAList.length - 1).toDouble(),
           minY: 0,
-          maxY: 5.0,
+          maxY: 5,
           lineBarsData: [
             LineChartBarData(
               spots: semesterGPAList
@@ -91,8 +90,7 @@ class GradeChartPage extends StatelessWidget {
               ),
               barWidth: 5,
               isStrokeCapRound: true,
-              dotData: const FlDotData(show: true),
-              belowBarData: BarAreaData(show: false),
+              belowBarData: BarAreaData(),
             ),
           ],
         ),

@@ -21,7 +21,7 @@ class _GradePageState extends State<GradePage> {
   double cultureCreditsCompleted = 0;
   double foreignLanguageCreditsCompleted = 0;
   double majorCreditsCompleted = 0;
-  double cumulativeGPA = 0.0;
+  double cumulativeGPA = 0;
 
   final List<Map<String, double>> semesterGPAList = [];
   List<Map<String, dynamic>> courses = [];
@@ -47,14 +47,13 @@ class _GradePageState extends State<GradePage> {
       builder: (BuildContext context) {
         return BlocBuilder<TimetableCubit, TimetableState>(
           builder: (context, state) {
-            final List<String> timetableList =
-                context.read<TimetableCubit>().timetables;
-            final TextEditingController _controller = TextEditingController();
+            final timetableList = context.read<TimetableCubit>().timetables;
+            final controller = TextEditingController();
 
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -67,7 +66,9 @@ class _GradePageState extends State<GradePage> {
                       const Text(
                         '시간표선택',
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -81,14 +82,18 @@ class _GradePageState extends State<GradePage> {
                             final timetableName = timetableList[index];
                             return Card(
                               margin: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               elevation: 3,
                               child: ListTile(
-                                title: Text(timetableName,
-                                    style:
-                                        const TextStyle(color: Colors.black)),
+                                title: Text(
+                                  timetableName,
+                                  style: const TextStyle(color: Colors.black),
+                                ),
                                 onTap: () {
                                   Navigator.pop(context, timetableName);
                                 },
@@ -119,7 +124,12 @@ class _GradePageState extends State<GradePage> {
   }
 
   void _updateCourse(
-      int index, String name, int credits, String grade, String type) {
+    int index,
+    String name,
+    int credits,
+    String grade,
+    String type,
+  ) {
     setState(() {
       courses[index] = {
         'name': name,
@@ -139,12 +149,12 @@ class _GradePageState extends State<GradePage> {
   }
 
   void _calculateGPA() {
-    double totalPoints = 0;
-    int totalCredits = 0;
+    var totalPoints = 0;
+    var totalCredits = 0;
 
-    for (var course in courses) {
-      double gradeValue = _convertGradeToPoints(course['grade'] as String);
-      totalPoints += gradeValue * (course['credits'] as int);
+    for (final course in courses) {
+      final gradeValue = _convertGradeToPoints(course['grade'] as String);
+      totalPoints += (gradeValue * (course['credits'] as int)) as int;
       totalCredits += course['credits'] as int;
     }
 
@@ -158,15 +168,15 @@ class _GradePageState extends State<GradePage> {
       case 'A+':
         return 4.5;
       case 'A':
-        return 4.0;
+        return 4;
       case 'B':
-        return 3.0;
+        return 3;
       case 'C':
-        return 2.0;
+        return 2;
       case 'F':
-        return 0.0;
+        return 0;
       default:
-        return 0.0;
+        return 0;
     }
   }
 
@@ -174,10 +184,10 @@ class _GradePageState extends State<GradePage> {
     showDialog(
       context: context,
       builder: (context) {
-        final TextEditingController nameController = TextEditingController();
-        int credits = 1;
-        String grade = 'A+';
-        String type = '専門科目';
+        final nameController = TextEditingController();
+        var credits = 1;
+        var grade = 'A+';
+        var type = '専門科目';
 
         return AlertDialog(
           title: const Text('手動で科目を追加'),
@@ -196,10 +206,12 @@ class _GradePageState extends State<GradePage> {
                     });
                   },
                   items: List.generate(5, (index) => index + 1)
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e.toString()),
-                          ))
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e.toString()),
+                        ),
+                      )
                       .toList(),
                   decoration: const InputDecoration(labelText: '単位数'),
                 ),
@@ -211,10 +223,12 @@ class _GradePageState extends State<GradePage> {
                     });
                   },
                   items: ['A+', 'A', 'B', 'C', 'F']
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e),
-                          ))
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e),
+                        ),
+                      )
                       .toList(),
                   decoration: const InputDecoration(labelText: '成績'),
                 ),
@@ -226,10 +240,12 @@ class _GradePageState extends State<GradePage> {
                     });
                   },
                   items: ['専門科目', '教養科目', '外国語']
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e),
-                          ))
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e),
+                        ),
+                      )
                       .toList(),
                   decoration: const InputDecoration(labelText: '区分'),
                 ),
@@ -262,8 +278,8 @@ class _GradePageState extends State<GradePage> {
   }
 
   void _applyGrades() {
-    double semesterGPA = cumulativeGPA;
-    int semesterCredits =
+    final semesterGPA = cumulativeGPA;
+    final semesterCredits =
         courses.fold(0, (sum, course) => sum + (course['credits'] as int));
 
     setState(() {
@@ -275,18 +291,15 @@ class _GradePageState extends State<GradePage> {
               totalCompletedCredits;
 
       // 각 과목 유형별로 취득 단위 업데이트
-      for (var course in courses) {
-        int credits = course['credits'] as int;
+      for (final course in courses) {
+        final credits = course['credits'] as int;
         switch (course['type']) {
           case '専門科目':
             majorCreditsCompleted += credits;
-            break;
           case '教養科目':
             cultureCreditsCompleted += credits;
-            break;
           case '外国語':
             foreignLanguageCreditsCompleted += credits;
-            break;
           default:
             break;
         }
@@ -299,7 +312,7 @@ class _GradePageState extends State<GradePage> {
   }
 
   Widget _buildSemesterButtons() {
-    return Container(
+    return SizedBox(
       height: 60,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -378,7 +391,8 @@ class _GradePageState extends State<GradePage> {
                   return AlertDialog(
                     title: const Text('SとAの意味'),
                     content: const Text(
-                        'Sは春学期、Aは秋学期を意味します。　　　　　　　　　　　　　ex) 1S = 1年生の春学期, 1A = 1年生の秋学期'),
+                      'Sは春学期、Aは秋学期を意味します。　　　　　　　　　　　　　ex) 1S = 1年生の春学期, 1A = 1年生の秋学期',
+                    ),
                     actions: <Widget>[
                       TextButton(
                         child: const Text('닫기'),

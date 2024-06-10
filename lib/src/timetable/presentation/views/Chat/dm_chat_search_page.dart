@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class ChatSearchPage extends SearchDelegate<String> {
-  final List<types.Message> messages;
 
   ChatSearchPage({required this.messages});
+  final List<types.Message> messages;
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -20,9 +20,10 @@ class ChatSearchPage extends SearchDelegate<String> {
   }
 
 
-Widget buildLeading(BuildContext context) {
+@override
+  Widget buildLeading(BuildContext context) {
   return IconButton(
-    icon: Icon(Icons.arrow_back),
+    icon: const Icon(Icons.arrow_back),
     onPressed: () {
       // null 대신 빈 문자열을 반환
       close(context, '');

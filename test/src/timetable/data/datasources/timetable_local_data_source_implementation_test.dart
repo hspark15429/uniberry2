@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -8,7 +7,6 @@ import 'package:uniberry2/src/timetable/data/datasources/timetable_local_data_so
 import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 
-import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   late TimetableRemoteDataSource dataSource;
@@ -54,7 +52,7 @@ void main() {
         result3,
         containsAll([
           '444d049c28b54985bfe46756f2cbd901',
-          'c6356be42ea84c158e358c9fa1c914fd'
+          'c6356be42ea84c158e358c9fa1c914fd',
         ]),
       );
       expect(result3, isNot(contains('cd1e8d3e74924aa1970daffd5249ebbb')));
@@ -62,7 +60,7 @@ void main() {
   });
   group('getCourse', () {
     test('getCourse success', () async {
-      var result = await dataSource.getCourse(courseId);
+      final result = await dataSource.getCourse(courseId);
       debugPrint(result.toString());
       expect(result, tCourse.copyWith(courseId: courseId));
     });

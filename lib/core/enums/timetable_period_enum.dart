@@ -34,10 +34,10 @@ enum Period {
 
 // convert string to TimetablePeriod
 TimetablePeriod stringToTimetablePeriod(String str) {
-  final List<String> parts = str.split('.');
-  final DayOfWeek day = DayOfWeek.values
+  final parts = str.split('.');
+  final day = DayOfWeek.values
       .firstWhere((e) => e.toString().split('.').last == parts[0]);
-  final Period period =
+  final period =
       Period.values.firstWhere((e) => e.toString().split('.').last == parts[1]);
   return TimetablePeriod(day, period);
 }

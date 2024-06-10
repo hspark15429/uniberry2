@@ -5,6 +5,8 @@ import 'package:uniberry2/src/timetable/presentation/views/settiing/scrapDataPsg
 
 
 class BookmarkManagerPage extends StatelessWidget {
+  const BookmarkManagerPage({super.key});
+
   // 북마크된 게시물 목록을 가져오는 함수
   List<Post> getBookmarkedPosts() {
   final bookmarkedTitles = BookmarkService().getBookmarkedPosts(); // 북마크된 게시물의 title 목록
@@ -20,7 +22,7 @@ class BookmarkManagerPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('북마크 관리'),
+        title: const Text('북마크 관리'),
       ),
       body: ListView.builder(
         itemCount: bookmarkedPosts.length,

@@ -31,7 +31,7 @@ class TimetableRemoteDataSourceImplementationTypesense
   Future<CourseModel> getCourse(String courseId) async {
     try {
       final searchParameters = {
-        'q': '$courseId',
+        'q': courseId,
         'query_by': 'courseId',
       };
 
@@ -86,7 +86,7 @@ class TimetableRemoteDataSourceImplementationTypesense
         'include_fields': 'courseId',
         'per_page': '100',
         'group_by': 'codes',
-        'group_limit': '1'
+        'group_limit': '1',
       };
 
       final results = await _typesenseClient

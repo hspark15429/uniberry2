@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/freemarketPage/freemarkget_itemDetailPage.dart';
 
 
-class FavoriteProductsPage extends StatelessWidget {
+class FavoriteProductsPage extends StatelessWidget { // Adding this parameter
+
+  const FavoriteProductsPage({required this.favoriteProducts, required this.onFavoriteToggle, required this.products, // Adding this parameter, super.key,, super.key,
+  });
   final List<Map<String, dynamic>> favoriteProducts;
   final Function(Map<String, dynamic>) onFavoriteToggle;
-  final List<Map<String, dynamic>> products; // Adding this parameter
-
-  const FavoriteProductsPage({
-    super.key,
-    required this.favoriteProducts,
-    required this.onFavoriteToggle,
-    required this.products, // Adding this parameter
-  });
+  final List<Map<String, dynamic>> products;
 
   @override
   Widget build(BuildContext context) {

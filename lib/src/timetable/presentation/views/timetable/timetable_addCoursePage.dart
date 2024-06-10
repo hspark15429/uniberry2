@@ -6,9 +6,9 @@ import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_s
 import 'package:uuid/uuid.dart';
 
 class AddCoursePage extends StatefulWidget {
-  final String period;
 
-  const AddCoursePage({super.key, required this.period});
+  const AddCoursePage({required this.period, super.key});
+  final String period;
 
   @override
   _AddCoursePageState createState() => _AddCoursePageState();
@@ -55,7 +55,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
 
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => TimetableScreen()),
+      MaterialPageRoute(builder: (context) => const TimetableScreen()),
       (Route<dynamic> route) => false,
     );
   }
@@ -74,7 +74,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(

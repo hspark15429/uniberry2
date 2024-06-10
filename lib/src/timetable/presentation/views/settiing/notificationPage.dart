@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+  const NotificationPage({super.key});
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
@@ -14,7 +14,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('알림'),
+        title: const Text('알림'),
       ),
       body: ListView.builder(
         itemCount: notifications.length,
@@ -28,25 +28,25 @@ class _NotificationPageState extends State<NotificationPage> {
                 notifications.removeAt(index);
               });
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('알림이 삭제되었습니다.')),
+                const SnackBar(content: Text('알림이 삭제되었습니다.')),
               );
             },
             background: Container(
               alignment: Alignment.centerRight,
               color: Colors.red,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 20.0),
+              child: const Padding(
+                padding: EdgeInsets.only(right: 20),
                 child: Icon(Icons.delete, color: Colors.white),
               ),
             ),
             child: ListTile(
               title: Text(
                 notification.message,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               trailing: Text(
                 notification.time,
-                style: TextStyle(fontSize: 12.0),
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           );
@@ -57,13 +57,13 @@ class _NotificationPageState extends State<NotificationPage> {
 }
 
 class Notification {
-  final String message;
-  final String time;
 
   Notification({
     required this.message,
     required this.time,
   });
+  final String message;
+  final String time;
 }
 
 final List<Notification> dummyNotifications = [

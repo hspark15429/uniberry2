@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
 import 'package:uniberry2/src/auth/domain/entities/user.dart';
 import 'package:uniberry2/src/auth/domain/usecases/forgot_password.dart';
 import 'package:uniberry2/src/auth/domain/usecases/sign_in.dart';

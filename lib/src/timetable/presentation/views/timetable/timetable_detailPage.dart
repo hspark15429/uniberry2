@@ -15,16 +15,13 @@ import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_s
 import 'package:url_launcher/url_launcher.dart';
 
 class TimetableDetailPage extends StatefulWidget {
+
+  const TimetableDetailPage({
+    required this.course, required this.period, required this.semester, super.key,
+  });
   final Course course;
   final String period;
   final String semester;
-
-  const TimetableDetailPage({
-    super.key,
-    required this.course,
-    required this.period,
-    required this.semester,
-  });
 
   @override
   _TimetableDetailPageState createState() => _TimetableDetailPageState();
@@ -55,7 +52,7 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
   }
 
   void _deleteCourse(BuildContext context) {
-    String currentSemester = widget.semester;
+    final currentSemester = widget.semester;
     context
         .read<TimetableCubit>()
         .removeCourseFromTimetable(widget.period, currentSemester);
@@ -74,7 +71,7 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
         return EditCourseDialog(
             course: widget.course,
             period: widget.period,
-            semester: widget.semester);
+            semester: widget.semester,);
       },
     );
   }
@@ -83,8 +80,8 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.course.titles.join(", "),
-            style: const TextStyle(color: Colors.white)),
+        title: Text(widget.course.titles.join(', '),
+            style: const TextStyle(color: Colors.white),),
         backgroundColor: Colors.black,
         elevation: 0,
         actions: [
@@ -100,7 +97,7 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Container(
@@ -119,10 +116,10 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildInfoRow("강의 코드", widget.course.codes.join(", ")),
-                    _buildInfoRow("수업명", widget.course.titles.join(", ")),
-                    _buildInfoRow("교수명", widget.course.professors.join(", ")),
-                    _buildInfoRow("학점", widget.course.credit.toString()),
+                    _buildInfoRow('강의 코드', widget.course.codes.join(', ')),
+                    _buildInfoRow('수업명', widget.course.titles.join(', ')),
+                    _buildInfoRow('교수명', widget.course.professors.join(', ')),
+                    _buildInfoRow('학점', widget.course.credit.toString()),
                   ],
                 ),
               ),
@@ -133,8 +130,8 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () => _launchURL(widget.course.syllabusUrl),
-                  child: const Text("시라버스확인",
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text('시라버스확인',
+                      style: TextStyle(color: Colors.white),),
                 ),
               ),
               const SizedBox(height: 16),
@@ -166,14 +163,14 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
             style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.black),
+                fontWeight: FontWeight.bold, color: Colors.black,),
           ),
           Expanded(
             child: Text(
@@ -189,15 +186,12 @@ class _TimetableDetailPageState extends State<TimetableDetailPage>
 }
 
 class EditCourseDialog extends StatefulWidget {
+
+  const EditCourseDialog(
+      {required this.course, required this.period, required this.semester, super.key,});
   final Course course;
   final String period;
   final String semester;
-
-  const EditCourseDialog(
-      {super.key,
-      required this.course,
-      required this.period,
-      required this.semester});
 
   @override
   _EditCourseDialogState createState() => _EditCourseDialogState();
@@ -212,9 +206,9 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
   @override
   void initState() {
     super.initState();
-    _titleController.text = widget.course.titles.join(", ");
-    _professorController.text = widget.course.professors.join(", ");
-    _codeController.text = widget.course.codes.join(", ");
+    _titleController.text = widget.course.titles.join(', ');
+    _professorController.text = widget.course.professors.join(', ');
+    _codeController.text = widget.course.codes.join(', ');
     _creditController.text = widget.course.credit.toString();
   }
 
@@ -294,9 +288,9 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
 }
 
 class MemoPage extends StatefulWidget {
-  final Course course;
 
-  const MemoPage({super.key, required this.course});
+  const MemoPage({required this.course, super.key});
+  final Course course;
 
   @override
   _MemoPageState createState() => _MemoPageState();
@@ -311,7 +305,7 @@ class _MemoPageState extends State<MemoPage> {
   @override
   Widget build(BuildContext context) {
     _memos.sort(
-        (a, b) => b.dateTime.compareTo(a.dateTime)); // 최신 메모가 상단에 위치하도록 정렬
+        (a, b) => b.dateTime.compareTo(a.dateTime),); // 최신 메모가 상단에 위치하도록 정렬
 
     return Scaffold(
       appBar: AppBar(
@@ -321,7 +315,7 @@ class _MemoPageState extends State<MemoPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
-            onPressed: () => _showMemoDialog(),
+            onPressed: _showMemoDialog,
           ),
         ],
       ),
@@ -351,7 +345,7 @@ class _MemoPageState extends State<MemoPage> {
                 title: Text(
                   memo.title,
                   style: const TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Colors.black, fontWeight: FontWeight.bold,),
                 ),
                 subtitle: Text(
                   DateFormat('yyyy-MM-dd HH:mm').format(memo.dateTime),
@@ -381,14 +375,14 @@ class _MemoPageState extends State<MemoPage> {
         return CupertinoAlertDialog(
           title: Text(_selectedMemo == null ? '새 메모 추가' : '메모 수정'),
           content: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
                 CupertinoTextField(
                   controller: _titleController,
                   placeholder: '제목',
                 ),
-                const SizedBox(height: 12.0),
+                const SizedBox(height: 12),
                 CupertinoTextField(
                   controller: _contentController,
                   placeholder: '내용',
@@ -505,10 +499,6 @@ class _MemoPageState extends State<MemoPage> {
 }
 
 class Memo {
-  int id;
-  String title;
-  String content;
-  DateTime dateTime;
 
   Memo({
     required this.id,
@@ -516,12 +506,16 @@ class Memo {
     required this.content,
     required this.dateTime,
   });
+  int id;
+  String title;
+  String content;
+  DateTime dateTime;
 }
 
 class AssignmentPage extends StatefulWidget {
-  final Course course;
 
-  const AssignmentPage({super.key, required this.course});
+  const AssignmentPage({required this.course, super.key});
+  final Course course;
 
   @override
   _AssignmentPageState createState() => _AssignmentPageState();
@@ -540,15 +534,15 @@ class _AssignmentPageState extends State<AssignmentPage> {
 
   Future<void> _initializeNotifications() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings initializationSettingsAndroid =
+    const initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    final DarwinInitializationSettings initializationSettingsIOS =
+    final initializationSettingsIOS =
         DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) async {
         // Handle your logic here when a notification is received
       },
     );
-    final InitializationSettings initializationSettings =
+    final initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
@@ -562,7 +556,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
     tz.initializeTimeZones();
 
     // Request permissions for iOS
-    final bool? result = await flutterLocalNotificationsPlugin
+    final result = await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
@@ -578,21 +572,21 @@ class _AssignmentPageState extends State<AssignmentPage> {
 
   Future<void> _loadAssignments() async {
     final prefs = await SharedPreferences.getInstance();
-    final String? assignmentsJson = prefs.getString('assignments');
+    final assignmentsJson = prefs.getString('assignments');
     if (assignmentsJson != null) {
-      final List<dynamic> assignmentsList =
+      final assignmentsList =
           json.decode(assignmentsJson) as List<dynamic>;
       setState(() {
         _assignments.addAll(assignmentsList
             .map((json) => Assignment.fromJson(json as Map<String, dynamic>))
-            .toList());
+            .toList(),);
       });
     }
   }
 
   Future<void> _saveAssignments() async {
     final prefs = await SharedPreferences.getInstance();
-    final String assignmentsJson =
+    final assignmentsJson =
         json.encode(_assignments.map((a) => a.toJson()).toList());
     await prefs.setString('assignments', assignmentsJson);
   }
@@ -662,9 +656,9 @@ class _AssignmentPageState extends State<AssignmentPage> {
   }
 
   Future<void> _scheduleNotification(Assignment assignment) async {
-    final DateTime scheduledTime =
+    final scheduledTime =
         assignment.dueDate.subtract(Duration(hours: assignment.reminder));
-    final tz.TZDateTime tzScheduledTime =
+    final tzScheduledTime =
         tz.TZDateTime.from(scheduledTime, tz.local);
 
     print('Scheduling notification for: $tzScheduledTime'); // 로그 추가
@@ -716,7 +710,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
             },
             background: Container(
               alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               color: Colors.red,
               child: const Icon(Icons.delete, color: Colors.white),
             ),
@@ -740,7 +734,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     Text(
                       assignment.title,
                       style: const TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
+                          color: Colors.black, fontWeight: FontWeight.bold,),
                     ),
                     const SizedBox(width: 8),
                     Text(
@@ -748,7 +742,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                       style: TextStyle(
                           color: assignment.type == 'Exam'
                               ? Colors.red
-                              : Colors.green),
+                              : Colors.green,),
                     ),
                   ],
                 ),
@@ -790,10 +784,10 @@ class _AssignmentPageState extends State<AssignmentPage> {
 }
 
 class _AssignmentDialog extends StatefulWidget {
+
+  const _AssignmentDialog({required this.onSave, this.assignment});
   final Assignment? assignment;
   final Function(Assignment) onSave;
-
-  _AssignmentDialog({this.assignment, required this.onSave});
 
   @override
   __AssignmentDialogState createState() => __AssignmentDialogState();
@@ -816,7 +810,7 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
     _dueTime = widget.assignment != null
         ? TimeOfDay(
             hour: widget.assignment!.dueDate.hour,
-            minute: widget.assignment!.dueDate.minute)
+            minute: widget.assignment!.dueDate.minute,)
         : TimeOfDay.now();
     _title = widget.assignment?.title ?? '';
     _description = widget.assignment?.description ?? '';
@@ -852,10 +846,10 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
               ListTile(
                 title: Text(_dueDate == null
                     ? '기한 선택'
-                    : '기한: ${DateFormat('yyyy-MM-dd').format(_dueDate!)} ${_dueTime.format(context)}'),
+                    : '기한: ${DateFormat('yyyy-MM-dd').format(_dueDate!)} ${_dueTime.format(context)}',),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
+                  final pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate:
@@ -863,7 +857,7 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
                     lastDate: DateTime.now().add(const Duration(days: 365)),
                   );
                   if (pickedDate != null) {
-                    TimeOfDay? pickedTime = await showTimePicker(
+                    final pickedTime = await showTimePicker(
                       context: context,
                       initialTime: TimeOfDay.now(),
                     );
@@ -929,7 +923,7 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate() && _dueDate != null) {
-              final DateTime finalDueDate = DateTime(
+              final finalDueDate = DateTime(
                 _dueDate!.year,
                 _dueDate!.month,
                 _dueDate!.day,
@@ -963,12 +957,6 @@ class __AssignmentDialogState extends State<_AssignmentDialog> {
 }
 
 class Assignment {
-  String type;
-  String title;
-  DateTime dueDate;
-  String description;
-  int reminder;
-  bool isComplete;
 
   Assignment({
     required this.type,
@@ -989,6 +977,12 @@ class Assignment {
       isComplete: json['isComplete'] as bool,
     );
   }
+  String type;
+  String title;
+  DateTime dueDate;
+  String description;
+  int reminder;
+  bool isComplete;
 
   Map<String, dynamic> toJson() {
     return {

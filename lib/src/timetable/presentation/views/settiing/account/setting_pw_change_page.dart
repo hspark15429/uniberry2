@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingPwChangePage extends StatefulWidget {
+  const SettingPwChangePage({super.key});
+
   @override
   _SettingPwChangePageState createState() => _SettingPwChangePageState();
 }
@@ -37,36 +39,36 @@ class _SettingPwChangePageState extends State<SettingPwChangePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('비밀번호 변경'),
+        title: const Text('비밀번호 변경'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               '현재 비밀번호',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             TextField(
               controller: _currentPasswordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '현재 비밀번호',
               ),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 RichText(
   text: TextSpan(
-    style: TextStyle(fontSize: 12, color: Colors.black),
+    style: const TextStyle(fontSize: 12, color: Colors.black),
     children: <TextSpan>[
-      TextSpan(
+      const TextSpan(
         text: '*현재 비밀번호가 기억이 나지 않는 경우, ',
         style: TextStyle(color: Colors.grey),
       ),
      TextSpan(
         text: '여기',
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
         recognizer: TapGestureRecognizer()..onTap = () {
           // 액션 구현: 탐색, 대화상자 표시 등
           print('비밀번호 복구 액션');
@@ -74,7 +76,7 @@ RichText(
           launch('https://yourpasswordrecoverylink.com');
         },
       ),
-      TextSpan(
+      const TextSpan(
         text: '를 클릭하세요.',
         style: TextStyle(color: Colors.grey),
       ),
@@ -83,37 +85,37 @@ RichText(
 ),
 
 
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               '새 비밀번호',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             TextField(
               controller: _newPasswordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '새 비밀번호',
               ),
               obscureText: true,
             ),
             TextField(
               controller: _confirmNewPasswordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '새 비밀번호 재확인',
               ),
               obscureText: true,
             ),
-            Text(
+            const Text(
               '영문, 숫자, 특수 문자를 포함한 8자~20자 이내로 작성하세요.',
               style: TextStyle(color: Colors.grey),
             ),
-           SizedBox(height: 20),
+           const SizedBox(height: 20),
 RichText(
   text: TextSpan(
     style: DefaultTextStyle.of(context).style.copyWith(fontSize: 12), // 기본 텍스트 스타일에 폰트 사이즈 12 적용
-    children: <TextSpan>[
+    children: const <TextSpan>[
       TextSpan(
         text: '※주의 사항\n1. 유니베리의 이용약관에 따라 타인 및 제 3자에게 계정 양도 및 대여는 엄격하게 금지하고 있습니다. 모니터링 시스템을 통해 계정 양도 및 대여가 적발될 경우 해당 계정은 영구 정지, 탈퇴 등의 조치가 가해지며, 계정 양도로 인한 ',
-        style: TextStyle(color: Colors.grey)
+        style: TextStyle(color: Colors.grey),
       ),
       TextSpan(
         text: '불법 행위가 발생할 경우 관련법에 의거하여 법적 처벌을 받을 수 있습니다.',
@@ -124,19 +126,19 @@ RichText(
 ),
 
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
            ElevatedButton(
   onPressed: () {
     // 현재 비밀번호가 입력되지 않은 경우
     if (_currentPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('현재 비밀번호를 입력해주세요.')),
+        const SnackBar(content: Text('현재 비밀번호를 입력해주세요.')),
       );
     }
     // 새 비밀번호와 새 비밀번호 재확인이 일치하지 않는 경우
     else if (_newPasswordController.text != _confirmNewPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('새 비밀번호가 일치하지 않습니다.')),
+        const SnackBar(content: Text('새 비밀번호가 일치하지 않습니다.')),
       );
     }
     // 모든 조건을 만족하는 경우 (여기에 비밀번호 변경 로직을 구현)
@@ -146,7 +148,7 @@ RichText(
       // 예: 서버에 비밀번호 변경 요청 보내기
     }
   },
-  child: Text('비밀번호 변경'),
+  child: const Text('비밀번호 변경'),
 ),
 
           ],

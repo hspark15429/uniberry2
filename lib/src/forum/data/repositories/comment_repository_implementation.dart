@@ -31,7 +31,7 @@ class CommentRepositoryImplementation implements CommentRepository {
   ResultFuture<void> updateComment(
       {required String commentId,
       required UpdateCommentAction action,
-      required commentData}) async {
+      required commentData,}) async {
     // TODO: implement updateComment
     throw UnimplementedError();
   }

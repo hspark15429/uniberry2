@@ -52,13 +52,7 @@ final List<Opportunity> dummyOpportunities = [
   ),
 ];
 
-class Opportunity {
-  final String category;
-  final String title;
-  final String description;
-  final List<String> imageUrls;
-  final String? additionalInfo;
-  int viewCount; // 조회수는 변경될 수 있으므로 final 키워드 제거
+class Opportunity { // 조회수는 변경될 수 있으므로 final 키워드 제거
 
   Opportunity({
     required this.category,
@@ -68,6 +62,12 @@ class Opportunity {
     this.additionalInfo,
     this.viewCount = 0,
   });
+  final String category;
+  final String title;
+  final String description;
+  final List<String> imageUrls;
+  final String? additionalInfo;
+  int viewCount;
 
   void incrementViewCount() {
     viewCount += 1;

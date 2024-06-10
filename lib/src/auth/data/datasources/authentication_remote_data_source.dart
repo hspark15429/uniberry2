@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fake_cloud_firestore/src/fake_cloud_firestore_instance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -134,17 +133,15 @@ class AuthenticationRemoteDataSourceImplementation
 
   @override
   Future<void> updateUser(
-      {required UpdateUserAction action, required userData}) async {
+      {required UpdateUserAction action, required userData,}) async {
     try {
       switch (action) {
         case UpdateUserAction.email:
           await _authClient.currentUser?.updateEmail(userData as String);
           await _updateUserData({'email': userData});
-          break;
         case UpdateUserAction.displayName:
           await _authClient.currentUser?.updateDisplayName(userData as String);
           await _updateUserData({'fullName': userData});
-          break;
         case UpdateUserAction.profilePic:
           final ref = _dbClient
               .ref()
@@ -153,7 +150,6 @@ class AuthenticationRemoteDataSourceImplementation
           final url = await ref.getDownloadURL();
           await _authClient.currentUser?.updatePhotoURL(url);
           await _updateUserData({'profilePic': url});
-          break;
         case UpdateUserAction.password:
           final newData = jsonDecode(userData as String) as DataMap;
           await _authClient.currentUser?.reauthenticateWithCredential(

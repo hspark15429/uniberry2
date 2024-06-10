@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DmChatKeyboard extends StatefulWidget {
-  const DmChatKeyboard({Key? key}) : super(key: key);
+  const DmChatKeyboard({super.key});
 
   @override
   _DmChatKeyboardState createState() => _DmChatKeyboardState();
@@ -22,7 +22,7 @@ class _DmChatKeyboardState extends State<DmChatKeyboard> {
     return Scaffold(
       resizeToAvoidBottomInset: true, // 수정: 키보드에 의한 UI 변형을 허용
       appBar: AppBar(
-        title: Text('DM Chat Keyboard'),
+        title: const Text('DM Chat Keyboard'),
       ),
       body: Column(
         children: [
@@ -33,7 +33,7 @@ class _DmChatKeyboardState extends State<DmChatKeyboard> {
               itemBuilder: (context, index) {
                 // 메시지를 뒤집어서 표시
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(_messages[_messages.length - 1 - index]),
                 );
               },
@@ -48,7 +48,7 @@ class _DmChatKeyboardState extends State<DmChatKeyboard> {
                 Expanded(
                   child: TextField(
                     controller: _textEditingController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Enter message',
                     ),
                     onSubmitted: (value) { // 추가: 엔터키 입력 시 메시지 전송
@@ -57,7 +57,7 @@ class _DmChatKeyboardState extends State<DmChatKeyboard> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: _sendMessage,
                 ),
               ],

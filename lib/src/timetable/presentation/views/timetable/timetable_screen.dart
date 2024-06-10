@@ -91,11 +91,11 @@ class _TimetableScreenState extends State<TimetableScreen>
   }
 
   void _selectSchool(BuildContext context) {
-    final List<String> availableSchools =
+    final availableSchools =
         context.read<TimetableCubit>().schools;
-    String? selectedSchool = context.read<TimetableCubit>().selectedSchool;
-    TextEditingController searchController = TextEditingController();
-    List<String> filteredSchools = availableSchools;
+    var selectedSchool = context.read<TimetableCubit>().selectedSchool;
+    final searchController = TextEditingController();
+    var filteredSchools = availableSchools;
 
     showModalBottomSheet(
       context: context,
@@ -109,7 +109,7 @@ class _TimetableScreenState extends State<TimetableScreen>
                 setState(() {
                   filteredSchools = availableSchools
                       .where((school) =>
-                          school.toLowerCase().contains(query.toLowerCase()))
+                          school.toLowerCase().contains(query.toLowerCase()),)
                       .toList();
                 });
               } else {
@@ -120,12 +120,12 @@ class _TimetableScreenState extends State<TimetableScreen>
             }
 
             return Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-              padding: EdgeInsets.all(20),
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 10,
@@ -144,19 +144,19 @@ class _TimetableScreenState extends State<TimetableScreen>
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: searchController,
                     onChanged: filterSchools,
                     decoration: InputDecoration(
                       hintText: '전공 검색',
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -165,7 +165,7 @@ class _TimetableScreenState extends State<TimetableScreen>
                         final school = filteredSchools[index];
                         return ListTile(
                           title: Text(school,
-                              style: TextStyle(fontWeight: FontWeight.w500)),
+                              style: const TextStyle(fontWeight: FontWeight.w500),),
                           leading: Radio<String>(
                             value: school,
                             groupValue: selectedSchool,
@@ -192,7 +192,7 @@ class _TimetableScreenState extends State<TimetableScreen>
                           Navigator.of(context).pop();
                         },
                         child: const Text('취소',
-                            style: TextStyle(color: Colors.red)),
+                            style: TextStyle(color: Colors.red),),
                       ),
                       ElevatedButton(
                         onPressed: () async {
@@ -202,7 +202,7 @@ class _TimetableScreenState extends State<TimetableScreen>
                                 .setSelectedSchool(selectedSchool!);
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString(
-                                'selectedSchool', selectedSchool!);
+                                'selectedSchool', selectedSchool!,);
                             setState(() {
                               _isMajorSelected = true;
                               _isFirstLaunch = false;
@@ -211,7 +211,6 @@ class _TimetableScreenState extends State<TimetableScreen>
                             Navigator.of(context).pop();
                           }
                         },
-                        child: const Text('저장'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color.fromARGB(255, 255, 255, 255),
@@ -219,10 +218,11 @@ class _TimetableScreenState extends State<TimetableScreen>
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
+                        child: const Text('저장'),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             );
@@ -244,36 +244,36 @@ class _TimetableScreenState extends State<TimetableScreen>
       builder: (BuildContext context) {
         return BlocBuilder<TimetableCubit, TimetableState>(
           builder: (context, state) {
-            final List<String> timetableList =
+            final timetableList =
                 context.read<TimetableCubit>().timetables;
-            final TextEditingController _controller = TextEditingController();
+            final controller = TextEditingController();
 
-            void _addTimetable() {
+            void addTimetable() {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('새 시간표 추가'),
                     content: TextField(
-                      controller: _controller,
+                      controller: controller,
                       decoration: const InputDecoration(hintText: '시간표 이름'),
                     ),
                     actions: <Widget>[
                       TextButton(
                         child: const Text('추가',
-                            style: TextStyle(color: Colors.black)),
+                            style: TextStyle(color: Colors.black),),
                         onPressed: () {
-                          if (_controller.text.isNotEmpty) {
+                          if (controller.text.isNotEmpty) {
                             context
                                 .read<TimetableCubit>()
-                                .addTimetable(_controller.text);
+                                .addTimetable(controller.text);
                             Navigator.of(context).pop();
                           }
                         },
                       ),
                       TextButton(
                         child: const Text('취소',
-                            style: TextStyle(color: Colors.black)),
+                            style: TextStyle(color: Colors.black),),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -289,7 +289,7 @@ class _TimetableScreenState extends State<TimetableScreen>
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -308,7 +308,7 @@ class _TimetableScreenState extends State<TimetableScreen>
                       ),
                       IconButton(
                         icon: const Icon(Icons.add),
-                        onPressed: _addTimetable,
+                        onPressed: addTimetable,
                       ),
                     ],
                   ),
@@ -344,21 +344,21 @@ class _TimetableScreenState extends State<TimetableScreen>
                                 alignment: Alignment.centerRight,
                                 padding: const EdgeInsets.only(right: 20),
                                 child: const Icon(Icons.delete,
-                                    color: Colors.white),
+                                    color: Colors.white,),
                               ),
                               child: Card(
                                 color: isSelected
                                     ? Colors.grey[300]
                                     : Colors.white,
                                 margin: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
+                                    horizontal: 16, vertical: 8,),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(10),),
                                 elevation: 3,
                                 child: ListTile(
                                   title: Text(timetableName,
                                       style:
-                                          const TextStyle(color: Colors.black)),
+                                          const TextStyle(color: Colors.black),),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.edit),
                                     onPressed: () {
@@ -465,15 +465,15 @@ class _TimetableScreenState extends State<TimetableScreen>
                   child: BlocBuilder<TimetableCubit, TimetableState>(
                     builder: (context, state) {
                       final timetableCubit = context.read<TimetableCubit>();
-                      final int periods = timetableCubit.periods;
-                      final bool includeSaturday =
+                      final periods = timetableCubit.periods;
+                      final includeSaturday =
                           timetableCubit.includeSaturday;
-                      final bool includeSunday = timetableCubit.includeSunday;
-                      final List<String> days = ['月', '火', '水', '木', '金'];
+                      final includeSunday = timetableCubit.includeSunday;
+                      final days = <String>['月', '火', '水', '木', '金'];
                       if (includeSaturday) days.add('土');
                       if (includeSunday) days.add('日');
                       return ListView(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8),
                         children: [
                           _buildDayHeader(days),
                           ...List.generate(
@@ -492,7 +492,7 @@ class _TimetableScreenState extends State<TimetableScreen>
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const GradePage()),
+                                    builder: (context) => const GradePage(),),
                               );
                             },
                             child: _buildGradeStatusCard(),
@@ -542,7 +542,7 @@ class _TimetableScreenState extends State<TimetableScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 '학부를 선택해 주세요',
                 style: TextStyle(
                   fontSize: 24,
@@ -577,8 +577,8 @@ class _TimetableScreenState extends State<TimetableScreen>
                   child: Center(
                       child: Text(day,
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)))))
-              .toList(),
+                              fontWeight: FontWeight.bold, fontSize: 16,),),),),)
+              ,
         ],
       ),
     );
@@ -607,7 +607,7 @@ class _TimetableScreenState extends State<TimetableScreen>
       ),
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: 30, // 교시 번호의 너비 조정
             child: Center(
               child: Text(
@@ -623,7 +623,7 @@ class _TimetableScreenState extends State<TimetableScreen>
               .map((day) => Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4.0), // 좌우 여백 추가
+                          horizontal: 4,), // 좌우 여백 추가
                       child: _buildDayCell(
                         context,
                         periodIndex,
@@ -632,8 +632,8 @@ class _TimetableScreenState extends State<TimetableScreen>
                         semester,
                       ),
                     ),
-                  ))
-              .toList(),
+                  ),)
+              ,
         ],
       ),
     );
@@ -646,11 +646,11 @@ class _TimetableScreenState extends State<TimetableScreen>
     TimetableCubit timetableCubit,
     String semester,
   ) {
-    final List<String> days = ['月', '火', '水', '木', '金'];
+    final days = <String>['月', '火', '水', '木', '金'];
     if (timetableCubit.includeSaturday) days.add('土');
     if (timetableCubit.includeSunday) days.add('日');
 
-    String period = '${days[dayIndex]}${periodIndex + 1}';
+    final period = '${days[dayIndex]}${periodIndex + 1}';
     final course = timetableCubit.semesterTimetables[semester]?[period];
 
     return InkWell(
@@ -688,7 +688,7 @@ class _TimetableScreenState extends State<TimetableScreen>
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
           color: course != null
-              ? Color.fromARGB(255, 255, 133, 133)
+              ? const Color.fromARGB(255, 255, 133, 133)
               : Colors.white10,
           borderRadius: BorderRadius.circular(5),
         ),
@@ -697,7 +697,7 @@ class _TimetableScreenState extends State<TimetableScreen>
                 style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 255, 255, 255)))
+                    color: Color.fromARGB(255, 255, 255, 255),),)
             : const Text(''), // 강의가 없으면 빈 텍스트
       ),
     );
@@ -719,7 +719,6 @@ class _TimetableScreenState extends State<TimetableScreen>
         ],
       ),
       child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '이수상황',
@@ -727,14 +726,14 @@ class _TimetableScreenState extends State<TimetableScreen>
           ),
           SizedBox(height: 16),
           GradeRateChartPage(
-            totalRequiredCredits: 124.0,
-            totalCompletedCredits: 0.0,
-            cultureCreditsRequired: 24.0,
-            cultureCreditsCompleted: 0.0,
-            foreignLanguageCreditsRequired: 12.0,
-            foreignLanguageCreditsCompleted: 0.0,
-            majorCreditsRequired: 68.0,
-            majorCreditsCompleted: 0.0,
+            totalRequiredCredits: 124,
+            totalCompletedCredits: 0,
+            cultureCreditsRequired: 24,
+            cultureCreditsCompleted: 0,
+            foreignLanguageCreditsRequired: 12,
+            foreignLanguageCreditsCompleted: 0,
+            majorCreditsRequired: 68,
+            majorCreditsCompleted: 0,
           ),
         ],
       ),

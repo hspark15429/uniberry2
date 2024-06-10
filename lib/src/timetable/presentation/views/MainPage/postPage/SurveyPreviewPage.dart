@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/SurveyWritePage.dart';
 
 class SurveyPreviewPage extends StatelessWidget {
-  final List<SurveyQuestion> questions;
-  final String title;
-  final String description;
 
   const SurveyPreviewPage({
     required this.questions,
-    Key? key,
-    required this.title,
-    required this.description,
-  }) : super(key: key);
+    required this.title, required this.description, super.key,
+  });
+  final List<SurveyQuestion> questions;
+  final String title;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +19,7 @@ class SurveyPreviewPage extends StatelessWidget {
         title: const Text('설문조사 미리보기', style: TextStyle(color: Colors.white)),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
             Text(
@@ -43,7 +41,7 @@ class SurveyPreviewPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(
-                                              10),
+                                              10,),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.2),
@@ -94,14 +92,14 @@ class SurveyPreviewPage extends StatelessWidget {
                             ),
                             title: Text(option, style: TextStyle(color: Colors.grey[800])),
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
                   );
                 default:
                   return const SizedBox();
               }
-            }).toList(),
+            }),
           ],
         ),
       ),

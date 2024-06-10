@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class NewChatRoomPage extends StatefulWidget {
-  const NewChatRoomPage({Key? key}) : super(key: key);
+  const NewChatRoomPage({super.key});
 
   @override
   _NewChatRoomPageState createState() => _NewChatRoomPageState();
@@ -23,15 +23,15 @@ class _NewChatRoomPageState extends State<NewChatRoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('새 채팅방 만들기'),
+        title: const Text('새 채팅방 만들기'),
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: TextField(
               controller: _chatRoomNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '채팅방 이름',
               ),
             ),
@@ -45,8 +45,8 @@ class _NewChatRoomPageState extends State<NewChatRoomPage> {
                 return ListTile(
                   title: Text(user.firstName ?? '알 수 없는 사용자'), // 예제에서는 firstName을 사용합니다. 실제로는 적절한 필드를 사용하세요.
                   trailing: isSelected
-                      ? Icon(Icons.check_circle, color: Colors.green)
-                      : Icon(Icons.check_circle_outline),
+                      ? const Icon(Icons.check_circle, color: Colors.green)
+                      : const Icon(Icons.check_circle_outline),
                   onTap: () {
                     setState(() {
                       if (isSelected) {
@@ -61,10 +61,10 @@ class _NewChatRoomPageState extends State<NewChatRoomPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ElevatedButton(
               onPressed: _createNewChatRoom,
-              child: Text('채팅방 만들기'),
+              child: const Text('채팅방 만들기'),
             ),
           ),
         ],
@@ -75,7 +75,7 @@ class _NewChatRoomPageState extends State<NewChatRoomPage> {
   void _createNewChatRoom() {
     // 채팅방 이름과 선택된 사용자 정보를 사용하여 새 채팅방을 생성하는 로직을 구현합니다.
     // 예: 서버에 채팅방 정보를 보내고, 성공적으로 생성된 경우 채팅방 페이지로 이동합니다.
-    final String chatRoomName = _chatRoomNameController.text;
+    final chatRoomName = _chatRoomNameController.text;
     if (chatRoomName.isNotEmpty && _selectedUsers.isNotEmpty) {
       // 서버에 채팅방 생성 요청 로직 추가
       print('채팅방 이름: $chatRoomName, 선택된 사용자 수: ${_selectedUsers.length}');
@@ -83,7 +83,7 @@ class _NewChatRoomPageState extends State<NewChatRoomPage> {
     } else {
       // 오류 메시지 표시
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("채팅방 이름과 사용자를 선택해주세요.")),
+        const SnackBar(content: Text('채팅방 이름과 사용자를 선택해주세요.')),
       );
     }
   }

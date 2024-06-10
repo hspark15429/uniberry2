@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserSettingPage extends StatelessWidget {
+  const UserSettingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,11 +12,11 @@ class UserSettingPage extends StatelessWidget {
         backgroundColor: Colors.black,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         children: [
           // 유저 설정 섹션
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
             child: Text(
               '유저 설정',
               style: GoogleFonts.roboto(
@@ -31,7 +33,7 @@ class UserSettingPage extends StatelessWidget {
 
           // 일반 설정 섹션
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
             child: Text(
               '일반 설정',
               style: GoogleFonts.roboto(

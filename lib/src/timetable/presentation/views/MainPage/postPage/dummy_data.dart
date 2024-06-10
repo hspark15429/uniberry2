@@ -1,4 +1,18 @@
 class Post {
+
+  Post({
+    required this.id,
+    required this.category,
+    required this.title,
+    required this.content,
+    required this.imageUrls,
+    required this.boardType,
+    required this.commentCount,
+    required this.datePosted,
+    required this.viewCount,
+    required this.author, this.likesCount = 0,
+    List<Comment>? comments, // Nullable로 변경하고 초기화 가능하게 수정
+  }) : comments = comments ?? [];
   final String id;
   final String category;
   final String title;
@@ -12,30 +26,9 @@ class Post {
   List<Comment> comments; // const를 제거하여 값을 변경할 수 있도록 함
   final String author;
 
-  Post({
-    required this.id,
-    required this.category,
-    required this.title,
-    required this.content,
-    required this.imageUrls,
-    required this.boardType,
-    required this.commentCount,
-    required this.datePosted,
-    required this.viewCount,
-    this.likesCount = 0,
-    List<Comment>? comments, // Nullable로 변경하고 초기화 가능하게 수정
-    required this.author,
-  }) : comments = comments ?? [];
-
 }
 
-class Comment {
-  final int? id; // Nullable int로 변경
-  final String content;
-  final String datePosted;
-  int likesCount; // final을 제거하여 값을 변경할 수 있도록 함
-  List<Comment> replies; // const를 제거하여 값을 변경할 수 있도록 함
-  bool isExpanded; // 추가된 필드
+class Comment { // 추가된 필드
 
   Comment({
     required this.content,
@@ -45,6 +38,12 @@ class Comment {
     this.id, // Nullable int로 변경
     this.isExpanded = false, // 기본값 설정
   }) : replies = replies ?? [];
+  final int? id; // Nullable int로 변경
+  final String content;
+  final String datePosted;
+  int likesCount; // final을 제거하여 값을 변경할 수 있도록 함
+  List<Comment> replies; // const를 제거하여 값을 변경할 수 있도록 함
+  bool isExpanded;
 }
 
 enum BoardType {
@@ -61,21 +60,21 @@ enum BoardType {
 String boardTypeToString(BoardType type) {
   switch (type) {
     case BoardType.freshman:
-      return "新入生";
+      return '新入生';
     case BoardType.certification:
-      return "資格";
+      return '資格';
     case BoardType.entrepreneurship:
-      return "起業";
+      return '起業';
     case BoardType.employment:
-      return "就活";
+      return '就活';
     case BoardType.club:
-      return "部活・クラブ";
+      return '部活・クラブ';
     case BoardType.free:
-      return "知恵箱";
+      return '知恵箱';
     case BoardType.schoolevent:
-      return "学内イベント";
+      return '学内イベント';
     default:
-      return "悩み相談";
+      return '悩み相談';
   }
 }
 
@@ -89,7 +88,7 @@ final List<Post> dummyPosts = [
     title: '面接のコツ', 
     content: '面接官からの質問に答える際は、結論から伝えることが大切です。これはPREP法といって、ビジネスの基本的なコミュニケーションの方法とされています。',
     imageUrls: [
-      'https://cdn-media.port-career.com/portcarrercom/prod/portcareer/wp-content/uploads/2022/05/17143907/623acd0ea35ed21b164538749adea687.jpg'
+      'https://cdn-media.port-career.com/portcarrercom/prod/portcareer/wp-content/uploads/2022/05/17143907/623acd0ea35ed21b164538749adea687.jpg',
     ],
     boardType: BoardType.employment,
     commentCount: 10,
@@ -103,7 +102,7 @@ final List<Post> dummyPosts = [
     title: '簿記２級取れた！！', 
     content: '２０２１年２月実施の第１５７回日商簿記検定に合格しました。',
     imageUrls: [
-      'https://bokikaikei.info/wp-content/uploads/2021/04/157boki2ytg.png'
+      'https://bokikaikei.info/wp-content/uploads/2021/04/157boki2ytg.png',
     ],
     boardType: BoardType.free,
     commentCount: 7,
@@ -117,7 +116,7 @@ final List<Post> dummyPosts = [
     title: '京都府のスタートアップ支援', 
     content: 'この補助金は、地域の課題解決を通じて地方創生を促進することを目的とし、京都府内で新たに起業する人や事業承継・第二創業する人に対して、起業に必要な経費の一部を助成します。',
     imageUrls: [
-      'https://taxlabor.com/web/wp-content/uploads/2023/05/070.png'
+      'https://taxlabor.com/web/wp-content/uploads/2023/05/070.png',
     ],
     boardType: BoardType.entrepreneurship,
     commentCount: 7,
@@ -134,7 +133,7 @@ final List<Post> dummyPosts = [
       'https://image.gaxi.jp/article_1646718701418.png', 
       'https://image.gaxi.jp/article_1646673784650.png',
       'https://image.gaxi.jp/article_1646673791518.png', 
-      'https://image.gaxi.jp/article_1646673803846.png'
+      'https://image.gaxi.jp/article_1646673803846.png',
     ],
     boardType: BoardType.scholarship,
     commentCount: 10,
@@ -144,18 +143,18 @@ final List<Post> dummyPosts = [
     comments: [
       Comment(
         id: 1,
-        content: "정말 유용한 정보네요! 감사합니다.",
-        datePosted: "2024-03-12 10:30",
+        content: '정말 유용한 정보네요! 감사합니다.',
+        datePosted: '2024-03-12 10:30',
       ),
       Comment(
         id: 2,
-        content: "저도 지원해봐야겠어요!",
-        datePosted: "2024-03-12 11:20",
+        content: '저도 지원해봐야겠어요!',
+        datePosted: '2024-03-12 11:20',
       ),
       Comment(
         id: 3,
-        content: "장학금 정보 찾고 있었는데 딱이네요.",
-        datePosted: "2024-03-12 13:45",
+        content: '장학금 정보 찾고 있었는데 딱이네요.',
+        datePosted: '2024-03-12 13:45',
       ),
     ],
     author: 'Paris',
@@ -166,7 +165,7 @@ final List<Post> dummyPosts = [
     title: '2023年OIC学園祭', 
     content: '学園祭実行委員長の石川寛太さん（映像4）は「あいにくの天候ではあったが、多くの来場者に来ていただけて非常に良かった。今後予定されるOIC（大阪いばらきキャンパス）とBKCの2つの学園祭は、それぞれの特色をもっている学園祭になるはず。来場者の方や出演する団体が楽しめて充実できる学園祭にしていきたい」と語った。',
     imageUrls: [
-      'https://ritsumeikanunivpress.com/wp-content/uploads/2022/11/中央ステージ%E3%80%80立命館大学応援団--scaled.jpg'
+      'https://ritsumeikanunivpress.com/wp-content/uploads/2022/11/中央ステージ%E3%80%80立命館大学応援団--scaled.jpg',
     ],
     boardType: BoardType.schoolevent,
     commentCount: 12,

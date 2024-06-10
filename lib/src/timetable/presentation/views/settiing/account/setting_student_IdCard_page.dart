@@ -2,10 +2,12 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'student_ID_card_back_page.dart';
-import 'student_ID_card_front_page.dart';
+import 'package:uniberry2/src/timetable/presentation/views/settiing/account/student_ID_card_back_page.dart';
+import 'package:uniberry2/src/timetable/presentation/views/settiing/account/student_ID_card_front_page.dart';
 
 class SettingStudentIdCardPage extends StatefulWidget {
+  const SettingStudentIdCardPage({super.key});
+
   @override
   _SettingStudentIdCardPageState createState() => _SettingStudentIdCardPageState();
 }
@@ -42,11 +44,11 @@ class _SettingStudentIdCardPageState extends State<SettingStudentIdCardPage> {
           duration: const Duration(milliseconds: 500),
           transitionBuilder: (Widget child, Animation<double> animation) {
             const angle = math.pi;
-            var tilt = animation.value * angle;
+            final tilt = animation.value * angle;
 
             if (animation.value < 0.5) {
               return Transform(
-                transform: Matrix4.rotationY(tilt) as Matrix4,
+                transform: Matrix4.rotationY(tilt),
                 alignment: Alignment.center,
                 child: child,
               );

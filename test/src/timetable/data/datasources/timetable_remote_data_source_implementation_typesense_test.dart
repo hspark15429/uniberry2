@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -48,7 +47,7 @@ void main() async {
   late DocumentReference<Map<String, dynamic>> docReferenceTimetable;
   late MockUserCredential tUserCredential;
   const tUser = LocalUserModel.empty();
-  var tTimetable = TimetableModel.empty();
+  final tTimetable = TimetableModel.empty();
   late Client typesenseClient;
   late TimetableRemoteDataSource dataSource;
 

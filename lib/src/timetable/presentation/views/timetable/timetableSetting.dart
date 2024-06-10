@@ -28,16 +28,16 @@ class _TimetableSettingPageState extends State<TimetableSettingPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Timetable Settings',
-            style: TextStyle(color: Colors.white)),
+            style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.black,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('Select Number of Periods',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
             Slider(
               value: _periods.toDouble(),
               min: 5,

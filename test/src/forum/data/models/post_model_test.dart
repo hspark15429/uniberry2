@@ -22,7 +22,7 @@ void main() {
   );
   final timestamp = Timestamp.fromDate(date);
 
-  final PostModel tPost = PostModel.empty(timestamp.toDate());
+  final tPost = PostModel.empty(timestamp.toDate());
   late DataMap tDataMap;
 
   setUp(() {
@@ -54,7 +54,7 @@ void main() {
         result,
         tDataMap
           ..remove('createdAt')
-          ..remove('updatedAt'));
+          ..remove('updatedAt'),);
   });
 
   test('copyWith', () {

@@ -7,9 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class TodolistPage extends StatefulWidget {
+  const TodolistPage({super.key, this.openAddDialog = false});
   final bool openAddDialog;
-
-  const TodolistPage({Key? key, this.openAddDialog = false}) : super(key: key);
 
   @override
   _TodolistPageState createState() => _TodolistPageState();
@@ -34,10 +33,10 @@ class _TodolistPageState extends State<TodolistPage> {
   }
 
   Map<DateTime, List<TodoItem>> _groupEvents(List<TodoItem> events) {
-    Map<DateTime, List<TodoItem>> data = {};
-    for (var event in events) {
-      DateTime date = DateTime(event.date.year, event.date.month, event.date.day);
-      DateTime? endDate = event.endDate ?? event.date;
+    final data = <DateTime, List<TodoItem>>{};
+    for (final event in events) {
+      var date = DateTime(event.date.year, event.date.month, event.date.day);
+      final endDate = event.endDate ?? event.date;
       while (!date.isAfter(endDate)) {
         if (!data.containsKey(date)) {
           data[date] = [];
@@ -62,16 +61,16 @@ class _TodolistPageState extends State<TodolistPage> {
               _calendarController.view = _currentView;
             });
           },
-          items: <DropdownMenuItem<CalendarView>>[
-            const DropdownMenuItem<CalendarView>(
+          items: const <DropdownMenuItem<CalendarView>>[
+            DropdownMenuItem<CalendarView>(
               value: CalendarView.month,
               child: Text('月間', style: TextStyle(color: Colors.black)),
             ),
-            const DropdownMenuItem<CalendarView>(
+            DropdownMenuItem<CalendarView>(
               value: CalendarView.week,
               child: Text('週間', style: TextStyle(color: Colors.black)),
             ),
-            const DropdownMenuItem<CalendarView>(
+            DropdownMenuItem<CalendarView>(
               value: CalendarView.day,
               child: Text('日間', style: TextStyle(color: Colors.black)),
             ),
@@ -102,7 +101,8 @@ class _TodolistPageState extends State<TodolistPage> {
           Expanded(
             child: _buildCalendar(),
           ),
-          if (_currentView == CalendarView.day || _currentView == CalendarView.week)
+          if (_currentView == CalendarView.day ||
+              _currentView == CalendarView.week)
             _buildAllDayEvents(),
         ],
       ),
@@ -125,8 +125,9 @@ class _TodolistPageState extends State<TodolistPage> {
       onTap: (CalendarTapDetails details) {
         if (details.targetElement == CalendarElement.calendarCell) {
           _showEventsOnDate(details.date!);
-        } else if (details.appointments != null && details.appointments!.isNotEmpty) {
-          final TodoItem event = details.appointments!.first as TodoItem;
+        } else if (details.appointments != null &&
+            details.appointments!.isNotEmpty) {
+          final event = details.appointments!.first as TodoItem;
           _showEventDetailsDialog(event);
         }
       },
@@ -152,7 +153,6 @@ class _TodolistPageState extends State<TodolistPage> {
         backgroundColor: Colors.white,
       ),
       monthViewSettings: const MonthViewSettings(
-        showAgenda: false,
         appointmentDisplayCount: 4,
         appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
         dayFormat: 'EEE',
@@ -165,14 +165,13 @@ class _TodolistPageState extends State<TodolistPage> {
         ),
       ),
       timeSlotViewSettings: const TimeSlotViewSettings(
-        startHour: 0,
-        endHour: 24,
         timeFormat: 'h:mm a',
         timeIntervalHeight: 50,
         timelineAppointmentHeight: 20,
       ),
-      appointmentBuilder: (BuildContext context, CalendarAppointmentDetails details) {
-        final TodoItem event = details.appointments.first as TodoItem;
+      appointmentBuilder:
+          (BuildContext context, CalendarAppointmentDetails details) {
+        final event = details.appointments.first as TodoItem;
         return Container(
           height: 20,
           width: details.bounds.width,
@@ -197,7 +196,12 @@ class _TodolistPageState extends State<TodolistPage> {
   }
 
   Widget _buildAllDayEvents() {
-    List<TodoItem> allDayEvents = todoList.where((event) => event.isAllDay && (isSameDay(event.date, _selectedDay) || isBetween(_selectedDay, event.date, event.endDate))).toList();
+    var allDayEvents = todoList
+        .where((event) =>
+            event.isAllDay &&
+            (isSameDay(event.date, _selectedDay) ||
+                isBetween(_selectedDay, event.date, event.endDate)))
+        .toList();
     if (allDayEvents.isEmpty) return Container();
 
     return Container(
@@ -224,30 +228,34 @@ class _TodolistPageState extends State<TodolistPage> {
             ],
           ),
           const SizedBox(height: 8),
-          ...allDayEvents.take(3).map((event) => Slidable(
-            key: Key(event.id),
-            endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              children: [
-                SlidableAction(
-                  onPressed: (context) => _deleteEvent(event),
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                  label: '삭제',
+          ...allDayEvents.take(3).map(
+                (event) => Slidable(
+                  key: Key(event.id),
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) => _deleteEvent(event),
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: '삭제',
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.all(8),
+                    color: event.tagColor,
+                    child: ListTile(
+                      title: Text(event.title,
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.white)),
+                      onTap: () => _showEventDetailsDialog(event),
+                    ),
+                  ),
                 ),
-              ],
-            ),
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              padding: const EdgeInsets.all(8),
-              color: event.tagColor,
-              child: ListTile(
-                title: Text(event.title, style: const TextStyle(fontSize: 14, color: Colors.white)),
-                onTap: () => _showEventDetailsDialog(event),
               ),
-            ),
-          )),
         ],
       ),
     );
@@ -259,7 +267,7 @@ class _TodolistPageState extends State<TodolistPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('종일 이벤트'),
-          content: Container(
+          content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
               shrinkWrap: true,
@@ -268,7 +276,9 @@ class _TodolistPageState extends State<TodolistPage> {
                 final event = allDayEvents[index];
                 return ListTile(
                   title: Text(event.title),
-                  subtitle: Text(event.isAllDay ? '종일' : '${event.startTime?.format(context)} - ${event.endTime?.format(context)}'),
+                  subtitle: Text(event.isAllDay
+                      ? '종일'
+                      : '${event.startTime?.format(context)} - ${event.endTime?.format(context)}'),
                   onTap: () {
                     Navigator.of(context).pop();
                     _showEventDetailsDialog(event);
@@ -291,7 +301,11 @@ class _TodolistPageState extends State<TodolistPage> {
   }
 
   void _showEventsOnDate(DateTime date) {
-    final eventsOnDate = todoList.where((event) => isSameDay(event.date, date) || isBetween(date, event.date, event.endDate)).toList();
+    final eventsOnDate = todoList
+        .where((event) =>
+            isSameDay(event.date, date) ||
+            isBetween(date, event.date, event.endDate))
+        .toList();
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -321,9 +335,11 @@ class _TodolistPageState extends State<TodolistPage> {
               final event = eventsOnDate[index];
               return ListTile(
                 title: Text(event.title),
-                subtitle: Text(event.isAllDay
-                    ? '종일'
-                    : '${event.startTime?.format(context)} - ${event.endTime?.format(context)}'),
+                subtitle: Text(
+                  event.isAllDay
+                      ? '종일'
+                      : '${event.startTime?.format(context)} - ${event.endTime?.format(context)}',
+                ),
                 onTap: () {
                   Navigator.of(context).pop();
                   _showEventDetailsDialog(event);
@@ -337,17 +353,17 @@ class _TodolistPageState extends State<TodolistPage> {
   }
 
   void _showAddBottomSheet() {
-    String title = '';
-    String description = '';
-    String location = '';
-    DateTime startDate = DateTime.now();
+    var title = '';
+    var description = '';
+    var location = '';
+    var startDate = DateTime.now();
     DateTime? endDate;
     TimeOfDay? startTime;
     TimeOfDay? endTime;
     Color selectedColor = Colors.redAccent;
-    bool reminderOneHourBefore = false;
-    bool reminderOneDayBefore = false;
-    bool isAllDay = false;
+    var reminderOneHourBefore = false;
+    var reminderOneDayBefore = false;
+    var isAllDay = false;
 
     showModalBottomSheet(
       context: context,
@@ -358,7 +374,7 @@ class _TodolistPageState extends State<TodolistPage> {
           child: StatefulBuilder(
             builder: (context, setState) {
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -386,44 +402,47 @@ class _TodolistPageState extends State<TodolistPage> {
                     ),
                     const SizedBox(height: 16),
                     ListTile(
-title: const Text('태그색상선택'),
+                      title: const Text('태그색상선택'),
                       trailing: Icon(Icons.circle, color: selectedColor),
                       onTap: () async {
-                        unawaited(showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-title: const Text('태그색상선택'),
-                              content: SingleChildScrollView(
-                                child: BlockPicker(
-                                  pickerColor: selectedColor,
-                                  availableColors: [
-                                    Colors.red[700]!,
-                                    Colors.orange[700]!,
-                                    Colors.yellow[700]!,
-                                    Colors.green[700]!,
-                                    Colors.blue[700]!,
-                                    Colors.indigo[700]!,
-                                    Colors.purple[700]!,
-                                    Colors.black,
-                                    Colors.pink[700]!,
-                                  ],
-                                  onColorChanged: (color) {
-                                    setState(() {
-                                      selectedColor = color;
-                                    });
-                                  },
+                        unawaited(
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('태그색상선택'),
+                                content: SingleChildScrollView(
+                                  child: BlockPicker(
+                                    pickerColor: selectedColor,
+                                    availableColors: [
+                                      Colors.red[700]!,
+                                      Colors.orange[700]!,
+                                      Colors.yellow[700]!,
+                                      Colors.green[700]!,
+                                      Colors.blue[700]!,
+                                      Colors.indigo[700]!,
+                                      Colors.purple[700]!,
+                                      Colors.black,
+                                      Colors.pink[700]!,
+                                    ],
+                                    onColorChanged: (color) {
+                                      setState(() {
+                                        selectedColor = color;
+                                      });
+                                    },
+                                  ),
                                 ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-child: const Text('저장'),
-                                  onPressed: () => Navigator.of(context).pop(),
-                                ),
-                              ],
-                            );
-                          },
-                        ));
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('저장'),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        );
                       },
                     ),
                     ListTile(
@@ -432,7 +451,7 @@ child: const Text('저장'),
                         DateFormat('yyyy-MM-dd').format(startDate),
                       ),
                       onTap: () async {
-                        final DateTime? pickedDate = await showDatePicker(
+                        final pickedDate = await showDatePicker(
                           context: context,
                           initialDate: startDate,
                           firstDate: DateTime(2000),
@@ -448,10 +467,12 @@ child: const Text('저장'),
                     ListTile(
                       title: const Text('개시 시간 설정'),
                       subtitle: Text(
-                        startTime != null ? startTime!.format(context) : '시간을 선택해주세요',
+                        startTime != null
+                            ? startTime!.format(context)
+                            : '시간을 선택해주세요',
                       ),
                       onTap: () async {
-                        final TimeOfDay? pickedTime = await showTimePicker(
+                        final pickedTime = await showTimePicker(
                           context: context,
                           initialTime: startTime ?? TimeOfDay.now(),
                         );
@@ -465,10 +486,12 @@ child: const Text('저장'),
                     ListTile(
                       title: const Text('종료날 선택'),
                       subtitle: Text(
-                        endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : '날짜를 선택해주세요',
+                        endDate != null
+                            ? DateFormat('yyyy-MM-dd').format(endDate!)
+                            : '날짜를 선택해주세요',
                       ),
                       onTap: () async {
-                        final DateTime? pickedDate = await showDatePicker(
+                        final pickedDate = await showDatePicker(
                           context: context,
                           initialDate: startDate,
                           firstDate: DateTime(2000),
@@ -484,10 +507,12 @@ child: const Text('저장'),
                     ListTile(
                       title: const Text('종료 시간 설정'),
                       subtitle: Text(
-                        endTime != null ? endTime!.format(context) : '시간을 선택해주세요',
+                        endTime != null
+                            ? endTime!.format(context)
+                            : '시간을 선택해주세요',
                       ),
                       onTap: () async {
-                        final TimeOfDay? pickedTime = await showTimePicker(
+                        final pickedTime = await showTimePicker(
                           context: context,
                           initialTime: endTime ?? TimeOfDay.now(),
                         );
@@ -499,7 +524,7 @@ child: const Text('저장'),
                       },
                     ),
                     SwitchListTile(
-title: const Text('종일'),
+                      title: const Text('종일'),
                       value: isAllDay,
                       onChanged: (value) {
                         setState(() {
@@ -513,7 +538,7 @@ title: const Text('종일'),
                     ),
                     TextField(
                       decoration: InputDecoration(
-labelText: '장소',
+                        labelText: '장소',
                         filled: true,
                         fillColor: Colors.grey[200],
                         border: const OutlineInputBorder(),
@@ -521,7 +546,7 @@ labelText: '장소',
                       onChanged: (value) => location = value,
                     ),
                     SwitchListTile(
-title: const Text('1시간전에알림'),
+                      title: const Text('1시간전에알림'),
                       value: reminderOneHourBefore,
                       onChanged: (value) {
                         setState(() {
@@ -530,7 +555,7 @@ title: const Text('1시간전에알림'),
                       },
                     ),
                     SwitchListTile(
-title: const Text('전날에알림'),
+                      title: const Text('전날에알림'),
                       value: reminderOneDayBefore,
                       onChanged: (value) {
                         setState(() {
@@ -542,23 +567,24 @@ title: const Text('전날에알림'),
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-child: const Text('취소'),
+                          child: const Text('취소'),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         ElevatedButton(
-child: const Text('저장'),
+                          child: const Text('저장'),
                           onPressed: () {
                             if (title.isEmpty) {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-title: const Text('에러'),
-content: const Text('필수필드를입력해주세요'),
+                                    title: const Text('에러'),
+                                    content: const Text('필수필드를입력해주세요'),
                                     actions: <Widget>[
                                       TextButton(
-child: const Text('확인'),
-                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: const Text('확인'),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
                                       ),
                                     ],
                                   );
@@ -566,7 +592,7 @@ child: const Text('확인'),
                               );
                               return;
                             }
-                            TodoItem newItem = TodoItem(
+                            final newItem = TodoItem(
                               id: DateTime.now().toString(),
                               title: title,
                               content: description,
@@ -598,8 +624,8 @@ child: const Text('확인'),
     );
   }
 
-  void _showDatePicker() async {
-    final DateTime? pickedDate = await showDatePicker(
+  Future<void> _showDatePicker() async {
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDay,
       firstDate: DateTime(2000),
@@ -618,29 +644,29 @@ child: const Text('확인'),
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-title: const Text('이벤트상세정보'),
+          title: const Text('이벤트상세정보'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-Text('타이틀: ${event.title}'),
-Text('일정: ${DateFormat('yyyy-MM-dd').format(event.date)}'),
+              Text('타이틀: ${event.title}'),
+              Text('일정: ${DateFormat('yyyy-MM-dd').format(event.date)}'),
               if (!event.isAllDay) ...[
-Text('개시시간: ${event.startTime?.format(context) ?? '미지정'}'),
-Text('종료시간: ${event.endTime?.format(context) ?? '미지정'}'),
+                Text('개시시간: ${event.startTime?.format(context) ?? '미지정'}'),
+                Text('종료시간: ${event.endTime?.format(context) ?? '미지정'}'),
               ],
-Text('내용: ${event.content}'),
+              Text('내용: ${event.content}'),
             ],
           ),
           actions: <Widget>[
             TextButton(
-child: const Text('닫기'),
+              child: const Text('닫기'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-child: const Text('삭제'),
+              child: const Text('삭제'),
               onPressed: () {
                 setState(() {
                   todoList.removeWhere((item) => item.id == event.id);
@@ -649,8 +675,8 @@ child: const Text('삭제'),
                 Navigator.of(context).pop();
               },
             ),
-TextButton(
-child: const Text('편집'),
+            TextButton(
+              child: const Text('편집'),
               onPressed: () {
                 Navigator.of(context).pop();
                 _showEditBottomSheet(event);
@@ -686,17 +712,17 @@ child: const Text('편집'),
   }
 
   void _showEditBottomSheet(TodoItem event) {
-    String title = event.title;
-    String description = event.content;
-    String location = '';
-    DateTime startDate = event.date;
-    DateTime? endDate = event.endDate;
-    TimeOfDay? startTime = event.startTime;
-    TimeOfDay? endTime = event.endTime;
-    Color selectedColor = event.tagColor;
-    bool reminderOneHourBefore = event.reminderOneHourBefore;
-    bool reminderOneDayBefore = event.reminderOneDayBefore;
-bool isAllDay = event.isAllDay;
+    var title = event.title;
+    var description = event.content;
+    var location = '';
+    var startDate = event.date;
+    var endDate = event.endDate;
+    var startTime = event.startTime;
+    var endTime = event.endTime;
+    var selectedColor = event.tagColor;
+    var reminderOneHourBefore = event.reminderOneHourBefore;
+    var reminderOneDayBefore = event.reminderOneDayBefore;
+    var isAllDay = event.isAllDay;
 
     showModalBottomSheet(
       context: context,
@@ -707,7 +733,7 @@ bool isAllDay = event.isAllDay;
           child: StatefulBuilder(
             builder: (context, setState) {
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -783,7 +809,7 @@ bool isAllDay = event.isAllDay;
                         DateFormat('yyyy-MM-dd').format(startDate),
                       ),
                       onTap: () async {
-                        final DateTime? pickedDate = await showDatePicker(
+                        final pickedDate = await showDatePicker(
                           context: context,
                           initialDate: startDate,
                           firstDate: DateTime(2000),
@@ -799,10 +825,12 @@ bool isAllDay = event.isAllDay;
                     ListTile(
                       title: const Text('개시 시간 설정'),
                       subtitle: Text(
-                        startTime != null ? startTime!.format(context) : '시간을 선택해주세요',
+                        startTime != null
+                            ? startTime!.format(context)
+                            : '시간을 선택해주세요',
                       ),
                       onTap: () async {
-                        final TimeOfDay? pickedTime = await showTimePicker(
+                        final pickedTime = await showTimePicker(
                           context: context,
                           initialTime: startTime ?? TimeOfDay.now(),
                         );
@@ -816,10 +844,12 @@ bool isAllDay = event.isAllDay;
                     ListTile(
                       title: const Text('종료날 선택'),
                       subtitle: Text(
-                        endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : '날짜를 선택해주세요',
+                        endDate != null
+                            ? DateFormat('yyyy-MM-dd').format(endDate!)
+                            : '날짜를 선택해주세요',
                       ),
                       onTap: () async {
-                        final DateTime? pickedDate = await showDatePicker(
+                        final pickedDate = await showDatePicker(
                           context: context,
                           initialDate: startDate,
                           firstDate: DateTime(2000),
@@ -835,10 +865,12 @@ bool isAllDay = event.isAllDay;
                     ListTile(
                       title: const Text('종료 시간 설정'),
                       subtitle: Text(
-                        endTime != null ? endTime!.format(context) : '시간을 선택해주세요',
+                        endTime != null
+                            ? endTime!.format(context)
+                            : '시간을 선택해주세요',
                       ),
                       onTap: () async {
-                        final TimeOfDay? pickedTime = await showTimePicker(
+                        final pickedTime = await showTimePicker(
                           context: context,
                           initialTime: endTime ?? TimeOfDay.now(),
                         );
@@ -909,7 +941,8 @@ bool isAllDay = event.isAllDay;
                                     actions: <Widget>[
                                       TextButton(
                                         child: const Text('確認'),
-                                        onPressed: () => Navigator.of(context).pop(),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
                                       ),
                                     ],
                                   );
@@ -918,20 +951,23 @@ bool isAllDay = event.isAllDay;
                               return;
                             }
                             setState(() {
-                              todoList.removeWhere((item) => item.id == event.id);
-                              todoList.add(TodoItem(
-                                id: event.id,
-                                title: title,
-                                content: description,
-                                date: startDate,
-                                endDate: endDate,
-                                tagColor: selectedColor,
-                                isAllDay: isAllDay,
-                                startTime: isAllDay ? null : startTime,
-                                endTime: isAllDay ? null : endTime,
-                                reminderOneHourBefore: reminderOneHourBefore,
-                                reminderOneDayBefore: reminderOneDayBefore,
-                              ));
+                              todoList
+                                  .removeWhere((item) => item.id == event.id);
+                              todoList.add(
+                                TodoItem(
+                                  id: event.id,
+                                  title: title,
+                                  content: description,
+                                  date: startDate,
+                                  endDate: endDate,
+                                  tagColor: selectedColor,
+                                  isAllDay: isAllDay,
+                                  startTime: isAllDay ? null : startTime,
+                                  endTime: isAllDay ? null : endTime,
+                                  reminderOneHourBefore: reminderOneHourBefore,
+                                  reminderOneDayBefore: reminderOneDayBefore,
+                                ),
+                              );
                               _groupedEvents = _groupEvents(todoList);
                             });
                             Navigator.of(context).pop();
@@ -959,11 +995,25 @@ bool isAllDay = event.isAllDay;
     if (endDate == null) {
       return false;
     }
-    return (date.isAfter(startDate) && date.isBefore(endDate)) || date == endDate;
+    return (date.isAfter(startDate) && date.isBefore(endDate)) ||
+        date == endDate;
   }
 }
 
 class TodoItem {
+  TodoItem({
+    required this.id,
+    required this.title,
+    required this.date,
+    required this.tagColor,
+    required this.content,
+    this.endDate,
+    this.isAllDay = false,
+    this.startTime,
+    this.endTime,
+    this.reminderOneHourBefore = false,
+    this.reminderOneDayBefore = false,
+  });
   String id;
   String title;
   DateTime date;
@@ -975,20 +1025,6 @@ class TodoItem {
   String content;
   bool reminderOneHourBefore;
   bool reminderOneDayBefore;
-
-  TodoItem({
-    required this.id,
-    required this.title,
-    required this.date,
-    this.endDate,
-    this.isAllDay = false,
-    this.startTime,
-    this.endTime,
-    required this.tagColor,
-    required this.content,
-    this.reminderOneHourBefore = false,
-    this.reminderOneDayBefore = false,
-  });
 }
 
 class EventDataSource extends CalendarDataSource {
@@ -998,22 +1034,25 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    DateTime date = (appointments![index] as TodoItem).date;
+    final date = (appointments![index] as TodoItem).date;
     if ((appointments![index] as TodoItem).isAllDay) {
-      return DateTime(date.year, date.month, date.day, 0, 0);
+      return DateTime(date.year, date.month, date.day);
     }
-    TimeOfDay? time = (appointments![index] as TodoItem).startTime;
-    return DateTime(date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
+    final time = (appointments![index] as TodoItem).startTime;
+    return DateTime(
+        date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
   }
 
   @override
   DateTime getEndTime(int index) {
-    DateTime date = (appointments![index] as TodoItem).endDate ?? (appointments![index] as TodoItem).date;
+    final date = (appointments![index] as TodoItem).endDate ??
+        (appointments![index] as TodoItem).date;
     if ((appointments![index] as TodoItem).isAllDay) {
       return DateTime(date.year, date.month, date.day, 23, 59);
     }
-    TimeOfDay? time = (appointments![index] as TodoItem).endTime;
-    return DateTime(date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
+    final time = (appointments![index] as TodoItem).endTime;
+    return DateTime(
+        date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
   }
 
   @override

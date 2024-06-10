@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TimetableMenuPage extends StatefulWidget {
-  final Function(String) onTimetableSelected;
 
-  const TimetableMenuPage({super.key, required this.onTimetableSelected});
+  const TimetableMenuPage({required this.onTimetableSelected, super.key});
+  final Function(String) onTimetableSelected;
 
   @override
   _TimetableMenuPageState createState() => _TimetableMenuPageState();
@@ -15,9 +15,9 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
   @override
   void initState() {
     super.initState();
-    int currentYear = DateTime.now().year;
+    final currentYear = DateTime.now().year;
     _timetableList = List.generate(4, (int index) => currentYear + index)
-.expand((year) => ["${year}년봄학기", "${year}년가을학기"])
+.expand((year) => ['$year년봄학기', '$year년가을학기'])
         .toList();
   }
 
@@ -75,7 +75,7 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
   }
 
   Future<void> _displayAddDialog(BuildContext context) async {
-    final TextEditingController _controller = TextEditingController();
+    final controller = TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -83,16 +83,16 @@ class _TimetableMenuPageState extends State<TimetableMenuPage> {
         return AlertDialog(
           title: const Text('새 시간표 추가'),
           content: TextField(
-            controller: _controller,
+            controller: controller,
             decoration: const InputDecoration(hintText: '시간표 이름'),
           ),
           actions: <Widget>[
             TextButton(
               child: const Text('추가', style: TextStyle(color: Colors.black)),
               onPressed: () {
-                if (_controller.text.isNotEmpty) {
+                if (controller.text.isNotEmpty) {
                   setState(() {
-                    _timetableList.add(_controller.text);
+                    _timetableList.add(controller.text);
                   });
                   Navigator.of(context).pop();
                 }

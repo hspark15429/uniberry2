@@ -1,7 +1,5 @@
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/auth/domain/entities/user.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 
 class LocalUserModel extends LocalUser {
   const LocalUserModel({

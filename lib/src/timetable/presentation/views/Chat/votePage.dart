@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class VotePage extends StatefulWidget {
+  const VotePage({required this.onVoteCreated, super.key});
   final Function(Map<String, dynamic>) onVoteCreated;
-
-  VotePage({required this.onVoteCreated});
 
   @override
   _VotePageState createState() => _VotePageState();
@@ -14,9 +13,12 @@ class _VotePageState extends State<VotePage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   String _selectedOption = '텍스트';
-  List<TextEditingController> _textControllers = [TextEditingController(), TextEditingController()];
-  List<DateTime> _dateOptions = [DateTime.now(), DateTime.now()];
-  List<TimeOfDay> _timeOptions = [TimeOfDay.now(), TimeOfDay.now()];
+  final List<TextEditingController> _textControllers = [
+    TextEditingController(),
+    TextEditingController()
+  ];
+  final List<DateTime> _dateOptions = [DateTime.now(), DateTime.now()];
+  final List<TimeOfDay> _timeOptions = [TimeOfDay.now(), TimeOfDay.now()];
   bool _allowMultipleSelection = false;
   bool _anonymousVoting = false;
   bool _allowOptionAddition = false;
@@ -24,14 +26,15 @@ class _VotePageState extends State<VotePage> {
   TimeOfDay? _deadlineTime;
   bool _sendNotification = false;
 
-  void _addTextOption() => setState(() => _textControllers.add(TextEditingController()));
+  void _addTextOption() =>
+      setState(() => _textControllers.add(TextEditingController()));
   void _addDateOption() => setState(() => _dateOptions.add(DateTime.now()));
   void _addTimeOption() => setState(() => _timeOptions.add(TimeOfDay.now()));
 
   Future<void> _pickImage(int index) async {
     try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      final picker = ImagePicker();
+      final image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         setState(() {
           // 이미지 처리 로직
@@ -44,7 +47,7 @@ class _VotePageState extends State<VotePage> {
   }
 
   Future<void> _selectDate(BuildContext context, int index) async {
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
@@ -56,7 +59,7 @@ class _VotePageState extends State<VotePage> {
   }
 
   Future<void> _selectTime(BuildContext context, int index) async {
-    final TimeOfDay? picked = await showTimePicker(
+    final picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
@@ -66,7 +69,7 @@ class _VotePageState extends State<VotePage> {
   }
 
   Future<void> _selectDeadlineDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
@@ -78,7 +81,7 @@ class _VotePageState extends State<VotePage> {
   }
 
   Future<void> _selectDeadlineTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
+    final picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
@@ -113,7 +116,8 @@ class _VotePageState extends State<VotePage> {
       final voteData = {
         'title': _titleController.text,
         'selectedOption': _selectedOption,
-        'textControllers': _textControllers.map((controller) => controller.text).toList(),
+        'textControllers':
+            _textControllers.map((controller) => controller.text).toList(),
         'dateOptions': _dateOptions,
         'timeOptions': _timeOptions,
         'allowMultipleSelection': _allowMultipleSelection,
@@ -135,30 +139,31 @@ class _VotePageState extends State<VotePage> {
       child: Column(
         children: [
           ..._textControllers.asMap().entries.map((entry) {
-            int index = entry.key;
-            TextEditingController controller = entry.value;
+            final index = entry.key;
+            var controller = entry.value;
             return Column(
               children: [
                 Dismissible(
                   key: UniqueKey(),
-                  onDismissed: (direction) => setState(() => _textControllers.removeAt(index)),
+                  onDismissed: (direction) =>
+                      setState(() => _textControllers.removeAt(index)),
                   background: Container(color: Colors.red),
                   child: ListTile(
                     leading: IconButton(
-                      icon: Icon(Icons.photo),
+                      icon: const Icon(Icons.photo),
                       onPressed: () => _pickImage(index),
                     ),
                     title: TextField(
                       controller: controller,
-                      decoration: InputDecoration(hintText: '옵션을 입력하세요'),
+                      decoration: const InputDecoration(hintText: '옵션을 입력하세요'),
                     ),
                   ),
                 ),
                 Divider(color: Colors.grey.shade300),
               ],
             );
-          }).toList(),
-          TextButton(onPressed: _addTextOption, child: Text('+ 선택지 추가')),
+          }),
+          TextButton(onPressed: _addTextOption, child: const Text('+ 선택지 추가')),
         ],
       ),
     );
@@ -171,16 +176,17 @@ class _VotePageState extends State<VotePage> {
       child: Column(
         children: [
           ..._dateOptions.asMap().entries.map((entry) {
-            int index = entry.key;
-            DateTime date = entry.value;
+            var index = entry.key;
+            var date = entry.value;
             return Column(
               children: [
                 Dismissible(
                   key: UniqueKey(),
-                  onDismissed: (direction) => setState(() => _dateOptions.removeAt(index)),
+                  onDismissed: (direction) =>
+                      setState(() => _dateOptions.removeAt(index)),
                   background: Container(color: Colors.red),
                   child: ListTile(
-                    leading: Icon(Icons.calendar_today),
+                    leading: const Icon(Icons.calendar_today),
                     title: Text('${date.toLocal()}'.split(' ')[0]),
                     onTap: () => _selectDate(context, index),
                   ),
@@ -188,8 +194,8 @@ class _VotePageState extends State<VotePage> {
                 Divider(color: Colors.grey.shade300),
               ],
             );
-          }).toList(),
-          TextButton(onPressed: _addDateOption, child: Text('+ 선택지 추가')),
+          }),
+          TextButton(onPressed: _addDateOption, child: const Text('+ 선택지 추가')),
         ],
       ),
     );
@@ -202,16 +208,17 @@ class _VotePageState extends State<VotePage> {
       child: Column(
         children: [
           ..._timeOptions.asMap().entries.map((entry) {
-            int index = entry.key;
-            TimeOfDay time = entry.value;
+            final index = entry.key;
+            var time = entry.value;
             return Column(
               children: [
                 Dismissible(
                   key: UniqueKey(),
-                  onDismissed: (direction) => setState(() => _timeOptions.removeAt(index)),
+                  onDismissed: (direction) =>
+                      setState(() => _timeOptions.removeAt(index)),
                   background: Container(color: Colors.red),
                   child: ListTile(
-                    leading: Icon(Icons.access_time),
+                    leading: const Icon(Icons.access_time),
                     title: Text(time.format(context)),
                     onTap: () => _selectTime(context, index),
                   ),
@@ -219,8 +226,8 @@ class _VotePageState extends State<VotePage> {
                 Divider(color: Colors.grey.shade300),
               ],
             );
-          }).toList(),
-          TextButton(onPressed: _addTimeOption, child: Text('+ 선택지 추가')),
+          }),
+          TextButton(onPressed: _addTimeOption, child: const Text('+ 선택지 추가')),
         ],
       ),
     );
@@ -243,94 +250,104 @@ class _VotePageState extends State<VotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('투표 생성'),
+        title: const Text('투표 생성'),
         actions: [
           IconButton(
-            icon: Icon(Icons.preview),
+            icon: const Icon(Icons.preview),
             onPressed: () => _showPreview(context),
           ),
         ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(labelText: '투표 주제'),
-                  validator: (value) => value == null || value.isEmpty ? '주제를 입력하세요' : null,
+                  decoration: const InputDecoration(labelText: '투표 주제'),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? '주제를 입력하세요' : null,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ChoiceChip(
-                      label: Text('텍스트'),
+                      label: const Text('텍스트'),
                       selected: _selectedOption == '텍스트',
-                      onSelected: (selected) => setState(() => _selectedOption = '텍스트'),
+                      onSelected: (selected) =>
+                          setState(() => _selectedOption = '텍스트'),
                     ),
                     ChoiceChip(
-                      label: Text('날짜'),
+                      label: const Text('날짜'),
                       selected: _selectedOption == '날짜',
-                      onSelected: (selected) => setState(() => _selectedOption = '날짜'),
+                      onSelected: (selected) =>
+                          setState(() => _selectedOption = '날짜'),
                     ),
                     ChoiceChip(
-                      label: Text('시간'),
+                      label: const Text('시간'),
                       selected: _selectedOption == '시간',
-                      onSelected: (selected) => setState(() => _selectedOption = '시간'),
+                      onSelected: (selected) =>
+                          setState(() => _selectedOption = '시간'),
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildOptionsCard(),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Card(
                   color: Colors.white,
                   elevation: 2,
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Icon(Icons.calendar_today),
+                        leading: const Icon(Icons.calendar_today),
                         title: Text(
-                            '마감 날짜: ${_deadlineDate != null ? _deadlineDate!.toLocal().toString().split(' ')[0] : '설정 안됨'}'),
+                          '마감 날짜: ${_deadlineDate != null ? _deadlineDate!.toLocal().toString().split(' ')[0] : '설정 안됨'}',
+                        ),
                         onTap: () => _selectDeadlineDate(context),
                       ),
                       ListTile(
-                        leading: Icon(Icons.access_time),
+                        leading: const Icon(Icons.access_time),
                         title: Text(
-                            '마감 시간: ${_deadlineTime != null ? _deadlineTime!.format(context) : '설정 안됨'}'),
+                          '마감 시간: ${_deadlineTime != null ? _deadlineTime!.format(context) : '설정 안됨'}',
+                        ),
                         onTap: () => _selectDeadlineTime(context),
                       ),
                     ],
                   ),
                 ),
                 SwitchListTile(
-                  title: Text('복수 선택 허용'),
+                  title: const Text('복수 선택 허용'),
                   value: _allowMultipleSelection,
-                  onChanged: (value) => setState(() => _allowMultipleSelection = value),
+                  onChanged: (value) =>
+                      setState(() => _allowMultipleSelection = value),
                 ),
                 SwitchListTile(
-                  title: Text('익명 투표'),
+                  title: const Text('익명 투표'),
                   value: _anonymousVoting,
-                  onChanged: (value) => setState(() => _anonymousVoting = value),
+                  onChanged: (value) =>
+                      setState(() => _anonymousVoting = value),
                 ),
                 SwitchListTile(
-                  title: Text('선택지 추가 허용'),
+                  title: const Text('선택지 추가 허용'),
                   value: _allowOptionAddition,
-                  onChanged: (value) => setState(() => _allowOptionAddition = value),
+                  onChanged: (value) =>
+                      setState(() => _allowOptionAddition = value),
                 ),
                 SwitchListTile(
-                  title: Text('투표 종료 전 알림 설정'),
+                  title: const Text('투표 종료 전 알림 설정'),
                   value: _sendNotification,
-                  onChanged: (value) => setState(() => _sendNotification = value),
+                  onChanged: (value) =>
+                      setState(() => _sendNotification = value),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _createVote,
-                  child: Text('투표 생성'),
+                  child: const Text('투표 생성'),
                 ),
               ],
             ),
@@ -342,6 +359,20 @@ class _VotePageState extends State<VotePage> {
 }
 
 class VotePreviewPage extends StatelessWidget {
+  const VotePreviewPage({
+    required this.title,
+    required this.selectedOption,
+    required this.textControllers,
+    required this.dateOptions,
+    required this.timeOptions,
+    required this.allowMultipleSelection,
+    required this.anonymousVoting,
+    required this.allowOptionAddition,
+    required this.deadlineDate,
+    required this.deadlineTime,
+    required this.sendNotification,
+    super.key,
+  });
   final String title;
   final String selectedOption;
   final List<TextEditingController> textControllers;
@@ -354,27 +385,13 @@ class VotePreviewPage extends StatelessWidget {
   final TimeOfDay? deadlineTime;
   final bool sendNotification;
 
-  VotePreviewPage({
-    required this.title,
-    required this.selectedOption,
-    required this.textControllers,
-    required this.dateOptions,
-    required this.timeOptions,
-    required this.allowMultipleSelection,
-    required this.anonymousVoting,
-    required this.allowOptionAddition,
-    required this.deadlineDate,
-    required this.deadlineTime,
-    required this.sendNotification,
-  });
-
   Widget _buildPreviewOptions(BuildContext context) {
     switch (selectedOption) {
       case '텍스트':
         return Column(
           children: textControllers.map((controller) {
             return ListTile(
-              leading: Icon(Icons.photo),
+              leading: const Icon(Icons.photo),
               title: Text(controller.text),
             );
           }).toList(),
@@ -383,7 +400,7 @@ class VotePreviewPage extends StatelessWidget {
         return Column(
           children: dateOptions.map((date) {
             return ListTile(
-              leading: Icon(Icons.calendar_today),
+              leading: const Icon(Icons.calendar_today),
               title: Text('${date.toLocal()}'.split(' ')[0]),
             );
           }).toList(),
@@ -392,7 +409,7 @@ class VotePreviewPage extends StatelessWidget {
         return Column(
           children: timeOptions.map((time) {
             return ListTile(
-              leading: Icon(Icons.access_time),
+              leading: const Icon(Icons.access_time),
               title: Text(time.format(context)),
             );
           }).toList(),
@@ -406,42 +423,50 @@ class VotePreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('투표 미리보기'),
+        title: const Text('투표 미리보기'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Card(
             color: Colors.white,
             elevation: 2,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('투표 주제: $title', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('투표 주제: $title',
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                   if (allowMultipleSelection || anonymousVoting) ...[
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     if (allowMultipleSelection)
-                      Text('*복수 선택 가능', style: TextStyle(color: Colors.grey)),
+                      const Text('*복수 선택 가능',
+                          style: TextStyle(color: Colors.grey)),
                     if (anonymousVoting)
-                      Text('*익명 투표', style: TextStyle(color: Colors.grey)),
+                      const Text('*익명 투표',
+                          style: TextStyle(color: Colors.grey)),
                   ],
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   _buildPreviewOptions(context),
-                  SizedBox(height: 16),
-                  Divider(),
+                  const SizedBox(height: 16),
+                  const Divider(),
                   ListTile(
-                    leading: Icon(Icons.calendar_today),
-                    title: Text(deadlineDate != null
-                        ? deadlineDate!.toLocal().toString().split(' ')[0]
-                        : '마감 날짜: 설정 안됨'),
+                    leading: const Icon(Icons.calendar_today),
+                    title: Text(
+                      deadlineDate != null
+                          ? deadlineDate!.toLocal().toString().split(' ')[0]
+                          : '마감 날짜: 설정 안됨',
+                    ),
                   ),
                   ListTile(
-                    leading: Icon(Icons.access_time),
-                    title: Text(deadlineTime != null
-                        ? deadlineTime!.format(context)
-                        : '마감 시간: 설정 안됨'),
+                    leading: const Icon(Icons.access_time),
+                    title: Text(
+                      deadlineTime != null
+                          ? deadlineTime!.format(context)
+                          : '마감 시간: 설정 안됨',
+                    ),
                   ),
                 ],
               ),

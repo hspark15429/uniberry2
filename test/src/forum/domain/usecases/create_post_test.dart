@@ -1,6 +1,6 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:dartz/dartz.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';

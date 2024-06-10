@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
 import 'package:uniberry2/src/auth/domain/entities/user.dart';
 
 class UserProvider extends ChangeNotifier {

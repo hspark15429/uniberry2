@@ -4,9 +4,9 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
 
 class PostDetailPage extends StatelessWidget {
-  final Post post;
 
-  const PostDetailPage({Key? key, required this.post}) : super(key: key);
+  const PostDetailPage({required this.post, super.key});
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +31,11 @@ class PostDetailPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-padding: const EdgeInsets.all(16.0),
+padding: const EdgeInsets.all(16),
           child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-Text("#${post.category}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.redAccent,)),
+Text('#${post.category}', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.redAccent,)),
               const SizedBox(height: 8),
 Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,)),
               const SizedBox(height: 8),
@@ -62,12 +62,11 @@ Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bol
                   ),
                 ),
               const SizedBox(height: 16),
-              Text("작성자: ${post.author}", style: const TextStyle(color: Colors.black)),
+              Text('작성자: ${post.author}', style: const TextStyle(color: Colors.black)),
               const SizedBox(height: 4),
-              Text("작성일: ${post.datePosted}", style: const TextStyle(color: Colors.black)),
+              Text('작성일: ${post.datePosted}', style: const TextStyle(color: Colors.black)),
               const SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.thumb_up_alt_outlined, size: 20, color: Colors.black),
@@ -75,7 +74,7 @@ Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bol
                       // 좋아요 함수
                     },
                   ),
-                  Text("${post.likesCount}", style: const TextStyle(color: Colors.black)),
+                  Text('${post.likesCount}', style: const TextStyle(color: Colors.black)),
                   const SizedBox(width: 16),
                   IconButton(
                     icon: const Icon(Icons.comment, size: 20, color: Colors.black),
@@ -83,7 +82,7 @@ Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bol
                       // 댓글 함수
                     },
                   ),
-                  Text("${post.comments.length}", style: const TextStyle(color: Colors.black)),
+                  Text('${post.comments.length}', style: const TextStyle(color: Colors.black)),
                 ],
               ),
               const SizedBox(height: 16),
@@ -92,8 +91,8 @@ Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bol
                 final commentTime = timeago.format(DateTime.parse(comment.datePosted), locale: 'ko');
 
                 return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  padding: const EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
@@ -129,14 +128,14 @@ Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bol
                                       },
                                     ),
                                     Text(
-                                      "${comment.likesCount}",
+                                      '${comment.likesCount}',
                                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                                     ),
                                   ],
                                 ),
                                 Text(
                                   commentTime,
-                                  style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+                                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                                 ),
                               ],
                             ),
@@ -152,7 +151,7 @@ Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bol
                     ],
                   ),
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),
@@ -162,21 +161,20 @@ Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bol
 }
 
 class ImageViewerPage extends StatelessWidget {
-  final List<String> imageUrls;
-  final int initialIndex;
 
   const ImageViewerPage({
-    Key? key,
-    required this.imageUrls,
+    required this.imageUrls, super.key,
     this.initialIndex = 0,
-  }) : super(key: key);
+  });
+  final List<String> imageUrls;
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text("${initialIndex + 1}/${imageUrls.length}", style: const TextStyle(color: Colors.white)),
+        title: Text('${initialIndex + 1}/${imageUrls.length}', style: const TextStyle(color: Colors.white)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),

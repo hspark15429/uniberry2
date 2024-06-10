@@ -82,6 +82,6 @@ extension TimetableCubitExtension on TimetableCubit {
       includeSaturday: _includeSaturday,
       includeSunday: _includeSunday,
       timetables: List.from(_timetables), // 시간표 목록 포함
-    ));
+    ),);
   }
 }

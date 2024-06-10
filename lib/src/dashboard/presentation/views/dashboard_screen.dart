@@ -17,7 +17,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
-    String initialSemester = _determineInitialSemester();
+    final initialSemester = _determineInitialSemester();
 
     return Scaffold(
       body: Center(
@@ -81,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
                 await Navigator.pushNamedAndRemoveUntil(
-                    context, '/', (route) => false);
+                    context, '/', (route) => false,);
               },
               child: const Text('Logout'),
             ),
@@ -92,10 +92,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   String _determineInitialSemester() {
-    DateTime now = DateTime.now();
-    int currentYear = now.year;
-    String semester =
-        now.month < 9 ? "${currentYear}년봄학기" : "${currentYear}년가을학기";
+    final now = DateTime.now();
+    final currentYear = now.year;
+    final semester =
+        now.month < 9 ? '$currentYear년봄학기' : '$currentYear년가을학기';
     return semester;
   }
 }

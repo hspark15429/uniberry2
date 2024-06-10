@@ -1,10 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:dartz/dartz.dart';
 import 'package:uniberry2/core/enums/update_post_enum.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';

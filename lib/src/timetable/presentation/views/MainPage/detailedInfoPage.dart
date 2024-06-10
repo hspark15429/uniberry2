@@ -5,6 +5,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailedInfoPage extends StatefulWidget {
+  const DetailedInfoPage({super.key});
+
   @override
   _DetailedInfoPageState createState() => _DetailedInfoPageState();
 }
@@ -19,7 +21,7 @@ class _DetailedInfoPageState extends State<DetailedInfoPage> {
   }
 
   void _initializeWebView() {
-    final WebViewController controller = WebViewController();
+    final controller = WebViewController();
 
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -51,8 +53,8 @@ Page resource error:
     _loadHtmlFromAssets();
   }
 
-  void _loadHtmlFromAssets() async {
-    String fileText = await rootBundle.loadString('assets/uniberry_guide.html');
+  Future<void> _loadHtmlFromAssets() async {
+    final fileText = await rootBundle.loadString('assets/uniberry_guide.html');
     _controller.loadRequest(
       Uri.dataFromString(
         fileText,

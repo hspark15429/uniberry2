@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SettingUserIdPage extends StatefulWidget {
+  const SettingUserIdPage({super.key});
+
   @override
   _SettingUserIdPageState createState() => _SettingUserIdPageState();
 }
@@ -20,10 +22,10 @@ class _SettingUserIdPageState extends State<SettingUserIdPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('유저 아이디 설정'),
+        title: const Text('유저 아이디 설정'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -32,14 +34,14 @@ class _SettingUserIdPageState extends State<SettingUserIdPage> {
               decoration: InputDecoration(
                 labelText: 'ID',
                 hintText: '설정할 ID를 입력하세요',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 // ID가 설정되면 텍스트 필드를 비활성화
                 enabled: !_isIdSet,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SwitchListTile(
-              title: Text('상대방이 내 ID로 검색 허용'),
+              title: const Text('상대방이 내 ID로 검색 허용'),
               value: _isIdSearchAllowed,
               onChanged: _isIdSet
                   ? null // ID가 설정되면 스위치를 비활성화
@@ -49,9 +51,9 @@ class _SettingUserIdPageState extends State<SettingUserIdPage> {
                       });
                     },
             ),
-            SizedBox(height: 20),
-            Text('ID는 변경 후에는 수정할 수 없습니다.'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+            const Text('ID는 변경 후에는 수정할 수 없습니다.'),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isIdSet
                   ? null // ID가 이미 설정되었다면 버튼 비활성화
@@ -61,7 +63,7 @@ class _SettingUserIdPageState extends State<SettingUserIdPage> {
                         _isIdSet = true; // ID 설정 완료
                       });
                     },
-              child: Text('ID 설정'),
+              child: const Text('ID 설정'),
             ),
           ],
         ),

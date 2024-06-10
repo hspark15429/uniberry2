@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/dummy_data.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postWritePage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postDetail.dart';
+import 'package:uniberry2/src/timetable/presentation/views/MainPage/postPage/postWritePage.dart';
+
 class ExpandableText extends StatefulWidget {
+  const ExpandableText({
+    required this.text,
+    super.key,
+    this.maxLines = 2,
+  });
   final String text;
   final int maxLines;
-
-  const ExpandableText({
-    Key? key,
-    required this.text,
-    this.maxLines = 2,
-  }) : super(key: key);
 
   @override
   _ExpandableTextState createState() => _ExpandableTextState();
@@ -21,13 +21,14 @@ class _ExpandableTextState extends State<ExpandableText> {
 
   @override
   Widget build(BuildContext context) {
-    TextPainter textPainter = TextPainter(
-      text: TextSpan(text: widget.text, style: DefaultTextStyle.of(context).style),
+    var textPainter = TextPainter(
+      text: TextSpan(
+          text: widget.text, style: DefaultTextStyle.of(context).style),
       maxLines: widget.maxLines,
       textDirection: TextDirection.ltr,
     );
     textPainter.layout(maxWidth: MediaQuery.of(context).size.width);
-    bool isOverflow = textPainter.didExceedMaxLines;
+    final isOverflow = textPainter.didExceedMaxLines;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +46,7 @@ class _ExpandableTextState extends State<ExpandableText> {
               });
             },
             child: Text(
-              isExpanded ? "閉じる" : "開く",
+              isExpanded ? '閉じる' : '開く',
               style: const TextStyle(color: Colors.blue),
             ),
           ),
@@ -55,9 +56,8 @@ class _ExpandableTextState extends State<ExpandableText> {
 }
 
 class PostPage extends StatefulWidget {
+  const PostPage({required this.currentBoard, super.key});
   final String currentBoard;
-
-  const PostPage({Key? key, required this.currentBoard}) : super(key: key);
 
   @override
   _PostPageState createState() => _PostPageState();
@@ -65,21 +65,25 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   List<Post> filteredPosts = [];
-  String searchQuery = "";
+  String searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    filteredPosts = dummyPosts.where((post) => post.boardType.toString().split('.').last == widget.currentBoard).toList();
-    filteredPosts.sort((a, b) => b.datePosted.compareTo(a.datePosted)); // 최신순 정렬
+    filteredPosts = dummyPosts
+        .where((post) =>
+            post.boardType.toString().split('.').last == widget.currentBoard)
+        .toList();
+    filteredPosts
+        .sort((a, b) => b.datePosted.compareTo(a.datePosted)); // 최신순 정렬
   }
 
   List<Post> _filterPosts(String query) {
     return dummyPosts.where((post) {
       return post.boardType.toString().split('.').last == widget.currentBoard &&
-             (post.title.contains(query) || post.content.contains(query));
+          (post.title.contains(query) || post.content.contains(query));
     }).toList()
-    ..sort((a, b) => b.datePosted.compareTo(a.datePosted)); // 최신순 정렬
+      ..sort((a, b) => b.datePosted.compareTo(a.datePosted)); // 최신순 정렬
   }
 
   @override
@@ -124,7 +128,8 @@ class _PostPageState extends State<PostPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PostDetailPage(post: post)),
+                MaterialPageRoute(
+                    builder: (context) => PostDetailPage(post: post)),
               );
             },
             child: Container(
@@ -145,7 +150,6 @@ class _PostPageState extends State<PostPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       if (post.imageUrls.isNotEmpty)
                         Container(
@@ -154,20 +158,29 @@ class _PostPageState extends State<PostPage> {
                           margin: const EdgeInsets.only(right: 16),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(post.imageUrls.first, fit: BoxFit.cover, width: 100, height: 100),
+                            child: Image.network(post.imageUrls.first,
+                                fit: BoxFit.cover, width: 100, height: 100),
                           ),
                         ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("#${post.category}", style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                            Text('#${post.category}',
+                                style: const TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold)),
                             const SizedBox(height: 4),
-                            Text(post.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                            Text(post.title,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 4),
-                            Text("作成日 ${post.datePosted} · 閲覧数 ${post.viewCount}", style: const TextStyle(fontSize: 14, color: Colors.grey)),
+                            Text(
+                                '作成日 ${post.datePosted} · 閲覧数 ${post.viewCount}',
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.grey)),
                             const SizedBox(height: 8),
-                            ExpandableText(text: post.content, maxLines: 2),
+                            ExpandableText(text: post.content),
                           ],
                         ),
                       ),
@@ -176,13 +189,15 @@ class _PostPageState extends State<PostPage> {
                   if (post.imageUrls.isNotEmpty) const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.thumb_up, color: Colors.grey, size: 20),
+                      const Icon(Icons.thumb_up, color: Colors.grey, size: 20),
                       const SizedBox(width: 4),
-                      Text('${post.likesCount}', style: const TextStyle(color: Colors.grey)),
+                      Text('${post.likesCount}',
+                          style: const TextStyle(color: Colors.grey)),
                       const SizedBox(width: 16),
-                      Icon(Icons.comment, color: Colors.grey, size: 20),
+                      const Icon(Icons.comment, color: Colors.grey, size: 20),
                       const SizedBox(width: 4),
-                      Text('${post.commentCount}', style: const TextStyle(color: Colors.grey)),
+                      Text('${post.commentCount}',
+                          style: const TextStyle(color: Colors.grey)),
                     ],
                   ),
                 ],
@@ -196,16 +211,15 @@ class _PostPageState extends State<PostPage> {
 }
 
 class PostSearchDelegate extends SearchDelegate {
+  PostSearchDelegate({required this.currentBoard, required this.filterPosts});
   final String currentBoard;
   final List<Post> Function(String) filterPosts;
-
-  PostSearchDelegate({required this.currentBoard, required this.filterPosts});
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
           showSuggestions(context);
@@ -217,7 +231,7 @@ class PostSearchDelegate extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -243,11 +257,13 @@ class PostSearchDelegate extends SearchDelegate {
         final post = filteredPosts[index];
         return ListTile(
           title: Text(post.title),
-          subtitle: Text("作成日 ${post.datePosted}\n${post.content}", maxLines: 2, overflow: TextOverflow.ellipsis),
+          subtitle: Text('作成日 ${post.datePosted}\n${post.content}',
+              maxLines: 2, overflow: TextOverflow.ellipsis),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PostDetailPage(post: post)),
+              MaterialPageRoute(
+                  builder: (context) => PostDetailPage(post: post)),
             );
           },
         );

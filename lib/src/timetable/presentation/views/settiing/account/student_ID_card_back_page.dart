@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StudentIDCardBackPage extends StatefulWidget {
+  const StudentIDCardBackPage({required this.enrollmentDate, super.key});
   final String enrollmentDate;
-  
-  const StudentIDCardBackPage({Key? key, required this.enrollmentDate}) : super(key: key);
 
   @override
   _StudentIDCardBackPageState createState() => _StudentIDCardBackPageState();
@@ -25,11 +24,12 @@ class _StudentIDCardBackPageState extends State<StudentIDCardBackPage> {
     _loadStudentInfo();
   }
 
-  void _loadStudentInfo() async {
-    String filePath = '/Users/jjpark/dev/uniberry/assets/studentDB(PARK Jaejin).json';
-    File file = File(filePath);
+  Future<void> _loadStudentInfo() async {
+    const filePath =
+        '/Users/jjpark/dev/uniberry/assets/studentDB(PARK Jaejin).json';
+    final file = File(filePath);
     if (await file.exists()) {
-      String content = await file.readAsString();
+      final content = await file.readAsString();
       _parseStudentInfo(content);
     } else {
       debugPrint('파일을 찾을 수 없습니다.');
@@ -38,15 +38,15 @@ class _StudentIDCardBackPageState extends State<StudentIDCardBackPage> {
 
   void _parseStudentInfo(String content) {
     try {
-      var jsonData = jsonDecode(content);
-      
+      final jsonData = jsonDecode(content);
+
       studentName = jsonData['氏名'] as String? ?? '';
       studentNumber = jsonData['学籍番号'] as String? ?? '';
       department = jsonData['学部'] as String? ?? '';
-      String fullEnrollmentDate = jsonData['入学年度'] as String? ?? '';
+      final fullEnrollmentDate = jsonData['入学年度'] as String? ?? '';
 
-      var splitDate = fullEnrollmentDate.split('年');
-      String yearString = splitDate[0].trim();
+      final splitDate = fullEnrollmentDate.split('年');
+      var yearString = splitDate[0].trim();
       enrollmentDate = yearString;
 
       setState(() {});
@@ -64,11 +64,11 @@ class _StudentIDCardBackPageState extends State<StudentIDCardBackPage> {
             width: 250,
             height: 250,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(20),
               color: Colors.white,
             ),
             child: Image.asset(
-              '/Users/jjpark/dev/uniberry/assets/qrcodeex.png', 
+              '/Users/jjpark/dev/uniberry/assets/qrcodeex.png',
               fit: BoxFit.contain,
             ),
           ),
@@ -78,30 +78,30 @@ class _StudentIDCardBackPageState extends State<StudentIDCardBackPage> {
   }
 
   String calculateExpirationDate(String enrollmentDate) {
-    int admissionYear = int.tryParse(enrollmentDate) ?? 0;
-    int expirationYear = admissionYear + 4;
-    DateTime expirationDate = DateTime(expirationYear, 3, 31);
+    final admissionYear = int.tryParse(enrollmentDate) ?? 0;
+    final expirationYear = admissionYear + 4;
+    final expirationDate = DateTime(expirationYear, 3, 31);
     return '${expirationDate.year}年 ${expirationDate.month}月 ${expirationDate.day}日';
   }
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Card(
-          elevation: 10.0,
+          elevation: 10,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
             width: screenWidth * 0.85,
             height: screenHeight * 0.75,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(20),
               gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -111,8 +111,8 @@ class _StudentIDCardBackPageState extends State<StudentIDCardBackPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  height: screenHeight * 0.1, 
+                SizedBox(
+                  height: screenHeight * 0.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -143,11 +143,11 @@ class _StudentIDCardBackPageState extends State<StudentIDCardBackPage> {
                     width: 140,
                     height: 140, // 크게 만듭니다.
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0), // 모양을 둥글게 합니다.
+                      borderRadius: BorderRadius.circular(20), // 모양을 둥글게 합니다.
                       color: Colors.white,
                     ),
                     child: Image.asset(
-                      '/Users/jjpark/dev/uniberry/assets/qrcodeex.png', 
+                      '/Users/jjpark/dev/uniberry/assets/qrcodeex.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -162,7 +162,6 @@ class _StudentIDCardBackPageState extends State<StudentIDCardBackPage> {
                 ),
                 const SizedBox(height: 20),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       '氏名: $studentName',
