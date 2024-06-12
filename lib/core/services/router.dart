@@ -13,7 +13,8 @@ import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/views/timetable_screen.dart';
+import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_screen.dart';
+
 import 'package:uniberry2/src/timetable/presentation/views/timetable_screen2.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {

@@ -83,4 +83,7 @@ enum Period {
   period7,
   period8,
   period9,
+  period10,
+  period11,
+  period12,
 }

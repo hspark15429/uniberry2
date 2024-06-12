@@ -40,11 +40,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const TimetableScreen(),
-                  ),
+                  '/timetable',
                 );
               },
               child: const Text('timetable'),
