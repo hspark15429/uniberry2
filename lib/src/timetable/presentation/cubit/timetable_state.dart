@@ -61,6 +61,15 @@ class TimetableDeleted extends TimetableState {
   const TimetableDeleted();
 }
 
+class TimetablesFetched extends TimetableState {
+  const TimetablesFetched(this.timetables);
+
+  final List<Timetable> timetables;
+
+  @override
+  List<Object?> get props => [timetables];
+}
+
 class TimetableError extends TimetableState {
   const TimetableError(this.message);
 

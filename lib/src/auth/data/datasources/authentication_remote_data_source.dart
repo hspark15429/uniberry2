@@ -132,8 +132,10 @@ class AuthenticationRemoteDataSourceImplementation
   }
 
   @override
-  Future<void> updateUser(
-      {required UpdateUserAction action, required userData,}) async {
+  Future<void> updateUser({
+    required UpdateUserAction action,
+    required dynamic userData,
+  }) async {
     try {
       switch (action) {
         case UpdateUserAction.email:
@@ -167,6 +169,13 @@ class AuthenticationRemoteDataSourceImplementation
               .doc(_authClient.currentUser?.uid)
               .update({
             'bio': userData as String,
+          });
+        case UpdateUserAction.timetableIds:
+          await _cloudStoreClient
+              .collection('users')
+              .doc(_authClient.currentUser?.uid)
+              .update({
+            'timetableIds': userData as List<String>,
           });
       }
     } on FirebaseAuthException catch (e) {

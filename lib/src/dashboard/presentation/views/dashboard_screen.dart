@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/presentation/views/Chat/dm_list_page.dart';
-import 'package:uniberry2/src/timetable/presentation/views/MainPage/homePage.dart';
-import 'package:uniberry2/src/timetable/presentation/views/timetable/timetable_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:uniberry2/core/providers/user_provider.dart';
+import 'package:uniberry2/src/auth/data/models/user_model.dart';
+import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart';
+import 'package:uniberry2/src/timetable/presentation/views/oldViews/Chat/dm_list_page.dart';
+import 'package:uniberry2/src/timetable/presentation/views/oldViews/MainPage/homePage.dart';
+import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_screen.dart';
 import 'package:uniberry2/src/timetable/presentation/views/timetable_screen2.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -50,7 +54,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const TimetableScreen2(),
+                    builder: (context) => StreamBuilder<LocalUserModel>(
+                      stream: DashboardUtils.userDataStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData &&
+                            snapshot.data is LocalUserModel) {
+                          context.read<UserProvider>().user = snapshot.data;
+                        }
+                        return const TimetableScreen2();
+                      },
+                    ),
                   ),
                 );
               },
@@ -81,7 +94,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
                 await Navigator.pushNamedAndRemoveUntil(
-                    context, '/', (route) => false,);
+                  context,
+                  '/',
+                  (route) => false,
+                );
               },
               child: const Text('Logout'),
             ),
@@ -94,8 +110,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String _determineInitialSemester() {
     final now = DateTime.now();
     final currentYear = now.year;
-    final semester =
-        now.month < 9 ? '$currentYear년봄학기' : '$currentYear년가을학기';
+    final semester = now.month < 9 ? '$currentYear년봄학기' : '$currentYear년가을학기';
     return semester;
   }
 }

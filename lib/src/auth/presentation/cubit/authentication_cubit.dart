@@ -68,7 +68,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
   Future<void> updateUser({
     required UpdateUserAction action,
-    required String userData,
+    required dynamic userData,
   }) async {
     emit(const AuthenticationLoading());
 

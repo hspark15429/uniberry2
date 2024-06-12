@@ -208,4 +208,23 @@ class TimetableCubit extends Cubit<TimetableState> {
       (_) => emit(const TimetableDeleted()),
     );
   }
+
+  Future<void> getTimetables(List<String> timetableIds) async {
+    emit(const TimetableLoading());
+
+    final timetables = <Timetable>[];
+    for (final timetableId in timetableIds) {
+      final result = await _readTimetable(timetableId);
+      final timetable = result.fold(
+        (failure) => TimetableError(failure.errorMessage),
+        timetables.add,
+      );
+    }
+
+    if (timetables.isEmpty) {
+      emit(const TimetableError('No courses found'));
+      return;
+    }
+    emit(TimetablesFetched(timetables));
+  }
 }

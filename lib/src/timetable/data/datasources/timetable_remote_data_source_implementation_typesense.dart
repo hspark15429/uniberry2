@@ -41,6 +41,7 @@ class TimetableRemoteDataSourceImplementationTypesense
           .search(searchParameters);
 
       if (results['found'] == 0) {
+        debugPrint('course not found');
         throw const ServerException(
           message: 'course not found',
           statusCode: 'no-data',
@@ -131,13 +132,22 @@ class TimetableRemoteDataSourceImplementationTypesense
           'uid': _authClient.currentUser!.uid,
         },
       );
+
+      await _cloudStoreClient
+          .collection('users')
+          .doc(_authClient.currentUser!.uid)
+          .update(
+        {
+          'timetableIds': FieldValue.arrayUnion([docReference.id]),
+        },
+      );
     } on FirebaseAuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occurred',
         statusCode: e.code,
       );
     } catch (e, s) {
-      debugPrint(s.toString());
+      debugPrint(e.toString());
       throw ServerException(
         message: e.toString(),
         statusCode: '500',
@@ -146,9 +156,9 @@ class TimetableRemoteDataSourceImplementationTypesense
   }
 
   @override
-  Future<TimetableModel> readTimetable(String timetableId) {
+  Future<TimetableModel> readTimetable(String timetableId) async {
     try {
-      return _cloudStoreClient
+      return await _cloudStoreClient
           .collection('timetables')
           .doc(timetableId)
           .get()
@@ -173,7 +183,7 @@ class TimetableRemoteDataSourceImplementationTypesense
   Future<void> updateTimetable({
     required String timetableId,
     required Timetable timetable,
-  }) {
+  }) async {
     try {
       return _cloudStoreClient.collection('timetables').doc(timetableId).update(
             (timetable as TimetableModel).toMap(),
@@ -193,12 +203,21 @@ class TimetableRemoteDataSourceImplementationTypesense
   }
 
   @override
-  Future<void> deleteTimetable(String timetableId) {
+  Future<void> deleteTimetable(String timetableId) async {
     try {
-      return _cloudStoreClient
+      await _cloudStoreClient
           .collection('timetables')
           .doc(timetableId)
           .delete();
+
+      await _cloudStoreClient
+          .collection('users')
+          .doc(_authClient.currentUser!.uid)
+          .update(
+        {
+          'timetableIds': FieldValue.arrayRemove([timetableId]),
+        },
+      );
     } on FirebaseAuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occurred',

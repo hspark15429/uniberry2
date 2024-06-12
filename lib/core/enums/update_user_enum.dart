@@ -4,4 +4,5 @@ enum UpdateUserAction {
   password,
   bio,
   profilePic,
+  timetableIds,
 }

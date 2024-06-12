@@ -1,43 +1,49 @@
-class TimetablePeriod {
-  const TimetablePeriod(this.day, this.period);
+// import 'package:equatable/equatable.dart';
 
-  final DayOfWeek day;
-  final Period period;
+// class TimetablePeriod extends Equatable {
+//   const TimetablePeriod(this.day, this.period);
 
-  @override
-  String toString() {
-    return '${day.toString().split('.').last}.${period.toString().split('.').last}';
-  }
-}
+//   final DayOfWeek day;
+//   final Period period;
 
-enum DayOfWeek {
-  monday,
-  tuesday,
-  wednesday,
-  thursday,
-  friday,
-  saturday,
-  sunday,
-}
+//   @override
+//   String toString() {
+//     return '${day.toString().split('.').last}.${period.toString().split('.').last}';
+//   }
 
-enum Period {
-  period1,
-  period2,
-  period3,
-  period4,
-  period5,
-  period6,
-  period7,
-  period8,
-  period9,
-}
+//   @override
+//   // TODO: implement props
+//   List<Object?> get props => [day, period];
+// }
 
-// convert string to TimetablePeriod
-TimetablePeriod stringToTimetablePeriod(String str) {
-  final parts = str.split('.');
-  final day = DayOfWeek.values
-      .firstWhere((e) => e.toString().split('.').last == parts[0]);
-  final period =
-      Period.values.firstWhere((e) => e.toString().split('.').last == parts[1]);
-  return TimetablePeriod(day, period);
-}
+// enum DayOfWeek {
+//   monday,
+//   tuesday,
+//   wednesday,
+//   thursday,
+//   friday,
+//   saturday,
+//   sunday,
+// }
+
+// enum Period {
+//   period1,
+//   period2,
+//   period3,
+//   period4,
+//   period5,
+//   period6,
+//   period7,
+//   period8,
+//   period9,
+// }
+
+// // convert string to TimetablePeriod
+// TimetablePeriod stringToTimetablePeriod(String str) {
+//   final parts = str.split('.');
+//   final day = DayOfWeek.values
+//       .firstWhere((e) => e.toString().split('.').last == parts[0]);
+//   final period =
+//       Period.values.firstWhere((e) => e.toString().split('.').last == parts[1]);
+//   return TimetablePeriod(day, period);
+// }

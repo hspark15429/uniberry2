@@ -1,22 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uniberry2/core/services/injection_container.dart';
+import 'package:uniberry2/src/timetable/data/models/course_model.dart';
+import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry2/src/timetable/domain/entities/course.dart';
+import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/search_courses_sheet.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_cell_card.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/update_timetable_list_sheet.dart';
+import 'package:uniberry2/src/timetable/presentation/widgets/timetable_header_widget.dart';
 
-class TimetableScreen2 extends StatelessWidget {
+class TimetableScreen2 extends StatefulWidget {
   const TimetableScreen2({super.key});
 
   static const String routeName = '/timetable2';
 
   @override
+  State<TimetableScreen2> createState() => _TimetableScreen2State();
+}
+
+class _TimetableScreen2State extends State<TimetableScreen2> {
+  TimetableModel _currentTimetable = TimetableModel.empty().copyWith(
+    name: '시간표를 선택하세요.',
+  );
+  Map<TimetablePeriod, CourseModel> timetableMapWithCourseObject = {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void switchCurrentTimetable(TimetableModel timetable) {
+    setState(() {
+      _currentTimetable = timetable;
+      timetableMapWithCourseObject = {};
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    const semester = '2024년봄학기';
+    context.read<TimetableCubit>().getCourses(
+          _currentTimetable.timetableMap.values.whereType<String>().toList(),
+        );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          semester,
-          style: TextStyle(
-            fontSize: 24,
-            color: Colors.white,
-            decoration: TextDecoration.underline,
+        title: GestureDetector(
+          onTap: () {
+            // TODO(HAN): Implement timetable selection
+            showModalBottomSheet<UpdateTimetableListSheet>(
+              context: context,
+              builder: (context) => UpdateTimetableListSheet(
+                switchCurrentTimetable: switchCurrentTimetable,
+              ),
+            );
+          },
+          child: Text(
+            _currentTimetable.name,
+            style: const TextStyle(
+              fontSize: 24,
+              color: Colors.white,
+              decoration: TextDecoration.underline,
+            ),
           ),
         ),
         centerTitle: true,
@@ -24,7 +71,7 @@ class TimetableScreen2 extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
         ),
         actions: [
@@ -38,42 +85,52 @@ class TimetableScreen2 extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(8),
+      body: Column(
         children: [
-          _buildDayHeader(),
-          ...List.generate(
-            6,
-            _buildPeriodRow,
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TimetableHeaderWidget(),
           ),
-          const SizedBox(height: 20),
-          _buildGradeStatusCard(),
-          const SizedBox(height: 300),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDayHeader() {
-    final days = <String>['월', '화', '수', '목', '금', '토', '일'];
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      color: Colors.grey[200],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const SizedBox(width: 30),
-          ...days.map(
-            (day) => Expanded(
-              child: Center(
-                child: Text(
-                  day,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: BlocBuilder<TimetableCubit, TimetableState>(
+                builder: (context, state) {
+                  if (state is CoursesFetched) {
+                    _currentTimetable.timetableMap.forEach((period, courseId) {
+                      if (courseId is String && courseId.isNotEmpty) {
+                        timetableMapWithCourseObject[period] = state.courses
+                                .firstWhere(
+                                    (course) => course.courseId == courseId)
+                            as CourseModel;
+                      }
+                    });
+                    return Column(
+                      children: [
+                        ...List.generate(
+                          6,
+                          _buildPeriodRow,
+                        ),
+                        const SizedBox(height: 20),
+                        _buildGradeStatusCard(),
+                        const SizedBox(height: 300),
+                      ],
+                    );
+                  } else if (state is TimetableLoading) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    return Column(
+                      children: [
+                        ...List.generate(
+                          6,
+                          _buildPeriodRow,
+                        ),
+                        const SizedBox(height: 20),
+                        _buildGradeStatusCard(),
+                        const SizedBox(height: 300),
+                      ],
+                    );
+                  }
+                },
               ),
             ),
           ),
@@ -82,8 +139,25 @@ class TimetableScreen2 extends StatelessWidget {
     );
   }
 
-  Widget _buildPeriodRow(int periodIndex) {
-    final days = <String>['월', '화', '수', '목', '금', '토', '일'];
+  Widget _buildPeriodRow(
+    int periodIndex,
+  ) {
+    List<TimetablePeriod> periods = [
+      TimetablePeriod(
+          day: DayOfWeek.monday, period: Period.values[periodIndex]),
+      TimetablePeriod(
+          day: DayOfWeek.tuesday, period: Period.values[periodIndex]),
+      TimetablePeriod(
+          day: DayOfWeek.wednesday, period: Period.values[periodIndex]),
+      TimetablePeriod(
+          day: DayOfWeek.thursday, period: Period.values[periodIndex]),
+      TimetablePeriod(
+          day: DayOfWeek.friday, period: Period.values[periodIndex]),
+      TimetablePeriod(
+          day: DayOfWeek.saturday, period: Period.values[periodIndex]),
+      TimetablePeriod(
+          day: DayOfWeek.sunday, period: Period.values[periodIndex]),
+    ];
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -113,22 +187,54 @@ class TimetableScreen2 extends StatelessWidget {
               ),
             ),
           ),
-          ...days.map(
-            (day) => Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Container(
-                  height: 100,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    color: Colors.white10,
-                    borderRadius: BorderRadius.circular(5),
+          ...periods.map(
+            (period) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Container(
+                    height: 100,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.white10,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: timetableMapWithCourseObject[period] != null
+                        ? TimetableCellCard(
+                            period: period,
+                            course: timetableMapWithCourseObject[period]!,
+                          )
+                        : InkWell(
+                            child: Container(
+                              height: 100, // 교시 크기를 더 키움
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.white10,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Text(''), // 강의가 없으면 빈 텍스트
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (newContext) => BlocProvider(
+                                    create: (context) => sl<TimetableCubit>(),
+                                    child: SearchCoursesSheet(
+                                      period: period,
+                                      school: '法学部',
+                                      term: '春セメスター', // 2024년봄학기
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                   ),
-                  child: const Text(''),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

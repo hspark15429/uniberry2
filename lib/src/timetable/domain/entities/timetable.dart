@@ -22,19 +22,6 @@ class Timetable extends Equatable {
           },
         );
 
-  Timetable.fromMap(DataMap map)
-      : this(
-          timetableId: map['timetableId'] as String,
-          uid: map['uid'] as String,
-          name: map['name'] as String,
-          timetableMap: (map['timetableMap'] as DataMap).map(
-            (period, courseId) => MapEntry(
-              TimetablePeriod.fromString(period),
-              courseId as String?,
-            ),
-          ),
-        );
-
   final String timetableId;
   final String uid;
   final String name;

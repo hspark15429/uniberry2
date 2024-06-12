@@ -10,7 +10,7 @@ import 'package:uniberry2/core/services/router.dart';
 import 'package:uniberry2/firebase_options.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/views/timetable/assignmentNotifier.dart';
+import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/assignmentNotifier.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          // maybe you can remove it later?
           BlocProvider(create: (context) => sl<TimetableCubit>()),
           BlocProvider(create: (context) => sl<PostCubit>()),
         ],
