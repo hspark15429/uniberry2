@@ -127,10 +127,11 @@ class _UpdateTimetableListSheetState extends State<UpdateTimetableListSheet> {
                           },
                           trailing: IconButton(
                             icon: const Icon(Icons.close),
-                            onPressed: () =>
-                                context.read<TimetableCubit>().deleteTimetable(
-                                      state.timetables[index].timetableId,
-                                    ),
+                            onPressed: () async => await context
+                                .read<TimetableCubit>()
+                                .deleteTimetable(
+                                  state.timetables[index].timetableId,
+                                ),
                           ),
                         );
                       },

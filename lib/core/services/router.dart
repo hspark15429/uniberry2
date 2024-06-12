@@ -8,6 +8,7 @@ import 'package:uniberry2/src/auth/data/models/user_model.dart';
 import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_up_screen.dart';
+import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
@@ -70,9 +71,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case TimetableScreen2.routeName:
       return MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (_) => sl<TimetableCubit>(),
-          child: const TimetableScreen(),
+        builder: (_) => StreamBuilder<LocalUserModel>(
+          stream: DashboardUtils.userDataStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data is LocalUserModel) {
+              context.read<UserProvider>().user = snapshot.data;
+            }
+            return const TimetableScreen2();
+          },
         ),
       );
     case ForumScreen.routeName:

@@ -51,21 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StreamBuilder<LocalUserModel>(
-                      stream: DashboardUtils.userDataStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData &&
-                            snapshot.data is LocalUserModel) {
-                          context.read<UserProvider>().user = snapshot.data;
-                        }
-                        return const TimetableScreen2();
-                      },
-                    ),
-                  ),
-                );
+                Navigator.pushNamed(context, '/timetable2');
               },
               child: const Text('timetable2'),
             ),
