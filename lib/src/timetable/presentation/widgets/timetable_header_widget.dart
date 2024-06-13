@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TimetableHeaderWidget extends StatelessWidget {
-  const TimetableHeaderWidget({super.key});
-  static const List<String> days = ['월', '화', '수', '목', '금', '토', '일'];
+  TimetableHeaderWidget({
+    required this.numOfDays,
+    super.key,
+  }) : days = ['월', '화', '수', '목', '금', '토', '일'].sublist(0, numOfDays);
 
+  final int numOfDays;
+  final List<String> days;
   @override
   Widget build(BuildContext context) {
     return Container(

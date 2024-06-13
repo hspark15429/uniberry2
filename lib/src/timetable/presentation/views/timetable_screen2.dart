@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
 import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
@@ -48,14 +50,29 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          onTap: () {
-            // TODO(HAN): Implement timetable selection
-            showModalBottomSheet<UpdateTimetableListSheet>(
+          onTap: () async {
+            final newTimetable = await showModalBottomSheet<TimetableModel>(
               context: context,
-              builder: (context) => UpdateTimetableListSheet(
-                switchCurrentTimetable: switchCurrentTimetable,
+              builder: (_) => BlocProvider(
+                create: (context) => sl<TimetableCubit>(),
+                child: Consumer<UserProvider>(
+                  builder: (context, provider, __) {
+                    context
+                        .read<TimetableCubit>()
+                        .getTimetables(provider.user!.timetableIds);
+                    return UpdateTimetableListSheet(
+                      switchCurrentTimetable: switchCurrentTimetable,
+                    );
+                  },
+                ),
               ),
             );
+            if (newTimetable != null) {
+              setState(() {
+                _currentTimetable = newTimetable;
+                timetableMapWithCourseObject = {};
+              });
+            }
           },
           child: Text(
             _currentTimetable.name,
@@ -87,9 +104,10 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: TimetableHeaderWidget(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:
+                TimetableHeaderWidget(numOfDays: _currentTimetable.numOfDays),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -107,8 +125,11 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
                     return Column(
                       children: [
                         ...List.generate(
-                          6,
-                          _buildPeriodRow,
+                          _currentTimetable.numOfPeriods,
+                          (index) => _buildPeriodRow(
+                            periodIndex: index,
+                            numOfDays: _currentTimetable.numOfDays,
+                          ),
                         ),
                         const SizedBox(height: 20),
                         _buildGradeStatusCard(),
@@ -121,8 +142,11 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
                     return Column(
                       children: [
                         ...List.generate(
-                          6,
-                          _buildPeriodRow,
+                          _currentTimetable.numOfPeriods,
+                          (index) => _buildPeriodRow(
+                            periodIndex: index,
+                            numOfDays: _currentTimetable.numOfDays,
+                          ),
                         ),
                         const SizedBox(height: 20),
                         _buildGradeStatusCard(),
@@ -139,10 +163,11 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
     );
   }
 
-  Widget _buildPeriodRow(
-    int periodIndex,
-  ) {
-    List<TimetablePeriod> periods = [
+  Widget _buildPeriodRow({
+    required int periodIndex,
+    required int numOfDays,
+  }) {
+    final periods = <TimetablePeriod>[
       TimetablePeriod(
           day: DayOfWeek.monday, period: Period.values[periodIndex]),
       TimetablePeriod(
@@ -157,7 +182,7 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
           day: DayOfWeek.saturday, period: Period.values[periodIndex]),
       TimetablePeriod(
           day: DayOfWeek.sunday, period: Period.values[periodIndex]),
-    ];
+    ].sublist(0, numOfDays);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),

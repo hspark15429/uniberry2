@@ -40,8 +40,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           }
         },
       );
-
-    case '/dashboard':
+    case DashboardScreen.routeName:
       return MaterialPageRoute(
         builder: (context) {
           if (sl<FirebaseAuth>().currentUser != null) {
@@ -78,7 +77,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             if (snapshot.hasData && snapshot.data is LocalUserModel) {
               context.read<UserProvider>().user = snapshot.data;
             }
-            return const TimetableScreen2();
+            return BlocProvider(
+              create: (context) => sl<TimetableCubit>(),
+              child: const TimetableScreen2(),
+            );
           },
         ),
       );

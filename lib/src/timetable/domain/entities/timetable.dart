@@ -7,6 +7,8 @@ class Timetable extends Equatable {
     required this.uid,
     required this.name,
     required this.timetableMap,
+    this.numOfDays = 5,
+    this.numOfPeriods = 7,
   });
 
   Timetable.empty()
@@ -20,12 +22,16 @@ class Timetable extends Equatable {
               period: Period.period1,
             ): '_empty.courseId',
           },
+          numOfDays: 5,
+          numOfPeriods: 7,
         );
 
   final String timetableId;
   final String uid;
   final String name;
   final Map<TimetablePeriod, String?> timetableMap;
+  final int numOfDays;
+  final int numOfPeriods;
 
   @override
   List<Object?> get props => [timetableId, uid, name, timetableMap];
