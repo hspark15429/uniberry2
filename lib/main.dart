@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           // maybe you can remove it later?
-          // BlocProvider(create: (context) => sl<TimetableCubit>()),
+          BlocProvider(create: (context) => sl<TimetableCubit>()),
           BlocProvider(create: (context) => sl<PostCubit>()),
         ],
         child: MaterialApp(

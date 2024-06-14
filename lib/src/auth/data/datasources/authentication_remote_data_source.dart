@@ -128,6 +128,9 @@ class AuthenticationRemoteDataSourceImplementation
                 )
                 .toMap(),
           );
+      await _cloudStoreClient.collection('timetables').doc(result.id).update({
+        'timetableId': result.id,
+      });
       await _updateUserData({
         'timetableIds': [result.id],
       });

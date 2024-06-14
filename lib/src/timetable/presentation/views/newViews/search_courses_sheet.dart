@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
+import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry2/src/timetable/presentation/utils/period_to_japanese.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_addCoursePage.dart'; // AddCoursePage import 추가
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetalbe_courseDetailPage.dart';
+import 'package:uniberry2/src/timetable/presentation/widgets/course_card.dart';
 
 class SearchCoursesSheet extends StatefulWidget {
   const SearchCoursesSheet({
@@ -22,14 +25,17 @@ class SearchCoursesSheet extends StatefulWidget {
 }
 
 class _SearchCoursesSheetState extends State<SearchCoursesSheet> {
-  final TextEditingController _searchController = TextEditingController();
+  late TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
-    context
-        .read<TimetableCubit>()
-        .searchCourses(period: '月3', school: widget.school, term: widget.term);
+    _searchController = TextEditingController();
+    context.read<TimetableCubit>().searchCourses(
+          period: timetablePeriodToJapanese(widget.period),
+          school: widget.school,
+          term: widget.term,
+        );
   }
 
   @override
@@ -43,11 +49,17 @@ class _SearchCoursesSheetState extends State<SearchCoursesSheet> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${widget.school} - ${widget.period} - ${widget.term}',
-          style: const TextStyle(color: Colors.white),
+          '${widget.term.isEmpty ? "all year" : widget.term} - ${widget.school}',
+          style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
         backgroundColor: Colors.black,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -102,64 +114,7 @@ class _SearchCoursesSheetState extends State<SearchCoursesSheet> {
                     itemCount: state.courses.length,
                     itemBuilder: (context, index) {
                       final course = state.courses[index];
-                      return GestureDetector(
-                        onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => BlocProvider.value(
-                          //       value: BlocProvider.of<TimetableCubit>(context),
-                          //       child: TimetableCourseDetailPage(
-                          //         course: course,
-                          //         period: widget.period,
-                          //         term: widget.term,
-                          //       ),
-                          //     ),
-                          //   ),
-                          // );
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                course.titles.join(', '),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                course.professors.join(', '),
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.grey),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                course.codes.join(', '),
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return CourseCard(course: course);
                     },
                   );
                 } else if (state is TimetableError) {

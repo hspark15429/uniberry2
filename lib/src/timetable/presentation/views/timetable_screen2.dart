@@ -9,9 +9,13 @@ import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/course_details_view.dart';
 import 'package:uniberry2/src/timetable/presentation/views/newViews/search_courses_sheet.dart';
 import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_cell_card.dart';
 import 'package:uniberry2/src/timetable/presentation/views/newViews/update_timetable_list_sheet.dart';
+import 'package:uniberry2/src/timetable/presentation/widgets/course_card.dart';
+import 'package:uniberry2/src/timetable/presentation/widgets/select_school_dialog.dart';
+import 'package:uniberry2/src/timetable/presentation/widgets/select_term_sheet.dart';
 import 'package:uniberry2/src/timetable/presentation/widgets/timetable_header_widget.dart';
 
 class TimetableScreen2 extends StatefulWidget {
@@ -26,22 +30,27 @@ class TimetableScreen2 extends StatefulWidget {
 
 class _TimetableScreen2State extends State<TimetableScreen2> {
   final prefs = sl<SharedPreferences>();
-  late TimetableModel _currentTimetable;
+  bool isEditted = false;
   Map<TimetablePeriod, CourseModel?> timetableMapWithCourseObject = {};
+  late TimetableModel _currentTimetable;
+  late String school;
+  late String term; // 2024년봄학기
 
   TimetableModel get currentTimetable => _currentTimetable;
-
   set currentTimetable(TimetableModel timetable) {
-    _currentTimetable = timetable;
-    prefs.setString('lastTimetable', _currentTimetable.toJson());
-    timetableMapWithCourseObject = {};
-    setState(() {});
+    setState(() {
+      _currentTimetable = timetable;
+      isEditted = true;
+      prefs.setString('lastTimetable', _currentTimetable.toJson());
+      timetableMapWithCourseObject = {};
+    });
   }
 
   @override
   void initState() {
     super.initState();
-
+    school = '経営学部';
+    term = '';
     if (prefs.getString('lastTimetable') == null) {
       currentTimetable = widget.initialTimetable;
       prefs.setString('lastTimetable', currentTimetable.toJson());
@@ -98,12 +107,60 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
         ),
         actions: [
           IconButton(
+            icon: Icon(
+              Icons.save,
+              color: isEditted ? Colors.white : null,
+            ),
+            onPressed: () async {
+              if (isEditted == true) {
+                await context.read<TimetableCubit>().updateTimetable(
+                      timetableId: currentTimetable.timetableId,
+                      timetable: currentTimetable,
+                    );
+                setState(() {
+                  debugPrint(currentTimetable.timetableId);
+                  isEditted = false;
+                });
+              }
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.school, color: Colors.white),
-            onPressed: () {},
+            onPressed: () async {
+              final result = await showModalBottomSheet<String>(
+                context: context,
+                builder: (context) {
+                  return SelectSchoolSheet(currentSchool: school);
+                },
+              );
+              if (result != null) {
+                school = result;
+              }
+            },
           ),
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.white),
-            onPressed: () {},
+            onPressed: () async {
+              final result = await showModalBottomSheet<SelectTermSheetParams>(
+                context: context,
+                builder: (context) {
+                  return SelectTermSheet(
+                    params: SelectTermSheetParams(
+                      term: term,
+                      numOfPeriods: currentTimetable.numOfPeriods,
+                      numOfDays: currentTimetable.numOfDays,
+                    ),
+                  );
+                },
+              );
+              if (result != null) {
+                term = result.term;
+                currentTimetable = currentTimetable.copyWith(
+                  numOfDays: result.numOfDays,
+                  numOfPeriods: result.numOfPeriods,
+                );
+              }
+            },
           ),
         ],
       ),
@@ -223,6 +280,7 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
           ),
           ...periods.map(
             (period) {
+              final CourseModel? course = timetableMapWithCourseObject[period];
               return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -234,10 +292,27 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
                       color: Colors.white10,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: timetableMapWithCourseObject[period] != null
-                        ? TimetableCellCard(
-                            period: period,
-                            course: timetableMapWithCourseObject[period]!,
+                    child: course != null
+                        ? GestureDetector(
+                            onTap: () async {
+                              final result = await Navigator.push<CourseModel?>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CourseDetailsView(
+                                    course: course,
+                                  ),
+                                ),
+                              );
+                              if (result != null) {
+                                currentTimetable = currentTimetable.copyWith(
+                                  timetableMap: {
+                                    ...currentTimetable.timetableMap,
+                                    period: null,
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(course.titles.join(', ')),
                           )
                         : InkWell(
                             child: Container(
@@ -250,19 +325,29 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
                               ),
                               child: const Text(''), // 강의가 없으면 빈 텍스트
                             ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (newContext) => BlocProvider(
-                                    create: (context) => sl<TimetableCubit>(),
+                            onTap: () async {
+                              final result = await Navigator.of(context).push(
+                                MaterialPageRoute<Course>(
+                                  builder: (newContext) => BlocProvider.value(
+                                    value: BlocProvider.of<TimetableCubit>(
+                                      context,
+                                    ),
                                     child: SearchCoursesSheet(
                                       period: period,
-                                      school: '法学部',
-                                      term: '春セメスター', // 2024년봄학기
+                                      school: school,
+                                      term: term,
                                     ),
                                   ),
                                 ),
                               );
+                              if (result != null) {
+                                currentTimetable = currentTimetable.copyWith(
+                                  timetableMap: {
+                                    ...currentTimetable.timetableMap,
+                                    period: result.courseId,
+                                  },
+                                );
+                              }
                             },
                           ),
                   ),
