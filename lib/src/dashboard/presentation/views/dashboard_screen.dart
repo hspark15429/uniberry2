@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry2/core/providers/user_provider.dart';
+import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/src/auth/data/models/user_model.dart';
 import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/Chat/dm_list_page.dart';
@@ -76,6 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
+                await sl<SharedPreferences>().clear();
                 await FirebaseAuth.instance.signOut();
                 await Navigator.pushNamedAndRemoveUntil(
                   context,

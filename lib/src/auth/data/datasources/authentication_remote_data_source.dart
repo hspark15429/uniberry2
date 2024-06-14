@@ -11,6 +11,7 @@ import 'package:uniberry2/core/utils/constants.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/auth/data/models/user_model.dart';
 import 'package:uniberry2/src/auth/domain/entities/user.dart';
+import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 
 abstract class AuthenticationRemoteDataSource {
   Future<LocalUser> signIn({
@@ -117,6 +118,19 @@ class AuthenticationRemoteDataSourceImplementation
       await userCred.user!.updateDisplayName(fullName);
       await userCred.user!.updatePhotoURL(kDefaultImage);
       await _setUserData(userCred.user!, email);
+
+      // create a default timetable
+      final result = await _cloudStoreClient.collection('timetables').add(
+            TimetableModel.empty()
+                .copyWith(
+                  name: 'Default Timetable',
+                  uid: userCred.user!.uid,
+                )
+                .toMap(),
+          );
+      await _updateUserData({
+        'timetableIds': [result.id],
+      });
     } on FirebaseAuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occurred',

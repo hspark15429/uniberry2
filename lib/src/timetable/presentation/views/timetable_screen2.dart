@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/src/timetable/data/models/course_model.dart';
@@ -14,37 +15,46 @@ import 'package:uniberry2/src/timetable/presentation/views/newViews/update_timet
 import 'package:uniberry2/src/timetable/presentation/widgets/timetable_header_widget.dart';
 
 class TimetableScreen2 extends StatefulWidget {
-  const TimetableScreen2({super.key});
+  const TimetableScreen2({required this.initialTimetable, super.key});
 
   static const String routeName = '/timetable2';
+  final TimetableModel initialTimetable;
 
   @override
   State<TimetableScreen2> createState() => _TimetableScreen2State();
 }
 
 class _TimetableScreen2State extends State<TimetableScreen2> {
-  TimetableModel _currentTimetable = TimetableModel.empty().copyWith(
-    name: '시간표를 선택하세요.',
-  );
-  Map<TimetablePeriod, CourseModel> timetableMapWithCourseObject = {};
+  final prefs = sl<SharedPreferences>();
+  late TimetableModel _currentTimetable;
+  Map<TimetablePeriod, CourseModel?> timetableMapWithCourseObject = {};
+
+  TimetableModel get currentTimetable => _currentTimetable;
+
+  set currentTimetable(TimetableModel timetable) {
+    _currentTimetable = timetable;
+    prefs.setString('lastTimetable', _currentTimetable.toJson());
+    timetableMapWithCourseObject = {};
+    setState(() {});
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-  }
 
-  void switchCurrentTimetable(TimetableModel timetable) {
-    setState(() {
-      _currentTimetable = timetable;
-      timetableMapWithCourseObject = {};
-    });
+    if (prefs.getString('lastTimetable') == null) {
+      currentTimetable = widget.initialTimetable;
+      prefs.setString('lastTimetable', currentTimetable.toJson());
+    } else {
+      currentTimetable =
+          TimetableModel.fromJson(prefs.getString('lastTimetable')!);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     context.read<TimetableCubit>().getCourses(
-          _currentTimetable.timetableMap.values.whereType<String>().toList(),
+          currentTimetable.timetableMap.values.whereType<String>().toList(),
         );
 
     return Scaffold(
@@ -60,18 +70,13 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
                     context
                         .read<TimetableCubit>()
                         .getTimetables(provider.user!.timetableIds);
-                    return UpdateTimetableListSheet(
-                      switchCurrentTimetable: switchCurrentTimetable,
-                    );
+                    return const UpdateTimetableListSheet();
                   },
                 ),
               ),
             );
             if (newTimetable != null) {
-              setState(() {
-                _currentTimetable = newTimetable;
-                timetableMapWithCourseObject = {};
-              });
+              currentTimetable = newTimetable;
             }
           },
           child: Text(
@@ -114,21 +119,25 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
               child: BlocBuilder<TimetableCubit, TimetableState>(
                 builder: (context, state) {
                   if (state is CoursesFetched) {
-                    _currentTimetable.timetableMap.forEach((period, courseId) {
+                    currentTimetable.timetableMap.forEach((period, courseId) {
                       if (courseId is String && courseId.isNotEmpty) {
-                        timetableMapWithCourseObject[period] = state.courses
-                                .firstWhere(
-                                    (course) => course.courseId == courseId)
-                            as CourseModel;
+                        try {
+                          timetableMapWithCourseObject[period] = state.courses
+                                  .firstWhere(
+                                      (course) => course.courseId == courseId)
+                              as CourseModel;
+                        } catch (e) {
+                          timetableMapWithCourseObject[period] = null;
+                        }
                       }
                     });
                     return Column(
                       children: [
                         ...List.generate(
-                          _currentTimetable.numOfPeriods,
+                          currentTimetable.numOfPeriods,
                           (index) => _buildPeriodRow(
                             periodIndex: index,
-                            numOfDays: _currentTimetable.numOfDays,
+                            numOfDays: currentTimetable.numOfDays,
                           ),
                         ),
                         const SizedBox(height: 20),

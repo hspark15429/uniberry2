@@ -34,12 +34,14 @@ class Timetable extends Equatable {
   final int numOfPeriods;
 
   @override
-  List<Object?> get props => [timetableId, uid, name, timetableMap];
+  List<Object?> get props =>
+      [timetableId, uid, name, timetableMap, numOfDays, numOfPeriods];
 
   @override
   String toString() {
     return 'Timetable(timetableId: $timetableId, '
-        'name: $name, timetableMap: $timetableMap)';
+        'name: $name, timetableMap: $timetableMap, '
+        'numOfDays: $numOfDays, numOfPeriods: $numOfPeriods)';
   }
 }
 

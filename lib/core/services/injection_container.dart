@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:typesense/typesense.dart';
 import 'package:uniberry2/src/auth/data/datasources/authentication_remote_data_source.dart';
 import 'package:uniberry2/src/auth/data/repositories/authentication_repository_implementation.dart';

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
+import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/auth/data/models/user_model.dart';
 import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_in_screen.dart';
@@ -12,6 +13,7 @@ import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart'
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
+import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_screen.dart';
 
@@ -79,7 +81,49 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             }
             return BlocProvider(
               create: (context) => sl<TimetableCubit>(),
-              child: const TimetableScreen2(),
+              child: Builder(
+                builder: (context) {
+                  final String firstTimetableId;
+                  if (context.read<UserProvider>().user!.timetableIds.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  firstTimetableId =
+                      context.read<UserProvider>().user!.timetableIds.first;
+
+                  return BlocConsumer<TimetableCubit, TimetableState>(
+                    builder: (context, state) {
+                      if (state is TimetableInitial) {
+                        context
+                            .read<TimetableCubit>()
+                            .readTimetable(firstTimetableId);
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is TimetableLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is TimetableRead) {
+                        return BlocProvider(
+                          create: (context) => sl<TimetableCubit>(),
+                          child: TimetableScreen2(
+                            initialTimetable: state.timetable as TimetableModel,
+                          ),
+                        );
+                      } else if (state is TimetableError) {
+                        return const DashboardScreen();
+                      } else {
+                        return const DashboardScreen();
+                      }
+                    },
+                    listener: (BuildContext context, TimetableState state) {
+                      if (state is TimetableError) {
+                        CoreUtils.showSnackBar(context, state.message);
+                      }
+                    },
+                  );
+                },
+              ),
             );
           },
         ),

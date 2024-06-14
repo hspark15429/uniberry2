@@ -13,11 +13,8 @@ import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart'
 
 class UpdateTimetableListSheet extends StatefulWidget {
   const UpdateTimetableListSheet({
-    required this.switchCurrentTimetable,
     super.key,
   });
-
-  final Function(TimetableModel) switchCurrentTimetable;
 
   @override
   State<UpdateTimetableListSheet> createState() =>
@@ -127,9 +124,6 @@ class _UpdateTimetableListSheetState extends State<UpdateTimetableListSheet> {
                     return ListTile(
                       title: Text(state.timetables[index].name),
                       onTap: () {
-                        // widget.switchCurrentTimetable(
-                        //   state.timetables[index] as TimetableModel,
-                        // );
                         Navigator.pop(
                           context,
                           state.timetables[index] as TimetableModel,

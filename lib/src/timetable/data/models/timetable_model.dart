@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 
@@ -7,6 +9,8 @@ class TimetableModel extends Timetable {
     required super.uid,
     required super.name,
     required super.timetableMap,
+    super.numOfDays = 5,
+    super.numOfPeriods = 7,
   });
 
   TimetableModel.empty()
@@ -20,7 +24,13 @@ class TimetableModel extends Timetable {
               period: Period.period1,
             ): '_empty.courseId',
           },
+          numOfDays: 5,
+          numOfPeriods: 7,
         );
+
+  factory TimetableModel.fromJson(String source) => TimetableModel.fromMap(
+        jsonDecode(source) as DataMap,
+      );
 
   TimetableModel.fromMap(DataMap map)
       : this(
@@ -33,7 +43,11 @@ class TimetableModel extends Timetable {
               courseId as String?,
             ),
           ),
+          numOfDays: map['numOfDays'] as int? ?? 5,
+          numOfPeriods: map['numOfPeriods'] as int? ?? 7,
         );
+
+  String toJson() => jsonEncode(toMap());
 
   DataMap toMap() {
     return {
@@ -46,6 +60,8 @@ class TimetableModel extends Timetable {
           courseId,
         ),
       ),
+      'numOfDays': numOfDays,
+      'numOfPeriods': numOfPeriods,
     };
   }
 
@@ -54,12 +70,16 @@ class TimetableModel extends Timetable {
     String? uid,
     String? name,
     Map<TimetablePeriod, String?>? timetableMap,
+    int? numOfDays,
+    int? numOfPeriods,
   }) {
     return TimetableModel(
       timetableId: timetableId ?? this.timetableId,
       uid: uid ?? this.uid,
       name: name ?? this.name,
       timetableMap: timetableMap ?? this.timetableMap,
+      numOfDays: numOfDays ?? this.numOfDays,
+      numOfPeriods: numOfPeriods ?? this.numOfPeriods,
     );
   }
 }

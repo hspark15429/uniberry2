@@ -30,6 +30,23 @@ void main() {
     expect(mapEquals(result.timetableMap, tTimetable.timetableMap), isTrue);
   });
 
+  test('fromJson', () {
+    // act
+    final result = TimetableModel.fromJson(fixture('timetable.json'));
+    // assert
+    expect(result, tTimetable);
+    expect(mapEquals(result.timetableMap, tTimetable.timetableMap), isTrue);
+  });
+
+  test('toJson', () {
+    // act
+    final map = jsonDecode(fixture('timetable.json')) as DataMap;
+    final json = jsonEncode(map);
+    final result = tTimetable.toJson();
+    // assert
+    expect(result, json);
+  });
+
   test('toMap', () {
     // act
     final result = tTimetable.toMap();

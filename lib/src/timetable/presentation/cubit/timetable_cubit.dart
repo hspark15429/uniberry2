@@ -122,6 +122,10 @@ class TimetableCubit extends Cubit<TimetableState> {
 
   Future<void> getCourses(List<String> courseIds) async {
     emit(const TimetableLoading());
+    if (courseIds.isEmpty) {
+      emit(const TimetableError('No courses found'));
+      return;
+    }
 
     final courses = <Course?>[];
     for (final courseId in courseIds) {
