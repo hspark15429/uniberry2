@@ -10,6 +10,7 @@ import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart'
 import 'package:uniberry2/src/auth/presentation/utils/authentication_heroes.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:uniberry2/src/auth/presentation/widgets/sign_in_form.dart';
+import 'package:uniberry2/src/dashboard/presentation/views/dashboard.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _SignInScreenState extends State<SignInScreen> {
             CoreUtils.showSnackBar(context, state.message);
           } else if (state is SignedIn) {
             context.read<UserProvider>().initUser(state.user);
-            Navigator.pushReplacementNamed(context, DashboardScreen.routeName);
+            Navigator.pushReplacementNamed(context, Dashboard.routeName);
           }
         },
         builder: (context, state) {

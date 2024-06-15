@@ -7,6 +7,7 @@ import 'package:uniberry2/src/forum/data/models/post_model.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
@@ -14,6 +15,8 @@ import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 class MockCreatePost extends Mock implements CreatePost {}
 
 class MockReadPost extends Mock implements ReadPost {}
+
+class MockReadPosts extends Mock implements ReadPosts {}
 
 class MockUpdatePost extends Mock implements UpdatePost {}
 
@@ -24,6 +27,7 @@ class MockSearchPosts extends Mock implements SearchPosts {}
 void main() {
   late CreatePost createPost;
   late ReadPost readPost;
+  late ReadPosts readPosts;
   late UpdatePost updatePost;
   late DeletePost deletePost;
   late SearchPosts searchPosts;
@@ -34,6 +38,7 @@ void main() {
   setUp(() {
     createPost = MockCreatePost();
     readPost = MockReadPost();
+    readPosts = MockReadPosts();
     updatePost = MockUpdatePost();
     deletePost = MockDeletePost();
     searchPosts = MockSearchPosts();
@@ -41,6 +46,7 @@ void main() {
       updatePost: updatePost,
       createPost: createPost,
       readPost: readPost,
+      readPosts: readPosts,
       deletePost: deletePost,
       searchPosts: searchPosts,
     );

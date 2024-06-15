@@ -43,35 +43,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           }
         },
       );
-    case DashboardScreen.routeName:
+
+    case Dashboard.routeName:
       return MaterialPageRoute(
-        builder: (context) {
-          if (sl<FirebaseAuth>().currentUser != null) {
-            final user = sl<FirebaseAuth>().currentUser!;
-            final localUser = LocalUserModel(
-              uid: user.uid,
-              email: user.email ?? '',
-              points: 0,
-              fullName: user.displayName ?? '',
-            );
-            context.read<UserProvider>().initUser(localUser);
-            return const DashboardScreen();
-          } else {
-            return BlocProvider(
-              create: (_) => sl<AuthenticationCubit>(),
-              child: const SignInScreen(),
-            );
-          }
-        },
+        builder: (_) => const Dashboard(),
       );
 
-    case ForumScreen.routeName:
-      return MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (_) => sl<PostCubit>(),
-          child: const ForumScreen(),
-        ),
-      );
+    // case ForumScreen.routeName:
+    //   return MaterialPageRoute(
+    //     builder: (_) => BlocProvider(
+    //       create: (_) => sl<PostCubit>(),
+    //       child: const ForumScreen(),
+    //     ),
+    //   );
 
     case SignInScreen.routeName:
       return MaterialPageRoute(

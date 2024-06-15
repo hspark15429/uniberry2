@@ -4,11 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry2/core/common/providers/tab_navigator.dart';
 import 'package:uniberry2/core/common/widgets/gradient_background.dart';
 import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/res/colours.dart';
 import 'package:uniberry2/core/res/res.dart';
+import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/src/profile/presentation/widgets/pop_up_item.dart';
 
 class ProfileView extends StatefulWidget {
@@ -109,6 +111,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                     onTap: () async {
+                      await sl<SharedPreferences>().clear();
                       await FirebaseAuth.instance.signOut();
                       unawaited(
                         navigator!.pushNamedAndRemoveUntil(
