@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-class SelectTermSheet extends StatefulWidget {
-  const SelectTermSheet({required this.params, super.key});
+class TimetableSettingsSheet extends StatefulWidget {
+  const TimetableSettingsSheet({required this.params, super.key});
 
   final SelectTermSheetParams params;
 
   @override
-  State<SelectTermSheet> createState() => _SelectTermSheetState();
+  State<TimetableSettingsSheet> createState() => _TimetableSettingsSheetState();
 }
 
-class _SelectTermSheetState extends State<SelectTermSheet> {
+class _TimetableSettingsSheetState extends State<TimetableSettingsSheet> {
   late SelectTermSheetParams _params;
 
   @override

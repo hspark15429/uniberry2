@@ -11,24 +11,21 @@ import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 
-class UpdateTimetableListSheet extends StatefulWidget {
-  const UpdateTimetableListSheet({
+class TimetableUpdateListSheet extends StatefulWidget {
+  const TimetableUpdateListSheet({
+    required this.currentIndex,
     super.key,
   });
 
+  final int currentIndex;
+
   @override
-  State<UpdateTimetableListSheet> createState() =>
-      _UpdateTimetableListSheetState();
+  State<TimetableUpdateListSheet> createState() =>
+      _TimetableUpdateListSheetState();
 }
 
-class _UpdateTimetableListSheetState extends State<UpdateTimetableListSheet> {
+class _TimetableUpdateListSheetState extends State<TimetableUpdateListSheet> {
   final controller = TextEditingController();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -129,7 +126,7 @@ class _UpdateTimetableListSheetState extends State<UpdateTimetableListSheet> {
                           state.timetables[index] as TimetableModel,
                         );
                       },
-                      trailing: index == 0
+                      trailing: index == widget.currentIndex
                           ? null
                           : IconButton(
                               icon: const Icon(Icons.close),

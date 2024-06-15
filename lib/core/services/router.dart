@@ -10,6 +10,7 @@ import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart'
 import 'package:uniberry2/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart';
+import 'package:uniberry2/src/dashboard/presentation/views/dashboard.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
@@ -17,7 +18,7 @@ import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_screen.dart';
 
-import 'package:uniberry2/src/timetable/presentation/views/timetable_screen2.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -33,7 +34,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               fullName: user.displayName ?? '',
             );
             context.read<UserProvider>().initUser(localUser);
-            return const DashboardScreen();
+            return const Dashboard();
           } else {
             return BlocProvider(
               create: (_) => sl<AuthenticationCubit>(),
@@ -71,7 +72,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           child: const TimetableScreen(),
         ),
       );
-    case TimetableScreen2.routeName:
+    case TimetableView.routeName:
       return MaterialPageRoute(
         builder: (_) => StreamBuilder<LocalUserModel>(
           stream: DashboardUtils.userDataStream,
@@ -106,7 +107,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                       } else if (state is TimetableRead) {
                         return BlocProvider(
                           create: (context) => sl<TimetableCubit>(),
-                          child: TimetableScreen2(
+                          child: TimetableView(
                             initialTimetable: state.timetable as TimetableModel,
                           ),
                         );

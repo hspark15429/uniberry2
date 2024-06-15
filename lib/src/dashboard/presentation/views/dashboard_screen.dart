@@ -9,12 +9,12 @@ import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart'
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/Chat/dm_list_page.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/MainPage/homePage.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_screen.dart';
-import 'package:uniberry2/src/timetable/presentation/views/timetable_screen2.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_view.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
-  static const String routeName = '/dashboard';
+  static const String routeName = '/dashboard_screen';
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:uniberry2/core/utils/constants.dart';
 
-class SelectSchoolSheet extends StatelessWidget {
-  const SelectSchoolSheet({required this.currentSchool, super.key});
+class SelectSchoolTile extends StatelessWidget {
+  const SelectSchoolTile({required this.currentSchool, super.key});
 
   final String currentSchool;
 

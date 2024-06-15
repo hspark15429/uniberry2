@@ -8,6 +8,7 @@ import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/core/services/router.dart';
 import 'package:uniberry2/firebase_options.dart';
+import 'package:uniberry2/src/dashboard/presentation/providers/dashboard_controller.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/assignmentNotifier.dart';
@@ -31,19 +32,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AssignmentNotifier>(
-          create: (_) => AssignmentNotifier(),
-        ),
+        ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MultiBlocProvider(
         providers: [
           // maybe you can remove it later?
-          BlocProvider(create: (context) => sl<TimetableCubit>()),
+          // BlocProvider(create: (context) => sl<TimetableCubit>()),
           BlocProvider(create: (context) => sl<PostCubit>()),
         ],
         child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Uniberry',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: Colors.white, // 배경색을 흰색으로 설정

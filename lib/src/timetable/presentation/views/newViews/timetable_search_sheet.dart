@@ -9,8 +9,8 @@ import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/ti
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetalbe_courseDetailPage.dart';
 import 'package:uniberry2/src/timetable/presentation/widgets/course_card.dart';
 
-class SearchCoursesSheet extends StatefulWidget {
-  const SearchCoursesSheet({
+class TimetableSearchSheet extends StatefulWidget {
+  const TimetableSearchSheet({
     required this.period,
     required this.school,
     required this.term,
@@ -21,10 +21,10 @@ class SearchCoursesSheet extends StatefulWidget {
   final String term;
 
   @override
-  _SearchCoursesSheetState createState() => _SearchCoursesSheetState();
+  _TimetableSearchSheetState createState() => _TimetableSearchSheetState();
 }
 
-class _SearchCoursesSheetState extends State<SearchCoursesSheet> {
+class _TimetableSearchSheetState extends State<TimetableSearchSheet> {
   late TextEditingController _searchController;
 
   @override

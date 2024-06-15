@@ -10,25 +10,24 @@ import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/newViews/course_details_view.dart';
-import 'package:uniberry2/src/timetable/presentation/views/newViews/search_courses_sheet.dart';
-import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_cell_card.dart';
-import 'package:uniberry2/src/timetable/presentation/views/newViews/update_timetable_list_sheet.dart';
-import 'package:uniberry2/src/timetable/presentation/widgets/course_card.dart';
-import 'package:uniberry2/src/timetable/presentation/widgets/select_school_dialog.dart';
-import 'package:uniberry2/src/timetable/presentation/widgets/select_term_sheet.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_search_sheet.dart';
+
+import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_update_list_sheet.dart';
+import 'package:uniberry2/src/timetable/presentation/widgets/select_school_tile.dart';
+import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_settings_sheet.dart';
 import 'package:uniberry2/src/timetable/presentation/widgets/timetable_header_widget.dart';
 
-class TimetableScreen2 extends StatefulWidget {
-  const TimetableScreen2({required this.initialTimetable, super.key});
+class TimetableView extends StatefulWidget {
+  const TimetableView({required this.initialTimetable, super.key});
 
   static const String routeName = '/timetable2';
   final TimetableModel initialTimetable;
 
   @override
-  State<TimetableScreen2> createState() => _TimetableScreen2State();
+  State<TimetableView> createState() => _TimetableViewState();
 }
 
-class _TimetableScreen2State extends State<TimetableScreen2> {
+class _TimetableViewState extends State<TimetableView> {
   final prefs = sl<SharedPreferences>();
   bool isEditted = false;
   Map<TimetablePeriod, CourseModel?> timetableMapWithCourseObject = {};
@@ -76,10 +75,13 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
                 create: (context) => sl<TimetableCubit>(),
                 child: Consumer<UserProvider>(
                   builder: (context, provider, __) {
+                    final timetableIds = provider.user!.timetableIds;
+                    final currentIndex =
+                        timetableIds.indexOf(currentTimetable.timetableId);
                     context
                         .read<TimetableCubit>()
                         .getTimetables(provider.user!.timetableIds);
-                    return const UpdateTimetableListSheet();
+                    return TimetableUpdateListSheet(currentIndex: currentIndex);
                   },
                 ),
               ),
@@ -99,12 +101,6 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
         ),
         centerTitle: true,
         backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -130,7 +126,7 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
               final result = await showModalBottomSheet<String>(
                 context: context,
                 builder: (context) {
-                  return SelectSchoolSheet(currentSchool: school);
+                  return SelectSchoolTile(currentSchool: school);
                 },
               );
               if (result != null) {
@@ -144,7 +140,7 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
               final result = await showModalBottomSheet<SelectTermSheetParams>(
                 context: context,
                 builder: (context) {
-                  return SelectTermSheet(
+                  return TimetableSettingsSheet(
                     params: SelectTermSheetParams(
                       term: term,
                       numOfPeriods: currentTimetable.numOfPeriods,
@@ -332,7 +328,7 @@ class _TimetableScreen2State extends State<TimetableScreen2> {
                                     value: BlocProvider.of<TimetableCubit>(
                                       context,
                                     ),
-                                    child: SearchCoursesSheet(
+                                    child: TimetableSearchSheet(
                                       period: period,
                                       school: school,
                                       term: term,
