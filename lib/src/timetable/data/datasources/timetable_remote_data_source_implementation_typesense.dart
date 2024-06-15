@@ -41,7 +41,8 @@ class TimetableRemoteDataSourceImplementationTypesense
           .search(searchParameters);
 
       if (results['found'] == 0) {
-        debugPrint('course not found');
+        // debugPrint('course not found');
+        debugPrint(courseId);
         throw const ServerException(
           message: 'course not found',
           statusCode: 'no-data',

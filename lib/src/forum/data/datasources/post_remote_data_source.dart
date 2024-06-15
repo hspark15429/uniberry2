@@ -182,12 +182,17 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
       // _postsSearcher.rerun();
 
       // return postIds;
+
       final searchParameters = {
-        'q': content,
-        'query_by': 'title,content,author',
+        'q': content.isEmpty ? '*' : content,
         'include_fields': 'postId',
-        'per_page': '50',
+        'query_by': 'title,content,author',
+        // 'per_page': '50',
       };
+
+      if (content.isNotEmpty) {
+        searchParameters['per_page'] = '10';
+      }
 
       final results = await _typesenseClient
           .collection('posts')

@@ -12,7 +12,6 @@ MyApp
                   Body()
                     Announcements
                     Latest(filtered)
-
             ChangeNotifierProvider<TabNavigator>
                 MultiBlocProvider<TimetableCubit>
                 Consumer<UserProvider>

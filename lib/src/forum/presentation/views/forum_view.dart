@@ -10,11 +10,21 @@ class ForumView extends StatefulWidget {
 }
 
 class _ForumViewState extends State<ForumView> {
+  Key _forumBodyKey = UniqueKey();
+
+  void _refreshContent() {
+    setState(() {
+      _forumBodyKey = UniqueKey();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: ForumAppBar(),
-      body: ForumBody(),
+    return Scaffold(
+      appBar: ForumAppBar(
+        onRefresh: _refreshContent,
+      ),
+      body: ForumBody(key: _forumBodyKey),
     );
   }
 }
