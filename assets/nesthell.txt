@@ -1,0 +1,47 @@
+MyApp
+  build: MultiProvider(DashboardController, UserProvider)
+    MaterialApp(generateRoute)
+    '/'
+        Dashboard();
+        StreamBuilder<LocalUserModel>
+            Consumer<DashboardController>
+            ChangeNotifierProvider<TabNavigator>
+                MultiBlocProvider<PostCubit>
+                ForumView()
+                  Header()
+                  Body()
+                    Announcements
+                    Latest(filtered)
+
+            ChangeNotifierProvider<TabNavigator>
+                MultiBlocProvider<TimetableCubit>
+                Consumer<UserProvider>
+                    BlocConsumer<TimetableCubit>
+                    BlocProvider<TimetableCubit>
+                        TimetableView()
+                        appBar:
+                            title:
+                            showModalBottomSheet
+                                BlocProvider<TimetableCubit>
+                                Consumer<UserProvider>
+                                    TimetableUpdateListSheet()
+                                    showDialog
+                                    BlocBuilder<TimetableCubit>
+                            actions:
+                            showModalBottomSheet
+                                SelectSchoolTile()
+                            showModalBottomSheet
+                                TimetableSettingsSheet
+                        body:
+                            TimetableHeaderWidget
+                            BlocBuilder<TimetableCubit>
+                            _buildPeriodRow(periodIndex, numOfDays)
+                                CourseDetailsView()
+                                CourseCard()
+                                BlocProvider.value<TimetableCubit>
+                                TimetableSearchSheet()
+                                    BlocBuilder<TimetableCubit>
+                                    CourseCard()
+
+
+

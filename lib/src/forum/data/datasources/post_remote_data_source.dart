@@ -15,6 +15,7 @@ abstract class PostRemoteDataSource {
   const PostRemoteDataSource();
   Future<void> createPost(Post post);
   Future<PostModel> readPost(String postId);
+  Future<List<PostModel>> readPosts(List<String> postIds);
   Future<void> updatePost({
     required String postId,
     required UpdatePostAction action,
@@ -41,13 +42,6 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
   final FirebaseFirestore _cloudStoreClient;
   final FirebaseStorage _dbClient;
   final Client _typesenseClient;
-
-  // final StreamController<HitsPage> _searchResultsController =
-  //     StreamController<HitsPage>();
-  // Stream<HitsPage> get searchResultsStream => _searchResultsController.stream;
-
-  // Stream<HitsPage> get _searchPage =>
-  //     _postsSearcher.responses.map(HitsPage.fromResponse);
 
   @override
   Future<void> createPost(Post post) async {
@@ -78,6 +72,36 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
       final post =
           await _cloudStoreClient.collection('posts').doc(postId).get();
       return PostModel.fromMap(post.data()!);
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      debugPrint(s.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<List<PostModel>> readPosts(List<String> postIds) async {
+    try {
+      // final post =
+      //     await _cloudStoreClient.collection('posts').doc(postId).get();
+      // return PostModel.fromMap(post.data()!);
+      final posts = await Future.wait(
+        postIds.map(
+          (postId) async {
+            final post =
+                await _cloudStoreClient.collection('posts').doc(postId).get();
+            return PostModel.fromMap(post.data()!);
+          },
+        ),
+      );
+      return posts;
     } on FirebaseAuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occurred',

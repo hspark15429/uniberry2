@@ -69,6 +69,7 @@ Future<void> initForum() async {
       () => PostCubit(
         createPost: sl(),
         readPost: sl(),
+        readPosts: sl(),
         updatePost: sl(),
         deletePost: sl(),
         searchPosts: sl(),
@@ -77,6 +78,7 @@ Future<void> initForum() async {
     // usecases
     ..registerLazySingleton(() => CreatePost(sl()))
     ..registerLazySingleton(() => ReadPost(sl()))
+    ..registerLazySingleton(() => ReadPosts(sl()))
     ..registerLazySingleton(() => UpdatePost(sl()))
     ..registerLazySingleton(() => DeletePost(sl()))
     ..registerLazySingleton(() => SearchPosts(sl()))

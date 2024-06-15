@@ -7,6 +7,7 @@ abstract class PostRepository {
 
   ResultFuture<void> createPost(Post post);
   ResultFuture<Post> readPost(String postId);
+  ResultFuture<List<Post>> readPosts(List<String> postIds);
   ResultFuture<void> updatePost({
     required String postId,
     required UpdatePostAction action,

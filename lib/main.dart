@@ -35,21 +35,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          // maybe you can remove it later?
-          // BlocProvider(create: (context) => sl<TimetableCubit>()),
-          BlocProvider(create: (context) => sl<PostCubit>()),
-        ],
-        child: MaterialApp(
-          title: 'Uniberry',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            scaffoldBackgroundColor: Colors.white, // 배경색을 흰색으로 설정
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          onGenerateRoute: generateRoute,
+      child: MaterialApp(
+        title: 'Uniberry',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.white, // 배경색을 흰색으로 설정
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        onGenerateRoute: generateRoute,
       ),
     );
   }

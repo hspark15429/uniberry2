@@ -33,6 +33,16 @@ class PostRepositoryImplementation implements PostRepository {
   }
 
   @override
+  ResultFuture<List<Post>> readPosts(List<String> postIds) async {
+    try {
+      final result = await _remoteDataSource.readPosts(postIds);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
   ResultFuture<void> updatePost({
     required String postId,
     required UpdatePostAction action,

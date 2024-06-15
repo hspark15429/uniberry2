@@ -6,6 +6,7 @@ import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 
@@ -15,11 +16,13 @@ class PostCubit extends Cubit<PostState> {
   PostCubit({
     required CreatePost createPost,
     required ReadPost readPost,
+    required ReadPosts readPosts,
     required UpdatePost updatePost,
     required DeletePost deletePost,
     required SearchPosts searchPosts,
   })  : _createPost = createPost,
         _readPost = readPost,
+        _readPosts = readPosts,
         _updatePost = updatePost,
         _deletePost = deletePost,
         _searchPosts = searchPosts,
@@ -27,6 +30,7 @@ class PostCubit extends Cubit<PostState> {
 
   final CreatePost _createPost;
   final ReadPost _readPost;
+  final ReadPosts _readPosts;
   final UpdatePost _updatePost;
   final DeletePost _deletePost;
   final SearchPosts _searchPosts;
@@ -61,6 +65,16 @@ class PostCubit extends Cubit<PostState> {
     result.fold(
       (failure) => emit(PostError(failure.message)),
       (post) => emit(PostRead(post)),
+    );
+  }
+
+  Future<void> readPosts(List<String> postIds) async {
+    emit(PostLoading());
+    final result = await _readPosts(postIds);
+
+    result.fold(
+      (failure) => emit(PostError(failure.message)),
+      (posts) => emit(PostsRead(posts)),
     );
   }
 

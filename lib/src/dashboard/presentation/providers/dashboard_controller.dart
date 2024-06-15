@@ -7,6 +7,8 @@ import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
+import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry2/src/forum/presentation/views/forum_view.dart';
 import 'package:uniberry2/src/profile/presentation/views/profile_view.dart';
 import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
@@ -21,9 +23,9 @@ class DashboardController extends ChangeNotifier {
         TabItem(
           child: MultiBlocProvider(
             providers: [
-              BlocProvider(create: (_) => sl<TimetableCubit>()),
+              BlocProvider(create: (_) => sl<PostCubit>()),
             ],
-            child: const Placeholder(),
+            child: const ForumView(),
           ),
         ),
       ),
@@ -36,10 +38,6 @@ class DashboardController extends ChangeNotifier {
             providers: [
               BlocProvider(create: (_) => sl<TimetableCubit>()),
             ],
-            // child: ChangeNotifierProvider(
-            //   create: (_) => DocumentsTabController(),
-            //   child: const DocumentView(),
-            // ),
             child: Consumer<UserProvider>(
               builder: (context, provider, __) {
                 return Builder(

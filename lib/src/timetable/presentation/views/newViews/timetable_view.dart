@@ -114,7 +114,6 @@ class _TimetableViewState extends State<TimetableView> {
                       timetable: currentTimetable,
                     );
                 setState(() {
-                  debugPrint(currentTimetable.timetableId);
                   isEditted = false;
                 });
               }
