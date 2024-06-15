@@ -8,6 +8,7 @@ class Post extends Equatable {
     required this.author,
     required this.createdAt,
     required this.updatedAt,
+    this.tags = const [],
   });
 
   Post.empty([DateTime? date])
@@ -18,6 +19,7 @@ class Post extends Equatable {
           author: '_empty.author',
           createdAt: date ?? DateTime.now(),
           updatedAt: date ?? DateTime.now(),
+          tags: const ['_empty.tag'],
         );
 
   final String postId;
@@ -26,6 +28,7 @@ class Post extends Equatable {
   final String author;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final List<String> tags;
 
   @override
   List<Object> get props => [postId];
@@ -33,5 +36,5 @@ class Post extends Equatable {
   @override
   String toString() =>
       'Post(postId: $postId, title: $title, content: $content, author: $author, '
-      'createdAt: $createdAt, updatedAt: $updatedAt)';
+      'tags: $tags createdAt: $createdAt, updatedAt: $updatedAt)';
 }

@@ -3,14 +3,14 @@ import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
 
 class PostModel extends Post {
-  const PostModel({
-    required super.postId,
-    required super.title,
-    required super.content,
-    required super.author,
-    required super.createdAt,
-    required super.updatedAt,
-  });
+  const PostModel(
+      {required super.postId,
+      required super.title,
+      required super.content,
+      required super.author,
+      required super.createdAt,
+      required super.updatedAt,
+      super.tags});
 
   PostModel.empty([DateTime? date])
       : this(
@@ -20,6 +20,7 @@ class PostModel extends Post {
           author: '_empty.author',
           createdAt: date ?? DateTime.now(),
           updatedAt: date ?? DateTime.now(),
+          tags: const ['_empty.tag'],
         );
 
   PostModel.fromMap(DataMap map)
@@ -30,6 +31,9 @@ class PostModel extends Post {
           author: map['author'] as String,
           createdAt: (map['createdAt'] as Timestamp).toDate(),
           updatedAt: (map['updatedAt'] as Timestamp).toDate(),
+          tags: map['tags'] != null
+              ? (map['tags'] as List<dynamic>).cast<String>()
+              : [],
         );
 
   PostModel.fromJson(Map<String, dynamic> json)
@@ -42,6 +46,7 @@ class PostModel extends Post {
               DateTime.fromMicrosecondsSinceEpoch(json['createdAt'] as int),
           updatedAt:
               DateTime.fromMicrosecondsSinceEpoch(json['updatedAt'] as int),
+          tags: (json['tags'] as List<dynamic>).cast<String>(),
         );
 
   DataMap toMap() {
@@ -52,6 +57,7 @@ class PostModel extends Post {
       'author': author,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
+      'tags': tags,
     };
   }
 
@@ -62,6 +68,7 @@ class PostModel extends Post {
     String? author,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<String>? tags,
   }) {
     return PostModel(
       postId: postId ?? this.postId,
@@ -70,6 +77,7 @@ class PostModel extends Post {
       author: author ?? this.author,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      tags: tags ?? this.tags,
     );
   }
 }

@@ -6,9 +6,10 @@
     "createdAt": {
         "_seconds": 1677483548,
         "_nanoseconds": 123456000
-      },
-      "updatedAt": {
-        "_seconds": 1677483548,
-        "_nanoseconds": 123456000
-      }
+    },
+    "updatedAt": {
+      "_seconds": 1677483548,
+      "_nanoseconds": 123456000
+    },
+    "tags": ["_empty.tag"]
 }
