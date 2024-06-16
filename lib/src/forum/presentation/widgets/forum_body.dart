@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry2/core/common/views/loading_view.dart';
+import 'package:uniberry2/core/utils/constants.dart';
 import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry2/src/forum/presentation/widgets/announcement_card.dart';
 
 class ForumBody extends StatefulWidget {
   const ForumBody({
@@ -14,6 +16,9 @@ class ForumBody extends StatefulWidget {
 }
 
 class _ForumBodyState extends State<ForumBody> {
+  late List<String> tags;
+  int? selectedTagIndex;
+
   void readPosts() {
     context.read<PostCubit>().searchPosts('');
   }
@@ -21,6 +26,7 @@ class _ForumBodyState extends State<ForumBody> {
   @override
   void initState() {
     super.initState();
+    tags = kPostTags;
     readPosts();
   }
 
@@ -59,32 +65,41 @@ class _ForumBodyState extends State<ForumBody> {
                 height: 100,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    CategoryItem('assets/images/start_img.png', 'Horse Riding'),
-                    CategoryItem('assets/images/start_img.png', 'Tennis Club'),
-                    CategoryItem('assets/images/start_img.png', 'Book Club'),
-                    CategoryItem('assets/images/start_img.png', 'Cycling'),
-                    CategoryItem('assets/images/start_img.png', 'Horse Riding'),
-                    CategoryItem('assets/images/start_img.png', 'Tennis Club'),
-                    CategoryItem('assets/images/start_img.png', 'Book Club'),
-                    CategoryItem('assets/images/start_img.png', 'Cycling'),
+                  children: const [
+                    AnnouncementItem('assets/images/start_img.png', 'Hospital'),
+                    AnnouncementItem('assets/images/start_img.png', 'Baseball'),
+                    AnnouncementItem(
+                        'assets/images/start_img.png', 'Basketball'),
+                    AnnouncementItem('assets/images/start_img.png', 'Football'),
+                    AnnouncementItem(
+                        'assets/images/start_img.png', 'Horse Riding'),
+                    AnnouncementItem(
+                        'assets/images/start_img.png', 'Tennis Club'),
+                    AnnouncementItem(
+                        'assets/images/start_img.png', 'Book Club'),
+                    AnnouncementItem('assets/images/start_img.png', 'Cycling'),
                   ],
                 ),
               ),
               SizedBox(
-                height: 100,
-                child: ListView(
+                height: 60,
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    CategoryItem('assets/images/start_img.png', 'Hospital'),
-                    CategoryItem('assets/images/start_img.png', 'Baseball'),
-                    CategoryItem('assets/images/start_img.png', 'Basketball'),
-                    CategoryItem('assets/images/start_img.png', 'Football'),
-                    CategoryItem('assets/images/start_img.png', 'Horse Riding'),
-                    CategoryItem('assets/images/start_img.png', 'Tennis Club'),
-                    CategoryItem('assets/images/start_img.png', 'Book Club'),
-                    CategoryItem('assets/images/start_img.png', 'Cycling'),
-                  ],
+                  itemCount: tags.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: FilterChip(
+                        label: Text(tags[index]),
+                        selected: selectedTagIndex == index,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            selectedTagIndex = selected ? index : null;
+                          });
+                        },
+                      ),
+                    );
+                  },
                 ),
               ),
               ListView.builder(
@@ -104,26 +119,6 @@ class _ForumBodyState extends State<ForumBody> {
           ),
         );
       },
-    );
-  }
-}
-
-class CategoryItem extends StatelessWidget {
-  final String imagePath;
-  final String title;
-
-  CategoryItem(this.imagePath, this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Image.asset(imagePath, width: 60, height: 60),
-          Text(title),
-        ],
-      ),
     );
   }
 }

@@ -10,10 +10,10 @@ class HomeScreen extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              CategoryItem('assets/horse_riding.png', 'Horse Riding'),
-              CategoryItem('assets/tennis.png', 'Tennis Club'),
-              CategoryItem('assets/reading.png', 'Book Club'),
-              CategoryItem('assets/cycling.png', 'Cycling'),
+              AnnouncementItem('assets/horse_riding.png', 'Horse Riding'),
+              AnnouncementItem('assets/tennis.png', 'Tennis Club'),
+              AnnouncementItem('assets/reading.png', 'Book Club'),
+              AnnouncementItem('assets/cycling.png', 'Cycling'),
             ],
           ),
         ),
@@ -22,10 +22,10 @@ class HomeScreen extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              CategoryItem('assets/hospital.png', 'Hospital'),
-              CategoryItem('assets/baseball.png', 'Baseball'),
-              CategoryItem('assets/basketball.png', 'Basketball'),
-              CategoryItem('assets/football.png', 'Football'),
+              AnnouncementItem('assets/hospital.png', 'Hospital'),
+              AnnouncementItem('assets/baseball.png', 'Baseball'),
+              AnnouncementItem('assets/basketball.png', 'Basketball'),
+              AnnouncementItem('assets/football.png', 'Football'),
             ],
           ),
         ),
@@ -40,11 +40,11 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class CategoryItem extends StatelessWidget {
+class AnnouncementItem extends StatelessWidget {
+  const AnnouncementItem(this.imagePath, this.title, {super.key});
+
   final String imagePath;
   final String title;
-
-  CategoryItem(this.imagePath, this.title);
 
   @override
   Widget build(BuildContext context) {

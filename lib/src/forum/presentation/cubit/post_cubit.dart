@@ -120,7 +120,7 @@ class PostCubit extends Cubit<PostState> {
 
     result.fold(
       (failure) => emit(PostError(failure.message)),
-      (posts) => emit(PostsSearched(posts)),
+      (postIds) => emit(PostsSearched(postIds)),
     );
   }
 }

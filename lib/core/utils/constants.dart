@@ -1,4 +1,5 @@
 const kDefaultImage = 'firebasestorageurl';
+const kPostTags = ['public', 'sports', 'study', 'food', 'question', 'job'];
 const kSchools = [
   '法学部',
   '経済学部',
