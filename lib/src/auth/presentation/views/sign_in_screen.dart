@@ -10,7 +10,6 @@ import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart'
 import 'package:uniberry2/src/auth/presentation/utils/authentication_heroes.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_up_screen.dart';
 import 'package:uniberry2/src/auth/presentation/widgets/sign_in_form.dart';
-import 'package:uniberry2/src/dashboard/presentation/views/dashboard.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -46,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
             CoreUtils.showSnackBar(context, state.message);
           } else if (state is SignedIn) {
             context.read<UserProvider>().initUser(state.user);
-            Navigator.pushReplacementNamed(context, Dashboard.routeName);
+            Navigator.pushReplacementNamed(context, DashboardScreen.routeName);
           }
         },
         builder: (context, state) {
@@ -63,7 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: Padding(
                         padding: EdgeInsets.only(right: 80),
                         child: Text(
-                          'Sign In to Uniberry',
+                          'Welcome Back!',
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 32,
@@ -88,17 +87,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         Baseline(
                           baseline: 100,
                           baselineType: TextBaseline.alphabetic,
-                          child: Hero(
-                            tag: AuthenticationHeroes.redirectText,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  SignUpScreen.routeName,
-                                );
-                              },
-                              child: const Text('Register account?'),
-                            ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                SignUpScreen.routeName,
+                              );
+                            },
+                            child: const Text('Register account?'),
                           ),
                         ),
                       ],

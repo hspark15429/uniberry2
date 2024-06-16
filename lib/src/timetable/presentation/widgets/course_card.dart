@@ -31,51 +31,81 @@ class CourseCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            course.titles.join(', '),
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          _buildTitle(course.titles.join(', ')),
+          const SizedBox(height: 8),
+          _buildInfoRow(Icons.person, course.professors.join(', ')),
+          const SizedBox(height: 8),
+          _buildInfoRow(Icons.code, course.codes.join(', ')),
+          const SizedBox(height: 8),
+          _buildInfoRow(
+              Icons.language, 'Languages: ${course.languages.join(', ')}'),
+          const SizedBox(height: 8),
+          _buildInfoRow(Icons.savings, 'Credit: ${course.credit}'),
+          const SizedBox(height: 8),
+          _buildInfoRow(
+              Icons.schedule, 'Periods: ${course.periods.join(', ')}'),
+          const SizedBox(height: 8),
+          _buildInfoRow(Icons.location_on, "장소: ${course.campuses.join(", ")}"),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+            onPressed: () => _launchURL(course.syllabusUrl),
+            child: const Text(
+              '시라버스확인',
+              style: TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            course.professors.join(', '),
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            course.codes.join(', '),
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-          const SizedBox(height: 4),
-          SizedBox(
-            height: 30,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-              ),
-              onPressed: () => _launchURL(course.syllabusUrl),
-              child: const Text(
-                '시라버스확인',
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            "장소: ${course.campuses.join(", ")}",
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
-          ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 16),
           if (!alreadyAdded)
             ElevatedButton.icon(
               onPressed: () => Navigator.pop(context, course),
-              label: const Text('강의 추가'),
-            )
+              icon: const Icon(Icons.add, color: Colors.white),
+              label: const Text(
+                '강의 추가',
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.grey, size: 20),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+        ),
+      ],
     );
   }
 }

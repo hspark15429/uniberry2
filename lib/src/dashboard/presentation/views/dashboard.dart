@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
                           ? IconlyBold.home
                           : IconlyLight.home,
                       color: controller.currentIndex == 0
-                          ? Colours.primaryColour
+                          ? const Color.fromARGB(255, 248, 84, 84)
                           : Colors.grey,
                     ),
                     label: '',
@@ -64,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
                           ? IconlyBold.calendar
                           : IconlyLight.calendar,
                       color: controller.currentIndex == 1
-                          ? Colours.primaryColour
+                          ? const Color.fromARGB(255, 136, 67, 255)
                           : Colors.grey,
                     ),
                     label: '',
@@ -76,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
                           ? IconlyBold.profile
                           : IconlyLight.profile,
                       color: controller.currentIndex == 4
-                          ? Colours.primaryColour
+                          ? const Color.fromARGB(255, 0, 0, 0)
                           : Colors.grey,
                     ),
                     label: '',
