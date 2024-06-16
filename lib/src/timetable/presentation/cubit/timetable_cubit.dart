@@ -139,6 +139,8 @@ class TimetableCubit extends Cubit<TimetableState> {
 
     final validCourses = courses.whereType<Course>().toList();
 
+    if (isClosed) return;
+
     if (validCourses.isEmpty) {
       emit(const TimetableError('No courses found'));
       return;
@@ -162,6 +164,7 @@ class TimetableCubit extends Cubit<TimetableState> {
         period: period,
       ),
     );
+    if (isClosed) return;
 
     courseIds.fold(
       (failure) => emit(TimetableError(failure.errorMessage)),

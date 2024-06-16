@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final String typesenseProtocol = 'https';
 
   final PagingController<int, Course> _pagingController =
-      PagingController(firstPageKey: 0);
+      PagingController(firstPageKey: 0); // 1?
 
   final GlobalKey<ScaffoldState> _mainScaffoldKey = GlobalKey();
 

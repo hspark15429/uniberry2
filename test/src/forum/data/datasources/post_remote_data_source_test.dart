@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -125,6 +126,21 @@ void main() {
       // assert
       expect(posts, containsAll(['BTAK4gYfyz0rgYQb1CRg']));
       expect(posts, isNot(contains(['9cz1cQBgElhV0Iuknm6e'])));
+    });
+  });
+
+  group('searchPostsWithPageKey', () {
+    test('should search posts', () async {
+      // arrange
+
+      // act
+      final result = await dataSource.searchPostsWithPageKey(
+          title: '', author: '', content: 'title', pageKey: 5);
+      // assert
+
+      expect(result.pageKey, 5);
+      expect(result.nextPageKey, 6);
+      expect(result.posts is List<PostModel>, true);
     });
   });
 }

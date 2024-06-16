@@ -323,10 +323,8 @@ class _TimetableViewState extends State<TimetableView> {
                             onTap: () async {
                               final result = await Navigator.of(context).push(
                                 MaterialPageRoute<Course>(
-                                  builder: (newContext) => BlocProvider.value(
-                                    value: BlocProvider.of<TimetableCubit>(
-                                      context,
-                                    ),
+                                  builder: (newContext) => BlocProvider(
+                                    create: (context) => sl<TimetableCubit>(),
                                     child: TimetableSearchSheet(
                                       period: period,
                                       school: school,
@@ -343,6 +341,7 @@ class _TimetableViewState extends State<TimetableView> {
                                   },
                                 );
                               }
+                              setState(() {});
                             },
                           ),
                   ),

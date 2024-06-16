@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:uniberry2/core/common/views/loading_view.dart';
 import 'package:uniberry2/core/utils/constants.dart';
 import 'package:uniberry2/core/utils/core_utils.dart';
+import 'package:uniberry2/core/utils/typedefs.dart';
+import 'package:uniberry2/src/forum/data/models/post_model.dart';
+import 'package:uniberry2/src/forum/domain/entities/post.dart';
+
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/widgets/announcement_card.dart';
 
@@ -19,15 +24,30 @@ class _ForumBodyState extends State<ForumBody> {
   late List<String> tags;
   int? selectedTagIndex;
 
-  void readPosts() {
-    context.read<PostCubit>().searchPosts('');
+  final PagingController<int, Post> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  void searchPostsWithPageKey({required String query, required int pageKey}) {
+    context
+        .read<PostCubit>()
+        .searchPostsWithPageKey(query: query, pageKey: pageKey);
   }
 
   @override
   void initState() {
     super.initState();
     tags = kPostTags;
-    readPosts();
+    searchPostsWithPageKey(query: '', pageKey: 0);
+    context.read<PostCubit>().emit(PostInitial()); // hotfix, remove later
+    _pagingController.addPageRequestListener((pageKey) {
+      searchPostsWithPageKey(query: '', pageKey: pageKey);
+    });
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,15 +56,15 @@ class _ForumBodyState extends State<ForumBody> {
       listener: (context, state) {
         if (state is PostError) {
           CoreUtils.showSnackBar(context, state.message);
-        } else if (state is PostsSearched && state.postIds.isNotEmpty) {
-          context.read<PostCubit>().readPosts(state.postIds);
         }
       },
       builder: (context, state) {
-        if (state is! PostsRead && state is! PostError) {
+        if (state is! PostsSearchedWithPagekey && state is! PostError) {
           return const LoadingView();
         }
-        if ((state is PostsRead && state.posts.isEmpty) || state is PostError) {
+        if ((state is PostsSearchedWithPagekey &&
+                state.searchResult.posts.isEmpty) ||
+            state is PostError) {
           return const Center(
             child: Text(
               'No posts found',
@@ -53,15 +73,18 @@ class _ForumBodyState extends State<ForumBody> {
           );
         }
 
-        state as PostsRead;
+        state as PostsSearchedWithPagekey;
 
-        final courses = state.posts
-          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+        if (state.searchResult.pageKey == 1) {
+          _pagingController.refresh();
+        }
+        _pagingController.appendPage(
+            state.searchResult.posts, state.searchResult.nextPageKey);
 
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
+        return CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(
                 height: 100,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
@@ -81,7 +104,9 @@ class _ForumBodyState extends State<ForumBody> {
                   ],
                 ),
               ),
-              SizedBox(
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
                 height: 60,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -102,21 +127,31 @@ class _ForumBodyState extends State<ForumBody> {
                   },
                 ),
               ),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: courses.length,
-                itemBuilder: (context, index) {
-                  final course = courses[index];
-                  return ListTile(
-                    title: Text(course.title),
-                    subtitle: Text(course.content),
-                    trailing: Text('${course.createdAt}'),
-                  );
-                },
+            ),
+            PagedSliverList<int, Post>(
+              pagingController: _pagingController,
+              // physics: const NeverScrollableScrollPhysics(),
+              builderDelegate: PagedChildBuilderDelegate<Post>(
+                noItemsFoundIndicatorBuilder: (_) => const Center(
+                  child: Text('No results found'),
+                ),
+                itemBuilder: (_, item, __) => Container(
+                  color: Colors.white,
+                  height: 80,
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 50, child: Text(item.title)),
+                      const SizedBox(width: 20),
+                      SizedBox(width: 30, child: Text(item.content)),
+                      const SizedBox(width: 20),
+                      Expanded(child: Text(item.author))
+                    ],
+                  ),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

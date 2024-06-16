@@ -10,6 +10,8 @@ import 'package:uniberry2/core/errors/exceptions.dart';
 import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
+import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
+import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
 
 abstract class PostRemoteDataSource {
   const PostRemoteDataSource();
@@ -27,6 +29,12 @@ abstract class PostRemoteDataSource {
     required String author,
     required String title,
     required String content,
+  });
+  Future<SearchPostsWithPageKeyResult> searchPostsWithPageKey({
+    required String author,
+    required String title,
+    required String content,
+    required int pageKey,
   });
 }
 
@@ -176,13 +184,6 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
     required String content,
   }) async {
     try {
-      // _postsSearcher.query(content);
-      // final results = await _searchPage.first;
-      // final postIds = results.items.map((post) => post.postId).toList();
-      // _postsSearcher.rerun();
-
-      // return postIds;
-
       final searchParameters = {
         'q': content.isEmpty ? '*' : content,
         'include_fields': 'postId',
@@ -209,19 +210,49 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
       throw ServerException(message: e.toString(), statusCode: '50555');
     }
   }
+
+  @override
+  Future<SearchPostsWithPageKeyResult> searchPostsWithPageKey({
+    required String author,
+    required String title,
+    required String content,
+    required int pageKey,
+  }) async {
+    try {
+      final searchParameters = {
+        'q': content.isEmpty ? '*' : content,
+        'query_by': 'title,content,author',
+        'page': pageKey.toString(),
+        'sort_by': 'createdAt:desc',
+        // 'per_page': '50',
+      };
+
+      if (content.isNotEmpty) {
+        searchParameters['per_page'] = '10';
+      }
+
+      final response = await _typesenseClient
+          .collection('posts')
+          .documents
+          .search(searchParameters);
+
+      final posts = (response['hits'] as List)
+          .map((post) =>
+              PostModel.fromJson((post as DataMap)['document'] as DataMap))
+          .toList();
+
+      final nbPages = ((response['found'] as int) / 10).ceil();
+      final isLastPage = response['page'] as int >= nbPages;
+      final nextPageKey = isLastPage ? null : pageKey + 1;
+
+      return SearchPostsWithPageKeyResult(
+        posts: posts,
+        pageKey: pageKey,
+        nextPageKey: nextPageKey,
+      );
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      throw ServerException(message: e.toString(), statusCode: '50555');
+    }
+  }
 }
-
-// class HitsPage {
-//   const HitsPage(this.items, this.pageKey, this.nextPageKey);
-
-//   factory HitsPage.fromResponse(SearchResponse response) {
-//     final items = response.hits.map(PostModel.fromJson).toList();
-//     final isLastPage = response.page >= response.nbPages;
-//     final nextPageKey = isLastPage ? null : response.page + 1;
-//     return HitsPage(items, response.page, nextPageKey);
-//   }
-
-//   final List<PostModel> items;
-//   final int pageKey;
-//   final int? nextPageKey;
-// }

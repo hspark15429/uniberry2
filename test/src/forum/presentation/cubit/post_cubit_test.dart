@@ -9,6 +9,7 @@ import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
+import 'package:uniberry2/src/forum/domain/usecases/search_posts_with_page_key.dart';
 import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 
@@ -24,6 +25,9 @@ class MockDeletePost extends Mock implements DeletePost {}
 
 class MockSearchPosts extends Mock implements SearchPosts {}
 
+class MockSearchPostsWithPageKey extends Mock
+    implements SearchPostsWithPageKey {}
+
 void main() {
   late CreatePost createPost;
   late ReadPost readPost;
@@ -31,6 +35,7 @@ void main() {
   late UpdatePost updatePost;
   late DeletePost deletePost;
   late SearchPosts searchPosts;
+  late SearchPostsWithPageKey searchPostsWithPageKey;
   late PostCubit cubit;
 
   final tPost = PostModel.empty();
@@ -42,6 +47,7 @@ void main() {
     updatePost = MockUpdatePost();
     deletePost = MockDeletePost();
     searchPosts = MockSearchPosts();
+    searchPostsWithPageKey = MockSearchPostsWithPageKey();
     cubit = PostCubit(
       updatePost: updatePost,
       createPost: createPost,
@@ -49,6 +55,7 @@ void main() {
       readPosts: readPosts,
       deletePost: deletePost,
       searchPosts: searchPosts,
+      searchPostsWithPageKey: searchPostsWithPageKey,
     );
     registerFallbackValue(PostModel.empty());
     registerFallbackValue(const UpdatePostParams.empty());

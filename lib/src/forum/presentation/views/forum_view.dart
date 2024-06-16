@@ -25,6 +25,10 @@ class _ForumViewState extends State<ForumView> {
         onRefresh: _refreshContent,
       ),
       body: ForumBody(key: _forumBodyKey),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

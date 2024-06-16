@@ -46,7 +46,9 @@ class PostModel extends Post {
               DateTime.fromMicrosecondsSinceEpoch(json['createdAt'] as int),
           updatedAt:
               DateTime.fromMicrosecondsSinceEpoch(json['updatedAt'] as int),
-          tags: (json['tags'] as List<dynamic>).cast<String>(),
+          tags: json['tags'] != null
+              ? (json['tags'] as List<dynamic>).cast<String>()
+              : [],
         );
 
   DataMap toMap() {

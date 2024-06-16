@@ -73,6 +73,7 @@ Future<void> initForum() async {
         updatePost: sl(),
         deletePost: sl(),
         searchPosts: sl(),
+        searchPostsWithPageKey: sl(),
       ),
     )
     // usecases
@@ -82,6 +83,7 @@ Future<void> initForum() async {
     ..registerLazySingleton(() => UpdatePost(sl()))
     ..registerLazySingleton(() => DeletePost(sl()))
     ..registerLazySingleton(() => SearchPosts(sl()))
+    ..registerLazySingleton(() => SearchPostsWithPageKey(sl()))
     // repo impl
     ..registerLazySingleton<PostRepository>(
       () => PostRepositoryImplementation(sl()),

@@ -87,4 +87,24 @@ class PostRepositoryImplementation implements PostRepository {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
   }
+
+  @override
+  ResultFuture<SearchPostsWithPageKeyResult> searchPostsWithPageKey({
+    required String author,
+    required String title,
+    required String content,
+    required int pageKey,
+  }) async {
+    try {
+      final result = await _remoteDataSource.searchPostsWithPageKey(
+        author: author,
+        title: title,
+        content: content,
+        pageKey: pageKey,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
 }

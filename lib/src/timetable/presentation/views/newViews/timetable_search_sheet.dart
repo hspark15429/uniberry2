@@ -60,20 +60,6 @@ class _TimetableSearchSheetState extends State<TimetableSearchSheet> {
             Navigator.pop(context);
           },
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.add),
-        //     color: Colors.white,
-        //     onPressed: () {
-        //       // Navigator.push(
-        //       //   context,
-        //       //   MaterialPageRoute(
-        //       //     builder: (context) => AddCoursePage(period: widget.period),
-        //       //   ),
-        //       // );
-        //     },
-        //   ),
-        // ],
       ),
       body: Column(
         children: [

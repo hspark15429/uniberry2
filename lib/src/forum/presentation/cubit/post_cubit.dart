@@ -3,11 +3,13 @@ import 'package:equatable/equatable.dart';
 import 'package:uniberry2/core/enums/update_post_enum.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
+import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
+import 'package:uniberry2/src/forum/domain/usecases/search_posts_with_page_key.dart';
 import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 
 part 'post_state.dart';
@@ -20,12 +22,14 @@ class PostCubit extends Cubit<PostState> {
     required UpdatePost updatePost,
     required DeletePost deletePost,
     required SearchPosts searchPosts,
+    required SearchPostsWithPageKey searchPostsWithPageKey,
   })  : _createPost = createPost,
         _readPost = readPost,
         _readPosts = readPosts,
         _updatePost = updatePost,
         _deletePost = deletePost,
         _searchPosts = searchPosts,
+        _searchPostsWithPageKey = searchPostsWithPageKey,
         super(PostInitial());
 
   final CreatePost _createPost;
@@ -34,6 +38,7 @@ class PostCubit extends Cubit<PostState> {
   final UpdatePost _updatePost;
   final DeletePost _deletePost;
   final SearchPosts _searchPosts;
+  final SearchPostsWithPageKey _searchPostsWithPageKey;
 
   Future<void> createPost({
     required String title,
@@ -121,6 +126,25 @@ class PostCubit extends Cubit<PostState> {
     result.fold(
       (failure) => emit(PostError(failure.message)),
       (postIds) => emit(PostsSearched(postIds)),
+    );
+  }
+
+  Future<void> searchPostsWithPageKey({
+    required String query,
+    required int pageKey,
+  }) async {
+    // emit(PostLoading());
+    final result = await _searchPostsWithPageKey(
+      SearchPostsWithPageKeyParams(
+        title: '',
+        content: query,
+        author: '',
+        pageKey: pageKey,
+      ),
+    );
+    result.fold(
+      (failure) => emit(PostError(failure.message)),
+      (searchResult) => emit(PostsSearchedWithPagekey(searchResult)),
     );
   }
 }

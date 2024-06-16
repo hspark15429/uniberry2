@@ -44,6 +44,15 @@ class PostsSearched extends PostState {
   List<Object> get props => [postIds];
 }
 
+class PostsSearchedWithPagekey extends PostState {
+  const PostsSearchedWithPagekey(this.searchResult);
+
+  final SearchPostsWithPageKeyResult searchResult;
+
+  @override
+  List<Object> get props => [searchResult];
+}
+
 class PostError extends PostState {
   const PostError(this.message);
 
