@@ -69,13 +69,21 @@ class _AddPostViewState extends State<AddPostView> {
                   if (titleController.text.trim().isNotEmpty &&
                       contentController.text.trim().isNotEmpty) {
                     context.read<PostCubit>().createPost(
-                      title: titleController.text,
-                      content: contentController.text,
-                      author: user.fullName,
-                      createdAt: DateTime.now(),
-                      updatedAt: DateTime.now(),
-                      tags: [kPostTags[tagController.value]],
-                    );
+                          PostModel(
+                            postId: '_new.PostId',
+                            title: titleController.text,
+                            upvotes: [],
+                            downvotes: [],
+                            commentCount: 0,
+                            author: user.fullName,
+                            uid: user.uid,
+                            type: 'text',
+                            createdAt: DateTime.now(),
+                            updatedAt: DateTime.now(),
+                            content: contentController.text,
+                            tags: [kPostTags[tagController.value]],
+                          ),
+                        );
                   }
                 }
               },

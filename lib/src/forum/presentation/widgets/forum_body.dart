@@ -140,7 +140,7 @@ class _ForumBodyState extends State<ForumBody> {
                     children: [
                       SizedBox(width: 50, child: Text(item.title)),
                       const SizedBox(width: 20),
-                      SizedBox(width: 30, child: Text(item.content)),
+                      SizedBox(width: 30, child: Text(item.content ?? '')),
                       const SizedBox(width: 20),
                       Expanded(child: Text(item.author))
                     ],

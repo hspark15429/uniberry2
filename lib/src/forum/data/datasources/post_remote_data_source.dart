@@ -232,7 +232,7 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
       if (content.isNotEmpty) {
         searchParameters['per_page'] = '10';
       }
-      if (tags.isNotEmpty) {
+      if (tags.isNotEmpty && tags != null) {
         searchParameters['filter_by'] = 'tags:=$tags';
       }
 

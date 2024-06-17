@@ -40,24 +40,8 @@ class PostCubit extends Cubit<PostState> {
   final SearchPosts _searchPosts;
   final SearchPostsWithPageKey _searchPostsWithPageKey;
 
-  Future<void> createPost({
-    required String title,
-    required String content,
-    required String author,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    List<String> tags = const [],
-  }) async {
+  Future<void> createPost(Post post) async {
     emit(PostLoading());
-    final post = PostModel(
-      postId: '',
-      title: title,
-      content: content,
-      author: author,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      tags: tags,
-    );
     final result = await _createPost(post);
     result.fold(
       (failure) => emit(PostError(failure.message)),

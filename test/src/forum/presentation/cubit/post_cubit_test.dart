@@ -77,16 +77,11 @@ void main() {
             .thenAnswer((_) async => const Right(null));
         return cubit;
       },
-      act: (cubit) => cubit.createPost(
-        title: tPost.title,
-        content: tPost.content,
-        author: tPost.author,
-        updatedAt: tPost.updatedAt,
-        createdAt: tPost.createdAt,
-      ),
+      act: (cubit) => cubit.createPost(tPost),
       expect: () => [PostLoading(), PostCreated()],
       verify: (_) {
-        verify(() => createPost(tPost.copyWith(postId: ''))).called(1);
+        verify(() => createPost(tPost.copyWith(postId: '_empty.postId')))
+            .called(1);
         verifyNoMoreInteractions(createPost);
       },
     );
