@@ -284,7 +284,9 @@ class _TimetableViewState extends State<TimetableView> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
-                      color: Colors.white10,
+                      color: course != null
+                          ? Color.fromARGB(255, 252, 120, 120)
+                          : Colors.white10,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: course != null
@@ -307,7 +309,14 @@ class _TimetableViewState extends State<TimetableView> {
                                 );
                               }
                             },
-                            child: Text(course.titles.join(', ')),
+                            child: Text(
+                              course.titles.join(', ').length > 17
+                                  ? '${course.titles.join(', ').substring(0, 17)}...'
+                                  : course.titles.join(', '),
+                              textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                              style: const TextStyle(
+                                  color: Colors.white), // 텍스트 색상을 흰색으로 변경
+                            ),
                           )
                         : InkWell(
                             child: Container(
@@ -315,7 +324,7 @@ class _TimetableViewState extends State<TimetableView> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey),
-                                color: Colors.white10,
+                                color: const Color.fromARGB(26, 255, 255, 255),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: const Text(''), // 강의가 없으면 빈 텍스트
