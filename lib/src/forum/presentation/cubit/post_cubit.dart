@@ -146,6 +146,7 @@ class PostCubit extends Cubit<PostState> {
         tags: tags,
       ),
     );
+    if (isClosed) return;
     result.fold(
       (failure) => emit(PostError(failure.message)),
       (searchResult) => emit(PostsSearchedWithPagekey(searchResult)),
