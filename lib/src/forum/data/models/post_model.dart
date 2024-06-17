@@ -3,14 +3,15 @@ import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
 
 class PostModel extends Post {
-  const PostModel(
-      {required super.postId,
-      required super.title,
-      required super.content,
-      required super.author,
-      required super.createdAt,
-      required super.updatedAt,
-      super.tags});
+  const PostModel({
+    required super.postId,
+    required super.title,
+    required super.content,
+    required super.author,
+    required super.createdAt,
+    required super.updatedAt,
+    super.tags,
+  });
 
   PostModel.empty([DateTime? date])
       : this(

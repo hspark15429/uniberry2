@@ -46,6 +46,7 @@ class PostCubit extends Cubit<PostState> {
     required String author,
     required DateTime createdAt,
     required DateTime updatedAt,
+    List<String> tags = const [],
   }) async {
     emit(PostLoading());
     final post = PostModel(
@@ -55,6 +56,7 @@ class PostCubit extends Cubit<PostState> {
       author: author,
       createdAt: createdAt,
       updatedAt: updatedAt,
+      tags: tags,
     );
     final result = await _createPost(post);
     result.fold(

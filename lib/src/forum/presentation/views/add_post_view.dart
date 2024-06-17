@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:uniberry2/core/common/providers/tab_navigator.dart';
 import 'package:uniberry2/core/providers/user_provider.dart';
+import 'package:uniberry2/core/utils/constants.dart';
 import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/auth/domain/entities/user.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
@@ -21,6 +22,7 @@ class AddPostView extends StatefulWidget {
 class _AddPostViewState extends State<AddPostView> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+  final tagController = ValueNotifier<int>(1);
   final formKey = GlobalKey<FormState>();
 
   late LocalUser user;
@@ -67,12 +69,13 @@ class _AddPostViewState extends State<AddPostView> {
                   if (titleController.text.trim().isNotEmpty &&
                       contentController.text.trim().isNotEmpty) {
                     context.read<PostCubit>().createPost(
-                          title: titleController.text,
-                          content: contentController.text,
-                          author: user.fullName,
-                          createdAt: DateTime.now(),
-                          updatedAt: DateTime.now(),
-                        );
+                      title: titleController.text,
+                      content: contentController.text,
+                      author: user.fullName,
+                      createdAt: DateTime.now(),
+                      updatedAt: DateTime.now(),
+                      tags: [kPostTags[tagController.value]],
+                    );
                   }
                 }
               },
@@ -89,6 +92,7 @@ class _AddPostViewState extends State<AddPostView> {
                     AddPostForm(
                       titleController: titleController,
                       contentController: contentController,
+                      tagController: tagController,
                       formKey: formKey,
                     )
                   ],
