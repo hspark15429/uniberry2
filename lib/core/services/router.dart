@@ -13,6 +13,7 @@ import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart'
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry2/src/forum/presentation/views/add_post_view.dart';
 import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
 import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
@@ -48,15 +49,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => const Dashboard(),
       );
-
-    // case ForumScreen.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (_) => BlocProvider(
-    //       create: (_) => sl<PostCubit>(),
-    //       child: const ForumScreen(),
-    //     ),
-    //   );
-
     case SignInScreen.routeName:
       return MaterialPageRoute(
         builder: (_) => BlocProvider(
@@ -76,8 +68,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (_) => const fui.ForgotPasswordScreen(),
       );
 
-    // case '/test':
-    //   return MaterialPageRoute(builder: (_) => const MyHomePage());
+    case AddPostView.id:
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (context) => sl<PostCubit>(),
+          child: const AddPostView(),
+        ),
+      );
 
     default:
       return MaterialPageRoute(builder: (_) => const Placeholder());

@@ -55,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
                           ? Colours.primaryColour
                           : Colors.grey,
                     ),
-                    label: 'Home',
+                    label: '',
                     backgroundColor: Colors.white,
                   ),
                   BottomNavigationBarItem(
@@ -67,31 +67,7 @@ class _DashboardState extends State<Dashboard> {
                           ? Colours.primaryColour
                           : Colors.grey,
                     ),
-                    label: 'Timetable',
-                    backgroundColor: Colors.white,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(
-                      controller.currentIndex == 2
-                          ? IconlyBold.chart
-                          : IconlyLight.chart,
-                      color: controller.currentIndex == 2
-                          ? Colours.primaryColour
-                          : Colors.grey,
-                    ),
-                    label: 'Chart',
-                    backgroundColor: Colors.white,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(
-                      controller.currentIndex == 3
-                          ? IconlyBold.chat
-                          : IconlyLight.chat,
-                      color: controller.currentIndex == 3
-                          ? Colours.primaryColour
-                          : Colors.grey,
-                    ),
-                    label: 'Message',
+                    label: '',
                     backgroundColor: Colors.white,
                   ),
                   BottomNavigationBarItem(
@@ -103,7 +79,7 @@ class _DashboardState extends State<Dashboard> {
                           ? Colours.primaryColour
                           : Colors.grey,
                     ),
-                    label: 'User',
+                    label: '',
                     backgroundColor: Colors.white,
                   ),
                 ],

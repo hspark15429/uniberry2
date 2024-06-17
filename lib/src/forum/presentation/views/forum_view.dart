@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uniberry2/core/common/providers/tab_navigator.dart';
+import 'package:uniberry2/src/forum/presentation/views/add_post_view.dart';
 import 'package:uniberry2/src/forum/presentation/widgets/forum_app_bar.dart';
 import 'package:uniberry2/src/forum/presentation/widgets/forum_body.dart';
 
@@ -26,7 +29,9 @@ class _ForumViewState extends State<ForumView> {
       ),
       body: ForumBody(key: _forumBodyKey),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, AddPostView.id);
+        },
         child: const Icon(Icons.add),
       ),
     );

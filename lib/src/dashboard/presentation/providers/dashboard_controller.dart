@@ -101,20 +101,6 @@ class DashboardController extends ChangeNotifier {
       child: const PersistentView(),
     ),
     BlocProvider(
-      create: (context) => sl<AuthenticationCubit>(),
-      child: ChangeNotifierProvider(
-        create: (_) => TabNavigator(TabItem(child: const Placeholder())),
-        child: const PersistentView(),
-      ),
-    ),
-    BlocProvider(
-      create: (context) => sl<AuthenticationCubit>(),
-      child: ChangeNotifierProvider(
-        create: (_) => TabNavigator(TabItem(child: const Placeholder())),
-        child: const PersistentView(),
-      ),
-    ),
-    BlocProvider(
       create: (_) => sl<AuthenticationCubit>(),
       child: ChangeNotifierProvider(
         create: (_) => TabNavigator(TabItem(child: const ProfileView())),
@@ -125,7 +111,7 @@ class DashboardController extends ChangeNotifier {
 
   List<Widget> get screens => _screens;
 
-  int _currentIndex = 4;
+  int _currentIndex = 2;
 
   int get currentIndex => _currentIndex;
 
