@@ -34,8 +34,9 @@ class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
               scrollDirection: Axis.horizontal,
               children: state.searchResult.posts
                   .map((post) => AnnouncementItem(
-                        'assets/images/start_img.png',
-                        post.title,
+                        imagePath: post.content!,
+                        title: post.title,
+                        link: post.link,
                       ))
                   .toList(),
             ),
