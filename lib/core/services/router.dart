@@ -9,12 +9,14 @@ import 'package:uniberry2/src/auth/data/models/user_model.dart';
 import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:uniberry2/src/auth/presentation/views/sign_up_screen.dart';
+import 'package:uniberry2/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
+import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/views/add_post_view.dart';
-import 'package:uniberry2/src/forum/presentation/views/test/test_screen.dart';
+import 'package:uniberry2/src/forum/presentation/views/post_details_view.dart';
 import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_screen.dart';
@@ -75,7 +77,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           child: const AddPostView(),
         ),
       );
-
+    case PostDetailsView.id:
+      return MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => sl<PostCubit>(),
+            ),
+            BlocProvider(
+              create: (context) => sl<CommentCubit>(),
+            ),
+          ],
+          child: PostDetailsView(settings.arguments! as Post),
+        ),
+      );
     default:
       return MaterialPageRoute(builder: (_) => const Placeholder());
   }

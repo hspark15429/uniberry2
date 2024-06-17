@@ -8,6 +8,36 @@ Future<void> init() async {
   await initAuthentication();
   await initTimetable();
   await initForum();
+  await initComment();
+}
+
+Future<void> initComment() async {
+  // cubit
+  sl
+    ..registerFactory(
+      () => CommentCubit(
+        createComment: sl(),
+        getCommentsByPostId: sl(),
+        updateComment: sl(),
+        deleteComment: sl(),
+      ),
+    )
+    // usecases
+    ..registerLazySingleton(() => CreateComment(sl()))
+    ..registerLazySingleton(() => GetCommentsByPostId(sl()))
+    ..registerLazySingleton(() => UpdateComment(sl()))
+    ..registerLazySingleton(() => DeleteComment(sl()))
+    // repo impl
+    ..registerLazySingleton<CommentRepository>(
+      () => CommentRepositoryImplementation(sl()),
+    )
+    // datasource impl
+    ..registerLazySingleton<CommentRemoteDataSource>(
+      () => CommentRemoteDataSourceImplementation(
+        cloudStoreClient: sl(),
+        dbClient: sl(),
+      ),
+    );
 }
 
 Future<void> initTimetable() async {

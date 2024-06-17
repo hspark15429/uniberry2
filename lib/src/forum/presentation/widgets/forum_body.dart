@@ -13,6 +13,7 @@ import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/widgets/announcement_card.dart';
 import 'package:uniberry2/src/forum/presentation/widgets/forum_body_subheader1.dart';
 import 'package:uniberry2/src/forum/presentation/widgets/forum_body_subheader2.dart';
+import 'package:uniberry2/src/forum/presentation/widgets/post_card.dart';
 
 class ForumBody extends StatefulWidget {
   const ForumBody({
@@ -132,20 +133,7 @@ class _ForumBodyState extends State<ForumBody> {
                 noItemsFoundIndicatorBuilder: (_) => const Center(
                   child: Text('No results found'),
                 ),
-                itemBuilder: (_, item, __) => Container(
-                  color: Colors.white,
-                  height: 80,
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      SizedBox(width: 50, child: Text(item.title)),
-                      const SizedBox(width: 20),
-                      SizedBox(width: 30, child: Text(item.content ?? '')),
-                      const SizedBox(width: 20),
-                      Expanded(child: Text(item.author))
-                    ],
-                  ),
-                ),
+                itemBuilder: (_, item, __) => PostCard(post: item),
               ),
             );
           },

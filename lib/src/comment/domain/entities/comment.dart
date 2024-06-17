@@ -3,38 +3,41 @@ import 'package:equatable/equatable.dart';
 class Comment extends Equatable {
   const Comment({
     required this.commentId,
-    required this.text,
+    required this.content,
     required this.postId,
-    required this.username,
-    required this.profilePic,
+    required this.author,
+    required this.uid,
     required this.createdAt,
     required this.updatedAt,
+    this.profilePic,
   });
 
   Comment.empty([DateTime? date])
       : this(
           commentId: '_empty.commentId',
-          text: '_empty.text',
+          content: '_empty.content',
           postId: '_empty.postId',
-          username: '_empty.username',
+          author: '_empty.username',
+          uid: '_empty.uid',
           profilePic: '_empty.profilePic',
           createdAt: date ?? DateTime.now(),
           updatedAt: date ?? DateTime.now(),
         );
 
   final String commentId;
-  final String text;
+  final String content;
   final DateTime createdAt;
   final DateTime updatedAt;
   final String postId;
-  final String username;
-  final String profilePic;
+  final String author;
+  final String uid;
+  final String? profilePic;
 
   @override
   List<Object> get props => [commentId];
 
   @override
   String toString() =>
-      'Comment(commentId: $commentId, text: $text, postId: $postId, username: $username, '
-      'profilePic: $profilePic, createdAt: $createdAt, updatedAt: $updatedAt)';
+      'Comment(commentId: $commentId, text: $content, postId: $postId, username: $author, '
+      'profilePic: $profilePic, createdAt: $createdAt, updatedAt: $updatedAt) uid: $uid';
 }
