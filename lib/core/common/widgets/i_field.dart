@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 class IField extends StatelessWidget {
   const IField({
     required this.controller,
-    this.filled = false,
+    this.filled = true,
     this.obscureText = false,
     this.readOnly = false,
     super.key,
     this.validator,
     this.fillColour,
     this.suffixIcon,
+    this.prefixIcon,
     this.hintText,
     this.keyboardType,
     this.hintStyle,
     this.overrideValidator = false,
     this.maxlines = 1,
+    required TextStyle textStyle,
   });
 
   final String? Function(String?)? validator;
@@ -24,6 +26,7 @@ class IField extends StatelessWidget {
   final bool obscureText;
   final bool readOnly;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
   final String? hintText;
   final TextInputType? keyboardType;
   final bool overrideValidator;
@@ -62,12 +65,12 @@ class IField extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
         ),
-        // overwriting the default padding helps with that puffy look
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         filled: filled,
         fillColor: fillColour,
         suffixIcon: suffixIcon,
+        prefixIcon: prefixIcon,
         hintText: hintText,
         hintStyle: hintStyle ??
             const TextStyle(

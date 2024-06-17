@@ -25,7 +25,7 @@ class RoundedButton extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: buttonColour ?? Colors.blueAccent,
+          backgroundColor: buttonColour ?? Colors.deepPurple,
           foregroundColor: labelColour ?? Colors.white,
           minimumSize: const Size(double.maxFinite, 50),
         ),

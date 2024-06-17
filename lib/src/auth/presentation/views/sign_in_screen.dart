@@ -87,14 +87,17 @@ class _SignInScreenState extends State<SignInScreen> {
                         Baseline(
                           baseline: 100,
                           baselineType: TextBaseline.alphabetic,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                context,
-                                SignUpScreen.routeName,
-                              );
-                            },
-                            child: const Text('Register account?'),
+                          child: Hero(
+                            tag: AuthenticationHeroes.redirectText,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  SignUpScreen.routeName,
+                                );
+                              },
+                              child: const Text('Register account?'),
+                            ),
                           ),
                         ),
                       ],

@@ -35,7 +35,11 @@ class _AddPostFormState extends State<AddPostForm> {
       key: widget.formKey,
       child: Column(
         children: [
-          IField(controller: widget.titleController, hintText: 'Title'),
+          IField(
+            controller: widget.titleController,
+            hintText: 'Title',
+            textStyle: TextStyle(color: Colors.black),
+          ),
           const SizedBox(height: 5),
           SizedBox(
             height: 60,
@@ -62,6 +66,7 @@ class _AddPostFormState extends State<AddPostForm> {
           IField(
             controller: widget.contentController,
             hintText: 'Content',
+            textStyle: TextStyle(color: Colors.black),
             maxlines: 15,
           ),
         ],
