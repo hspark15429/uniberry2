@@ -2,12 +2,17 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class GradeChartPage extends StatelessWidget {
-
-  const GradeChartPage({required this.semesterGPAList, super.key});
   final List<Map<String, double>> semesterGPAList;
+
+  const GradeChartPage({Key? key, required this.semesterGPAList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // 유효한 값만 포함한 리스트 생성
+    final validSemesterGPAList = semesterGPAList.where((entry) {
+      return entry.values.first != null && !entry.values.first.isNaN;
+    }).toList();
+
     return Container(
       height: 200,
       padding: const EdgeInsets.all(16),
@@ -29,10 +34,11 @@ class GradeChartPage extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
+                reservedSize: 22,
                 getTitlesWidget: (value, meta) {
-                  var text = '';
-                  if (value.toInt() < semesterGPAList.length) {
-                    final semesterKey = semesterGPAList[value.toInt()].keys.first;
+                  String text = '';
+                  if (value.toInt() < validSemesterGPAList.length) {
+                    String semesterKey = validSemesterGPAList[value.toInt()].keys.first;
                     text = semesterKey;
                   }
                   return Text(
@@ -46,8 +52,8 @@ class GradeChartPage extends StatelessWidget {
                 },
               ),
             ),
-            rightTitles: const AxisTitles(),
-            topTitles: const AxisTitles(),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -66,15 +72,15 @@ class GradeChartPage extends StatelessWidget {
           ),
           borderData: FlBorderData(
             show: true,
-            border: Border.all(color: Colors.grey),
+            border: Border.all(color: Colors.grey, width: 1),
           ),
           minX: 0,
-          maxX: (semesterGPAList.length - 1).toDouble(),
+          maxX: (validSemesterGPAList.length - 1).toDouble(),
           minY: 0,
-          maxY: 5,
+          maxY: 5.0,
           lineBarsData: [
             LineChartBarData(
-              spots: semesterGPAList
+              spots: validSemesterGPAList
                   .asMap()
                   .entries
                   .map((entry) => FlSpot(entry.key.toDouble(), entry.value.values.first))
@@ -90,7 +96,8 @@ class GradeChartPage extends StatelessWidget {
               ),
               barWidth: 5,
               isStrokeCapRound: true,
-              belowBarData: BarAreaData(),
+              dotData: const FlDotData(show: true),
+              belowBarData: BarAreaData(show: false),
             ),
           ],
         ),

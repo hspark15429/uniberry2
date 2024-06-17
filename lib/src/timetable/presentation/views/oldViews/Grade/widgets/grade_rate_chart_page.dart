@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class GradeRateChartPage extends StatelessWidget {
-
-  const GradeRateChartPage({required this.totalRequiredCredits, required this.totalCompletedCredits, required this.cultureCreditsRequired, required this.cultureCreditsCompleted, required this.foreignLanguageCreditsRequired, required this.foreignLanguageCreditsCompleted, required this.majorCreditsRequired, required this.majorCreditsCompleted, super.key,
-  });
   final double totalRequiredCredits;
   final double totalCompletedCredits;
   final double cultureCreditsRequired;
@@ -13,9 +10,20 @@ class GradeRateChartPage extends StatelessWidget {
   final double majorCreditsRequired;
   final double majorCreditsCompleted;
 
+  const GradeRateChartPage({
+    required this.totalRequiredCredits,
+    required this.totalCompletedCredits,
+    required this.cultureCreditsRequired,
+    required this.cultureCreditsCompleted,
+    required this.foreignLanguageCreditsRequired,
+    required this.foreignLanguageCreditsCompleted,
+    required this.majorCreditsRequired,
+    required this.majorCreditsCompleted,
+  });
+
   double calculatePercentage(double required, double completed) {
     if (required == 0) {
-      return 0;
+      return 0.0;
     }
     return (completed / required) * 100.0;
   }
@@ -26,25 +34,25 @@ class GradeRateChartPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-children: [
-const Text('졸업', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        children: [
+          const Text('졸업', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
-_buildProgressIndicator('필요총학점', totalRequiredCredits, totalCompletedCredits),
+          _buildCompletedCredits("필요총학점", totalCompletedCredits),
           const SizedBox(height: 16),
-_buildProgressIndicator('교양과목', cultureCreditsRequired, cultureCreditsCompleted),
+          _buildProgressIndicator("교양과목", cultureCreditsRequired, cultureCreditsCompleted),
           const SizedBox(height: 16),
-_buildProgressIndicator('외국어', foreignLanguageCreditsRequired, foreignLanguageCreditsCompleted),
+          _buildProgressIndicator("외국어", foreignLanguageCreditsRequired, foreignLanguageCreditsCompleted),
           const SizedBox(height: 16),
-_buildProgressIndicator('전공', majorCreditsRequired, majorCreditsCompleted),
+          _buildProgressIndicator("전공", majorCreditsRequired, majorCreditsCompleted),
         ],
       ),
     );
   }
 
   Widget _buildProgressIndicator(String label, double required, double completed) {
-    final percentage = calculatePercentage(required, completed);
-    final requiredInt = required.toInt();
-    final completedInt = completed.toInt();
+    double percentage = calculatePercentage(required, completed);
+    int requiredInt = required.toInt();
+    int completedInt = completed.toInt();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +67,23 @@ _buildProgressIndicator('전공', majorCreditsRequired, majorCreditsCompleted),
         ),
         const SizedBox(height: 8),
         Text(
-          '필수 $requiredInt 이수 $completedInt (${percentage.toStringAsFixed(1)}%)',
+          "이수 $completedInt",
+          style: const TextStyle(fontSize: 14, color: Colors.black54),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCompletedCredits(String label, double completed) {
+    int completedInt = completed.toInt();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const SizedBox(height: 8),
+        Text(
+          "이수 $completedInt",
           style: const TextStyle(fontSize: 14, color: Colors.black54),
         ),
       ],
