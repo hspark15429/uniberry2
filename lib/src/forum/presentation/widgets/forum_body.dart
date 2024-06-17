@@ -25,19 +25,21 @@ class _ForumBodyState extends State<ForumBody> {
   int? selectedTagIndex;
 
   final PagingController<int, Post> _pagingController =
-      PagingController(firstPageKey: 0);
+      PagingController(firstPageKey: 1);
 
   void searchPostsWithPageKey({required String query, required int pageKey}) {
-    context
-        .read<PostCubit>()
-        .searchPostsWithPageKey(query: query, pageKey: pageKey);
+    context.read<PostCubit>().searchPostsWithPageKey(
+          query: query,
+          pageKey: pageKey,
+          tags: selectedTagIndex != null ? [tags[selectedTagIndex!]] : [],
+        );
   }
 
   @override
   void initState() {
     super.initState();
     tags = kPostTags;
-    searchPostsWithPageKey(query: '', pageKey: 0);
+    searchPostsWithPageKey(query: '', pageKey: 1);
     context.read<PostCubit>().emit(PostInitial()); // hotfix, remove later
     _pagingController.addPageRequestListener((pageKey) {
       searchPostsWithPageKey(query: '', pageKey: pageKey);
@@ -67,7 +69,7 @@ class _ForumBodyState extends State<ForumBody> {
             state is PostError) {
           return const Center(
             child: Text(
-              'No posts found',
+              'Please refresh or try again later.',
               textAlign: TextAlign.center,
             ),
           );
@@ -120,6 +122,7 @@ class _ForumBodyState extends State<ForumBody> {
                         onSelected: (bool selected) {
                           setState(() {
                             selectedTagIndex = selected ? index : null;
+                            searchPostsWithPageKey(query: '', pageKey: 1);
                           });
                         },
                       ),

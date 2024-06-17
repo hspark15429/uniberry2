@@ -134,6 +134,7 @@ class PostCubit extends Cubit<PostState> {
   Future<void> searchPostsWithPageKey({
     required String query,
     required int pageKey,
+    List<String> tags = const [],
   }) async {
     // emit(PostLoading());
     final result = await _searchPostsWithPageKey(
@@ -142,6 +143,7 @@ class PostCubit extends Cubit<PostState> {
         content: query,
         author: '',
         pageKey: pageKey,
+        tags: tags,
       ),
     );
     result.fold(

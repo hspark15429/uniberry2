@@ -94,6 +94,7 @@ class PostRepositoryImplementation implements PostRepository {
     required String title,
     required String content,
     required int pageKey,
+    List<String> tags = const [],
   }) async {
     try {
       final result = await _remoteDataSource.searchPostsWithPageKey(
@@ -101,6 +102,7 @@ class PostRepositoryImplementation implements PostRepository {
         title: title,
         content: content,
         pageKey: pageKey,
+        tags: tags,
       );
       return Right(result);
     } on ServerException catch (e) {

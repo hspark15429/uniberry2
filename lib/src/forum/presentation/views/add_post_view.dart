@@ -22,7 +22,7 @@ class AddPostView extends StatefulWidget {
 class _AddPostViewState extends State<AddPostView> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
-  final tagController = ValueNotifier<int>(1);
+  final tagController = ValueNotifier<int>(0);
   final formKey = GlobalKey<FormState>();
 
   late LocalUser user;

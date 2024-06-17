@@ -20,6 +20,7 @@ class SearchPostsWithPageKey
       title: params.title,
       content: params.content,
       pageKey: params.pageKey,
+      tags: params.tags,
     );
     return result;
   }
@@ -31,19 +32,22 @@ class SearchPostsWithPageKeyParams extends Equatable {
     required this.title,
     required this.content,
     required this.pageKey,
+    this.tags = const [],
   });
 
   const SearchPostsWithPageKeyParams.empty()
       : author = '',
         title = '',
         content = '',
-        pageKey = 0;
+        pageKey = 0,
+        tags = const [];
 
   final String author;
   final String title;
   final String content;
   final int pageKey;
+  final List<String> tags;
 
   @override
-  List<Object?> get props => [author, title, content, pageKey];
+  List<Object?> get props => [author, title, content, pageKey, tags];
 }

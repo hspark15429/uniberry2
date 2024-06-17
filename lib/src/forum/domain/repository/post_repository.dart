@@ -28,6 +28,7 @@ abstract class PostRepository {
     required String title,
     required String content,
     required int pageKey,
+    List<String> tags,
   });
 }
 

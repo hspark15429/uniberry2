@@ -35,6 +35,7 @@ abstract class PostRemoteDataSource {
     required String title,
     required String content,
     required int pageKey,
+    List<String> tags,
   });
 }
 
@@ -217,6 +218,7 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
     required String title,
     required String content,
     required int pageKey,
+    List<String> tags = const [],
   }) async {
     try {
       final searchParameters = {
@@ -229,6 +231,9 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
 
       if (content.isNotEmpty) {
         searchParameters['per_page'] = '10';
+      }
+      if (tags.isNotEmpty) {
+        searchParameters['filter_by'] = 'tags:=$tags';
       }
 
       final response = await _typesenseClient
