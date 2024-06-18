@@ -80,7 +80,7 @@ class _ForumBodyState extends State<ForumBody> {
               itemCount: tags.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: FilterChip(
                     label: Text(
                       tags[index],
@@ -135,7 +135,7 @@ class _ForumBodyState extends State<ForumBody> {
               _pagingController.refresh();
             }
             _pagingController.appendPage(
-                state.searchResult.posts, state.searchResult.nextPageKey);
+                state.searchResult.posts, state.searchResult.nextPageKey,);
             return PagedSliverList<int, Post>(
               pagingController: _pagingController,
               // physics: const NeverScrollableScrollPhysics(),

@@ -32,13 +32,13 @@ class _ForumViewState extends State<ForumView> {
         onPressed: () {
           Navigator.pushNamed(context, AddPostView.id);
         },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
         backgroundColor: Colors.black, //
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
         ),
       ),
       backgroundColor: Colors.white, // 전체 배경을 흰색으로 설정
