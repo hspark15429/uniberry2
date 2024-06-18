@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
 import 'package:uniberry2/src/forum/presentation/views/post_details_view.dart';
 
@@ -47,9 +48,23 @@ class PostCard extends StatelessWidget {
               style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 4),
-            Text(
-              post.author,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            Row(
+              children: [
+                Text(
+                  post.author,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+                const Spacer(),
+                const Icon(
+                  IconlyBold.chat,
+                  color: Colors.grey,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  post.commentCount.toString(),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ],
             ),
             const SizedBox(height: 4),
           ],

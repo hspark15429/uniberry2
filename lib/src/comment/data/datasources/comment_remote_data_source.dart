@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uniberry2/core/enums/update_comment_enum.dart';
 import 'package:uniberry2/core/errors/exceptions.dart';
+import 'package:uniberry2/core/utils/typedefs.dart';
 import 'package:uniberry2/src/comment/data/models/comment_model.dart';
 import 'package:uniberry2/src/comment/domain/entities/comment.dart';
 
@@ -66,7 +67,7 @@ class CommentRemoteDataSourceImplementation implements CommentRemoteDataSource {
         statusCode: e.code,
       );
     } catch (e, s) {
-      debugPrint(s.toString());
+      debugPrint(e.toString());
       throw ServerException(
         message: e.toString(),
         statusCode: '500',
@@ -80,6 +81,7 @@ class CommentRemoteDataSourceImplementation implements CommentRemoteDataSource {
       final comments = await _cloudStoreClient
           .collection('comments')
           .where('postId', isEqualTo: postId)
+          .orderBy('createdAt', descending: true)
           .get();
       return comments.docs
           .map((comment) => CommentModel.fromMap(comment.data()))
@@ -90,7 +92,8 @@ class CommentRemoteDataSourceImplementation implements CommentRemoteDataSource {
         statusCode: e.code,
       );
     } catch (e, s) {
-      debugPrint(s.toString());
+      // debugPrint(s.toString());
+      debugPrint(e.toString());
       throw ServerException(
         message: e.toString(),
         statusCode: '500',

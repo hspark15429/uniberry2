@@ -45,76 +45,108 @@ class _PostDetailsViewState extends State<PostDetailsView> {
       appBar: AppBar(
         title: Text(widget.post.title),
       ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 5,
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.post.title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  widget.post.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  widget.post.content!,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      widget.post.author,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    const Spacer(),
+                    // icon showing comment count
+                    const Icon(
+                      IconlyBold.chat,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      widget.post.commentCount.toString(),
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: BlocConsumer<CommentCubit, CommentState>(
+                listener: (context, state) {
+                  if (state is CommentCreated || state is CommentDeleted) {
+                    commentContentController.clear();
+                    context
+                        .read<CommentCubit>()
+                        .getCommentsByPostId(widget.post.postId);
+
+                    CoreUtils.showSnackBar(
+                      context,
+                      'Operation was successful!',
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  if (state is CommentsFetchedByPostId) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.comments.length,
+                      itemBuilder: (context, index) {
+                        final comment = state.comments[index];
+                        return CommentCard(comment: comment);
+                      },
+                    );
+                  }
+                  return const LoadingView();
+                },
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              widget.post.content!,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              widget.post.author,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(height: 4),
-            BlocConsumer<CommentCubit, CommentState>(
-              listener: (context, state) {
-                if (state is CommentCreated) {
-                  commentContentController.clear();
-                  context
-                      .read<CommentCubit>()
-                      .getCommentsByPostId(widget.post.postId);
-                  context.read<PostCubit>().updatePost(
-                        postId: widget.post.postId,
-                        action: UpdatePostAction.commentCount,
-                        postData: widget.post.commentCount + 1,
-                      );
-                  CoreUtils.showSnackBar(
-                    context,
-                    'Comment created successfully!',
-                  );
-                }
-              },
-              builder: (context, state) {
-                if (state is CommentsFetchedByPostId) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.comments.length,
-                    itemBuilder: (context, index) {
-                      final comment = state.comments[index];
-                      return CommentCard(comment: comment);
-                    },
-                  );
-                }
-                return const LoadingView();
-              },
-            )
-          ],
-        ),
+          )
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         child: Padding(
