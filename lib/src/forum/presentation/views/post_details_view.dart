@@ -1,3 +1,4 @@
+import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
@@ -68,7 +69,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                 color: Colors.white,
                 fontSize: 18), // AppBar 제목 텍스트 스타일을 흰색으로 설정
           ),
-          body: Column(
+          body: ListView(
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -96,10 +97,47 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      widget.post.content!,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
+                    if (widget.post.type == 'text')
+                      Text(
+                        widget.post.content!,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
+                      )
+                    else if (widget.post.type == 'image')
+                      Image.network(
+                        widget.post.content!,
+                        fit: BoxFit.cover,
+                      )
+                    else if (widget.post.type == 'link')
+                      AnyLinkPreview(
+                        link: widget.post.link!,
+                        displayDirection: UIDirection.uiDirectionHorizontal,
+                        showMultimedia: true,
+                        bodyMaxLines: 5,
+                        bodyTextOverflow: TextOverflow.ellipsis,
+                        titleStyle: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                        bodyStyle:
+                            const TextStyle(color: Colors.grey, fontSize: 12),
+                        errorBody: '내용 미리보기가 없습니다.',
+                        errorTitle: '제목 미리보기가 없습니다.',
+                        errorWidget: Container(
+                          color: Colors.grey[300],
+                          child: Text('Oops!'),
+                        ),
+                        errorImage: "https://google.com/",
+                        cache: Duration(days: 7),
+                        backgroundColor: Colors.grey[300],
+                        borderRadius: 12,
+                        removeElevation: false,
+                        boxShadow: [
+                          BoxShadow(blurRadius: 3, color: Colors.grey)
+                        ],
+                        // onTap: () {}, // This disables tap event
+                      ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
@@ -158,6 +196,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                     builder: (context, state) {
                       if (state is CommentsFetched) {
                         return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: state.comments.length,
                           itemBuilder: (context, index) {
