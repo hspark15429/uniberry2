@@ -18,6 +18,7 @@ abstract class PostRemoteDataSource {
   Future<void> createPost(Post post);
   Future<PostModel> readPost(String postId);
   Future<List<PostModel>> readPosts(List<String> postIds);
+  Future<List<PostModel>> getPostsByUserId(String userId);
   Future<void> updatePost({
     required String postId,
     required UpdatePostAction action,
@@ -258,6 +259,30 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
     } catch (e, s) {
       debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '50555');
+    }
+  }
+
+  @override
+  Future<List<PostModel>> getPostsByUserId(String userId) async {
+    try {
+      final posts = await _cloudStoreClient
+          .collection('posts')
+          .where('uid', isEqualTo: userId)
+          .orderBy('createdAt', descending: true)
+          .get();
+      return posts.docs.map((post) => PostModel.fromMap(post.data())).toList();
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      // debugPrint(s.toString());
+      debugPrint(e.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
     }
   }
 }

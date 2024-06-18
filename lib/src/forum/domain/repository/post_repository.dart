@@ -7,8 +7,13 @@ abstract class PostRepository {
   const PostRepository();
 
   ResultFuture<void> createPost(Post post);
+  ResultFuture<void> createPostWithImage({
+    required Post post,
+    required dynamic image,
+  });
   ResultFuture<Post> readPost(String postId);
   ResultFuture<List<Post>> readPosts(List<String> postIds);
+  ResultFuture<List<Post>> getPostsByUserId(String userId);
   ResultFuture<void> updatePost({
     required String postId,
     required UpdatePostAction action,

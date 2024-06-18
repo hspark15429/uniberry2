@@ -23,6 +23,15 @@ class PostRepositoryImplementation implements PostRepository {
   }
 
   @override
+  ResultFuture<void> createPostWithImage({
+    required Post post,
+    required image,
+  }) {
+    // TODO: implement createPostWithImage
+    throw UnimplementedError();
+  }
+
+  @override
   ResultFuture<Post> readPost(String postId) async {
     try {
       final result = await _remoteDataSource.readPost(postId);
@@ -36,6 +45,16 @@ class PostRepositoryImplementation implements PostRepository {
   ResultFuture<List<Post>> readPosts(List<String> postIds) async {
     try {
       final result = await _remoteDataSource.readPosts(postIds);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
+  ResultFuture<List<Post>> getPostsByUserId(String userId) async {
+    try {
+      final result = await _remoteDataSource.getPostsByUserId(userId);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));

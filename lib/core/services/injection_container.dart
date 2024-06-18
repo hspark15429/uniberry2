@@ -26,7 +26,9 @@ import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dar
 import 'package:uniberry2/src/forum/data/repositories/post_repository_implementation.dart';
 import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/create_post_with_image.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/get_posts_by_user_id.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';

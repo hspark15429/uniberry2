@@ -163,51 +163,48 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                   ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                      ),
-                    ],
-                  ),
-                  child: BlocConsumer<CommentCubit, CommentState>(
-                    listener: (context, state) {
-                      if (state is CommentCreated || state is CommentDeleted) {
-                        commentContentController.clear();
-                        context
-                            .read<CommentCubit>()
-                            .getCommentsByPostId(widget.post.postId);
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                    ),
+                  ],
+                ),
+                child: BlocConsumer<CommentCubit, CommentState>(
+                  listener: (context, state) {
+                    if (state is CommentCreated || state is CommentDeleted) {
+                      commentContentController.clear();
+                      context
+                          .read<CommentCubit>()
+                          .getCommentsByPostId(widget.post.postId);
 
-                        CoreUtils.showSnackBar(
-                          context,
-                          'Operation was successful!',
-                        );
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is CommentsFetched) {
-                        return ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.comments.length,
-                          itemBuilder: (context, index) {
-                            final comment = state.comments[index];
-                            return CommentCard(comment: comment);
-                          },
-                        );
-                      }
-                      return const LoadingView();
-                    },
-                  ),
+                      CoreUtils.showSnackBar(
+                        context,
+                        'Operation was successful!',
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is CommentsFetched) {
+                      return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: state.comments.length,
+                        itemBuilder: (context, index) {
+                          final comment = state.comments[index];
+                          return CommentCard(comment: comment);
+                        },
+                      );
+                    }
+                    return const LoadingView();
+                  },
                 ),
               )
             ],

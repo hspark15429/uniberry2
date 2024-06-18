@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:uniberry2/core/enums/update_post_enum.dart';
 import 'package:uniberry2/src/forum/data/models/post_model.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/create_post_with_image.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
@@ -14,6 +15,8 @@ import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 
 class MockCreatePost extends Mock implements CreatePost {}
+
+class MockCreatePostWithImage extends Mock implements CreatePostWithImage {}
 
 class MockReadPost extends Mock implements ReadPost {}
 
@@ -30,6 +33,7 @@ class MockSearchPostsWithPageKey extends Mock
 
 void main() {
   late CreatePost createPost;
+  late CreatePostWithImage createPostWithImage;
   late ReadPost readPost;
   late ReadPosts readPosts;
   late UpdatePost updatePost;
@@ -42,6 +46,7 @@ void main() {
 
   setUp(() {
     createPost = MockCreatePost();
+    createPostWithImage = MockCreatePostWithImage();
     readPost = MockReadPost();
     readPosts = MockReadPosts();
     updatePost = MockUpdatePost();
@@ -51,6 +56,7 @@ void main() {
     cubit = PostCubit(
       updatePost: updatePost,
       createPost: createPost,
+      createPostWithImage: createPostWithImage,
       readPost: readPost,
       readPosts: readPosts,
       deletePost: deletePost,

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uniberry2/core/common/widgets/i_field.dart';
 import 'package:uniberry2/core/utils/constants.dart';
 
@@ -27,6 +30,17 @@ class AddPostForm extends StatefulWidget {
 class _AddPostFormState extends State<AddPostForm> {
   late List<String> tags;
   late List<String> types;
+
+  File? pickedImage;
+
+  Future<void> pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        pickedImage = File(image.path);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -119,7 +133,7 @@ class _AddPostFormState extends State<AddPostForm> {
               filled: true,
               fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
             ),
-          if (widget.typeController.value == 1)
+          if (widget.typeController.value == 1) ...[
             IField(
               controller: widget.contentController,
               hintText: 'Image URL',
@@ -136,6 +150,16 @@ class _AddPostFormState extends State<AddPostForm> {
                 return 'Invalid URL';
               },
             ),
+            Center(
+              child: IconButton(
+                onPressed: pickImage,
+                icon: Icon(
+                  (pickedImage != null) ? Icons.edit : Icons.add_a_photo,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
           if (widget.typeController.value == 2)
             IField(
               controller: widget.linkController,

@@ -47,6 +47,12 @@
 	<true/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Uniberryは写真ライブラリへのアクセスを必要とします</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Uniberryはカメラへのアクセスを必要とします</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Uniberryはマイクへのアクセスを必要とします</string>
 
 </dict>
 </plist>

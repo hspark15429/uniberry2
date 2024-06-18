@@ -100,8 +100,10 @@ Future<void> initForum() async {
     ..registerFactory(
       () => PostCubit(
         createPost: sl(),
+        createPostWithImage: sl(),
         readPost: sl(),
         readPosts: sl(),
+        getPostsByUserId: sl(),
         updatePost: sl(),
         deletePost: sl(),
         searchPosts: sl(),
@@ -110,8 +112,10 @@ Future<void> initForum() async {
     )
     // usecases
     ..registerLazySingleton(() => CreatePost(sl()))
+    ..registerLazySingleton(() => CreatePostWithImage(sl()))
     ..registerLazySingleton(() => ReadPost(sl()))
     ..registerLazySingleton(() => ReadPosts(sl()))
+    ..registerLazySingleton(() => GetPostsByUserId(sl()))
     ..registerLazySingleton(() => UpdatePost(sl()))
     ..registerLazySingleton(() => DeletePost(sl()))
     ..registerLazySingleton(() => SearchPosts(sl()))
