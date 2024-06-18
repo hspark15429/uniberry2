@@ -44,6 +44,10 @@ class _PostDetailsViewState extends State<PostDetailsView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.post.title),
+        backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
+        iconTheme: IconThemeData(color: Colors.white), // AppBar 아이콘 색상을 흰색으로 설정
+        titleTextStyle: TextStyle(
+            color: Colors.white, fontSize: 18), // AppBar 제목 텍스트 스타일을 흰색으로 설정
       ),
       body: Column(
         children: [
@@ -85,7 +89,6 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       style: const TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     const Spacer(),
-                    // icon showing comment count
                     const Icon(
                       IconlyBold.chat,
                       color: Colors.grey,
@@ -149,6 +152,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
+        color: Colors.white, // BottomAppBar 배경색을 검정색으로 설정
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -157,7 +161,8 @@ class _PostDetailsViewState extends State<PostDetailsView> {
               controller: commentContentController,
               hintText: 'Comment',
               suffixIcon: IconButton(
-                icon: const Icon(IconlyBold.arrow_up_square),
+                icon: const Icon(IconlyBold.arrow_up_square,
+                    color: Colors.white), // 아이콘 색상을 흰색으로 설정
                 onPressed: () {
                   final user = context.read<UserProvider>().user;
                   if (commentContentController.text.trim().isNotEmpty) {
@@ -175,6 +180,9 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                   }
                 },
               ),
+              textStyle: TextStyle(color: Colors.white),
+              filled: true,
+              fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
             ),
           ),
         ),

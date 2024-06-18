@@ -82,8 +82,17 @@ class _ForumBodyState extends State<ForumBody> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: FilterChip(
-                    label: Text(tags[index]),
+                    label: Text(
+                      tags[index],
+                      style: TextStyle(
+                        color: selectedTagIndex == index
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
                     selected: selectedTagIndex == index,
+                    selectedColor: Colors.black,
+                    backgroundColor: Colors.white,
                     onSelected: (bool selected) {
                       setState(() {
                         selectedTagIndex = selected ? index : null;
@@ -104,7 +113,7 @@ class _ForumBodyState extends State<ForumBody> {
           },
           builder: (context, state) {
             if (state is! PostsSearchedWithPagekey && state is! PostError) {
-              return const SliverToBoxAdapter(child: const LoadingView());
+              return const SliverToBoxAdapter(child: LoadingView());
             }
             if ((state is PostsSearchedWithPagekey &&
                     state.searchResult.posts.isEmpty) ||
@@ -114,6 +123,7 @@ class _ForumBodyState extends State<ForumBody> {
                   child: Text(
                     'Please refresh or try again later.',
                     textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black), // 텍스트 색상 변경
                   ),
                 ),
               );
@@ -131,7 +141,10 @@ class _ForumBodyState extends State<ForumBody> {
               // physics: const NeverScrollableScrollPhysics(),
               builderDelegate: PagedChildBuilderDelegate<Post>(
                 noItemsFoundIndicatorBuilder: (_) => const Center(
-                  child: Text('No results found'),
+                  child: Text(
+                    'No results found',
+                    style: TextStyle(color: Colors.black), // 텍스트 색상 변경
+                  ),
                 ),
                 itemBuilder: (_, item, __) => PostCard(post: item),
               ),

@@ -60,8 +60,13 @@ class _AddPostViewState extends State<AddPostView> {
             onPressed: () {
               Navigator.pop(context);
             },
+            color: Colors.white, // BackButton 색상을 흰색으로 설정
           ),
-          title: const Text('Add Post'),
+          title: const Text(
+            'Add Post',
+            style: TextStyle(color: Colors.white), // AppBar 제목 색상을 흰색으로 설정
+          ),
+          backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
           actions: [
             TextButton(
               onPressed: () {
@@ -87,25 +92,29 @@ class _AddPostViewState extends State<AddPostView> {
                   }
                 }
               },
-              child: const Text('완료'),
+              child: const Text(
+                '완료',
+                style: TextStyle(color: Colors.white), // 완료 버튼 텍스트 색상을 흰색으로 설정
+              ),
             ),
           ],
         ),
         body: SafeArea(
           child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: Column(
-                  children: [
-                    AddPostForm(
-                      titleController: titleController,
-                      contentController: contentController,
-                      tagController: tagController,
-                      formKey: formKey,
-                    )
-                  ],
-                ),
-              )),
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: Column(
+                children: [
+                  AddPostForm(
+                    titleController: titleController,
+                    contentController: contentController,
+                    tagController: tagController,
+                    formKey: formKey,
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

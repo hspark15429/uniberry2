@@ -38,7 +38,9 @@ class _AddPostFormState extends State<AddPostForm> {
           IField(
             controller: widget.titleController,
             hintText: 'Title',
-            textStyle: TextStyle(color: Colors.black),
+            textStyle: const TextStyle(color: Colors.black),
+            filled: true,
+            fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
           ),
           const SizedBox(height: 5),
           SizedBox(
@@ -50,8 +52,17 @@ class _AddPostFormState extends State<AddPostForm> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: FilterChip(
-                    label: Text(tags[index]),
+                    label: Text(
+                      tags[index],
+                      style: TextStyle(
+                        color: widget.tagController.value == index
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
                     selected: widget.tagController.value == index,
+                    selectedColor: Colors.black,
+                    backgroundColor: Colors.white,
                     onSelected: (bool selected) {
                       setState(() {
                         widget.tagController.value = index;
@@ -66,8 +77,10 @@ class _AddPostFormState extends State<AddPostForm> {
           IField(
             controller: widget.contentController,
             hintText: 'Content',
-            textStyle: TextStyle(color: Colors.black),
+            textStyle: const TextStyle(color: Colors.black),
             maxlines: 15,
+            filled: true,
+            fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
           ),
         ],
       ),
