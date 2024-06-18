@@ -12,6 +12,8 @@ import 'package:uniberry2/core/res/colours.dart';
 import 'package:uniberry2/core/res/res.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/src/profile/presentation/widgets/pop_up_item.dart';
+import 'package:uniberry2/src/profile/presentation/widgets/profile_body.dart';
+import 'package:uniberry2/src/profile/presentation/widgets/profile_header.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -43,8 +45,8 @@ class _ProfileViewState extends State<ProfileView> {
           extendBodyBehindAppBar: true,
           backgroundColor: Colors.white,
           appBar: AppBar(
-            title: Text(
-              context.read<UserProvider>().user!.fullName,
+            title: const Text(
+              'Profile',
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 24,
@@ -67,21 +69,12 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                     onTap: () {
-                      context.read<TabNavigator>().push(
-                            TabItem(
-                              child: const Placeholder(),
-                            ),
-                          );
+                      // context.read<TabNavigator>().push(
+                      //       TabItem(
+                      //         child: const Placeholder(),
+                      //       ),
+                      //     );
                     },
-                  ),
-                  const PopupMenuItem<void>(
-                    child: PopupItem(
-                      title: 'Notification',
-                      icon: Icon(
-                        IconlyLight.notification,
-                        color: Colours.neutralTextColour,
-                      ),
-                    ),
                   ),
                   const PopupMenuItem<void>(
                     child: PopupItem(
@@ -131,8 +124,8 @@ class _ProfileViewState extends State<ProfileView> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: const [
-                // ProfileHeader(),
-                // ProfileBody(),
+                ProfileHeader(),
+                ProfileBody(),
               ],
             ),
           ),

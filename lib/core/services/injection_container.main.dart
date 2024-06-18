@@ -18,6 +18,7 @@ Future<void> initComment() async {
       () => CommentCubit(
         createComment: sl(),
         getCommentsByPostId: sl(),
+        getCommentsByUserId: sl(),
         updateComment: sl(),
         deleteComment: sl(),
       ),
@@ -25,6 +26,7 @@ Future<void> initComment() async {
     // usecases
     ..registerLazySingleton(() => CreateComment(sl()))
     ..registerLazySingleton(() => GetCommentsByPostId(sl()))
+    ..registerLazySingleton(() => GetCommentsByUserId(sl()))
     ..registerLazySingleton(() => UpdateComment(sl()))
     ..registerLazySingleton(() => DeleteComment(sl()))
     // repo impl

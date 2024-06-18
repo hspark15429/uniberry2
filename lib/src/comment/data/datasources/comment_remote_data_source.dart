@@ -13,6 +13,7 @@ abstract class CommentRemoteDataSource {
   Future<void> createComment(Comment comment);
   // Future<CommentModel> readComment(String commentId);
   Future<List<Comment>> getCommentsByPostId(String postId);
+  Future<List<Comment>> getCommentsByUserId(String userId);
   Future<void> updateComment({
     required String commentId,
     required UpdateCommentAction action,
@@ -81,6 +82,32 @@ class CommentRemoteDataSourceImplementation implements CommentRemoteDataSource {
       final comments = await _cloudStoreClient
           .collection('comments')
           .where('postId', isEqualTo: postId)
+          .orderBy('createdAt', descending: true)
+          .get();
+      return comments.docs
+          .map((comment) => CommentModel.fromMap(comment.data()))
+          .toList();
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      // debugPrint(s.toString());
+      debugPrint(e.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<List<Comment>> getCommentsByUserId(String userId) async {
+    try {
+      final comments = await _cloudStoreClient
+          .collection('comments')
+          .where('uid', isEqualTo: userId)
           .orderBy('createdAt', descending: true)
           .get();
       return comments.docs

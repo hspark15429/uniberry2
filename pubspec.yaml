@@ -114,4 +114,5 @@ flutter:
     - assets/uniberry_guide.html
     - assets/images/start_img.png
     - assets/images/auth_gradient_background.png
+    - assets/icons/
     - .env

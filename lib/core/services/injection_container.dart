@@ -19,6 +19,7 @@ import 'package:uniberry2/src/comment/domain/repository/comment_repository.dart'
 import 'package:uniberry2/src/comment/domain/usecases/create_comment.dart';
 import 'package:uniberry2/src/comment/domain/usecases/delete_comment.dart';
 import 'package:uniberry2/src/comment/domain/usecases/get_comments_by_post_id.dart';
+import 'package:uniberry2/src/comment/domain/usecases/get_comments_by_user_id.dart';
 import 'package:uniberry2/src/comment/domain/usecases/update_comment.dart';
 import 'package:uniberry2/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dart';
