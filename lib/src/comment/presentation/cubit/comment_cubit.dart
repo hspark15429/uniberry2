@@ -44,7 +44,7 @@ class CommentCubit extends Cubit<CommentState> {
     final result = await _getCommentsByPostId(postId);
     result.fold(
       (failure) => emit(CommentError(failure.message)),
-      (comments) => emit(CommentsFetchedByPostId(comments)),
+      (comments) => emit(CommentsFetched(comments)),
     );
   }
 
@@ -53,7 +53,7 @@ class CommentCubit extends Cubit<CommentState> {
     final result = await _getCommentsByUserId(userId);
     result.fold(
       (failure) => emit(CommentError(failure.message)),
-      (comments) => emit(CommentsFetchedByPostId(comments)),
+      (comments) => emit(CommentsFetched(comments)),
     );
   }
 

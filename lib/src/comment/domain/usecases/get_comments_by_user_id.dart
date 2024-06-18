@@ -11,6 +11,6 @@ class GetCommentsByUserId implements UsecaseWithParams<List<Comment>, String> {
 
   @override
   ResultFuture<List<Comment>> call(String userId) async {
-    return _repo.getCommentsByPostId(userId);
+    return _repo.getCommentsByUserId(userId);
   }
 }

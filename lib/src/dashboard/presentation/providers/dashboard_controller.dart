@@ -7,6 +7,7 @@ import 'package:uniberry2/core/providers/user_provider.dart';
 import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/core/utils/core_utils.dart';
 import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
+import 'package:uniberry2/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry2/src/forum/presentation/views/forum_view.dart';
 import 'package:uniberry2/src/profile/presentation/views/profile_view.dart';
@@ -103,7 +104,18 @@ class DashboardController extends ChangeNotifier {
     BlocProvider(
       create: (_) => sl<AuthenticationCubit>(),
       child: ChangeNotifierProvider(
-        create: (_) => TabNavigator(TabItem(child: const ProfileView())),
+        create: (_) => TabNavigator(TabItem(
+            child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => sl<CommentCubit>(),
+            ),
+            BlocProvider(
+              create: (context) => sl<PostCubit>(),
+            ),
+          ],
+          child: const ProfileView(),
+        ))),
         child: const PersistentView(),
       ),
     ),

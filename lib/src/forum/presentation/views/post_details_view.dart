@@ -131,7 +131,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                   }
                 },
                 builder: (context, state) {
-                  if (state is CommentsFetchedByPostId) {
+                  if (state is CommentsFetched) {
                     return ListView.builder(
                       shrinkWrap: true,
                       itemCount: state.comments.length,

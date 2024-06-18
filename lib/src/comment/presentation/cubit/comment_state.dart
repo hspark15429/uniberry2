@@ -13,8 +13,8 @@ class CommentLoading extends CommentState {}
 
 class CommentCreated extends CommentState {}
 
-class CommentsFetchedByPostId extends CommentState {
-  const CommentsFetchedByPostId(this.comments);
+class CommentsFetched extends CommentState {
+  const CommentsFetched(this.comments);
 
   final List<Comment> comments;
 

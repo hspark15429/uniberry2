@@ -19,7 +19,14 @@ class AnnouncementItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Image.network(imagePath, width: 60, height: 60),
+              Image.network(
+                imagePath,
+                width: 60,
+                height: 60,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error);
+                },
+              ),
               Text(title),
             ],
           ),
