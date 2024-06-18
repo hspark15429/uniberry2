@@ -46,6 +46,7 @@ class _ProfileBodyState extends State<ProfileBody> {
               builder: (context, state) {
                 if (state is CommentsFetched) {
                   return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: state.comments.length,
                     itemBuilder: (context, index) {

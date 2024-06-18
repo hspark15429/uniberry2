@@ -1,3 +1,4 @@
+import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:uniberry2/src/forum/domain/entities/post.dart';
@@ -43,11 +44,43 @@ class PostCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              post.content!,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(height: 4),
+            if (post.type == 'text')
+              Text(
+                post.content!,
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
+              )
+            else if (post.type == 'image')
+              Image.network(
+                post.content!,
+                fit: BoxFit.cover,
+              )
+            else if (post.type == 'link')
+              AnyLinkPreview(
+                link: post.link!,
+                displayDirection: UIDirection.uiDirectionHorizontal,
+                showMultimedia: true,
+                bodyMaxLines: 5,
+                bodyTextOverflow: TextOverflow.ellipsis,
+                titleStyle: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+                bodyStyle: const TextStyle(color: Colors.grey, fontSize: 12),
+                errorBody: '내용 미리보기가 없습니다.',
+                errorTitle: '제목 미리보기가 없습니다.',
+                errorWidget: Container(
+                  color: Colors.grey[300],
+                  child: Text('Oops!'),
+                ),
+                errorImage: "https://google.com/",
+                cache: Duration(days: 7),
+                backgroundColor: Colors.grey[300],
+                borderRadius: 12,
+                removeElevation: false,
+                boxShadow: [BoxShadow(blurRadius: 3, color: Colors.grey)],
+                // onTap: () {}, // This disables tap event
+              ),
             Row(
               children: [
                 Text(

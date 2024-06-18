@@ -6,14 +6,18 @@ class AddPostForm extends StatefulWidget {
   const AddPostForm({
     required this.titleController,
     required this.contentController,
+    required this.linkController,
     required this.formKey,
     required this.tagController,
+    required this.typeController,
     super.key,
   });
 
   final TextEditingController titleController;
   final TextEditingController contentController;
+  final TextEditingController linkController;
   final ValueNotifier<int> tagController;
+  final ValueNotifier<int> typeController;
   final GlobalKey<FormState> formKey;
 
   @override
@@ -22,11 +26,13 @@ class AddPostForm extends StatefulWidget {
 
 class _AddPostFormState extends State<AddPostForm> {
   late List<String> tags;
+  late List<String> types;
 
   @override
   void initState() {
     super.initState();
     tags = kPostTags;
+    types = kPostTypes;
   }
 
   @override
@@ -73,15 +79,80 @@ class _AddPostFormState extends State<AddPostForm> {
               },
             ),
           ),
-          const SizedBox(height: 5),
-          IField(
-            controller: widget.contentController,
-            hintText: 'Content',
-            textStyle: const TextStyle(color: Colors.black),
-            maxlines: 15,
-            filled: true,
-            fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
+          SizedBox(
+            height: 60,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: types.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: FilterChip(
+                    label: Text(
+                      types[index],
+                      style: TextStyle(
+                        color: widget.typeController.value == index
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
+                    selected: widget.typeController.value == index,
+                    selectedColor: Colors.black,
+                    backgroundColor: Colors.white,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        widget.typeController.value = index;
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
           ),
+          const SizedBox(height: 5),
+          if (widget.typeController.value == 0)
+            IField(
+              controller: widget.contentController,
+              hintText: 'Content',
+              textStyle: const TextStyle(color: Colors.black),
+              maxlines: 15,
+              filled: true,
+              fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
+            ),
+          if (widget.typeController.value == 1)
+            IField(
+              controller: widget.contentController,
+              hintText: 'Image URL',
+              textStyle: const TextStyle(color: Colors.black),
+              filled: true,
+              fillColour: Colors.white,
+              keyboardType: TextInputType.url,
+              overrideValidator: true,
+              validator: (value) {
+                if (value!.startsWith('http://') ||
+                    value.startsWith('https://')) {
+                  return null;
+                }
+                return 'Invalid URL';
+              },
+            ),
+          if (widget.typeController.value == 2)
+            IField(
+              controller: widget.linkController,
+              hintText: 'Link URL',
+              textStyle: const TextStyle(color: Colors.black),
+              filled: true,
+              fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
+              keyboardType: TextInputType.url,
+              overrideValidator: true,
+              validator: (value) {
+                if (value!.startsWith('http://') ||
+                    value.startsWith('https://')) {
+                  return null;
+                }
+                return 'Invalid URL';
+              },
+            ),
         ],
       ),
     );

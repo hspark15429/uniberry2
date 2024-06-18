@@ -5,8 +5,6 @@ import 'package:uniberry2/src/timetable/domain/entities/course.dart';
 import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry2/src/timetable/presentation/utils/period_to_japanese.dart';
-import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetable_addCoursePage.dart'; // AddCoursePage import 추가
-import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/timetalbe_courseDetailPage.dart';
 import 'package:uniberry2/src/timetable/presentation/widgets/course_card.dart';
 
 class TimetableSearchSheet extends StatefulWidget {

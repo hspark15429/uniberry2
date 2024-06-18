@@ -22,7 +22,9 @@ class AddPostView extends StatefulWidget {
 class _AddPostViewState extends State<AddPostView> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+  final linkController = TextEditingController();
   final tagController = ValueNotifier<int>(0);
+  final typeController = ValueNotifier<int>(0);
   final formKey = GlobalKey<FormState>();
 
   late LocalUser user;
@@ -32,6 +34,7 @@ class _AddPostViewState extends State<AddPostView> {
     user = context.read<UserProvider>().user!;
     titleController.text = '';
     contentController.text = '';
+    linkController.text = '';
     super.initState();
   }
 
@@ -39,6 +42,7 @@ class _AddPostViewState extends State<AddPostView> {
   void dispose() {
     titleController.dispose();
     contentController.dispose();
+    linkController.dispose();
     super.dispose();
   }
 
@@ -72,7 +76,8 @@ class _AddPostViewState extends State<AddPostView> {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   if (titleController.text.trim().isNotEmpty &&
-                      contentController.text.trim().isNotEmpty) {
+                      (contentController.text.trim().isNotEmpty ||
+                          linkController.text.trim().isNotEmpty)) {
                     context.read<PostCubit>().createPost(
                           PostModel(
                             postId: '_new.PostId',
@@ -82,10 +87,11 @@ class _AddPostViewState extends State<AddPostView> {
                             commentCount: 0,
                             author: user.fullName,
                             uid: user.uid,
-                            type: 'text',
+                            type: kPostTypes[typeController.value],
                             createdAt: DateTime.now(),
                             updatedAt: DateTime.now(),
                             content: contentController.text,
+                            link: linkController.text,
                             tags: [kPostTags[tagController.value]],
                           ),
                         );
@@ -108,7 +114,9 @@ class _AddPostViewState extends State<AddPostView> {
                   AddPostForm(
                     titleController: titleController,
                     contentController: contentController,
+                    linkController: linkController,
                     tagController: tagController,
+                    typeController: typeController,
                     formKey: formKey,
                   )
                 ],

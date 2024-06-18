@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart'; // 로케일 초기화를 위한 import 추가
 import 'package:provider/provider.dart';
@@ -9,9 +9,6 @@ import 'package:uniberry2/core/services/injection_container.dart';
 import 'package:uniberry2/core/services/router.dart';
 import 'package:uniberry2/firebase_options.dart';
 import 'package:uniberry2/src/dashboard/presentation/providers/dashboard_controller.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/views/oldViews/timetable/assignmentNotifier.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

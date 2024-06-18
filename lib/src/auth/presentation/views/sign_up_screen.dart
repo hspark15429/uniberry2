@@ -10,7 +10,6 @@ import 'package:uniberry2/src/auth/presentation/utils/authentication_heroes.dart
 import 'package:uniberry2/src/auth/presentation/views/sign_in_screen.dart';
 import 'package:uniberry2/src/auth/presentation/widgets/sign_up_form.dart';
 import 'package:uniberry2/src/dashboard/presentation/views/dashboard.dart';
-import 'package:uniberry2/src/dashboard/presentation/views/dashboard_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

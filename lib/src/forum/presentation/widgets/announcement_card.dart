@@ -15,26 +15,27 @@ class AnnouncementItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Image.network(
-                imagePath,
-                width: 60,
-                height: 60,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.error);
-                },
-              ),
-              Text(title),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Image.network(
+              imagePath,
+              width: 60,
+              height: 60,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.error);
+              },
+            ),
+            Text(title),
+          ],
         ),
-        onTap: () async {
-          if (link != null) {
-            await CoreUtils.launchWebpage(Uri.parse(link!));
-          }
-        });
+      ),
+      onTap: () async {
+        if (link != null) {
+          await CoreUtils.launchWebpage(Uri.parse(link!)).catchError((e) {});
+        }
+      },
+    );
   }
 }

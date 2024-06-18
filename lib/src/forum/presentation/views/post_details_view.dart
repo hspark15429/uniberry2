@@ -41,152 +41,194 @@ class _PostDetailsViewState extends State<PostDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.post.title),
-        backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
-        iconTheme: IconThemeData(color: Colors.white), // AppBar 아이콘 색상을 흰색으로 설정
-        titleTextStyle: TextStyle(
-            color: Colors.white, fontSize: 18), // AppBar 제목 텍스트 스타일을 흰색으로 설정
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
+    return BlocConsumer<PostCubit, PostState>(
+      listener: (context, state) {
+        if (state is PostDeleted) {
+          Navigator.pop(context);
+          CoreUtils.showSnackBar(context, 'Post deleted successfully!');
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.post.title),
+            actions: [
+              if (context.read<UserProvider>().user!.uid == widget.post.uid)
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                  onPressed: () {
+                    context.read<PostCubit>().deletePost(widget.post.postId);
+                  },
                 ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  widget.post.title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.post.content!,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      widget.post.author,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      IconlyBold.chat,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      widget.post.commentCount.toString(),
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ],
+            backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
+            iconTheme: const IconThemeData(
+                color: Colors.white), // AppBar 아이콘 색상을 흰색으로 설정
+            titleTextStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 18), // AppBar 제목 텍스트 스타일을 흰색으로 설정
+          ),
+          body: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 5,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      widget.post.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.post.content!,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Text(
+                          widget.post.author,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        const Spacer(),
+                        const Icon(
+                          IconlyBold.chat,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          widget.post.commentCount.toString(),
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: BlocConsumer<CommentCubit, CommentState>(
-                listener: (context, state) {
-                  if (state is CommentCreated || state is CommentDeleted) {
-                    commentContentController.clear();
-                    context
-                        .read<CommentCubit>()
-                        .getCommentsByPostId(widget.post.postId);
+                  child: BlocConsumer<CommentCubit, CommentState>(
+                    listener: (context, state) {
+                      if (state is CommentCreated || state is CommentDeleted) {
+                        commentContentController.clear();
+                        context
+                            .read<CommentCubit>()
+                            .getCommentsByPostId(widget.post.postId);
 
-                    CoreUtils.showSnackBar(
-                      context,
-                      'Operation was successful!',
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  if (state is CommentsFetched) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.comments.length,
-                      itemBuilder: (context, index) {
-                        final comment = state.comments[index];
-                        return CommentCard(comment: comment);
-                      },
-                    );
-                  }
-                  return const LoadingView();
-                },
-              ),
-            ),
-          )
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white, // BottomAppBar 배경색을 검정색으로 설정
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: formKey,
-            child: IField(
-              controller: commentContentController,
-              hintText: 'Comment',
-              suffixIcon: IconButton(
-                icon: const Icon(IconlyBold.arrow_up_square,
-                    color: Colors.white), // 아이콘 색상을 흰색으로 설정
-                onPressed: () {
-                  final user = context.read<UserProvider>().user;
-                  if (commentContentController.text.trim().isNotEmpty) {
-                    context.read<CommentCubit>().createComment(
-                          CommentModel(
-                            commentId: '_new.CommentId',
-                            content: commentContentController.text,
-                            postId: widget.post.postId,
-                            author: user!.fullName,
-                            uid: user.uid,
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                          ),
+                        CoreUtils.showSnackBar(
+                          context,
+                          'Operation was successful!',
                         );
-                  }
-                },
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is CommentsFetched) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.comments.length,
+                          itemBuilder: (context, index) {
+                            final comment = state.comments[index];
+                            return CommentCard(comment: comment);
+                          },
+                        );
+                      }
+                      return const LoadingView();
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Form(
+              key: formKey,
+              child: TextField(
+                autofocus: false,
+                maxLines: null,
+                controller: commentContentController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  filled: true,
+                  fillColor: Colors.white,
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      IconlyBold.arrow_up_square,
+                      color: Colors.black,
+                    ), // 아이콘 색상을 흰색으로 설정
+                    onPressed: () {
+                      final user = context.read<UserProvider>().user;
+                      if (commentContentController.text.trim().isNotEmpty) {
+                        context.read<CommentCubit>().createComment(
+                              CommentModel(
+                                commentId: '_new.CommentId',
+                                content: commentContentController.text,
+                                postId: widget.post.postId,
+                                author: user!.fullName,
+                                uid: user.uid,
+                                createdAt: DateTime.now(),
+                                updatedAt: DateTime.now(),
+                              ),
+                            );
+                      }
+                    },
+                  ),
+                  hintText: 'Comment',
+                ),
               ),
-              textStyle: TextStyle(color: Colors.white),
-              filled: true,
-              fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
