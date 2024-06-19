@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/comment/domain/entities/comment.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/comment/domain/entities/comment.dart';
 
 class CommentModel extends Comment {
   const CommentModel({

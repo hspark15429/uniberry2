@@ -6,10 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/src/auth/data/datasources/authentication_remote_data_source.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
+import 'package:uniberry/core/enums/update_user_enum.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/src/auth/data/datasources/authentication_remote_data_source.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 

@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:uniberry2/core/enums/update_comment_enum.dart';
-import 'package:uniberry2/src/comment/domain/entities/comment.dart';
-import 'package:uniberry2/src/comment/domain/usecases/create_comment.dart';
-import 'package:uniberry2/src/comment/domain/usecases/delete_comment.dart';
-import 'package:uniberry2/src/comment/domain/usecases/get_comments_by_post_id.dart';
-import 'package:uniberry2/src/comment/domain/usecases/get_comments_by_user_id.dart';
-import 'package:uniberry2/src/comment/domain/usecases/update_comment.dart';
+import 'package:uniberry/core/enums/update_comment_enum.dart';
+import 'package:uniberry/src/comment/domain/entities/comment.dart';
+import 'package:uniberry/src/comment/domain/usecases/create_comment.dart';
+import 'package:uniberry/src/comment/domain/usecases/delete_comment.dart';
+import 'package:uniberry/src/comment/domain/usecases/get_comments_by_post_id.dart';
+import 'package:uniberry/src/comment/domain/usecases/get_comments_by_user_id.dart';
+import 'package:uniberry/src/comment/domain/usecases/update_comment.dart';
 
 part 'comment_state.dart';
 

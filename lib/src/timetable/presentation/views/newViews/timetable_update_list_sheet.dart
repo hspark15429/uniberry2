@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/services/injection_container.dart';
-import 'package:uniberry2/core/utils/core_utils.dart';
-import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
-import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry/core/enums/update_user_enum.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
+import 'package:uniberry/src/auth/presentation/cubit/authentication_cubit.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/src/timetable/presentation/cubit/timetable_cubit.dart';
 
 class TimetableUpdateListSheet extends StatefulWidget {
   const TimetableUpdateListSheet({

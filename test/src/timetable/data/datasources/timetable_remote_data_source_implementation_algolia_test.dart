@@ -1,10 +1,10 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source_implementation_algolia.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source_implementation_algolia.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
 
 void main() {
   late TimetableRemoteDataSource dataSource;

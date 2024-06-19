@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/common/providers/tab_navigator.dart';
-import 'package:uniberry2/src/forum/presentation/views/add_post_view.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/forum_app_bar.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/forum_body.dart';
+import 'package:uniberry/core/common/providers/tab_navigator.dart';
+import 'package:uniberry/src/forum/presentation/views/add_post_view.dart';
+import 'package:uniberry/src/forum/presentation/widgets/forum_app_bar.dart';
+import 'package:uniberry/src/forum/presentation/widgets/forum_body.dart';
 
 class ForumView extends StatefulWidget {
   const ForumView({super.key});

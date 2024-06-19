@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/src/auth/domain/repository/authentication_repository.dart';
-import 'package:uniberry2/src/auth/domain/usecases/sign_up.dart';
+import 'package:uniberry/src/auth/domain/repository/authentication_repository.dart';
+import 'package:uniberry/src/auth/domain/usecases/sign_up.dart';
 
 import 'mock_authentication_repository.dart';
 

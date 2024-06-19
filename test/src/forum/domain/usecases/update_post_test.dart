@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
-import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/src/forum/domain/repository/post_repository.dart';
+import 'package:uniberry/src/forum/domain/usecases/update_post.dart';
 
 import 'repository.mock.dart';
 

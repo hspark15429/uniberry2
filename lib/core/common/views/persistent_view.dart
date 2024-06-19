@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/common/providers/tab_navigator.dart';
+import 'package:uniberry/core/common/providers/tab_navigator.dart';
 
 class PersistentView extends StatefulWidget {
   const PersistentView({this.body, super.key});

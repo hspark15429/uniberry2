@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/services/injection_container.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
-import 'package:uniberry2/src/timetable/domain/entities/course.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
-import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/views/newViews/course_details_view.dart';
-import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_search_sheet.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/timetable/domain/entities/course.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry/src/timetable/presentation/views/newViews/course_details_view.dart';
+import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_search_sheet.dart';
 
-import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_update_list_sheet.dart';
-import 'package:uniberry2/src/timetable/presentation/widgets/select_school_tile.dart';
-import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_settings_sheet.dart';
-import 'package:uniberry2/src/timetable/presentation/widgets/timetable_header_widget.dart';
+import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_update_list_sheet.dart';
+import 'package:uniberry/src/timetable/presentation/widgets/select_school_tile.dart';
+import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_settings_sheet.dart';
+import 'package:uniberry/src/timetable/presentation/widgets/timetable_header_widget.dart';
 
 class TimetableView extends StatefulWidget {
   const TimetableView({required this.initialTimetable, super.key});

@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/errors/failures.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/auth/data/datasources/authentication_remote_data_source.dart';
-import 'package:uniberry2/src/auth/domain/entities/user.dart';
-import 'package:uniberry2/src/auth/domain/repository/authentication_repository.dart';
+import 'package:uniberry/core/enums/update_user_enum.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/errors/failures.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/auth/data/datasources/authentication_remote_data_source.dart';
+import 'package:uniberry/src/auth/domain/entities/user.dart';
+import 'package:uniberry/src/auth/domain/repository/authentication_repository.dart';
 
 class AuthenticationRepositoryImplementation
     implements AuthenticationRepository {

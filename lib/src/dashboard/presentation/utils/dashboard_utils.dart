@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uniberry2/core/services/injection_container.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
+import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
 
 class DashboardUtils {
   const DashboardUtils._();

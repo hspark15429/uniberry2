@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/errors/failures.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
-import 'package:uniberry2/src/timetable/data/repositories/timetable_repository_implementation.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/errors/failures.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/timetable/data/repositories/timetable_repository_implementation.dart';
+import 'package:uniberry/src/timetable/domain/usecases/search_courses.dart';
 
 class MockTimetableRemoteDataSource extends Mock
     implements TimetableRemoteDataSource {}

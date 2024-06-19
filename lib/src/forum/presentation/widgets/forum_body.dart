@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:uniberry2/core/common/views/loading_view.dart';
-import 'package:uniberry2/core/services/injection_container.dart';
-import 'package:uniberry2/core/utils/constants.dart';
-import 'package:uniberry2/core/utils/core_utils.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
+import 'package:uniberry/core/common/views/loading_view.dart';
+import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/core/utils/constants.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
+import 'package:uniberry/src/forum/domain/entities/post.dart';
 
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/announcement_card.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/forum_body_subheader1.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/forum_body_subheader2.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/post_card.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/src/forum/presentation/widgets/announcement_card.dart';
+import 'package:uniberry/src/forum/presentation/widgets/forum_body_subheader1.dart';
+import 'package:uniberry/src/forum/presentation/widgets/forum_body_subheader2.dart';
+import 'package:uniberry/src/forum/presentation/widgets/post_card.dart';
 
 class ForumBody extends StatefulWidget {
   const ForumBody({

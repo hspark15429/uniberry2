@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
 
 class Timetable extends Equatable {
   const Timetable({

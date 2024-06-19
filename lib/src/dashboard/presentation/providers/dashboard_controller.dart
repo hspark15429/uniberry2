@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/common/providers/tab_navigator.dart';
-import 'package:uniberry2/core/common/views/persistent_view.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/services/injection_container.dart';
-import 'package:uniberry2/core/utils/core_utils.dart';
-import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
-import 'package:uniberry2/src/comment/presentation/cubit/comment_cubit.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
-import 'package:uniberry2/src/forum/presentation/views/forum_view.dart';
-import 'package:uniberry2/src/profile/presentation/views/profile_view.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
-import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/views/newViews/timetable_view.dart';
+import 'package:uniberry/core/common/providers/tab_navigator.dart';
+import 'package:uniberry/core/common/views/persistent_view.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
+import 'package:uniberry/src/auth/presentation/cubit/authentication_cubit.dart';
+import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/src/forum/presentation/views/forum_view.dart';
+import 'package:uniberry/src/profile/presentation/views/profile_view.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_view.dart';
 
 class DashboardController extends ChangeNotifier {
   List<int> _indexHistory = [0];

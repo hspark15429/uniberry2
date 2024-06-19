@@ -1,16 +1,16 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:flutter/foundation.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
 
 class TimetableRemoteDataSourceImplementationAlgolia
     implements TimetableRemoteDataSource {
-  TimetableRemoteDataSourceImplementationAlgolia(
-      {required HitsSearcher coursesSearcher,})
-      : _coursesSearcher = coursesSearcher;
+  TimetableRemoteDataSourceImplementationAlgolia({
+    required HitsSearcher coursesSearcher,
+  }) : _coursesSearcher = coursesSearcher;
 
   final HitsSearcher _coursesSearcher;
   Stream<HitsPage> get _searchPage =>

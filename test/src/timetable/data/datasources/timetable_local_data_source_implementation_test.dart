@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_local_data_source_implementation.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
-
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_local_data_source_implementation.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
 
 void main() {
   late TimetableRemoteDataSource dataSource;

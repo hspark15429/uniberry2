@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:uniberry2/core/enums/update_comment_enum.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/comment/data/models/comment_model.dart';
-import 'package:uniberry2/src/comment/domain/entities/comment.dart';
+import 'package:uniberry/core/enums/update_comment_enum.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/comment/data/models/comment_model.dart';
+import 'package:uniberry/src/comment/domain/entities/comment.dart';
 
 abstract class CommentRemoteDataSource {
   const CommentRemoteDataSource();

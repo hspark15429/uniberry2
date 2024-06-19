@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniberry2/core/enums/update_comment_enum.dart';
-import 'package:uniberry2/core/usecases/usecases.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/comment/domain/repository/comment_repository.dart';
+import 'package:uniberry/core/enums/update_comment_enum.dart';
+import 'package:uniberry/core/usecases/usecases.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/comment/domain/repository/comment_repository.dart';
 
 class UpdateComment implements UsecaseWithParams<void, UpdateCommentParams> {
   final CommentRepository repository;

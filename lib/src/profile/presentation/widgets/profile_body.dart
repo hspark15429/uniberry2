@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/common/views/loading_view.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/src/comment/presentation/cubit/comment_cubit.dart';
-import 'package:uniberry2/src/comment/presentation/widgets/comment_card.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/post_card.dart';
+import 'package:uniberry/core/common/views/loading_view.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
+import 'package:uniberry/src/comment/presentation/widgets/comment_card.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/src/forum/presentation/widgets/post_card.dart';
 
 class ProfileBody extends StatefulWidget {
   const ProfileBody({super.key});

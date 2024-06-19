@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:uniberry2/core/common/widgets/i_field.dart';
-import 'package:uniberry2/core/utils/constants.dart';
+import 'package:uniberry/core/common/widgets/i_field.dart';
+import 'package:uniberry/core/utils/constants.dart';
 
 class AddPostForm extends StatefulWidget {
   const AddPostForm({

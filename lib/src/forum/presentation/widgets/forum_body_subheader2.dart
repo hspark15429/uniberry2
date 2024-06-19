@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/announcement_card.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/src/forum/presentation/widgets/announcement_card.dart';
 
 class ForumBodySubHeader2 extends StatefulWidget {
   const ForumBodySubHeader2({

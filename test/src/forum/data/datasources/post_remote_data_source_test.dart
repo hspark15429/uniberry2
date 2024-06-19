@@ -7,9 +7,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:typesense/typesense.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/src/forum/data/datasources/post_remote_data_source.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 

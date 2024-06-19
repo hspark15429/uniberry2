@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/forum/domain/entities/post.dart';
 
 class PostModel extends Post {
   const PostModel({

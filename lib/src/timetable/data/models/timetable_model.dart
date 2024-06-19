@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
 
 class TimetableModel extends Timetable {
   const TimetableModel({

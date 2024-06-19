@@ -2,14 +2,14 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/core/errors/failures.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
-import 'package:uniberry2/src/auth/domain/usecases/forgot_password.dart';
-import 'package:uniberry2/src/auth/domain/usecases/sign_in.dart';
-import 'package:uniberry2/src/auth/domain/usecases/sign_up.dart';
-import 'package:uniberry2/src/auth/domain/usecases/update_user.dart';
-import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
+import 'package:uniberry/core/enums/update_user_enum.dart';
+import 'package:uniberry/core/errors/failures.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
+import 'package:uniberry/src/auth/domain/usecases/forgot_password.dart';
+import 'package:uniberry/src/auth/domain/usecases/sign_in.dart';
+import 'package:uniberry/src/auth/domain/usecases/sign_up.dart';
+import 'package:uniberry/src/auth/domain/usecases/update_user.dart';
+import 'package:uniberry/src/auth/presentation/cubit/authentication_cubit.dart';
 
 class MockSignIn extends Mock implements SignIn {}
 

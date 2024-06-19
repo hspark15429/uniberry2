@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
-import 'package:uniberry2/src/auth/domain/entities/user.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
+import 'package:uniberry/src/auth/domain/entities/user.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 

@@ -1,6 +1,6 @@
-import 'package:uniberry2/core/enums/update_comment_enum.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/comment/domain/entities/comment.dart';
+import 'package:uniberry/core/enums/update_comment_enum.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/comment/domain/entities/comment.dart';
 
 abstract class CommentRepository {
   const CommentRepository();

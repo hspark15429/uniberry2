@@ -1,4 +1,4 @@
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
 
 String timetablePeriodToJapanese(TimetablePeriod period) {
   const dayMap = {

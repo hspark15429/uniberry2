@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/res/colours.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
-import 'package:uniberry2/src/dashboard/presentation/providers/dashboard_controller.dart';
-import 'package:uniberry2/src/dashboard/presentation/utils/dashboard_utils.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/res/colours.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
+import 'package:uniberry/src/dashboard/presentation/providers/dashboard_controller.dart';
+import 'package:uniberry/src/dashboard/presentation/utils/dashboard_utils.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});

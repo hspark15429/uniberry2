@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniberry2/core/common/widgets/gradient_background.dart';
-import 'package:uniberry2/core/common/widgets/rounded_button.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/res/res.dart';
-import 'package:uniberry2/core/utils/core_utils.dart';
-import 'package:uniberry2/src/auth/presentation/cubit/authentication_cubit.dart';
-import 'package:uniberry2/src/auth/presentation/utils/authentication_heroes.dart';
-import 'package:uniberry2/src/auth/presentation/views/sign_up_screen.dart';
-import 'package:uniberry2/src/auth/presentation/widgets/sign_in_form.dart';
-import 'package:uniberry2/src/dashboard/presentation/views/dashboard.dart';
+import 'package:uniberry/core/common/widgets/gradient_background.dart';
+import 'package:uniberry/core/common/widgets/rounded_button.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/res/res.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
+import 'package:uniberry/src/auth/presentation/cubit/authentication_cubit.dart';
+import 'package:uniberry/src/auth/presentation/utils/authentication_heroes.dart';
+import 'package:uniberry/src/auth/presentation/views/sign_up_screen.dart';
+import 'package:uniberry/src/auth/presentation/widgets/sign_in_form.dart';
+import 'package:uniberry/src/dashboard/presentation/views/dashboard.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

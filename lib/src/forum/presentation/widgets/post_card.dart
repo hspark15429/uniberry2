@@ -1,8 +1,8 @@
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
-import 'package:uniberry2/src/forum/presentation/views/post_details_view.dart';
+import 'package:uniberry/src/forum/domain/entities/post.dart';
+import 'package:uniberry/src/forum/presentation/views/post_details_view.dart';
 
 class PostCard extends StatelessWidget {
   const PostCard({

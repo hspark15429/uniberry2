@@ -1,6 +1,6 @@
-import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/auth/domain/entities/user.dart';
+import 'package:uniberry/core/enums/update_user_enum.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/auth/domain/entities/user.dart';
 
 abstract class AuthenticationRepository {
   const AuthenticationRepository();

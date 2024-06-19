@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/src/comment/domain/entities/comment.dart';
-import 'package:uniberry2/src/comment/presentation/cubit/comment_cubit.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/src/comment/domain/entities/comment.dart';
+import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
 
 class CommentCard extends StatelessWidget {
   const CommentCard({

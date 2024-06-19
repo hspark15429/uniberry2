@@ -2,16 +2,16 @@ import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import 'package:uniberry2/core/common/views/loading_view.dart';
-import 'package:uniberry2/core/common/widgets/i_field.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/utils/core_utils.dart';
-import 'package:uniberry2/src/comment/data/models/comment_model.dart';
-import 'package:uniberry2/src/comment/presentation/cubit/comment_cubit.dart';
-import 'package:uniberry2/src/comment/presentation/widgets/comment_card.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/core/common/views/loading_view.dart';
+import 'package:uniberry/core/common/widgets/i_field.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
+import 'package:uniberry/src/comment/data/models/comment_model.dart';
+import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
+import 'package:uniberry/src/comment/presentation/widgets/comment_card.dart';
+import 'package:uniberry/src/forum/domain/entities/post.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
 
 class PostDetailsView extends StatefulWidget {
   const PostDetailsView(this.post, {super.key});

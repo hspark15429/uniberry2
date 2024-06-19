@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/common/providers/tab_navigator.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/utils/constants.dart';
-import 'package:uniberry2/core/utils/core_utils.dart';
-import 'package:uniberry2/src/auth/domain/entities/user.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
-import 'package:uniberry2/src/forum/presentation/widgets/add_post_form.dart';
+import 'package:uniberry/core/common/providers/tab_navigator.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/utils/constants.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
+import 'package:uniberry/src/auth/domain/entities/user.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/src/forum/presentation/widgets/add_post_form.dart';
 
 class AddPostView extends StatefulWidget {
   const AddPostView({super.key});

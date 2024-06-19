@@ -2,16 +2,16 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
-import 'package:uniberry2/src/timetable/domain/entities/course.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/create_timetable.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/delete_timetable.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/read_timetable.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/search_courses.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/update_timetable.dart';
-import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/src/timetable/domain/entities/course.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/src/timetable/domain/usecases/create_timetable.dart';
+import 'package:uniberry/src/timetable/domain/usecases/delete_timetable.dart';
+import 'package:uniberry/src/timetable/domain/usecases/get_course.dart';
+import 'package:uniberry/src/timetable/domain/usecases/read_timetable.dart';
+import 'package:uniberry/src/timetable/domain/usecases/search_courses.dart';
+import 'package:uniberry/src/timetable/domain/usecases/update_timetable.dart';
+import 'package:uniberry/src/timetable/presentation/cubit/timetable_cubit.dart';
 
 class MockGetCourse extends Mock implements GetCourse {}
 

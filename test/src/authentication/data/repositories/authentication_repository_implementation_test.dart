@@ -1,14 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/errors/failures.dart';
-import 'package:uniberry2/src/auth/data/datasources/authentication_remote_data_source.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
-import 'package:uniberry2/src/auth/data/repositories/authentication_repository_implementation.dart';
-import 'package:uniberry2/src/auth/domain/entities/user.dart';
-import 'package:uniberry2/src/auth/domain/repository/authentication_repository.dart';
+import 'package:uniberry/core/enums/update_user_enum.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/errors/failures.dart';
+import 'package:uniberry/src/auth/data/datasources/authentication_remote_data_source.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
+import 'package:uniberry/src/auth/data/repositories/authentication_repository_implementation.dart';
+import 'package:uniberry/src/auth/domain/entities/user.dart';
+import 'package:uniberry/src/auth/domain/repository/authentication_repository.dart';
 
 class MockAuthRemoteDataSource extends Mock
     implements AuthenticationRemoteDataSource {}

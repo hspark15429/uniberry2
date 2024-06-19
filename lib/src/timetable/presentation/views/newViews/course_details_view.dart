@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
-import 'package:uniberry2/src/timetable/presentation/widgets/course_card.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/src/timetable/presentation/widgets/course_card.dart';
 
 class CourseDetailsView extends StatelessWidget {
   const CourseDetailsView({required this.course, super.key});

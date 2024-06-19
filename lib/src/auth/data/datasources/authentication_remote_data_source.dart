@@ -5,13 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:uniberry2/core/enums/update_user_enum.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/utils/constants.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
-import 'package:uniberry2/src/auth/domain/entities/user.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/core/enums/update_user_enum.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/utils/constants.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
+import 'package:uniberry/src/auth/domain/entities/user.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
 
 abstract class AuthenticationRemoteDataSource {
   Future<LocalUser> signIn({

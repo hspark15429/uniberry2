@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniberry2/core/usecases/usecases.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/auth/domain/repository/authentication_repository.dart';
+import 'package:uniberry/core/usecases/usecases.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/auth/domain/repository/authentication_repository.dart';
 
 class SignUp extends UsecaseWithParams<void, SignUpParams> {
   const SignUp(this._repo);

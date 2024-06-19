@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
+import 'package:uniberry/src/forum/domain/entities/post.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 
@@ -51,10 +51,11 @@ void main() {
 
     // assert
     expect(
-        result,
-        tDataMap
-          ..remove('createdAt')
-          ..remove('updatedAt'),);
+      result,
+      tDataMap
+        ..remove('createdAt')
+        ..remove('updatedAt'),
+    );
   });
 
   test('copyWith', () {

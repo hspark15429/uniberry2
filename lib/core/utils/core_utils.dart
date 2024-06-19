@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CoreUtils {

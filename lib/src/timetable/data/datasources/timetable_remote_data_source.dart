@@ -1,6 +1,6 @@
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
 
 abstract class TimetableRemoteDataSource {
   Future<CourseModel> getCourse(String courseId);

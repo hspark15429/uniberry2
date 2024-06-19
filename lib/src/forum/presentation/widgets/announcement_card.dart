@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/core/utils/core_utils.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
 
 class AnnouncementItem extends StatelessWidget {
   const AnnouncementItem({

@@ -6,10 +6,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:typesense/typesense.dart';
-import 'package:uniberry2/src/auth/data/models/user_model.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source_implementation_typesense.dart';
-import 'package:uniberry2/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/auth/data/models/user_model.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source_implementation_typesense.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uniberry2/core/providers/user_provider.dart';
-import 'package:uniberry2/core/res/colours.dart';
-import 'package:uniberry2/core/res/res.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/res/colours.dart';
+import 'package:uniberry/core/res/res.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});

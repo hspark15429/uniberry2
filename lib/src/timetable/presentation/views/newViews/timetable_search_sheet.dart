@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uniberry2/core/services/injection_container.dart';
-import 'package:uniberry2/src/timetable/domain/entities/course.dart';
-import 'package:uniberry2/src/timetable/domain/entities/timetable.dart';
-import 'package:uniberry2/src/timetable/presentation/cubit/timetable_cubit.dart';
-import 'package:uniberry2/src/timetable/presentation/utils/period_to_japanese.dart';
-import 'package:uniberry2/src/timetable/presentation/widgets/course_card.dart';
+import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/src/timetable/domain/entities/course.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
+import 'package:uniberry/src/timetable/presentation/cubit/timetable_cubit.dart';
+import 'package:uniberry/src/timetable/presentation/utils/period_to_japanese.dart';
+import 'package:uniberry/src/timetable/presentation/widgets/course_card.dart';
 
 class TimetableSearchSheet extends StatefulWidget {
   const TimetableSearchSheet({

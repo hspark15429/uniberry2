@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniberry2/src/timetable/domain/entities/course.dart';
+import 'package:uniberry/src/timetable/domain/entities/course.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CourseCard extends StatelessWidget {

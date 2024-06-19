@@ -2,18 +2,18 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
-import 'package:uniberry2/src/forum/domain/usecases/create_post_with_image.dart';
-import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
-import 'package:uniberry2/src/forum/domain/usecases/get_posts_by_user_id.dart';
-import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
-import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
-import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
-import 'package:uniberry2/src/forum/domain/usecases/search_posts_with_page_key.dart';
-import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
+import 'package:uniberry/src/forum/domain/usecases/create_post.dart';
+import 'package:uniberry/src/forum/domain/usecases/create_post_with_image.dart';
+import 'package:uniberry/src/forum/domain/usecases/delete_post.dart';
+import 'package:uniberry/src/forum/domain/usecases/get_posts_by_user_id.dart';
+import 'package:uniberry/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry/src/forum/domain/usecases/read_posts.dart';
+import 'package:uniberry/src/forum/domain/usecases/search_posts.dart';
+import 'package:uniberry/src/forum/domain/usecases/search_posts_with_page_key.dart';
+import 'package:uniberry/src/forum/domain/usecases/update_post.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
 
 class MockCreatePost extends Mock implements CreatePost {}
 

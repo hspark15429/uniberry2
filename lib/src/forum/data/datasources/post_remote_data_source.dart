@@ -5,13 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:typesense/typesense.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
-import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
-import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
+import 'package:uniberry/src/forum/domain/entities/post.dart';
+import 'package:uniberry/src/forum/domain/repository/post_repository.dart';
+import 'package:uniberry/src/forum/domain/usecases/search_posts.dart';
 
 abstract class PostRemoteDataSource {
   const PostRemoteDataSource();
