@@ -32,6 +32,7 @@ class ProfileHeader extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 24,
+                color: Colors.black, // 이름 텍스트 색상을 검정색으로 설정
               ),
             ),
             if (provider.user?.bio != null &&
@@ -45,7 +46,7 @@ class ProfileHeader extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,
-                    color: Colours.neutralTextColour,
+                    color: Colours.neutralTextColour, // bio 텍스트 색상 유지
                   ),
                 ),
               ),
