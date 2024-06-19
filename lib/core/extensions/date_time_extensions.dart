@@ -20,13 +20,4 @@ extension DateTimeExt on DateTime {
       return 'now';
     }
   }
-
-  String get postCreatedAtFormatted {
-    final timestampLocal = toLocal();
-
-    return DateTime.fromMillisecondsSinceEpoch(
-            timestampLocal.millisecondsSinceEpoch * 1000 * 1000)
-        .toString()
-        .substring(0, 16);
-  }
 }

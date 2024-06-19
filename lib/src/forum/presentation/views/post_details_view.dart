@@ -114,7 +114,10 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                         ),
                         const Spacer(),
                         Text(
-                          widget.post.createdAt.postCreatedAtFormatted,
+                          widget.post.createdAt
+                              .toLocal()
+                              .toString()
+                              .substring(0, 16),
                           style:
                               const TextStyle(fontSize: 12, color: Colors.grey),
                         ),

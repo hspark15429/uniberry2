@@ -60,10 +60,10 @@ class PostModel extends Post {
           author: json['author'] as String,
           uid: json['uid'] as String,
           type: json['type'] as String,
-          createdAt:
-              DateTime.fromMicrosecondsSinceEpoch(json['createdAt'] as int),
+          createdAt: DateTime.fromMillisecondsSinceEpoch(
+              (json['createdAt'] as int) * 1000),
           updatedAt:
-              DateTime.fromMicrosecondsSinceEpoch(json['updatedAt'] as int),
+              DateTime.fromMillisecondsSinceEpoch(json['updatedAt'] as int),
           tags: (json['tags'] as List<dynamic>).cast<String>(),
           content: json['content'] as String?,
           link: json['link'] as String?,
