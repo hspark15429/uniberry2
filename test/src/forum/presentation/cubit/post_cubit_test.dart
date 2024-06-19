@@ -7,6 +7,7 @@ import 'package:uniberry2/src/forum/data/models/post_model.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/create_post_with_image.dart';
 import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
+import 'package:uniberry2/src/forum/domain/usecases/get_posts_by_user_id.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
 import 'package:uniberry2/src/forum/domain/usecases/read_posts.dart';
 import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
@@ -22,6 +23,8 @@ class MockReadPost extends Mock implements ReadPost {}
 
 class MockReadPosts extends Mock implements ReadPosts {}
 
+class MockGetPostsByUserId extends Mock implements GetPostsByUserId {}
+
 class MockUpdatePost extends Mock implements UpdatePost {}
 
 class MockDeletePost extends Mock implements DeletePost {}
@@ -36,6 +39,7 @@ void main() {
   late CreatePostWithImage createPostWithImage;
   late ReadPost readPost;
   late ReadPosts readPosts;
+  late GetPostsByUserId getPostsByUserId;
   late UpdatePost updatePost;
   late DeletePost deletePost;
   late SearchPosts searchPosts;
@@ -49,6 +53,7 @@ void main() {
     createPostWithImage = MockCreatePostWithImage();
     readPost = MockReadPost();
     readPosts = MockReadPosts();
+    getPostsByUserId = MockGetPostsByUserId();
     updatePost = MockUpdatePost();
     deletePost = MockDeletePost();
     searchPosts = MockSearchPosts();
@@ -59,6 +64,7 @@ void main() {
       createPostWithImage: createPostWithImage,
       readPost: readPost,
       readPosts: readPosts,
+      getPostsByUserId: getPostsByUserId,
       deletePost: deletePost,
       searchPosts: searchPosts,
       searchPostsWithPageKey: searchPostsWithPageKey,
