@@ -11,6 +11,7 @@ class AddPostForm extends StatefulWidget {
     required this.contentController,
     required this.linkController,
     required this.formKey,
+    required this.imageController,
     required this.tagController,
     required this.typeController,
     super.key,
@@ -19,6 +20,7 @@ class AddPostForm extends StatefulWidget {
   final TextEditingController titleController;
   final TextEditingController contentController;
   final TextEditingController linkController;
+  final ValueNotifier<dynamic> imageController;
   final ValueNotifier<int> tagController;
   final ValueNotifier<int> typeController;
   final GlobalKey<FormState> formKey;
@@ -30,6 +32,7 @@ class AddPostForm extends StatefulWidget {
 class _AddPostFormState extends State<AddPostForm> {
   late List<String> tags;
   late List<String> types;
+  late String pickedImagePath = '';
 
   File? pickedImage;
 
@@ -37,7 +40,10 @@ class _AddPostFormState extends State<AddPostForm> {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
-        pickedImage = File(image.path);
+        widget.contentController.value = TextEditingValue(
+          text: image.path,
+        );
+        widget.imageController.value = File(image.path);
       });
     }
   }
@@ -134,22 +140,12 @@ class _AddPostFormState extends State<AddPostForm> {
               fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
             ),
           if (widget.typeController.value == 1) ...[
-            IField(
-              controller: widget.contentController,
-              hintText: 'Image URL',
-              textStyle: const TextStyle(color: Colors.black),
-              filled: true,
-              fillColour: Colors.white,
-              keyboardType: TextInputType.url,
-              overrideValidator: true,
-              validator: (value) {
-                if (value!.startsWith('http://') ||
-                    value.startsWith('https://')) {
-                  return null;
-                }
-                return 'Invalid URL';
-              },
-            ),
+            if (widget.imageController.value != null)
+              Image.file(
+                widget.imageController.value as File,
+                height: 200,
+                width: 200,
+              ),
             Center(
               child: IconButton(
                 onPressed: pickImage,

@@ -127,6 +127,7 @@ Future<void> initForum() async {
     // datasource impl
     ..registerLazySingleton<PostRemoteDataSource>(
       () => PostRemoteDataSourceImplementation(
+        authClient: sl(),
         cloudStoreClient: sl(),
         dbClient: sl(),
         typesenseClient: sl(),

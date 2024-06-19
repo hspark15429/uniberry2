@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,7 @@ class _AddPostViewState extends State<AddPostView> {
   final linkController = TextEditingController();
   final tagController = ValueNotifier<int>(0);
   final typeController = ValueNotifier<int>(0);
+  final imageController = ValueNotifier<dynamic>(null);
   final formKey = GlobalKey<FormState>();
 
   late LocalUser user;
@@ -43,6 +46,9 @@ class _AddPostViewState extends State<AddPostView> {
     titleController.dispose();
     contentController.dispose();
     linkController.dispose();
+    tagController.dispose();
+    typeController.dispose();
+    imageController.dispose();
     super.dispose();
   }
 
@@ -72,36 +78,54 @@ class _AddPostViewState extends State<AddPostView> {
           ),
           backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
           actions: [
-            TextButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  if (titleController.text.trim().isNotEmpty &&
-                      (contentController.text.trim().isNotEmpty ||
-                          linkController.text.trim().isNotEmpty)) {
-                    context.read<PostCubit>().createPost(
-                          PostModel(
-                            postId: '_new.PostId',
-                            title: titleController.text,
-                            upvotes: [],
-                            downvotes: [],
-                            commentCount: 0,
-                            author: user.fullName,
-                            uid: user.uid,
-                            type: kPostTypes[typeController.value],
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                            content: contentController.text,
-                            link: linkController.text,
-                            tags: [kPostTags[tagController.value]],
-                          ),
-                        );
-                  }
+            BlocBuilder<PostCubit, PostState>(
+              builder: (context, state) {
+                if (state is PostLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
+                return TextButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      if (titleController.text.trim().isNotEmpty &&
+                          (contentController.text.trim().isNotEmpty ||
+                              linkController.text.trim().isNotEmpty)) {
+                        final post = PostModel(
+                          postId: '_new.PostId',
+                          title: titleController.text,
+                          upvotes: [],
+                          downvotes: [],
+                          commentCount: 0,
+                          author: user.fullName,
+                          uid: user.uid,
+                          type: kPostTypes[typeController.value],
+                          createdAt: DateTime.now(),
+                          updatedAt: DateTime.now(),
+                          content: contentController.text,
+                          link: linkController.text,
+                          tags: [kPostTags[tagController.value]],
+                        );
+                        if (post.type == 'image') {
+                          context.read<PostCubit>().createPostWithImage(
+                                post: post.copyWith(
+                                  content: '',
+                                ),
+                                image: imageController.value,
+                              );
+                        } else {
+                          context.read<PostCubit>().createPost(post);
+                        }
+                      }
+                    }
+                  },
+                  child: const Text(
+                    '완료',
+                    style:
+                        TextStyle(color: Colors.white), // 완료 버튼 텍스트 색상을 흰색으로 설정
+                  ),
+                );
               },
-              child: const Text(
-                '완료',
-                style: TextStyle(color: Colors.white), // 완료 버튼 텍스트 색상을 흰색으로 설정
-              ),
             ),
           ],
         ),
@@ -114,6 +138,7 @@ class _AddPostViewState extends State<AddPostView> {
                   AddPostForm(
                     titleController: titleController,
                     contentController: contentController,
+                    imageController: imageController,
                     linkController: linkController,
                     tagController: tagController,
                     typeController: typeController,

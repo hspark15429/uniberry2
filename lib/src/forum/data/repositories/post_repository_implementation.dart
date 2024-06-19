@@ -25,10 +25,15 @@ class PostRepositoryImplementation implements PostRepository {
   @override
   ResultFuture<void> createPostWithImage({
     required Post post,
-    required image,
-  }) {
-    // TODO: implement createPostWithImage
-    throw UnimplementedError();
+    required dynamic image,
+  }) async {
+    try {
+      final result =
+          await _remoteDataSource.createPostWithImage(post: post, image: image);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
   }
 
   @override

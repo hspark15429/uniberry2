@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,10 @@ import 'package:uniberry/src/forum/domain/usecases/search_posts.dart';
 abstract class PostRemoteDataSource {
   const PostRemoteDataSource();
   Future<void> createPost(Post post);
+  Future<void> createPostWithImage({
+    required Post post,
+    required dynamic image,
+  });
   Future<PostModel> readPost(String postId);
   Future<List<PostModel>> readPosts(List<String> postIds);
   Future<List<PostModel>> getPostsByUserId(String userId);
@@ -42,13 +47,16 @@ abstract class PostRemoteDataSource {
 
 class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
   PostRemoteDataSourceImplementation({
+    required FirebaseAuth authClient,
     required FirebaseFirestore cloudStoreClient,
     required FirebaseStorage dbClient,
     required Client typesenseClient,
-  })  : _typesenseClient = typesenseClient,
+  })  : _authClient = authClient,
+        _typesenseClient = typesenseClient,
         _cloudStoreClient = cloudStoreClient,
         _dbClient = dbClient;
 
+  final FirebaseAuth _authClient;
   final FirebaseFirestore _cloudStoreClient;
   final FirebaseStorage _dbClient;
   final Client _typesenseClient;
@@ -62,6 +70,53 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
       await _cloudStoreClient.collection('posts').doc(docReference.id).update(
         {'postId': docReference.id},
       );
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      debugPrint(s.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<void> createPostWithImage({
+    required Post post,
+    required dynamic image,
+  }) async {
+    try {
+      if (image is File) {
+        final docReference = await _cloudStoreClient.collection('posts').add(
+              (post as PostModel).toMap(),
+            );
+        await _cloudStoreClient.collection('posts').doc(docReference.id).update(
+          {'postId': docReference.id},
+        );
+        final ref = _dbClient.ref().child(
+            'posts/images/user_uploaded/${_authClient.currentUser?.uid}/${docReference.id}');
+        await ref.putFile(image);
+        final url = await ref.getDownloadURL();
+        await _cloudStoreClient.collection('posts').doc(docReference.id).update(
+          {'content': url},
+        );
+      } else if (image is String) {
+        final docReference = await _cloudStoreClient.collection('posts').add(
+              (post as PostModel).toMap(),
+            );
+        await _cloudStoreClient.collection('posts').doc(docReference.id).update(
+          {'postId': docReference.id},
+        );
+      } else {
+        throw const ServerException(
+          message: 'image is not a file or a string',
+          statusCode: 'wrong type',
+        );
+      }
     } on FirebaseAuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occurred',
