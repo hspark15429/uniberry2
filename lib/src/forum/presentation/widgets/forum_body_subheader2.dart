@@ -13,6 +13,8 @@ class ForumBodySubHeader2 extends StatefulWidget {
 }
 
 class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
+  int _currentPage = 0;
+
   @override
   void initState() {
     super.initState();
@@ -28,17 +30,63 @@ class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
         if (state is PostsSearchedWithPagekey) {
-          return SizedBox(
-            height: 100,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: state.searchResult.posts
-                  .map((post) => AnnouncementItem(
-                        imagePath: post.content!,
-                        title: post.title,
-                        link: post.link,
-                      ))
-                  .toList(),
+          final posts = state.searchResult.posts.take(5).toList();
+          return Center(
+            child: Card(
+              margin: const EdgeInsets.all(16),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Announcements',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 190, // 카드 크기를 키우기 위해 높이를 조정
+                      child: PageView.builder(
+                        itemCount: posts.length,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentPage = index;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return AnnouncementItem(
+                            imagePath: post.content!,
+                            title: post.title,
+                            link: post.link,
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        posts.length,
+                        (index) => Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _currentPage == index
+                                ? Colors.black
+                                : Colors.black.withOpacity(0.2),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         }

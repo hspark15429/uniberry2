@@ -123,7 +123,7 @@ class _ForumBodyState extends State<ForumBody> {
                   child: Text(
                     'Please refresh or try again later.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black), // 텍스트 색상 변경
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               );
@@ -135,15 +135,16 @@ class _ForumBodyState extends State<ForumBody> {
               _pagingController.refresh();
             }
             _pagingController.appendPage(
-                state.searchResult.posts, state.searchResult.nextPageKey,);
+              state.searchResult.posts,
+              state.searchResult.nextPageKey,
+            );
             return PagedSliverList<int, Post>(
               pagingController: _pagingController,
-              // physics: const NeverScrollableScrollPhysics(),
               builderDelegate: PagedChildBuilderDelegate<Post>(
                 noItemsFoundIndicatorBuilder: (_) => const Center(
                   child: Text(
                     'No results found',
-                    style: TextStyle(color: Colors.black), // 텍스트 색상 변경
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
                 itemBuilder: (_, item, __) => PostCard(post: item),

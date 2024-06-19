@@ -12,6 +12,7 @@ import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry/src/comment/presentation/widgets/comment_card.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:intl/intl.dart';
 
 class PostDetailsView extends StatefulWidget {
   const PostDetailsView(this.post, {super.key});
@@ -40,13 +41,44 @@ class _PostDetailsViewState extends State<PostDetailsView> {
     super.dispose();
   }
 
+  String formatPostTime(DateTime postTime) {
+    return DateFormat('yyyy-MM-dd HH:mm').format(postTime);
+  }
+
+  void _showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('삭제 확인'),
+          content: const Text('게시물이 삭제됩니다. 계속하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('삭제'),
+              onPressed: () {
+                context.read<PostCubit>().deletePost(widget.post.postId);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostCubit, PostState>(
       listener: (context, state) {
         if (state is PostDeleted) {
           Navigator.pop(context);
-          CoreUtils.showSnackBar(context, 'Post deleted successfully!');
+          CoreUtils.showSnackBar(context, '게시물이 삭제되었습니다.');
         }
       },
       builder: (context, state) {
@@ -57,17 +89,12 @@ class _PostDetailsViewState extends State<PostDetailsView> {
               if (context.read<UserProvider>().user!.uid == widget.post.uid)
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.white),
-                  onPressed: () {
-                    context.read<PostCubit>().deletePost(widget.post.postId);
-                  },
+                  onPressed: _showDeleteDialog,
                 ),
             ],
-            backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
-            iconTheme: const IconThemeData(
-                color: Colors.white), // AppBar 아이콘 색상을 흰색으로 설정
-            titleTextStyle: const TextStyle(
-                color: Colors.white,
-                fontSize: 18), // AppBar 제목 텍스트 스타일을 흰색으로 설정
+            backgroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.white),
+            titleTextStyle: const TextStyle(color: Colors.white, fontSize: 18),
           ),
           body: ListView(
             children: [
@@ -77,17 +104,18 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                    ),
-                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Text(
+                      '#${widget.post.tags![0]}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
                     Text(
                       widget.post.title,
                       style: const TextStyle(
@@ -96,7 +124,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     if (widget.post.type == 'text')
                       Text(
                         widget.post.content!,
@@ -126,30 +154,23 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                         errorTitle: '제목 미리보기가 없습니다.',
                         errorWidget: Container(
                           color: Colors.grey[300],
-                          child: Text('Oops!'),
+                          child: const Text('Oops!'),
                         ),
                         errorImage: "https://google.com/",
-                        cache: Duration(days: 7),
+                        cache: const Duration(days: 7),
                         backgroundColor: Colors.grey[300],
                         borderRadius: 12,
                         removeElevation: false,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(blurRadius: 3, color: Colors.grey)
                         ],
-                        // onTap: () {}, // This disables tap event
                       ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
-                        Text(
-                          widget.post.author,
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        const Spacer(),
-                        const Icon(
+                        Icon(
                           IconlyBold.chat,
-                          color: Colors.grey,
+                          color: Colors.grey[600],
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -157,56 +178,103 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                           style:
                               const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
+                        const Spacer(),
+                        Text(
+                          formatPostTime(widget.post.createdAt),
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(
+                          Icons.edit,
+                          color: Colors.grey,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          widget.post.author,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 4),
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-                child: BlocConsumer<CommentCubit, CommentState>(
-                  listener: (context, state) {
-                    if (state is CommentCreated || state is CommentDeleted) {
-                      commentContentController.clear();
-                      context
-                          .read<CommentCubit>()
-                          .getCommentsByPostId(widget.post.postId);
+              Divider(
+                color: Colors.grey[300],
+                thickness: 1,
+                height: 32,
+                indent: 16,
+                endIndent: 16,
+              ),
+              BlocConsumer<CommentCubit, CommentState>(
+                listener: (context, state) {
+                  if (state is CommentCreated || state is CommentDeleted) {
+                    commentContentController.clear();
+                    context
+                        .read<CommentCubit>()
+                        .getCommentsByPostId(widget.post.postId);
 
-                      CoreUtils.showSnackBar(
-                        context,
-                        'Operation was successful!',
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is CommentsFetched) {
-                      return ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: state.comments.length,
-                        itemBuilder: (context, index) {
-                          final comment = state.comments[index];
-                          return CommentCard(comment: comment);
-                        },
-                      );
-                    }
-                    return const LoadingView();
-                  },
-                ),
-              )
+                    CoreUtils.showSnackBar(
+                        context, 'Operation was successful!');
+                  }
+                },
+                builder: (context, state) {
+                  if (state is CommentsFetched) {
+                    return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.comments.length,
+                      itemBuilder: (context, index) {
+                        final comment = state.comments[index];
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.edit,
+                                    color: Colors.grey,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    comment.author,
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                comment.content,
+                                style: const TextStyle(
+                                    fontSize: 14, color: Colors.black),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                formatPostTime(comment.createdAt),
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return const LoadingView();
+                },
+              ),
             ],
           ),
           bottomNavigationBar: Padding(
@@ -240,7 +308,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                     icon: const Icon(
                       IconlyBold.arrow_up_square,
                       color: Colors.black,
-                    ), // 아이콘 색상을 흰색으로 설정
+                    ),
                     onPressed: () {
                       final user = context.read<UserProvider>().user;
                       if (commentContentController.text.trim().isNotEmpty) {
