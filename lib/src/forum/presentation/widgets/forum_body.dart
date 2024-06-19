@@ -66,10 +66,48 @@ class _ForumBodyState extends State<ForumBody> {
             child: const ForumBodySubHeader1(),
           ),
         ),
+        const SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Row(
+              children: [
+                Icon(Icons.lightbulb, color: Colors.yellow, size: 24),
+                SizedBox(width: 8),
+                Text(
+                  '注目すべき情報',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         SliverToBoxAdapter(
           child: BlocProvider(
             create: (context) => sl<PostCubit>(),
             child: const ForumBodySubHeader2(),
+          ),
+        ),
+        const SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Row(
+              children: [
+                Icon(Icons.diversity_3, color: Colors.black, size: 24),
+                SizedBox(width: 8),
+                Text(
+                  '学内掲示板',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         SliverToBoxAdapter(

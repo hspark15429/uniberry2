@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:uniberry/core/common/views/loading_view.dart';
-import 'package:uniberry/core/common/widgets/i_field.dart';
-import 'package:uniberry/core/enums/update_post_enum.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/src/comment/data/models/comment_model.dart';
@@ -108,21 +106,37 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      '#${widget.post.tags![0]}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.orange,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          '#${widget.post.tags![0]}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.orange,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          formatPostTime(widget.post.createdAt),
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      widget.post.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.post.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     if (widget.post.type == 'text')
@@ -148,8 +162,10 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
-                        bodyStyle:
-                            const TextStyle(color: Colors.grey, fontSize: 12),
+                        bodyStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
                         errorBody: '내용 미리보기가 없습니다.',
                         errorTitle: '제목 미리보기가 없습니다.',
                         errorWidget: Container(
@@ -167,34 +183,36 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       ),
                     const SizedBox(height: 8),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(
-                          IconlyBold.chat,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          widget.post.commentCount.toString(),
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              widget.post.author,
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                            ),
+                          ],
                         ),
                         const Spacer(),
-                        Text(
-                          formatPostTime(widget.post.createdAt),
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
-                        ),
-                        const SizedBox(width: 8),
-                        const Icon(
-                          Icons.edit,
-                          color: Colors.grey,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          widget.post.author,
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        Row(
+                          children: [
+                            Icon(
+                              IconlyBold.chat,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              widget.post.commentCount.toString(),
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -228,47 +246,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       itemCount: state.comments.length,
                       itemBuilder: (context, index) {
                         final comment = state.comments[index];
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.edit,
-                                    color: Colors.grey,
-                                    size: 16,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    comment.author,
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                comment.content,
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.black),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                formatPostTime(comment.createdAt),
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        );
+                        return CommentCard(comment: comment);
                       },
                     );
                   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
-import 'package:uniberry/src/forum/presentation/widgets/announcement_card.dart';
+import 'package:uniberry/src/forum/presentation/widgets/advertisement_card.dart';
 
 class ForumBodySubHeader2 extends StatefulWidget {
   const ForumBodySubHeader2({
@@ -34,21 +34,18 @@ class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
           return Center(
             child: Card(
               margin: const EdgeInsets.all(16),
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                side: BorderSide(color: Colors.white, width: 10),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Announcements',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
                     SizedBox(
-                      height: 190, // 카드 크기를 키우기 위해 높이를 조정
+                      height: 330, // 카드 크기를 키우기 위해 높이를 조정
                       child: PageView.builder(
                         itemCount: posts.length,
                         onPageChanged: (index) {
@@ -58,9 +55,8 @@ class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
                         },
                         itemBuilder: (context, index) {
                           final post = posts[index];
-                          return AnnouncementItem(
+                          return AdvertisementItem(
                             imagePath: post.content!,
-                            title: post.title,
                             link: post.link,
                           );
                         },
