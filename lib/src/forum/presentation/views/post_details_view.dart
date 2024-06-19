@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:uniberry/core/common/views/loading_view.dart';
+import 'package:uniberry/core/extensions/date_time_extensions.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/src/comment/data/models/comment_model.dart';
@@ -37,10 +38,6 @@ class _PostDetailsViewState extends State<PostDetailsView> {
   void dispose() {
     commentContentController.dispose();
     super.dispose();
-  }
-
-  String formatPostTime(DateTime postTime) {
-    return DateFormat('yyyy-MM-dd HH:mm').format(postTime);
   }
 
   void _showDeleteDialog() {
@@ -117,7 +114,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                         ),
                         const Spacer(),
                         Text(
-                          formatPostTime(widget.post.createdAt),
+                          widget.post.createdAt.postCreatedAtFormatted,
                           style:
                               const TextStyle(fontSize: 12, color: Colors.grey),
                         ),
