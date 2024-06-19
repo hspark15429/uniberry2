@@ -101,21 +101,14 @@ class DashboardController extends ChangeNotifier {
       ),
       child: const PersistentView(),
     ),
-    BlocProvider(
-      create: (_) => sl<AuthenticationCubit>(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<AuthenticationCubit>()),
+        BlocProvider(create: (context) => sl<CommentCubit>()),
+        BlocProvider(create: (context) => sl<PostCubit>()),
+      ],
       child: ChangeNotifierProvider(
-        create: (_) => TabNavigator(TabItem(
-            child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => sl<CommentCubit>(),
-            ),
-            BlocProvider(
-              create: (context) => sl<PostCubit>(),
-            ),
-          ],
-          child: const ProfileView(),
-        ))),
+        create: (_) => TabNavigator(TabItem(child: const ProfileView())),
         child: const PersistentView(),
       ),
     ),

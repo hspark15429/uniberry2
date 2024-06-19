@@ -16,7 +16,7 @@ class CommentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(comment.content),
-      subtitle: Text(comment.author),
+      subtitle: Text('${comment.author}#${comment.uid.trim().substring(0, 5)}'),
       trailing: (comment.uid == context.read<UserProvider>().user!.uid)
           ? IconButton(
               icon: const Icon(Icons.delete),

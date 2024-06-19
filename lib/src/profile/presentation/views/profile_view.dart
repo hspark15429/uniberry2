@@ -11,6 +11,7 @@ import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/res/colours.dart';
 import 'package:uniberry/core/res/res.dart';
 import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/src/profile/presentation/views/edit_profile_view.dart';
 import 'package:uniberry/src/profile/presentation/widgets/pop_up_item.dart';
 import 'package:uniberry/src/profile/presentation/widgets/profile_body.dart';
 import 'package:uniberry/src/profile/presentation/widgets/profile_header.dart';
@@ -69,11 +70,11 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                     onTap: () {
-                      // context.read<TabNavigator>().push(
-                      //       TabItem(
-                      //         child: const Placeholder(),
-                      //       ),
-                      //     );
+                      context.read<TabNavigator>().push(
+                            TabItem(
+                              child: const EditProfileView(),
+                            ),
+                          );
                     },
                   ),
                   const PopupMenuItem<void>(

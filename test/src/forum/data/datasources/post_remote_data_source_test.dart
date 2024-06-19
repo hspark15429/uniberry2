@@ -43,6 +43,7 @@ void main() {
         connectionTimeout: const Duration(seconds: 2),
       ),
     );
+    authClient = MockFirebaseAuth();
     cloudStoreClient = FakeFirebaseFirestore();
     docReference = await cloudStoreClient.collection('posts').add(
           tPost.toMap(),
@@ -53,6 +54,7 @@ void main() {
     tPost = tPost.copyWith(postId: docReference.id);
     dbClient = MockFirebaseStorage();
     dataSource = PostRemoteDataSourceImplementation(
+      authClient: authClient,
       cloudStoreClient: cloudStoreClient,
       dbClient: dbClient,
       typesenseClient: typesenseClient,

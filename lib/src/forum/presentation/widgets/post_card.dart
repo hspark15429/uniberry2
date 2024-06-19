@@ -84,7 +84,7 @@ class PostCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  post.author,
+                  '${post.author}#${post.uid.trim().substring(0, 5)}',
                   style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const Spacer(),

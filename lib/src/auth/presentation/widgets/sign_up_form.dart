@@ -35,7 +35,6 @@ class _SignUpFormState extends State<SignUpForm> {
           IField(
             controller: widget.fullNameController,
             hintText: 'Full Name',
-            textStyle: TextStyle(color: Colors.black),
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.perm_identity, color: Colors.black),
             keyboardType: TextInputType.name,
@@ -44,7 +43,6 @@ class _SignUpFormState extends State<SignUpForm> {
           IField(
             controller: widget.emailController,
             hintText: 'Email address',
-            textStyle: TextStyle(color: Colors.black),
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.mail_outline, color: Colors.black),
             keyboardType: TextInputType.emailAddress,
@@ -53,7 +51,6 @@ class _SignUpFormState extends State<SignUpForm> {
           IField(
             controller: widget.passwordController,
             hintText: 'Password',
-            textStyle: TextStyle(color: Colors.black),
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
             obscureText: obscurePassword,
@@ -74,7 +71,6 @@ class _SignUpFormState extends State<SignUpForm> {
           IField(
             controller: widget.confirmPasswordController,
             hintText: 'Confirm Password',
-            textStyle: TextStyle(color: Colors.black),
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
             obscureText: obscureConfirmPassword,

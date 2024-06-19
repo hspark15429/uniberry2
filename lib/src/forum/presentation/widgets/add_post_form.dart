@@ -64,7 +64,6 @@ class _AddPostFormState extends State<AddPostForm> {
           IField(
             controller: widget.titleController,
             hintText: 'Title',
-            textStyle: const TextStyle(color: Colors.black),
             filled: true,
             fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
           ),
@@ -134,7 +133,6 @@ class _AddPostFormState extends State<AddPostForm> {
             IField(
               controller: widget.contentController,
               hintText: 'Content',
-              textStyle: const TextStyle(color: Colors.black),
               maxlines: 15,
               filled: true,
               fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
@@ -160,7 +158,6 @@ class _AddPostFormState extends State<AddPostForm> {
             IField(
               controller: widget.linkController,
               hintText: 'Link URL',
-              textStyle: const TextStyle(color: Colors.black),
               filled: true,
               fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
               keyboardType: TextInputType.url,

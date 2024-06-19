@@ -30,7 +30,6 @@ class _SignInFormState extends State<SignInForm> {
           IField(
             controller: widget.emailController,
             hintText: 'Email address',
-            textStyle: TextStyle(color: Colors.black),
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.mail_outline, color: Colors.black),
             keyboardType: TextInputType.emailAddress,
@@ -39,7 +38,6 @@ class _SignInFormState extends State<SignInForm> {
           IField(
             controller: widget.passwordController,
             hintText: 'Password',
-            textStyle: const TextStyle(color: Colors.black),
             fillColour: Colors.grey.withOpacity(0.2),
             obscureText: obscurePassword,
             keyboardType: TextInputType.visiblePassword,

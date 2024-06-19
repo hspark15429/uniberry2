@@ -16,7 +16,6 @@ class IField extends StatelessWidget {
     this.hintStyle,
     this.overrideValidator = false,
     this.maxlines = 1,
-    required TextStyle textStyle,
   });
 
   final String? Function(String?)? validator;
