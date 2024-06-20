@@ -5,6 +5,7 @@ import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
 abstract class TimetableRemoteDataSource {
   Future<CourseModel> getCourse(String courseId);
   Future<List<String>> searchCourses({
+    required String query,
     required String school,
     required String campus,
     required String term,

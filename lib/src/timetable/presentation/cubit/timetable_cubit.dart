@@ -149,6 +149,7 @@ class TimetableCubit extends Cubit<TimetableState> {
   }
 
   Future<void> searchCourses({
+    String? query,
     String? school,
     String? campus,
     String? term,
@@ -158,6 +159,7 @@ class TimetableCubit extends Cubit<TimetableState> {
 
     final courseIds = await _searchCourses(
       SearchCoursesParams(
+        query: query,
         school: _selectedSchool ?? school,
         campus: campus,
         term: term,

@@ -42,6 +42,7 @@ class TimetableRemoteDataSourceImplementation
 
   @override
   Future<List<String>> searchCourses({
+    required String query,
     required String school,
     required String campus,
     required String term,

@@ -24,6 +24,7 @@ class TimetableRepositoryImplementation implements TimetableRepository {
 
   @override
   ResultFuture<List<String>> searchCourses({
+    required String query,
     required String school,
     required String campus,
     required String term,
@@ -31,6 +32,7 @@ class TimetableRepositoryImplementation implements TimetableRepository {
   }) async {
     try {
       final result = await _remoteDataSource.searchCourses(
+        query: query,
         campus: campus,
         period: period,
         school: school,

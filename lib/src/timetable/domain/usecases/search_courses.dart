@@ -12,6 +12,7 @@ class SearchCourses
   @override
   ResultFuture<List<String>> call(SearchCoursesParams params) async {
     final courses = await _repo.searchCourses(
+      query: params.query ?? '',
       school: params.school ?? '',
       campus: params.campus ?? '',
       term: params.term ?? '',
@@ -23,6 +24,7 @@ class SearchCourses
 
 class SearchCoursesParams extends Equatable {
   const SearchCoursesParams({
+    this.query,
     this.school,
     this.campus,
     this.term,
@@ -31,17 +33,19 @@ class SearchCoursesParams extends Equatable {
 
   const SearchCoursesParams.empty()
       : this(
+          query: 'empty.query',
           school: 'empty.school',
           campus: 'empty.campus',
           term: 'empty.term',
           period: 'empty.period',
         );
 
+  final String? query;
   final String? school;
   final String? campus;
   final String? term;
   final String? period;
 
   @override
-  List<String?> get props => [school, campus, term, period];
+  List<String?> get props => [query, school, campus, term, period];
 }

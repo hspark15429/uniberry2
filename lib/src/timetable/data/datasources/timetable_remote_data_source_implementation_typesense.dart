@@ -66,6 +66,7 @@ class TimetableRemoteDataSourceImplementationTypesense
 
   @override
   Future<List<String>> searchCourses({
+    required String query,
     required String school,
     required String campus,
     required String term,
@@ -82,8 +83,8 @@ class TimetableRemoteDataSourceImplementationTypesense
       final filterString = filters.isNotEmpty ? filters.join(' && ') : '';
 
       final searchParameters = {
-        'q': '',
-        'query_by': 'periods,term,campuses,schools',
+        'q': query,
+        'query_by': 'codes',
         'filter_by': filterString,
         'include_fields': 'courseId',
         'per_page': '100',

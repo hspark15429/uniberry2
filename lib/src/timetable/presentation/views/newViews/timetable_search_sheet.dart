@@ -29,7 +29,16 @@ class _TimetableSearchSheetState extends State<TimetableSearchSheet> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _searchController.addListener(() {
+      context.read<TimetableCubit>().searchCourses(
+            query: _searchController.text,
+            period: timetablePeriodToJapanese(widget.period),
+            school: widget.school,
+            term: widget.term,
+          );
+    });
     context.read<TimetableCubit>().searchCourses(
+          query: '',
           period: timetablePeriodToJapanese(widget.period),
           school: widget.school,
           term: widget.term,
@@ -66,7 +75,7 @@ class _TimetableSearchSheetState extends State<TimetableSearchSheet> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: '강의명, 수업코드로검색',
+                hintText: '수업코드로검색',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
