@@ -76,7 +76,7 @@ class TimetableRemoteDataSourceImplementationTypesense
       // Build the filterBy string dynamically
       final filters = [];
       if (campus.isNotEmpty) filters.add('campuses:$campus');
-      if (period.isNotEmpty) filters.add('periods:$period');
+      if (period.isNotEmpty) filters.add('periods:$period*');
       if (term.isNotEmpty) filters.add('term:$term');
       if (school.isNotEmpty) filters.add('schools:$school');
 
