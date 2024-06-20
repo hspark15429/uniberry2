@@ -53,6 +53,9 @@ class PostCard extends StatelessWidget {
               Image.network(
                 post.content!,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error);
+                },
               )
             else if (post.type == 'link')
               AnyLinkPreview(

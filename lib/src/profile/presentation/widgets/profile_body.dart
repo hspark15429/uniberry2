@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:uniberry/core/common/views/loading_view.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/services/injection_container.dart';
 import 'package:uniberry/src/comment/domain/entities/comment.dart';
 import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry/src/comment/presentation/widgets/comment_card.dart';
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/src/forum/presentation/views/post_details_view.dart';
 import 'package:uniberry/src/forum/presentation/widgets/post_card.dart';
 
 class ProfileBody extends StatefulWidget {
@@ -19,15 +21,31 @@ class ProfileBody extends StatefulWidget {
 
 class _ProfileBodyState extends State<ProfileBody> {
   final options = ['내가 작성한 글', '내가 작성한 댓글'];
-  int index = 0;
+  int _index = 0;
+  int get index => _index;
+  set index(int value) {
+    setState(() {
+      _index = value;
+      _loadPosts();
+      _loadComments();
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    context.read<CommentCubit>().getCommentsByUserId(
+    _loadPosts();
+    _loadComments();
+  }
+
+  void _loadPosts() {
+    context.read<PostCubit>().getPostsByUserId(
           context.read<UserProvider>().user!.uid,
         );
-    context.read<PostCubit>().getPostsByUserId(
+  }
+
+  void _loadComments() {
+    context.read<CommentCubit>().getCommentsByUserId(
           context.read<UserProvider>().user!.uid,
         );
   }
@@ -119,9 +137,37 @@ class _ProfileBodyState extends State<ProfileBody> {
                       itemCount: state.comments.length,
                       itemBuilder: (context, index) {
                         final comment = state.comments[index];
-                        return CommentCard(
-                          comment: comment,
-                          replyCommentController: ValueNotifier<Comment?>(null),
+                        return BlocProvider(
+                          create: (context) => sl<PostCubit>(),
+                          child: Builder(
+                            builder: (context) {
+                              return BlocConsumer<PostCubit, PostState>(
+                                listener: (context, state) {
+                                  if (state is PostRead) {
+                                    Navigator.pushNamed(
+                                      context,
+                                      PostDetailsView.id,
+                                      arguments: state.post,
+                                    );
+                                  }
+                                },
+                                builder: (context, state) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      context.read<PostCubit>().readPost(
+                                            comment.postId,
+                                          );
+                                    },
+                                    child: CommentCard(
+                                      comment: comment,
+                                      replyCommentController:
+                                          ValueNotifier<Comment?>(null),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         );
                       },
                     );

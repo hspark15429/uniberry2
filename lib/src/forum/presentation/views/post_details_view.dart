@@ -152,6 +152,9 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       Image.network(
                         widget.post.content!,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.error);
+                        },
                       )
                     else if (widget.post.type == 'link')
                       AnyLinkPreview(
