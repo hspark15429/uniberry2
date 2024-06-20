@@ -1,4 +1,5 @@
 import 'package:any_link_preview/any_link_preview.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
@@ -50,10 +51,10 @@ class PostCard extends StatelessWidget {
                 style: const TextStyle(fontSize: 14, color: Colors.grey),
               )
             else if (post.type == 'image')
-              Image.network(
-                post.content!,
+              CachedNetworkImage(
+                imageUrl: post.content!,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
+                errorWidget: (context, error, stackTrace) {
                   return const Icon(Icons.error);
                 },
               )

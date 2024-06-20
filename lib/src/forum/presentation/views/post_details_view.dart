@@ -1,4 +1,5 @@
 import 'package:any_link_preview/any_link_preview.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
@@ -149,12 +150,11 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                             const TextStyle(fontSize: 14, color: Colors.grey),
                       )
                     else if (widget.post.type == 'image')
-                      Image.network(
-                        widget.post.content!,
+                      CachedNetworkImage(
+                        imageUrl: widget.post.content!,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.error);
-                        },
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       )
                     else if (widget.post.type == 'link')
                       AnyLinkPreview(

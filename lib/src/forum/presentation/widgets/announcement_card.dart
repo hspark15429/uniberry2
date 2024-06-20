@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 
@@ -19,11 +20,11 @@ class AnnouncementItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Image.network(
-              imagePath,
+            CachedNetworkImage(
+              imageUrl: imagePath,
               width: 60,
               height: 60,
-              errorBuilder: (context, error, stackTrace) {
+              errorWidget: (context, error, stackTrace) {
                 return const Icon(Icons.error);
               },
             ),

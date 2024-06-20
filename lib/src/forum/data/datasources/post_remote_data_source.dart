@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:typesense/typesense.dart';
 import 'package:uniberry/core/enums/update_post_enum.dart';
 import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/core/utils/typedefs.dart';
 import 'package:uniberry/src/forum/data/models/post_model.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
@@ -91,6 +92,8 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
   }) async {
     try {
       if (image is File) {
+        final compressedImage = await CoreUtils.compressFile(image);
+
         final docReference = await _cloudStoreClient.collection('posts').add(
               (post as PostModel).toMap(),
             );
@@ -99,7 +102,7 @@ class PostRemoteDataSourceImplementation implements PostRemoteDataSource {
         );
         final ref = _dbClient.ref().child(
             'posts/images/user_uploaded/${_authClient.currentUser?.uid}/${docReference.id}');
-        await ref.putFile(image);
+        await ref.putFile(compressedImage);
         final url = await ref.getDownloadURL();
         await _cloudStoreClient.collection('posts').doc(docReference.id).update(
           {'content': url},
