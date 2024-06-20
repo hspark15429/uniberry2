@@ -74,27 +74,30 @@ class _AddPostFormState extends State<AddPostForm> {
               scrollDirection: Axis.horizontal,
               itemCount: tags.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: FilterChip(
-                    label: Text(
-                      tags[index],
-                      style: TextStyle(
-                        color: widget.tagController.value == index
-                            ? Colors.white
-                            : Colors.black,
+                if (index != 0) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: FilterChip(
+                      label: Text(
+                        tags[index],
+                        style: TextStyle(
+                          color: widget.tagController.value == index
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
+                      selected: widget.tagController.value == index,
+                      selectedColor: Colors.black,
+                      backgroundColor: Colors.white,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          widget.tagController.value = index;
+                        });
+                      },
                     ),
-                    selected: widget.tagController.value == index,
-                    selectedColor: Colors.black,
-                    backgroundColor: Colors.white,
-                    onSelected: (bool selected) {
-                      setState(() {
-                        widget.tagController.value = index;
-                      });
-                    },
-                  ),
-                );
+                  );
+                }
+                return const SizedBox.shrink();
               },
             ),
           ),

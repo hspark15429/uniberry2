@@ -25,7 +25,7 @@ class _AddPostViewState extends State<AddPostView> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final linkController = TextEditingController();
-  final tagController = ValueNotifier<int>(0);
+  final tagController = ValueNotifier<int>(1);
   final typeController = ValueNotifier<int>(0);
   final imageController = ValueNotifier<dynamic>(null);
   final formKey = GlobalKey<FormState>();

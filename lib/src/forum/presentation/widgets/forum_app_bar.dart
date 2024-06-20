@@ -19,11 +19,11 @@ class ForumAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon:
               const Icon(Icons.refresh, color: Colors.white), // 아이콘 색상을 흰색으로 설정
         ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(IconlyLight.notification,
-              color: Colors.white), // 아이콘 색상을 흰색으로 설정
-        ),
+        // IconButton(
+        //   onPressed: () {},
+        //   icon: const Icon(IconlyLight.notification,
+        //       color: Colors.white), // 아이콘 색상을 흰색으로 설정
+        // ),
       ],
     );
   }
