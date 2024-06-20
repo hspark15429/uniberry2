@@ -129,22 +129,24 @@ class _AddPostViewState extends State<AddPostView> {
             ),
           ],
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Column(
-                children: [
-                  AddPostForm(
-                    titleController: titleController,
-                    contentController: contentController,
-                    imageController: imageController,
-                    linkController: linkController,
-                    tagController: tagController,
-                    typeController: typeController,
-                    formKey: formKey,
-                  )
-                ],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                child: Column(
+                  children: [
+                    AddPostForm(
+                      titleController: titleController,
+                      contentController: contentController,
+                      imageController: imageController,
+                      linkController: linkController,
+                      tagController: tagController,
+                      typeController: typeController,
+                      formKey: formKey,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
