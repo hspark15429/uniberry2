@@ -10,6 +10,7 @@ class Comment extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.profilePic,
+    this.parentCommentId,
   });
 
   Comment.empty([DateTime? date])
@@ -22,6 +23,7 @@ class Comment extends Equatable {
           profilePic: '_empty.profilePic',
           createdAt: date ?? DateTime.now(),
           updatedAt: date ?? DateTime.now(),
+          parentCommentId: null,
         );
 
   final String commentId;
@@ -32,6 +34,7 @@ class Comment extends Equatable {
   final String author;
   final String uid;
   final String? profilePic;
+  final String? parentCommentId;
 
   @override
   List<Object> get props => [commentId];
@@ -39,5 +42,6 @@ class Comment extends Equatable {
   @override
   String toString() =>
       'Comment(commentId: $commentId, text: $content, postId: $postId, username: $author, '
-      'profilePic: $profilePic, createdAt: $createdAt, updatedAt: $updatedAt) uid: $uid';
+      'profilePic: $profilePic, createdAt: $createdAt, updatedAt: $updatedAt) uid: $uid '
+      'parentCommentId: $parentCommentId';
 }

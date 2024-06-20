@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:uniberry/core/common/views/loading_view.dart';
-import 'package:uniberry/core/extensions/date_time_extensions.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
-import 'package:uniberry/src/comment/data/models/comment_model.dart';
+import 'package:uniberry/src/comment/domain/entities/comment.dart';
 import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry/src/comment/presentation/widgets/comment_card.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:intl/intl.dart';
+import 'package:uniberry/src/forum/presentation/widgets/comment_text_field.dart';
 
 class PostDetailsView extends StatefulWidget {
   const PostDetailsView(this.post, {super.key});
@@ -26,45 +26,33 @@ class PostDetailsView extends StatefulWidget {
 
 class _PostDetailsViewState extends State<PostDetailsView> {
   final commentContentController = TextEditingController();
+  final replyCommentController = ValueNotifier<Comment?>(null);
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    commentContentController.addListener(_handleTextChange);
     context.read<CommentCubit>().getCommentsByPostId(widget.post.postId);
   }
 
   @override
   void dispose() {
-    commentContentController.dispose();
+    commentContentController
+      ..removeListener(_handleTextChange)
+      ..dispose();
+    replyCommentController.dispose();
     super.dispose();
   }
 
-  void _showDeleteDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('삭제 확인'),
-          content: const Text('게시물이 삭제됩니다. 계속하시겠습니까?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('삭제'),
-              onPressed: () {
-                context.read<PostCubit>().deletePost(widget.post.postId);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void _handleTextChange() {
+    final comment = replyCommentController.value;
+    if (comment != null) {
+      final authorTag = '@${comment.author}';
+      if (!commentContentController.text.contains(authorTag)) {
+        replyCommentController.value = null;
+      }
+    }
   }
 
   @override
@@ -84,7 +72,22 @@ class _PostDetailsViewState extends State<PostDetailsView> {
               if (context.read<UserProvider>().user!.uid == widget.post.uid)
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.white),
-                  onPressed: _showDeleteDialog,
+                  onPressed: () {
+                    CoreUtils.showConfirmationDialog(
+                      context,
+                      text: 'delete',
+                      title: '삭제 확인',
+                      content: '게시물이 삭제됩니다. 계속하시겠습니까?',
+                      actionText: '삭제',
+                      cancelText: '취소',
+                    ).then((value) {
+                      if (value != null && value) {
+                        context
+                            .read<PostCubit>()
+                            .deletePost(widget.post.postId);
+                      }
+                    });
+                  },
                 ),
             ],
             backgroundColor: Colors.black,
@@ -246,7 +249,10 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       itemCount: state.comments.length,
                       itemBuilder: (context, index) {
                         final comment = state.comments[index];
-                        return CommentCard(comment: comment);
+                        return CommentCard(
+                          comment: comment,
+                          replyCommentController: replyCommentController,
+                        );
                       },
                     );
                   }
@@ -255,60 +261,26 @@ class _PostDetailsViewState extends State<PostDetailsView> {
               ),
             ],
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: formKey,
-              child: TextField(
-                autofocus: false,
-                maxLines: null,
-                controller: commentContentController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor,
+          bottomNavigationBar: ValueListenableBuilder(
+              valueListenable: replyCommentController,
+              builder: (context, Comment? comment, child) {
+                if (comment != null) {
+                  commentContentController.text = '@${comment.author} ';
+                } else {
+                  commentContentController.clear();
+                }
+                return Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Form(
+                    key: formKey,
+                    child: CommentTextField(
+                      commentContentController: commentContentController,
+                      replyCommentController: replyCommentController,
+                      widget: widget,
                     ),
                   ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  filled: true,
-                  fillColor: Colors.white,
-                  suffixIcon: IconButton(
-                    icon: const Icon(
-                      IconlyBold.arrow_up_square,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      final user = context.read<UserProvider>().user;
-                      if (commentContentController.text.trim().isNotEmpty) {
-                        context.read<CommentCubit>().createComment(
-                              CommentModel(
-                                commentId: '_new.CommentId',
-                                content: commentContentController.text,
-                                postId: widget.post.postId,
-                                author: user!.fullName,
-                                uid: user.uid,
-                                createdAt: DateTime.now(),
-                                updatedAt: DateTime.now(),
-                              ),
-                            );
-                      }
-                    },
-                  ),
-                  hintText: 'Comment',
-                ),
-              ),
-            ),
-          ),
+                );
+              }),
         );
       },
     );

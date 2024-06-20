@@ -40,4 +40,46 @@ class CoreUtils {
       return;
     }
   }
+
+  static Future<bool?> showConfirmationDialog(
+    BuildContext context, {
+    String? text,
+    String? title,
+    String? content,
+    String? actionText,
+    String? cancelText,
+    Color? actionColor,
+    Color? cancelColor,
+  }) async {
+    debugPrint('showConfirmationDialog');
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title ?? text!),
+          content: Text(content ?? 'Are you sure you want to $text?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Text(
+                cancelText ?? 'Cancel',
+                style: TextStyle(color: cancelColor),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: Text(
+                actionText ?? text!.split(' ')[0].trim(),
+                style: TextStyle(color: actionColor),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

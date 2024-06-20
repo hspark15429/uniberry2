@@ -12,6 +12,7 @@ class CommentModel extends Comment {
     required super.createdAt,
     required super.updatedAt,
     super.profilePic,
+    super.parentCommentId,
   });
 
   CommentModel.empty([DateTime? date])
@@ -22,6 +23,7 @@ class CommentModel extends Comment {
           author: '_empty.author',
           uid: '_empty.uid',
           profilePic: '_empty.profilePic',
+          parentCommentId: null,
           createdAt: date ?? DateTime.now(),
           updatedAt: date ?? DateTime.now(),
         );
@@ -36,6 +38,7 @@ class CommentModel extends Comment {
           createdAt: (map['createdAt'] as Timestamp).toDate(),
           updatedAt: (map['updatedAt'] as Timestamp).toDate(),
           profilePic: map['profilePic'] as String?,
+          parentCommentId: map['parentCommentId'] as String?,
         );
 
   CommentModel.fromJson(DataMap json)
@@ -48,6 +51,7 @@ class CommentModel extends Comment {
           createdAt: (json['createdAt'] as Timestamp).toDate(),
           updatedAt: (json['updatedAt'] as Timestamp).toDate(),
           profilePic: json['profilePic'] as String?,
+          parentCommentId: json['parentCommentId'] as String?,
         );
 
   DataMap toMap() {
@@ -60,6 +64,7 @@ class CommentModel extends Comment {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'profilePic': profilePic,
+      'parentCommentId': parentCommentId,
     };
   }
 
@@ -72,6 +77,7 @@ class CommentModel extends Comment {
     DateTime? createdAt,
     DateTime? updatedAt,
     String? profilePic,
+    String? parentCommentId,
   }) {
     return CommentModel(
       commentId: commentId ?? this.commentId,
@@ -82,6 +88,7 @@ class CommentModel extends Comment {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       profilePic: profilePic ?? this.profilePic,
+      parentCommentId: parentCommentId ?? this.parentCommentId,
     );
   }
 }

@@ -62,8 +62,8 @@ class PostModel extends Post {
           type: json['type'] as String,
           createdAt: DateTime.fromMillisecondsSinceEpoch(
               (json['createdAt'] as int) * 1000),
-          updatedAt:
-              DateTime.fromMillisecondsSinceEpoch(json['updatedAt'] as int),
+          updatedAt: DateTime.fromMillisecondsSinceEpoch(
+              (json['updatedAt'] as int) * 1000),
           tags: (json['tags'] as List<dynamic>).cast<String>(),
           content: json['content'] as String?,
           link: json['link'] as String?,

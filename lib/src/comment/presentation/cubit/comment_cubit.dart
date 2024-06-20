@@ -4,6 +4,7 @@ import 'package:uniberry/core/enums/update_comment_enum.dart';
 import 'package:uniberry/src/comment/domain/entities/comment.dart';
 import 'package:uniberry/src/comment/domain/usecases/create_comment.dart';
 import 'package:uniberry/src/comment/domain/usecases/delete_comment.dart';
+import 'package:uniberry/src/comment/domain/usecases/get_comments_by_parent_comment_id.dart';
 import 'package:uniberry/src/comment/domain/usecases/get_comments_by_post_id.dart';
 import 'package:uniberry/src/comment/domain/usecases/get_comments_by_user_id.dart';
 import 'package:uniberry/src/comment/domain/usecases/update_comment.dart';
@@ -15,11 +16,13 @@ class CommentCubit extends Cubit<CommentState> {
     required CreateComment createComment,
     required GetCommentsByPostId getCommentsByPostId,
     required GetCommentsByUserId getCommentsByUserId,
+    required GetCommentsByParentCommentId getCommentsByParentCommentId,
     required UpdateComment updateComment,
     required DeleteComment deleteComment,
   })  : _createComment = createComment,
         _getCommentsByPostId = getCommentsByPostId,
         _getCommentsByUserId = getCommentsByUserId,
+        _getCommentsByParentCommentId = getCommentsByParentCommentId,
         _updateComment = updateComment,
         _deleteComment = deleteComment,
         super(CommentInitial());
@@ -27,6 +30,7 @@ class CommentCubit extends Cubit<CommentState> {
   final CreateComment _createComment;
   final GetCommentsByPostId _getCommentsByPostId;
   final GetCommentsByUserId _getCommentsByUserId;
+  final GetCommentsByParentCommentId _getCommentsByParentCommentId;
   final UpdateComment _updateComment;
   final DeleteComment _deleteComment;
 
@@ -51,6 +55,15 @@ class CommentCubit extends Cubit<CommentState> {
   Future<void> getCommentsByUserId(String userId) async {
     emit(CommentLoading());
     final result = await _getCommentsByUserId(userId);
+    result.fold(
+      (failure) => emit(CommentError(failure.message)),
+      (comments) => emit(CommentsFetched(comments)),
+    );
+  }
+
+  Future<void> getCommentsByParentCommentId(String parentCommentId) async {
+    emit(CommentLoading());
+    final result = await _getCommentsByParentCommentId(parentCommentId);
     result.fold(
       (failure) => emit(CommentError(failure.message)),
       (comments) => emit(CommentsFetched(comments)),

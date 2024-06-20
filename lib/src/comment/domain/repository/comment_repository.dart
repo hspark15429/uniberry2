@@ -8,6 +8,8 @@ abstract class CommentRepository {
   ResultFuture<void> createComment(Comment comment);
   ResultFuture<List<Comment>> getCommentsByPostId(String postId);
   ResultFuture<List<Comment>> getCommentsByUserId(String userId);
+  ResultFuture<List<Comment>> getCommentsByParentCommentId(
+      String parentCommentId);
   ResultFuture<void> updateComment({
     required String commentId,
     required UpdateCommentAction action,

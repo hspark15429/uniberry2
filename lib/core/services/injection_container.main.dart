@@ -19,6 +19,7 @@ Future<void> initComment() async {
         createComment: sl(),
         getCommentsByPostId: sl(),
         getCommentsByUserId: sl(),
+        getCommentsByParentCommentId: sl(),
         updateComment: sl(),
         deleteComment: sl(),
       ),
@@ -27,6 +28,7 @@ Future<void> initComment() async {
     ..registerLazySingleton(() => CreateComment(sl()))
     ..registerLazySingleton(() => GetCommentsByPostId(sl()))
     ..registerLazySingleton(() => GetCommentsByUserId(sl()))
+    ..registerLazySingleton(() => GetCommentsByParentCommentId(sl()))
     ..registerLazySingleton(() => UpdateComment(sl()))
     ..registerLazySingleton(() => DeleteComment(sl()))
     // repo impl

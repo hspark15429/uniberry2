@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:uniberry/core/common/views/loading_view.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/src/comment/domain/entities/comment.dart';
 import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry/src/comment/presentation/widgets/comment_card.dart';
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
@@ -118,7 +119,10 @@ class _ProfileBodyState extends State<ProfileBody> {
                       itemCount: state.comments.length,
                       itemBuilder: (context, index) {
                         final comment = state.comments[index];
-                        return CommentCard(comment: comment);
+                        return CommentCard(
+                          comment: comment,
+                          replyCommentController: ValueNotifier<Comment?>(null),
+                        );
                       },
                     );
                   }

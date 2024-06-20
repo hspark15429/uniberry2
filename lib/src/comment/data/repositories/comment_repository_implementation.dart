@@ -53,6 +53,19 @@ class CommentRepositoryImplementation implements CommentRepository {
   }
 
   @override
+  ResultFuture<List<Comment>> getCommentsByParentCommentId(
+    String parentCommentId,
+  ) async {
+    try {
+      final result =
+          await _remoteDataSource.getCommentsByParentCommentId(parentCommentId);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
   ResultFuture<void> updateComment({
     required String commentId,
     required UpdateCommentAction action,
