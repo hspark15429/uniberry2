@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry/core/common/widgets/gradient_background.dart';
 import 'package:uniberry/core/common/widgets/rounded_button.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/res/res.dart';
+import 'package:uniberry/core/services/injection_container.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/src/auth/presentation/cubit/authentication_cubit.dart';
 import 'package:uniberry/src/auth/presentation/utils/authentication_heroes.dart';
@@ -40,12 +44,25 @@ class _SignInScreenState extends State<SignInScreen> {
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is AuthenticationError) {
             CoreUtils.showSnackBar(context, state.message);
           } else if (state is SignedIn) {
             context.read<UserProvider>().initUser(state.user);
-            Navigator.pushReplacementNamed(context, Dashboard.routeName);
+            if (FirebaseAuth.instance.currentUser!.emailVerified) {
+              unawaited(
+                Navigator.pushReplacementNamed(context, Dashboard.routeName),
+              );
+            } else {
+              CoreUtils.showSnackBar(
+                context,
+                'メールアドレスを確認してください',
+              );
+              await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+              await sl<SharedPreferences>().clear();
+              await FirebaseAuth.instance.signOut();
+              await Navigator.pushReplacementNamed(context, '/');
+            }
           }
         },
         builder: (context, state) {

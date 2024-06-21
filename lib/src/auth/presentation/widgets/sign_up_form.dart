@@ -46,6 +46,14 @@ class _SignUpFormState extends State<SignUpForm> {
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.mail_outline, color: Colors.black),
             keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'メールアドレスを入力してください';
+              } else if (!value.contains('@ed.ritsumei.ac.jp')) {
+                return '学校のメールアドレスである必要があります';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 25),
           IField(

@@ -53,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 );
           } else if (state is SignedIn) {
             context.read<UserProvider>().initUser(state.user);
-            Navigator.pushReplacementNamed(context, Dashboard.routeName);
+            Navigator.pushReplacementNamed(context, '/');
           }
         },
         builder: (context, state) {

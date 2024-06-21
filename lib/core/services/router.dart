@@ -26,7 +26,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/':
       return MaterialPageRoute(
         builder: (context) {
-          if (sl<FirebaseAuth>().currentUser != null) {
+          if (sl<FirebaseAuth>().currentUser != null &&
+              sl<FirebaseAuth>().currentUser!.emailVerified) {
             final user = sl<FirebaseAuth>().currentUser!;
             final localUser = LocalUserModel(
               uid: user.uid,
@@ -36,6 +37,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             );
             context.read<UserProvider>().initUser(localUser);
             return const Dashboard();
+          } else if (sl<FirebaseAuth>().currentUser == null) {
+            return BlocProvider(
+              create: (_) => sl<AuthenticationCubit>(),
+              child: const SignInScreen(),
+            );
           } else {
             return BlocProvider(
               create: (_) => sl<AuthenticationCubit>(),
