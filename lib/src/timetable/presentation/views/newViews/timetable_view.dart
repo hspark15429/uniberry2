@@ -193,8 +193,8 @@ class _TimetableViewState extends State<TimetableView> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        _buildGradeStatusCard(),
-                        const SizedBox(height: 300),
+                        // _buildGradeStatusCard(),
+                        // const SizedBox(height: 300),
                       ],
                     );
                   } else if (state is TimetableLoading) {
@@ -210,8 +210,8 @@ class _TimetableViewState extends State<TimetableView> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        _buildGradeStatusCard(),
-                        const SizedBox(height: 300),
+                        // _buildGradeStatusCard(),
+                        // const SizedBox(height: 300),
                       ],
                     );
                   }

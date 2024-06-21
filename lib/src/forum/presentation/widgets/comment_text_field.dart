@@ -23,9 +23,12 @@ class CommentTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       autofocus: false,
+      onTapOutside: (_) {
+        FocusScope.of(context).unfocus();
+      },
       maxLines: null,
       controller: commentContentController,
-      keyboardType: TextInputType.text,
+      // keyboardType: TextInputType.text,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
