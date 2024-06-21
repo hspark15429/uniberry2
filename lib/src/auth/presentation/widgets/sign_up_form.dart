@@ -34,7 +34,7 @@ class _SignUpFormState extends State<SignUpForm> {
         children: [
           IField(
             controller: widget.fullNameController,
-            hintText: 'Full Name',
+            hintText: 'ニックネーム',
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.perm_identity, color: Colors.black),
             keyboardType: TextInputType.name,
@@ -42,7 +42,7 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 25),
           IField(
             controller: widget.emailController,
-            hintText: 'Email address',
+            hintText: '大学のメールアドレス',
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.mail_outline, color: Colors.black),
             keyboardType: TextInputType.emailAddress,
@@ -50,7 +50,7 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 25),
           IField(
             controller: widget.passwordController,
-            hintText: 'Password',
+            hintText: 'パスワード',
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
             obscureText: obscurePassword,
@@ -70,7 +70,7 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 25),
           IField(
             controller: widget.confirmPasswordController,
-            hintText: 'Confirm Password',
+            hintText: 'パスワード再確認',
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
             obscureText: obscureConfirmPassword,

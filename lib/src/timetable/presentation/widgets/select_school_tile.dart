@@ -43,7 +43,7 @@ class _SelectSchoolTileState extends State<SelectSchoolTile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select School'),
+        title: const Text('専攻を選択'),
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
@@ -56,7 +56,7 @@ class _SelectSchoolTileState extends State<SelectSchoolTile> {
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search schools',
+                hintText: '専攻を検索',
                 prefixIcon: Icon(Icons.search, color: Colors.black),
                 filled: true,
                 fillColor: Colors.grey[200],
@@ -118,7 +118,7 @@ class _SelectSchoolTileState extends State<SelectSchoolTile> {
                     Navigator.pop(context);
                   },
                   child: const Text(
-                    'Cancel',
+                    'キャンセル',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -135,7 +135,7 @@ class _SelectSchoolTileState extends State<SelectSchoolTile> {
                     Navigator.pop(context, _currentSchool);
                   },
                   child: const Text(
-                    'Save',
+                    '保存',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

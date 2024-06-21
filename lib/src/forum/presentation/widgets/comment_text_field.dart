@@ -69,7 +69,7 @@ class CommentTextField extends StatelessWidget {
             }
           },
         ),
-        hintText: 'Comment',
+        hintText: 'コメントを入力',
       ),
     );
   }

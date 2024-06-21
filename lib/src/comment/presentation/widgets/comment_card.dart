@@ -39,12 +39,14 @@ class CommentCard extends StatelessWidget {
                 },
                 icon: const Icon(
                   IconlyBold.chat,
+                  color: Colors.green,
                   size: 20,
                 ),
               ),
               if (comment.uid == context.read<UserProvider>().user!.uid)
                 IconButton(
                   icon: const Icon(Icons.delete),
+                  color: Colors.red[600],
                   onPressed: () {
                     // delete comment
                     context

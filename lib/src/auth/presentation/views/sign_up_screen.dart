@@ -70,10 +70,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Padding(
                         padding: EdgeInsets.only(right: 80),
                         child: Text(
-                          'Register an account with Uniberry',
+                          'はじめまして',
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            fontSize: 32,
+                            fontSize: 52,
                           ),
                         ),
                       ),
@@ -82,10 +82,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const Hero(
                       tag: AuthenticationHeroes.helperText,
                       child: Text(
-                        'Sign up for an account',
+                        'アカウントを作成する',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
-                          fontSize: 14,
+                          fontSize: 22,
                         ),
                       ),
                     ),
@@ -101,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               SignInScreen.routeName,
                             );
                           },
-                          child: const Text('Already have an account?'),
+                          child: const Text('既にアカウントをお持ちですか?'),
                         ),
                       ),
                     ),
@@ -121,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: CircularProgressIndicator(),
                             )
                           : RoundedButton(
-                              label: 'Sign Up',
+                              label: '会員登録',
                               onPressed: () {
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 if (formKey.currentState!.validate()) {

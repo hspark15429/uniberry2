@@ -46,7 +46,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         if (state is UserUpdated) {
-          CoreUtils.showSnackBar(context, 'Profile updated successfully');
+          CoreUtils.showSnackBar(context, 'プロフィールが変更されました');
           context.read<TabNavigator>().pop();
         } else if (state is AuthenticationError) {
           CoreUtils.showSnackBar(context, state.message);
@@ -61,7 +61,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               },
             ),
             title: const Text(
-              'Edit Profile',
+              'ニックネーム変更',
             ),
             actions: [
               IconButton(

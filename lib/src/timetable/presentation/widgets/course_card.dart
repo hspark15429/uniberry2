@@ -37,15 +37,13 @@ class CourseCard extends StatelessWidget {
           const SizedBox(height: 8),
           _buildInfoRow(Icons.code, course.codes.join(', ')),
           const SizedBox(height: 8),
-          _buildInfoRow(
-              Icons.language, 'Languages: ${course.languages.join(', ')}'),
+          _buildInfoRow(Icons.language, '言語: ${course.languages.join(', ')}'),
           const SizedBox(height: 8),
-          _buildInfoRow(Icons.savings, 'Credit: ${course.credit}'),
+          _buildInfoRow(Icons.savings, '単位: ${course.credit}'),
           const SizedBox(height: 8),
-          _buildInfoRow(
-              Icons.schedule, 'Periods: ${course.periods.join(', ')}'),
+          _buildInfoRow(Icons.schedule, '曜日・時限: ${course.periods.join(', ')}'),
           const SizedBox(height: 8),
-          _buildInfoRow(Icons.location_on, "장소: ${course.campuses.join(", ")}"),
+          _buildInfoRow(Icons.location_on, "場所: ${course.campuses.join(", ")}"),
           const SizedBox(height: 16),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -57,7 +55,7 @@ class CourseCard extends StatelessWidget {
             ),
             onPressed: () => _launchURL(course.syllabusUrl),
             child: const Text(
-              '시라버스확인',
+              'シラバス確認',
               style: TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
@@ -67,7 +65,7 @@ class CourseCard extends StatelessWidget {
               onPressed: () => Navigator.pop(context, course),
               icon: const Icon(Icons.add, color: Colors.white),
               label: const Text(
-                '강의 추가',
+                '講義追加',
                 style: TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(

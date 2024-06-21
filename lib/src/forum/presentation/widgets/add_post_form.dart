@@ -63,7 +63,7 @@ class _AddPostFormState extends State<AddPostForm> {
         children: [
           IField(
             controller: widget.titleController,
-            hintText: 'Title',
+            hintText: 'タイトル',
             filled: true,
             fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
           ),
@@ -135,7 +135,7 @@ class _AddPostFormState extends State<AddPostForm> {
           if (widget.typeController.value == 0)
             IField(
               controller: widget.contentController,
-              hintText: 'Content',
+              hintText: '内容',
               maxlines: 15,
               filled: true,
               fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정

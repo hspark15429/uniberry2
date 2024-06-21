@@ -29,7 +29,7 @@ class _SignInFormState extends State<SignInForm> {
         children: [
           IField(
             controller: widget.emailController,
-            hintText: 'Email address',
+            hintText: '大学のメールアドレス',
             fillColour: Colors.grey.withOpacity(0.2),
             prefixIcon: const Icon(Icons.mail_outline, color: Colors.black),
             keyboardType: TextInputType.emailAddress,
@@ -37,7 +37,7 @@ class _SignInFormState extends State<SignInForm> {
           const SizedBox(height: 25),
           IField(
             controller: widget.passwordController,
-            hintText: 'Password',
+            hintText: 'パスワード',
             fillColour: Colors.grey.withOpacity(0.2),
             obscureText: obscurePassword,
             keyboardType: TextInputType.visiblePassword,

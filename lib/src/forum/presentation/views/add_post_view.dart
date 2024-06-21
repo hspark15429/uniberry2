@@ -73,7 +73,7 @@ class _AddPostViewState extends State<AddPostView> {
             color: Colors.white, // BackButton 색상을 흰색으로 설정
           ),
           title: const Text(
-            'Add Post',
+            '投稿を作成',
             style: TextStyle(color: Colors.white), // AppBar 제목 색상을 흰색으로 설정
           ),
           backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
@@ -120,7 +120,7 @@ class _AddPostViewState extends State<AddPostView> {
                     }
                   },
                   child: const Text(
-                    '완료',
+                    '投稿する',
                     style:
                         TextStyle(color: Colors.white), // 완료 버튼 텍스트 색상을 흰색으로 설정
                   ),

@@ -63,7 +63,7 @@ class _ProfileViewState extends State<ProfileView> {
                 itemBuilder: (context) => [
                   PopupMenuItem<void>(
                     child: const PopupItem(
-                      title: 'Edit Profile',
+                      title: 'ニックネーム変更',
                       icon: Icon(
                         Icons.edit_outlined,
                         color: Colours.neutralTextColour,

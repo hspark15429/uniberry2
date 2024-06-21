@@ -31,25 +31,25 @@ class _TimetableSettingsSheetState extends State<TimetableSettingsSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle('Select Term'),
+          _buildSectionTitle('セメスター選択'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: _buildTermTile('All Year', '')),
+              Expanded(child: _buildTermTile('全セメスター', '')),
               const SizedBox(width: 8),
-              Expanded(child: _buildTermTile('Spring', '春セメスター')),
+              Expanded(child: _buildTermTile('春セメスター', '春セメスター')),
               const SizedBox(width: 8),
-              Expanded(child: _buildTermTile('Fall', '秋セメスター')),
+              Expanded(child: _buildTermTile('秋セメスター', '秋セメスター')),
             ],
           ),
           const SizedBox(height: 20),
-          _buildSectionTitle('Select Number of Periods'),
+          _buildSectionTitle('コマ数設定'),
           Slider(
             value: _params.numOfPeriods.toDouble(),
             min: 5,
             max: 12,
             divisions: 7,
-            label: '${_params.numOfPeriods} periods',
+            label: '${_params.numOfPeriods} コマ',
             onChanged: (value) {
               setState(() {
                 _params.numOfPeriods = value.toInt();
@@ -60,7 +60,7 @@ class _TimetableSettingsSheetState extends State<TimetableSettingsSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Include Weekends', style: TextStyle(fontSize: 16)),
+              const Text('土日を含む', style: TextStyle(fontSize: 16)),
               Switch(
                 value: _params.numOfDays == 7,
                 onChanged: (value) {
@@ -85,7 +85,7 @@ class _TimetableSettingsSheetState extends State<TimetableSettingsSheet> {
                 Navigator.pop(context, _params);
               },
               child: const Text(
-                'Save Settings',
+                '保存',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

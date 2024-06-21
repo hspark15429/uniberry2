@@ -20,7 +20,7 @@ class EditProfileForm extends StatelessWidget {
         EditProfileFormField(
           controller: fullNameController,
           hintText: user.fullName,
-          fieldTitle: 'FULL NAME',
+          fieldTitle: 'ニックネーム',
         ),
       ],
     );

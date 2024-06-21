@@ -17,12 +17,12 @@ class CoreUtils {
           content: Text(
             message,
             style: const TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
           behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.pink,
+          backgroundColor: Colors.white,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           margin: const EdgeInsets.all(10),

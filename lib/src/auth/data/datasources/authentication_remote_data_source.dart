@@ -123,7 +123,7 @@ class AuthenticationRemoteDataSourceImplementation
       final result = await _cloudStoreClient.collection('timetables').add(
             TimetableModel.empty()
                 .copyWith(
-                  name: 'Default Timetable',
+                  name: '時間割',
                   uid: userCred.user!.uid,
                 )
                 .toMap(),

@@ -40,7 +40,7 @@ class IField extends StatelessWidget {
           ? validator
           : (value) {
               if (value == null || value.isEmpty) {
-                return 'This field is required';
+                return '入力必須です';
               }
               return validator?.call(value);
             },

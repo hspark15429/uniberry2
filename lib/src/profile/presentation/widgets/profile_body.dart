@@ -20,7 +20,7 @@ class ProfileBody extends StatefulWidget {
 }
 
 class _ProfileBodyState extends State<ProfileBody> {
-  final options = ['내가 작성한 글', '내가 작성한 댓글'];
+  final options = ['作成した投稿', '作成したコメント'];
   int _index = 0;
   int get index => _index;
   set index(int value) {

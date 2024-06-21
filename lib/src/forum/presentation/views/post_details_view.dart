@@ -62,7 +62,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
       listener: (context, state) {
         if (state is PostDeleted) {
           Navigator.pop(context);
-          CoreUtils.showSnackBar(context, '게시물이 삭제되었습니다.');
+          CoreUtils.showSnackBar(context, '削除されました。');
         }
       },
       builder: (context, state) {
@@ -77,10 +77,10 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                     CoreUtils.showConfirmationDialog(
                       context,
                       text: 'delete',
-                      title: '삭제 확인',
-                      content: '게시물이 삭제됩니다. 계속하시겠습니까?',
-                      actionText: '삭제',
-                      cancelText: '취소',
+                      title: '投稿削除',
+                      content: '投稿が掲示板から削除されます',
+                      actionText: '削除',
+                      cancelText: 'キャンセル',
                     ).then((value) {
                       if (value != null && value) {
                         context
@@ -193,15 +193,15 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.person,
-                              color: Colors.grey[600],
+                              color: Colors.black,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               widget.post.author,
                               style: const TextStyle(
-                                  fontSize: 14, color: Colors.grey),
+                                  fontSize: 14, color: Colors.black),
                             ),
                           ],
                         ),
@@ -210,13 +210,13 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                           children: [
                             Icon(
                               IconlyBold.chat,
-                              color: Colors.grey[600],
+                              color: Colors.green[600],
                             ),
                             const SizedBox(width: 4),
                             Text(
                               widget.post.commentCount.toString(),
                               style: const TextStyle(
-                                  fontSize: 14, color: Colors.grey),
+                                  fontSize: 14, color: Colors.green),
                             ),
                           ],
                         ),

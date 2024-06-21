@@ -4,7 +4,7 @@ class TimetableHeaderWidget extends StatelessWidget {
   TimetableHeaderWidget({
     required this.numOfDays,
     super.key,
-  }) : days = ['월', '화', '수', '목', '금', '토', '일'].sublist(0, numOfDays);
+  }) : days = ['月', '火', '水', '木', '金', '土', '日'].sublist(0, numOfDays);
 
   final int numOfDays;
   final List<String> days;

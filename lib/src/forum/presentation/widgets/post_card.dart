@@ -87,19 +87,23 @@ class PostCard extends StatelessWidget {
               ),
             Row(
               children: [
+                const Icon(
+                  Icons.person,
+                  color: Colors.black,
+                ),
                 Text(
                   '${post.author}#${post.uid.trim().substring(0, 5)}',
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  style: const TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 const Spacer(),
                 const Icon(
                   IconlyBold.chat,
-                  color: Colors.grey,
+                  color: Colors.green,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   post.commentCount.toString(),
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  style: const TextStyle(fontSize: 14, color: Colors.green),
                 ),
               ],
             ),

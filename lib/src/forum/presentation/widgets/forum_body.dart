@@ -71,13 +71,13 @@ class _ForumBodyState extends State<ForumBody> {
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Row(
               children: [
-                Icon(Icons.lightbulb, color: Colors.yellow, size: 24),
+                Icon(Icons.lightbulb, color: Colors.yellow, size: 38),
                 SizedBox(width: 8),
                 Text(
                   '注目すべき情報',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 20,
                     color: Colors.black,
                   ),
                 ),
@@ -96,13 +96,13 @@ class _ForumBodyState extends State<ForumBody> {
             padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Row(
               children: [
-                Icon(Icons.diversity_3, color: Colors.black, size: 24),
+                Icon(Icons.diversity_3, color: Colors.black, size: 38),
                 SizedBox(width: 8),
                 Text(
                   '学内掲示板',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 20,
                     color: Colors.black,
                   ),
                 ),
@@ -159,9 +159,9 @@ class _ForumBodyState extends State<ForumBody> {
               return const SliverToBoxAdapter(
                 child: Center(
                   child: Text(
-                    'Please refresh or try again later.',
+                    '投稿が見つかりました',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.black, fontSize: 15),
                   ),
                 ),
               );

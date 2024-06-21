@@ -6,16 +6,16 @@ extension DateTimeExt on DateTime {
 
     if (difference.inDays > 365) {
       final years = (difference.inDays / 365).floor();
-      return '$years년 전';
+      return '$years年前';
     } else if (difference.inDays > 30) {
       final months = (difference.inDays / 30).floor();
-      return '$months달 전';
+      return '$monthsヶ月前';
     } else if (difference.inDays > 0) {
-      return '${difference.inDays}일 전';
+      return '${difference.inDays}日前';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}시간 전';
+      return '${difference.inHours}時間前';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}분 전';
+      return '${difference.inMinutes}分前';
     } else {
       return 'now';
     }

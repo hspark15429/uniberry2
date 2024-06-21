@@ -65,27 +65,26 @@ class _SignInScreenState extends State<SignInScreen> {
                           'Welcome Back!',
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            fontSize: 32,
+                            fontSize: 58,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Hero(
                           tag: AuthenticationHeroes.helperText,
                           child: Text(
-                            'Sign in to your account',
+                            '',
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
-                              fontSize: 14,
+                              fontSize: 28,
                             ),
                           ),
                         ),
                         Baseline(
-                          baseline: 100,
+                          baseline: 50,
                           baselineType: TextBaseline.alphabetic,
                           child: Hero(
                             tag: AuthenticationHeroes.redirectText,
@@ -96,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   SignUpScreen.routeName,
                                 );
                               },
-                              child: const Text('Register account?'),
+                              child: const Text('アカウントを作成する'),
                             ),
                           ),
                         ),
@@ -115,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         onPressed: () {
                           Navigator.pushNamed(context, '/forgot-password');
                         },
-                        child: const Text('Forgot password?'),
+                        child: const Text('パスワード再設定'),
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -126,7 +125,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               child: CircularProgressIndicator(),
                             )
                           : RoundedButton(
-                              label: 'Sign In',
+                              label: 'ログイン',
                               onPressed: () {
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 FirebaseAuth.instance.currentUser?.reload();

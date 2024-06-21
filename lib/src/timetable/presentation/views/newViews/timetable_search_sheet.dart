@@ -56,7 +56,7 @@ class _TimetableSearchSheetState extends State<TimetableSearchSheet> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${widget.term.isEmpty ? "all year" : widget.term} - ${widget.school}',
+          '${widget.term.isEmpty ? "全セメスター" : widget.term}  ${widget.school}',
           style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
         backgroundColor: Colors.black,
@@ -75,7 +75,7 @@ class _TimetableSearchSheetState extends State<TimetableSearchSheet> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: '수업코드로검색',
+                hintText: '授業コードで検索..',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
