@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:uniberry2/core/errors/failures.dart';
+import 'package:uniberry/core/errors/failures.dart';
 
 typedef ResultFuture<T> = Future<Either<Failure, T>>;
 

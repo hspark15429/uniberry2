@@ -1,16 +1,16 @@
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/timetable/data/datasources/timetable_remote_data_source.dart';
-import 'package:uniberry2/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/src/timetable/data/datasources/timetable_remote_data_source.dart';
+import 'package:uniberry/src/timetable/data/models/course_model.dart';
+import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
+import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
 
 class TimetableRemoteDataSourceImplementationAlgolia
     implements TimetableRemoteDataSource {
-  TimetableRemoteDataSourceImplementationAlgolia(
-      {required HitsSearcher coursesSearcher})
-      : _coursesSearcher = coursesSearcher;
+  TimetableRemoteDataSourceImplementationAlgolia({
+    required HitsSearcher coursesSearcher,
+  }) : _coursesSearcher = coursesSearcher;
 
   final HitsSearcher _coursesSearcher;
   Stream<HitsPage> get _searchPage =>
@@ -45,6 +45,7 @@ class TimetableRemoteDataSourceImplementationAlgolia
 
   @override
   Future<List<String>> searchCourses({
+    required String query,
     required String school,
     required String campus,
     required String term,
@@ -73,6 +74,33 @@ class TimetableRemoteDataSourceImplementationAlgolia
       debugPrintStack(stackTrace: s);
       throw ServerException(message: e.toString(), statusCode: '505');
     }
+  }
+
+  @override
+  Future<void> createTimetable(Timetable timetable) {
+    // TODO: implement createTimetable
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteTimetable(String name) {
+    // TODO: implement deleteTimetable
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<TimetableModel> readTimetable(String timetableId) {
+    // TODO: implement readTimetables
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateTimetable({
+    required String timetableId,
+    required Timetable timetable,
+  }) {
+    // TODO: implement updateTimetable
+    throw UnimplementedError();
   }
 }
 

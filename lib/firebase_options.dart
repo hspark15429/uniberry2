@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1087361013683',
     projectId: 'educationapp-5f2da',
     storageBucket: 'educationapp-5f2da.appspot.com',
-    iosBundleId: 'com.example.uniberry2',
+    iosBundleId: 'com.testing1.uniberry',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -69,6 +69,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1087361013683',
     projectId: 'educationapp-5f2da',
     storageBucket: 'educationapp-5f2da.appspot.com',
-    iosBundleId: 'com.example.uniberry2',
+    iosBundleId: 'com.testing1.uniberry',
   );
 }

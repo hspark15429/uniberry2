@@ -9,7 +9,9 @@ sealed class TimetableState extends Equatable {
 
 final class TimetableInitial extends TimetableState {}
 
-class TimetableLoading extends TimetableState {}
+class TimetableLoading extends TimetableState {
+  const TimetableLoading();
+}
 
 class CourseFetched extends TimetableState {
   const CourseFetched(this.course);
@@ -38,13 +40,34 @@ class CourseIdsSearched extends TimetableState {
   List<Object?> get props => [courseIds];
 }
 
-class SchoolsLoaded extends TimetableState {
-  final List<String> schools;
+class TimetableCreated extends TimetableState {
+  const TimetableCreated();
+}
 
-  const SchoolsLoaded(this.schools);
+class TimetableRead extends TimetableState {
+  const TimetableRead(this.timetable);
+
+  final Timetable timetable;
 
   @override
-  List<Object?> get props => [schools];
+  List<Object?> get props => [timetable];
+}
+
+class TimetableUpdateCompleted extends TimetableState {
+  const TimetableUpdateCompleted();
+}
+
+class TimetableDeleted extends TimetableState {
+  const TimetableDeleted();
+}
+
+class TimetablesFetched extends TimetableState {
+  const TimetablesFetched(this.timetables);
+
+  final List<Timetable> timetables;
+
+  @override
+  List<Object?> get props => [timetables];
 }
 
 class TimetableError extends TimetableState {
@@ -54,56 +77,4 @@ class TimetableError extends TimetableState {
 
   @override
   List<Object?> get props => [message];
-}
-
-// 전공선택
-class SchoolSelected extends TimetableState {
-  final String? selectedSchool;
-
-  const SchoolSelected(this.selectedSchool);
-
-  @override
-  List<Object?> get props => [selectedSchool];
-}
-
-// 학기변경
-class SemesterSelected extends TimetableState {
-  final String? selectedSchool;
-  final String semester;
-
-  const SemesterSelected({
-    required this.selectedSchool,
-    required this.semester,
-  });
-
-  @override
-  List<Object?> get props => [selectedSchool, semester];
-}
-
-// 시간표 저장
-class CoursesUpdated extends TimetableState {
-  final Map<String, Course?> timetable;
-
-  const CoursesUpdated(this.timetable);
-
-  @override
-  List<Object?> get props => [timetable];
-}
-
-// 새로운 상태 추가
-class TimetableUpdated extends TimetableState {
-  final int periods;
-  final bool includeSaturday;
-  final bool includeSunday;
-  final List<String> timetables;
-
-  const TimetableUpdated({
-    required this.periods,
-    required this.includeSaturday,
-    required this.includeSunday,
-    required this.timetables,
-  });
-
-  @override
-  List<Object?> get props => [periods, includeSaturday, includeSunday, timetables];
 }
