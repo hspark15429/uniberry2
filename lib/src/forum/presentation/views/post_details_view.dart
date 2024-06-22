@@ -95,179 +95,174 @@ class _PostDetailsViewState extends State<PostDetailsView> {
             iconTheme: const IconThemeData(color: Colors.white),
             titleTextStyle: const TextStyle(color: Colors.white, fontSize: 18),
           ),
-          body: Expanded(
-            child: ListView(
-              children: [
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '#${widget.post.tags![0]}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.orange,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            widget.post.createdAt
-                                .toLocal()
-                                .toString()
-                                .substring(0, 16),
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              widget.post.title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      if (widget.post.type == 'text')
+          body: ListView(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
                         Text(
-                          widget.post.content!,
+                          '#${widget.post.tags![0]}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.orange,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          widget.post.createdAt
+                              .toLocal()
+                              .toString()
+                              .substring(0, 16),
                           style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
-                        )
-                      else if (widget.post.type == 'image')
-                        CachedNetworkImage(
-                          imageUrl: widget.post.content!,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        )
-                      else if (widget.post.type == 'link')
-                        AnyLinkPreview(
-                          link: widget.post.link!,
-                          displayDirection: UIDirection.uiDirectionHorizontal,
-                          showMultimedia: true,
-                          bodyMaxLines: 5,
-                          bodyTextOverflow: TextOverflow.ellipsis,
-                          titleStyle: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.post.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
-                          bodyStyle: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                          ),
-                          errorBody: '내용 미리보기가 없습니다.',
-                          errorTitle: '제목 미리보기가 없습니다.',
-                          errorWidget: Container(
-                            color: Colors.grey[300],
-                            child: const Text('Oops!'),
-                          ),
-                          errorImage: "https://google.com/",
-                          cache: const Duration(days: 7),
-                          backgroundColor: Colors.grey[300],
-                          borderRadius: 12,
-                          removeElevation: false,
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 3, color: Colors.grey)
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    if (widget.post.type == 'text')
+                      Text(
+                        widget.post.content!,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
+                      )
+                    else if (widget.post.type == 'image')
+                      CachedNetworkImage(
+                        imageUrl: widget.post.content!,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      )
+                    else if (widget.post.type == 'link')
+                      AnyLinkPreview(
+                        link: widget.post.link!,
+                        displayDirection: UIDirection.uiDirectionHorizontal,
+                        showMultimedia: true,
+                        bodyMaxLines: 5,
+                        bodyTextOverflow: TextOverflow.ellipsis,
+                        titleStyle: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                        bodyStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                        errorBody: '내용 미리보기가 없습니다.',
+                        errorTitle: '제목 미리보기가 없습니다.',
+                        errorWidget: Container(
+                          color: Colors.grey[300],
+                          child: const Text('Oops!'),
+                        ),
+                        errorImage: "https://google.com/",
+                        cache: const Duration(days: 7),
+                        backgroundColor: Colors.grey[300],
+                        borderRadius: 12,
+                        removeElevation: false,
+                        boxShadow: const [
+                          BoxShadow(blurRadius: 3, color: Colors.grey)
+                        ],
+                      ),
+                    const SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.person,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              widget.post.author,
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.black),
+                            ),
                           ],
                         ),
-                      const SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                color: Colors.black,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                widget.post.author,
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.black),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          Row(
-                            children: [
-                              Icon(
-                                IconlyBold.chat,
-                                color: Colors.green[600],
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                widget.post.commentCount.toString(),
-                                style: const TextStyle(
-                                    fontSize: 14, color: Colors.green),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.grey[300],
-                  thickness: 1,
-                  height: 32,
-                  indent: 16,
-                  endIndent: 16,
-                ),
-                BlocConsumer<CommentCubit, CommentState>(
-                  listener: (context, state) {
-                    if (state is CommentCreated || state is CommentDeleted) {
-                      commentContentController.clear();
-                      context
-                          .read<CommentCubit>()
-                          .getCommentsByPostId(widget.post.postId);
-
-                      CoreUtils.showSnackBar(
-                          context, 'Operation was successful!');
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is CommentsFetched) {
-                      return Expanded(
-                        child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.comments.length,
-                          itemBuilder: (context, index) {
-                            final comment = state.comments[index];
-                            return CommentCard(
-                              comment: comment,
-                              replyCommentController: replyCommentController,
-                            );
-                          },
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Icon(
+                              IconlyBold.chat,
+                              color: Colors.green[600],
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              widget.post.commentCount.toString(),
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.green),
+                            ),
+                          ],
                         ),
-                      );
-                    }
-                    return const LoadingView();
-                  },
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Divider(
+                color: Colors.grey[300],
+                thickness: 1,
+                height: 32,
+                indent: 16,
+                endIndent: 16,
+              ),
+              BlocConsumer<CommentCubit, CommentState>(
+                listener: (context, state) {
+                  if (state is CommentCreated || state is CommentDeleted) {
+                    commentContentController.clear();
+                    context
+                        .read<CommentCubit>()
+                        .getCommentsByPostId(widget.post.postId);
+
+                    CoreUtils.showSnackBar(
+                        context, 'Operation was successful!');
+                  }
+                },
+                builder: (context, state) {
+                  if (state is CommentsFetched) {
+                    return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.comments.length,
+                      itemBuilder: (context, index) {
+                        final comment = state.comments[index];
+                        return CommentCard(
+                          comment: comment,
+                          replyCommentController: replyCommentController,
+                        );
+                      },
+                    );
+                  }
+                  return const LoadingView();
+                },
+              ),
+            ],
           ),
           bottomNavigationBar: ValueListenableBuilder(
               valueListenable: replyCommentController,
