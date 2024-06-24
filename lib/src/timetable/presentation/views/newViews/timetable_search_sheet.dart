@@ -75,7 +75,7 @@ class _TimetableSearchSheetState extends State<TimetableSearchSheet> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: '授業コードで検索..',
+                hintText: '講義名またはコードで検索...',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),

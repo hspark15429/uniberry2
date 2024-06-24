@@ -80,7 +80,7 @@ class Colours {
       50: Color(0xFFFFFFFF),
       100: Color(0xFFFFFFFF),
       200: Color(0xFFFFFFFF),
-      300: Color(0xFF000000),
+      300: Color(0xFFFFFFFF),
       400: Color(0xFF000000),
       500: Color(_blackPrimaryValue),
       600: Color(0xFF000000),

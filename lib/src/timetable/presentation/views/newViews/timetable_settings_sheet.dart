@@ -26,8 +26,7 @@ class _TimetableSettingsSheetState extends State<TimetableSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white, // 배경을 흰색으로 설정
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,9 +59,18 @@ class _TimetableSettingsSheetState extends State<TimetableSettingsSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('土日を含む', style: TextStyle(fontSize: 16)),
+              const Text(
+                '土日を含む',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Switch(
                 value: _params.numOfDays == 7,
+                focusColor: Colors.black,
+                activeColor: Colors.black,
+                inactiveTrackColor: Colors.grey[400],
                 onChanged: (value) {
                   setState(() {
                     _params.numOfDays = value ? 7 : 5;
@@ -89,7 +97,6 @@ class _TimetableSettingsSheetState extends State<TimetableSettingsSheet> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

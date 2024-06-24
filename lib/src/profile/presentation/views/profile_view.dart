@@ -59,7 +59,10 @@ class _ProfileViewState extends State<ProfileView> {
                   PopupMenuItem<void>(
                     child: const PopupItem(
                       title: 'ニックネーム変更',
-                      icon: Icon(Icons.edit_outlined),
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        color: Colors.black,
+                      ),
                     ),
                     onTap: () {
                       context
@@ -92,7 +95,10 @@ class _ProfileViewState extends State<ProfileView> {
                   PopupMenuItem<void>(
                     child: const PopupItem(
                       title: 'Logout',
-                      icon: Icon(Icons.logout_rounded),
+                      icon: Icon(
+                        Icons.logout_rounded,
+                        color: Colors.black,
+                      ),
                     ),
                     onTap: () async {
                       await sl<SharedPreferences>().clear();
