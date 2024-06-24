@@ -84,7 +84,7 @@ class TimetableRemoteDataSourceImplementationTypesense
 
       final searchParameters = {
         'q': query,
-        'query_by': 'codes',
+        'query_by': 'titles,codes',
         'filter_by': filterString,
         'include_fields': 'courseId',
         'per_page': '100',
