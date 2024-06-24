@@ -12,6 +12,8 @@ import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/res/colours.dart';
 import 'package:uniberry/core/res/res.dart';
 import 'package:uniberry/core/services/injection_container.dart';
+import 'package:uniberry/core/utils/constants.dart';
+import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/src/profile/presentation/views/edit_profile_view.dart';
 import 'package:uniberry/src/profile/presentation/widgets/pop_up_item.dart';
 import 'package:uniberry/src/profile/presentation/widgets/profile_body.dart';
@@ -65,11 +67,17 @@ class _ProfileViewState extends State<ProfileView> {
                           .push(TabItem(child: const EditProfileView()));
                     },
                   ),
-                  const PopupMenuItem<void>(
-                    child: PopupItem(
+                  PopupMenuItem<void>(
+                    child: const PopupItem(
                       title: 'Help',
-                      icon: Icon(Icons.help_outline_outlined),
+                      icon: Icon(
+                        Icons.help_outline_outlined,
+                        color: Colors.black,
+                      ),
                     ),
+                    onTap: () {
+                      CoreUtils.launchWebpage(Uri.parse(kHelpWebUrl));
+                    },
                   ),
                   PopupMenuItem<void>(
                     height: 1,

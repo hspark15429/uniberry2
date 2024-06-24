@@ -1,3 +1,5 @@
+const kHelpWebUrl =
+    'https://invited-play-8a9.notion.site/8e4789aab735468db7577b77681cb103?pvs=74';
 const kDefaultImage = 'firebasestorageurl';
 const kPostTags = ['public', '自由', '知恵袋', '就活', '相談', '授業', '資格', 'サークル・部活'];
 const kPostTypes = ['text', 'image', 'link'];
