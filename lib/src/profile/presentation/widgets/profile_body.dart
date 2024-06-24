@@ -60,15 +60,8 @@ class _ProfileBodyState extends State<ProfileBody> {
             Row(
               children: [
                 FilterChip(
-                  label: Text(
-                    options[0],
-                    style: TextStyle(
-                      color: index == 0 ? Colors.white : Colors.black,
-                    ),
-                  ),
+                  label: Text(options[0]),
                   selected: index == 0,
-                  selectedColor: Colors.black,
-                  backgroundColor: Colors.white,
                   onSelected: (bool selected) {
                     setState(() {
                       if (selected) index = 0;
@@ -77,15 +70,8 @@ class _ProfileBodyState extends State<ProfileBody> {
                 ),
                 const SizedBox(width: 8),
                 FilterChip(
-                  label: Text(
-                    options[1],
-                    style: TextStyle(
-                      color: index == 1 ? Colors.white : Colors.black,
-                    ),
-                  ),
+                  label: Text(options[1]),
                   selected: index == 1,
-                  selectedColor: Colors.black,
-                  backgroundColor: Colors.white,
                   onSelected: (bool selected) {
                     setState(() {
                       if (selected) index = 1;

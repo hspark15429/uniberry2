@@ -40,7 +40,6 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       body: BlocConsumer<AuthenticationCubit, AuthenticationState>(

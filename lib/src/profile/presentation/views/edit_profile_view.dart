@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:uniberry/core/common/providers/tab_navigator.dart';
+import 'package:uniberry/core/common/widgets/title_text.dart';
 import 'package:uniberry/core/enums/update_user_enum.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
@@ -60,9 +61,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 context.read<TabNavigator>().pop();
               },
             ),
-            title: const Text(
-              'ニックネーム変更',
-            ),
+            title: const TitleText(text: 'ニックネーム変更'),
             actions: [
               IconButton(
                 icon: state is AuthenticationLoading
@@ -75,9 +74,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           fullNameController.addListener(() => refresh(() {}));
                           return Icon(
                             Icons.check,
-                            color: nothingChanged
-                                ? Colors.grey
-                                : Colors.blueAccent,
+                            color: nothingChanged ? Colors.grey : Colors.black,
                           );
                         },
                       ),

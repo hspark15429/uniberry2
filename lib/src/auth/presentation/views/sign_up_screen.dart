@@ -39,7 +39,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       body: BlocConsumer<AuthenticationCubit, AuthenticationState>(

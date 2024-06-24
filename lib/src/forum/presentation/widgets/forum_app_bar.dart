@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:uniberry/core/common/widgets/title_text.dart';
 
 class ForumAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ForumAppBar({required this.onRefresh, super.key});
@@ -8,11 +9,8 @@ class ForumAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text(
-        'Home',
-        style: TextStyle(color: Colors.white), // 제목 텍스트 색상을 흰색으로 설정
-      ),
-      backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
+      title: const TitleText(text: 'Home'),
+      // backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
       actions: [
         IconButton(
           onPressed: onRefresh,

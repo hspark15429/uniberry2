@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:uniberry/core/common/views/loading_view.dart';
+import 'package:uniberry/core/common/widgets/title_text.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/src/comment/domain/entities/comment.dart';
@@ -68,7 +69,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(widget.post.title),
+            title: TitleText(text: widget.post.title),
             actions: [
               if (context.read<UserProvider>().user!.uid == widget.post.uid)
                 IconButton(

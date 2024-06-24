@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:uniberry/core/common/providers/tab_navigator.dart';
+import 'package:uniberry/core/common/widgets/title_text.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/utils/constants.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
@@ -66,24 +67,13 @@ class _AddPostViewState extends State<AddPostView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            color: Colors.white, // BackButton 색상을 흰색으로 설정
-          ),
-          title: const Text(
-            '投稿を作成',
-            style: TextStyle(color: Colors.white), // AppBar 제목 색상을 흰색으로 설정
-          ),
-          backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
+          leading: BackButton(onPressed: () => Navigator.pop(context)),
+          title: const TitleText(text: '投稿を作成'),
           actions: [
             BlocBuilder<PostCubit, PostState>(
               builder: (context, state) {
                 if (state is PostLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
                 return TextButton(
                   onPressed: () {
@@ -94,8 +84,8 @@ class _AddPostViewState extends State<AddPostView> {
                         final post = PostModel(
                           postId: '_new.PostId',
                           title: titleController.text,
-                          upvotes: [],
-                          downvotes: [],
+                          upvotes: const [],
+                          downvotes: const [],
                           commentCount: 0,
                           author: user.fullName,
                           uid: user.uid,
@@ -121,8 +111,7 @@ class _AddPostViewState extends State<AddPostView> {
                   },
                   child: const Text(
                     '投稿する',
-                    style:
-                        TextStyle(color: Colors.white), // 완료 버튼 텍스트 색상을 흰색으로 설정
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 );
               },
@@ -144,7 +133,7 @@ class _AddPostViewState extends State<AddPostView> {
                       tagController: tagController,
                       typeController: typeController,
                       formKey: formKey,
-                    )
+                    ),
                   ],
                 ),
               ),

@@ -19,6 +19,7 @@ class ProfileHeader extends StatelessWidget {
             : provider.user!.profilePic;
         return Column(
           children: [
+            const SizedBox(height: 16),
             CircleAvatar(
               radius: 50,
               backgroundImage: image != null
@@ -32,7 +33,6 @@ class ProfileHeader extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 24,
-                color: Colors.black, // 이름 텍스트 색상을 검정색으로 설정
               ),
             ),
             if (provider.user?.bio != null &&

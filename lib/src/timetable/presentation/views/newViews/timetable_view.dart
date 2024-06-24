@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uniberry/core/common/widgets/title_text.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/services/injection_container.dart';
 import 'package:uniberry/src/timetable/data/models/course_model.dart';
@@ -90,22 +91,13 @@ class _TimetableViewState extends State<TimetableView> {
               currentTimetable = newTimetable;
             }
           },
-          child: Text(
-            _currentTimetable.name,
-            style: const TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-              decoration: TextDecoration.underline,
-            ),
-          ),
+          child: TitleText(text: _currentTimetable.name),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.black,
         actions: [
           IconButton(
             icon: Icon(
               Icons.save,
-              color: isEditted ? Colors.white : null,
+              color: isEditted ? Colors.white : Colors.grey,
             ),
             onPressed: () async {
               if (isEditted == true) {
@@ -120,7 +112,7 @@ class _TimetableViewState extends State<TimetableView> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.school, color: Colors.white),
+            icon: const Icon(Icons.school),
             onPressed: () async {
               final result = await showModalBottomSheet<String>(
                 context: context,
@@ -134,7 +126,7 @@ class _TimetableViewState extends State<TimetableView> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
+            icon: const Icon(Icons.settings),
             onPressed: () async {
               final result = await showModalBottomSheet<SelectTermSheetParams>(
                 context: context,
@@ -162,7 +154,7 @@ class _TimetableViewState extends State<TimetableView> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child:
                 TimetableHeaderWidget(numOfDays: _currentTimetable.numOfDays),
           ),

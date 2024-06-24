@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry/core/common/providers/tab_navigator.dart';
 import 'package:uniberry/core/common/widgets/gradient_background.dart';
+import 'package:uniberry/core/common/widgets/title_text.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/res/colours.dart';
 import 'package:uniberry/core/res/res.dart';
@@ -44,19 +45,11 @@ class _ProfileViewState extends State<ProfileView> {
       builder: (context, value, child) {
         return Scaffold(
           extendBodyBehindAppBar: true,
-          backgroundColor: Colors.white,
           appBar: AppBar(
-            title: const Text(
-              'Profile',
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 24,
-              ),
-            ),
+            title: const TitleText(text: 'Profile'),
             actions: [
               PopupMenuButton(
                 offset: const Offset(0, 50),
-                surfaceTintColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -64,26 +57,18 @@ class _ProfileViewState extends State<ProfileView> {
                   PopupMenuItem<void>(
                     child: const PopupItem(
                       title: 'ニックネーム変更',
-                      icon: Icon(
-                        Icons.edit_outlined,
-                        color: Colours.neutralTextColour,
-                      ),
+                      icon: Icon(Icons.edit_outlined),
                     ),
                     onTap: () {
-                      context.read<TabNavigator>().push(
-                            TabItem(
-                              child: const EditProfileView(),
-                            ),
-                          );
+                      context
+                          .read<TabNavigator>()
+                          .push(TabItem(child: const EditProfileView()));
                     },
                   ),
                   const PopupMenuItem<void>(
                     child: PopupItem(
                       title: 'Help',
-                      icon: Icon(
-                        Icons.help_outline_outlined,
-                        color: Colours.neutralTextColour,
-                      ),
+                      icon: Icon(Icons.help_outline_outlined),
                     ),
                   ),
                   PopupMenuItem<void>(
@@ -99,10 +84,7 @@ class _ProfileViewState extends State<ProfileView> {
                   PopupMenuItem<void>(
                     child: const PopupItem(
                       title: 'Logout',
-                      icon: Icon(
-                        Icons.logout_rounded,
-                        color: Colors.black,
-                      ),
+                      icon: Icon(Icons.logout_rounded),
                     ),
                     onTap: () async {
                       await sl<SharedPreferences>().clear();
@@ -120,8 +102,7 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             ],
           ),
-          body: GradientBackground(
-            image: Res.authGradientBackground,
+          body: SafeArea(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: const [
