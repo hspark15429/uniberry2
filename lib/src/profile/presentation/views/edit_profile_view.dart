@@ -55,7 +55,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         if (state is UserUpdated) {
-          CoreUtils.showSnackBar(context, 'プロフィールが変更されました');
+          CoreUtils.showSnackBar(context, '更新に成功！');
           context.read<TabNavigator>().pop();
         } else if (state is AuthenticationError) {
           CoreUtils.showSnackBar(context, state.message);
@@ -102,6 +102,22 @@ class _EditProfileViewState extends State<EditProfileView> {
                 fullNameController: fullNameController,
                 user: user,
               ),
+              Center(
+                child: SizedBox(
+                  width: 170,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        context.read<AuthenticationCubit>().updateUser(
+                              action: UpdateUserAction.blockedUids,
+                              userData: List<String>.empty(),
+                            );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[400],
+                      ),
+                      child: const Text('すべてブロック解除')),
+                ),
+              ),
               FirebaseUIActions(
                 actions: [
                   AccountDeletedAction((context, user) async {
@@ -109,8 +125,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     await sl<SharedPreferences>().clear();
                     await auth.signOut();
 
-                    CoreUtils.showSnackBar(
-                        context, 'アカウントが削除されました Account Deleted Successfully');
+                    CoreUtils.showSnackBar(context, 'アカウントが削除されました');
                     unawaited(
                       Navigator.pushNamedAndRemoveUntil(
                         context,
