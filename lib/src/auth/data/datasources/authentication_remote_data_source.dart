@@ -134,6 +134,9 @@ class AuthenticationRemoteDataSourceImplementation
       await _updateUserData({
         'timetableIds': [result.id],
       });
+      await _updateUserData({
+        'fullName': fullName,
+      });
     } on FirebaseAuthException catch (e) {
       throw ServerException(
         message: e.message ?? 'Error Occurred',

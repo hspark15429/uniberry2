@@ -96,6 +96,7 @@ class PostCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 const Spacer(),
+                const SizedBox(width: 8),
                 const Icon(
                   IconlyBold.chat,
                   color: Colors.green,

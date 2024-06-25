@@ -1,11 +1,17 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uniberry/core/common/providers/tab_navigator.dart';
 import 'package:uniberry/core/common/widgets/title_text.dart';
 import 'package:uniberry/core/enums/update_user_enum.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
+import 'package:uniberry/core/services/injection_container.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/src/auth/domain/entities/user.dart';
 import 'package:uniberry/src/auth/presentation/cubit/authentication_cubit.dart';
@@ -19,6 +25,8 @@ class EditProfileView extends StatefulWidget {
 }
 
 class _EditProfileViewState extends State<EditProfileView> {
+  final auth = FirebaseAuth.instance;
+
   final fullNameController = TextEditingController();
 
   late LocalUser user;
@@ -93,6 +101,51 @@ class _EditProfileViewState extends State<EditProfileView> {
               EditProfileForm(
                 fullNameController: fullNameController,
                 user: user,
+              ),
+              // delete account button
+              // Center(
+              //   child: SizedBox(
+              //     width: 200,
+              //     child: ElevatedButton(
+              //       onPressed: () {
+              //         CoreUtils.showConfirmationDialog(
+              //           context,
+              //           text: 'アカウントを削除する',
+              //           content: 'アカウントを削除すると、すべてのデータが失われます。',
+              //           cancelText: 'キャンセル',
+              //         );
+              //       },
+              //       style: ElevatedButton.styleFrom(
+              //         backgroundColor: Colors.redAccent,
+              //       ),
+              //       child: const Text('アカウントを削除する'),
+              //     ),
+              //   ),
+              // ),
+              FirebaseUIActions(
+                actions: [
+                  AccountDeletedAction((context, user) async {
+                    // Do something after the account is deleted.
+                    await sl<SharedPreferences>().clear();
+                    await auth.signOut();
+
+                    CoreUtils.showSnackBar(
+                        context, 'アカウントが削除されました Account Deleted Successfully');
+                    unawaited(
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/',
+                        (route) => false,
+                      ),
+                    );
+                  }),
+                ],
+                child: Center(
+                  child: DeleteAccountButton(
+                    auth: auth,
+                    showDeleteConfirmationDialog: true,
+                  ),
+                ),
               ),
             ],
           ),

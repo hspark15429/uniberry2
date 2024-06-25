@@ -72,9 +72,46 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   PopupMenuItem<void>(
                     child: const PopupItem(
-                      title: 'Help',
+                      title: 'Privacy Policy',
                       icon: Icon(
-                        Icons.help_outline_outlined,
+                        Icons.privacy_tip_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                    onTap: () {
+                      CoreUtils.launchWebpage(Uri.parse(kPrivacyWebUrl));
+                    },
+                  ),
+                  PopupMenuItem<void>(
+                    child: const PopupItem(
+                      title: 'Terms Of Use (EULA)',
+                      icon: Icon(
+                        Icons.description_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                    onTap: () {
+                      CoreUtils.launchWebpage(Uri.parse(kTermsOfUseWebUrl));
+                    },
+                  ),
+                  PopupMenuItem<void>(
+                    child: const PopupItem(
+                      title: 'Community Guidelines',
+                      icon: Icon(
+                        Icons.rule_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                    onTap: () {
+                      CoreUtils.launchWebpage(
+                          Uri.parse(kCommunityGuidelinesWebUrl));
+                    },
+                  ),
+                  PopupMenuItem<void>(
+                    child: const PopupItem(
+                      title: 'Contact Us',
+                      icon: Icon(
+                        Icons.email_outlined,
                         color: Colors.black,
                       ),
                     ),

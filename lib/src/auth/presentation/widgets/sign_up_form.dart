@@ -49,9 +49,10 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'メールアドレスを入力してください';
-              } else if (!value.contains('@ed.ritsumei.ac.jp')) {
-                return '学校のメールアドレスである必要があります';
               }
+              // else if (!value.contains('@ed.ritsumei.ac.jp')) {
+              //   return '学校のメールアドレスである必要があります';
+              // }
               return null;
             },
           ),

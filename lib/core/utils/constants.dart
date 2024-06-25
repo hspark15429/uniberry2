@@ -1,5 +1,12 @@
 const kHelpWebUrl =
     'https://invited-play-8a9.notion.site/8e4789aab735468db7577b77681cb103?pvs=74';
+const kPrivacyWebUrl =
+    'https://invited-play-8a9.notion.site/d4d4ed6afbcb4cc691c6b810f37c05c7';
+const kTermsOfUseWebUrl =
+    'https://invited-play-8a9.notion.site/91d376321d4144f298565db7dfa796d0';
+const kCommunityGuidelinesWebUrl =
+    'https://invited-play-8a9.notion.site/2b4f410f98c44939b516a34c44d1c457?pvs=25';
+
 const kDefaultImage = 'firebasestorageurl';
 const kPostTags = ['public', '自由', '知恵袋', '就活', '相談', '授業', '資格', 'サークル・部活'];
 const kPostTypes = ['text', 'image', 'link'];

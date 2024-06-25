@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart'; // 로케일 초기화를 위한 import 추가
 import 'package:provider/provider.dart';
+import 'package:uniberry/core/lang/jp.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/res/colours.dart';
 import 'package:uniberry/core/services/injection_container.dart';
@@ -17,7 +20,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await initializeDateFormatting('en_US'); // 로케일 초기화
+
   await dotenv.load();
   await init();
 
@@ -35,6 +38,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
+        localizationsDelegates: [
+          // Creates an instance of FirebaseUILocalizationDelegate with overridden labels
+          FirebaseUILocalizations.withDefaultOverrides(const LabelOverrides()),
+
+          // Delegates below take care of built-in flutter widgets
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+
+          // This delegate is required to provide the labels that are not overridden by LabelOverrides
+          FirebaseUILocalizations.delegate,
+        ],
         title: 'Uniberry',
         theme: ThemeData(
           useMaterial3: true,

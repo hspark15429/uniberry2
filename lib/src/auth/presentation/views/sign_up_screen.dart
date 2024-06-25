@@ -1,9 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry/core/common/widgets/gradient_background.dart';
 import 'package:uniberry/core/common/widgets/rounded_button.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/res/res.dart';
+import 'package:uniberry/core/utils/constants.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/src/auth/presentation/cubit/authentication_cubit.dart';
 import 'package:uniberry/src/auth/presentation/utils/authentication_heroes.dart';
@@ -134,6 +136,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 }
                               },
                             ),
+                    ),
+                    const SizedBox(height: 10),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: 'アカウントを作成することにより、',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '利用規約 (EULA)',
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 14,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                CoreUtils.launchWebpage(
+                                  Uri.parse(kTermsOfUseWebUrl),
+                                );
+                              },
+                          ),
+                          const TextSpan(
+                            text: ' および ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'プライバシーポリシー',
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 14,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                CoreUtils.launchWebpage(
+                                  Uri.parse(kPrivacyWebUrl),
+                                );
+                              },
+                          ),
+                          const TextSpan(
+                            text: 'ポリシーに同意したことになります。',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
