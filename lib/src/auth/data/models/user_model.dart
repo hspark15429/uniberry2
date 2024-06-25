@@ -14,6 +14,7 @@ class LocalUserModel extends LocalUser {
     super.following,
     super.groupIds,
     super.timetableIds,
+    super.blockedUids,
   });
 
   const LocalUserModel.empty()
@@ -40,6 +41,7 @@ class LocalUserModel extends LocalUser {
           following: (map['following'] as List<dynamic>).cast<String>(),
           followers: (map['followers'] as List<dynamic>).cast<String>(),
           timetableIds: (map['timetableIds'] as List<dynamic>).cast<String>(),
+          blockedUids: (map['blockedUids'] as List<dynamic>).cast<String>(),
         );
 
   LocalUserModel copyWith({
@@ -54,6 +56,7 @@ class LocalUserModel extends LocalUser {
     List<String>? following,
     List<String>? groupIds,
     List<String>? timetableIds,
+    List<String>? blockedUids,
   }) {
     return LocalUserModel(
       uid: uid ?? this.uid,
@@ -67,6 +70,7 @@ class LocalUserModel extends LocalUser {
       following: following ?? this.following,
       groupIds: groupIds ?? this.groupIds,
       timetableIds: timetableIds ?? this.timetableIds,
+      blockedUids: blockedUids ?? this.blockedUids,
     );
   }
 
@@ -82,5 +86,6 @@ class LocalUserModel extends LocalUser {
         'following': following,
         'followers': followers,
         'timetableIds': timetableIds,
+        'blockedUids': blockedUids,
       };
 }

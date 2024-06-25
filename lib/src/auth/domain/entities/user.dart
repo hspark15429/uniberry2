@@ -13,6 +13,7 @@ class LocalUser extends Equatable {
     this.following = const [],
     this.followers = const [],
     this.timetableIds = const [],
+    this.blockedUids = const [],
   });
 
   const LocalUser.empty()
@@ -28,6 +29,7 @@ class LocalUser extends Equatable {
           following: const [],
           followers: const [],
           timetableIds: const [],
+          blockedUids: const [],
         );
 
   @override
@@ -47,6 +49,7 @@ class LocalUser extends Equatable {
   final List<String> following;
   final List<String> followers;
   final List<String> timetableIds;
+  final List<String> blockedUids;
 
   @override
   List<dynamic> get props => [
@@ -61,5 +64,6 @@ class LocalUser extends Equatable {
         following.length,
         followers.length,
         timetableIds.length,
+        blockedUids.length,
       ];
 }

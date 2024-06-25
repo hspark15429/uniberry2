@@ -197,6 +197,20 @@ class AuthenticationRemoteDataSourceImplementation
               .update({
             'timetableIds': userData as List<String>,
           });
+        case UpdateUserAction.blockedUids:
+          await _cloudStoreClient
+              .collection('users')
+              .doc(_authClient.currentUser?.uid)
+              .update({
+            'blockedUids': userData as List<String>,
+          });
+        case UpdateUserAction.reportedPostIds:
+          await _cloudStoreClient
+              .collection('users')
+              .doc(_authClient.currentUser?.uid)
+              .update({
+            'enrolledCourseIds': userData as List<String>,
+          });
       }
     } on FirebaseAuthException catch (e) {
       throw ServerException(

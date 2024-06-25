@@ -72,7 +72,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   PopupMenuItem<void>(
                     child: const PopupItem(
-                      title: 'Privacy Policy',
+                      title: 'プライバシーポリシー', // 'Privacy Policy',
                       icon: Icon(
                         Icons.privacy_tip_outlined,
                         color: Colors.black,
@@ -84,7 +84,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   PopupMenuItem<void>(
                     child: const PopupItem(
-                      title: 'Terms Of Use (EULA)',
+                      title: '利用規約 (EULA)', //'Terms Of Use (EULA)',
                       icon: Icon(
                         Icons.description_outlined,
                         color: Colors.black,
@@ -96,7 +96,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   PopupMenuItem<void>(
                     child: const PopupItem(
-                      title: 'Community Guidelines',
+                      title: 'コミュニティガイドライン', // 'Community Guidelines',
                       icon: Icon(
                         Icons.rule_outlined,
                         color: Colors.black,
@@ -109,7 +109,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   PopupMenuItem<void>(
                     child: const PopupItem(
-                      title: 'Contact Us',
+                      title: 'お問い合わせ', // 'Contact Us',
                       icon: Icon(
                         Icons.email_outlined,
                         color: Colors.black,

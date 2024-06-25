@@ -7,6 +7,8 @@ const kTermsOfUseWebUrl =
 const kCommunityGuidelinesWebUrl =
     'https://invited-play-8a9.notion.site/2b4f410f98c44939b516a34c44d1c457?pvs=25';
 
+const kBlockedContent = 'ブロックされたコンテンツ';
+
 const kDefaultImage = 'firebasestorageurl';
 const kPostTags = ['public', '自由', '知恵袋', '就活', '相談', '授業', '資格', 'サークル・部活'];
 const kPostTypes = ['text', 'image', 'link'];

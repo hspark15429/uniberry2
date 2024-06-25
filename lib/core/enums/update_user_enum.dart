@@ -5,4 +5,6 @@ enum UpdateUserAction {
   bio,
   profilePic,
   timetableIds,
+  blockedUids,
+  reportedPostIds,
 }

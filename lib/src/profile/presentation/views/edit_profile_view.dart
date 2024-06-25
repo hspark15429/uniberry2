@@ -102,26 +102,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                 fullNameController: fullNameController,
                 user: user,
               ),
-              // delete account button
-              // Center(
-              //   child: SizedBox(
-              //     width: 200,
-              //     child: ElevatedButton(
-              //       onPressed: () {
-              //         CoreUtils.showConfirmationDialog(
-              //           context,
-              //           text: 'アカウントを削除する',
-              //           content: 'アカウントを削除すると、すべてのデータが失われます。',
-              //           cancelText: 'キャンセル',
-              //         );
-              //       },
-              //       style: ElevatedButton.styleFrom(
-              //         backgroundColor: Colors.redAccent,
-              //       ),
-              //       child: const Text('アカウントを削除する'),
-              //     ),
-              //   ),
-              // ),
               FirebaseUIActions(
                 actions: [
                   AccountDeletedAction((context, user) async {

@@ -2,6 +2,9 @@ import 'package:any_link_preview/any_link_preview.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
+import 'package:uniberry/core/common/widgets/flag_button.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
 import 'package:uniberry/src/forum/presentation/views/post_details_view.dart';
 
@@ -96,7 +99,9 @@ class PostCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 const Spacer(),
-                const SizedBox(width: 8),
+                if (!(post.uid == context.read<UserProvider>().user!.uid))
+                  FlagButton(item: post),
+                const SizedBox(width: 4),
                 const Icon(
                   IconlyBold.chat,
                   color: Colors.green,

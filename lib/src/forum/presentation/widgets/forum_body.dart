@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:uniberry/core/common/views/loading_view.dart';
+import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/services/injection_container.dart';
 import 'package:uniberry/core/utils/constants.dart';
 import 'package:uniberry/core/utils/core_utils.dart';
 import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/auth/domain/entities/user.dart';
 import 'package:uniberry/src/forum/data/models/post_model.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
 
@@ -25,6 +27,7 @@ class ForumBody extends StatefulWidget {
 }
 
 class _ForumBodyState extends State<ForumBody> {
+  late LocalUser user;
   late List<String> tags;
   int? selectedTagIndex;
 
@@ -42,6 +45,7 @@ class _ForumBodyState extends State<ForumBody> {
   @override
   void initState() {
     super.initState();
+    user = context.read<UserProvider>().user!;
     tags = kPostTags;
     searchPostsWithPageKey(query: '', pageKey: 1);
     context.read<PostCubit>().emit(PostInitial()); // hotfix, remove later
@@ -169,11 +173,16 @@ class _ForumBodyState extends State<ForumBody> {
 
             state as PostsSearchedWithPagekey;
 
+            // filter blocked posts
+            final filteredPosts = state.searchResult.posts.where((post) {
+              return !user.blockedUids.contains(post.uid);
+            }).toList();
+
             if (state.searchResult.pageKey == 1) {
               _pagingController.refresh();
             }
             _pagingController.appendPage(
-              state.searchResult.posts,
+              filteredPosts,
               state.searchResult.nextPageKey,
             );
             return PagedSliverList<int, Post>(
@@ -185,7 +194,9 @@ class _ForumBodyState extends State<ForumBody> {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-                itemBuilder: (_, item, __) => PostCard(post: item),
+                itemBuilder: (_, item, __) {
+                  return PostCard(post: item);
+                },
               ),
             );
           },

@@ -25,8 +25,17 @@ class DashboardController extends ChangeNotifier {
           child: MultiBlocProvider(
             providers: [
               BlocProvider(create: (_) => sl<PostCubit>()),
+              BlocProvider(create: (_) => sl<AuthenticationCubit>()),
             ],
-            child: const ForumView(),
+            child: Consumer<UserProvider>(
+              builder: (context, provider, __) {
+                return Builder(
+                  builder: (context) {
+                    return const ForumView();
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
