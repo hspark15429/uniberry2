@@ -55,7 +55,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     return BlocConsumer<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         if (state is UserUpdated) {
-          CoreUtils.showSnackBar(context, '更新に成功！');
+          CoreUtils.showSnackBar(context, '変更内容が更新されました。');
           context.read<TabNavigator>().pop();
         } else if (state is AuthenticationError) {
           CoreUtils.showSnackBar(context, state.message);
@@ -115,7 +115,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green[400],
                       ),
-                      child: const Text('すべてブロック解除')),
+                      child: const Text('ブロック一括解除')),
                 ),
               ),
               FirebaseUIActions(

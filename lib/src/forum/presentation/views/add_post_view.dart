@@ -61,7 +61,7 @@ class _AddPostViewState extends State<AddPostView> {
           Navigator.pop(context);
           CoreUtils.showSnackBar(context, state.message);
         } else if (state is PostCreated) {
-          CoreUtils.showSnackBar(context, 'Post created successfully!');
+          CoreUtils.showSnackBar(context, '投稿しました。');
           Navigator.pop(context);
         }
       },

@@ -163,7 +163,7 @@ class _ForumBodyState extends State<ForumBody> {
               return const SliverToBoxAdapter(
                 child: Center(
                   child: Text(
-                    '投稿が見つかりました',
+                    '投稿がありません。',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black, fontSize: 15),
                   ),
