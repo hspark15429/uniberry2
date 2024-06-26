@@ -55,7 +55,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
       final authorTag = '@${comment.author}';
       if (!commentContentController.text.contains(authorTag)) {
         replyCommentController.value = null;
-      }
+      } else {}
     }
   }
 
@@ -272,29 +272,35 @@ class _PostDetailsViewState extends State<PostDetailsView> {
               ],
             ),
             bottomNavigationBar: ValueListenableBuilder(
-                valueListenable: replyCommentController,
-                builder: (context, Comment? comment, child) {
-                  if (comment != null) {
-                    commentContentController.text = '@${comment.author} ';
-                  } else {
-                    commentContentController.clear();
-                  }
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: 24.0,
-                      right: 24.0,
-                      bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
-                    ),
-                    child: Form(
-                      key: formKey,
-                      child: CommentTextField(
-                        commentContentController: commentContentController,
-                        replyCommentController: replyCommentController,
-                        widget: widget,
+              valueListenable: replyCommentController,
+              builder: (context, Comment? comment, child) {
+                if (comment != null) {
+                  // highlight the author's name in the text field with purple color
+                  commentContentController.text = '@${comment.author} ';
+                } else {
+                  commentContentController.clear();
+                }
+                return Builder(
+                  builder: (context) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: 24,
+                        right: 24,
+                        bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
                       ),
-                    ),
-                  );
-                }),
+                      child: Form(
+                        key: formKey,
+                        child: CommentTextField(
+                          commentContentController: commentContentController,
+                          replyCommentController: replyCommentController,
+                          widget: widget,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           );
         },
       ),
