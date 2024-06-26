@@ -92,7 +92,7 @@ class _TimetableUpdateListSheetState extends State<TimetableUpdateListSheet> {
                             ),
                             TextButton(
                               child: const Text(
-                                'キャンサル',
+                                'キャンセル',
                                 style: TextStyle(color: Colors.black),
                               ),
                               onPressed: () {
