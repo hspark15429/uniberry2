@@ -46,9 +46,9 @@ class _FlagButtonState extends State<FlagButton> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text('報告'),
+                title: const Text('通報'),
                 content: const Text(
-                    'この投稿を報告してもよろしいですか? 弊社のチームが確認し、24 時間以内に適切な措置を講じます。'),
+                    'この投稿を通報してもよろしいですか? 弊社のチームが確認し、24 時間以内に適切な措置を行います。'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -60,7 +60,7 @@ class _FlagButtonState extends State<FlagButton> {
                     onPressed: () {
                       Navigator.of(context).pop('report');
                     },
-                    child: const Text('ユーザーと投稿の報告'),
+                    child: const Text('ユーザーと投稿の通保'),
                   ),
                   TextButton(
                     onPressed: () {

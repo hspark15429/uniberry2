@@ -294,6 +294,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                           commentContentController: commentContentController,
                           replyCommentController: replyCommentController,
                           widget: widget,
+                          onCommentSubmit: () {},
                         ),
                       ),
                     );
