@@ -6,9 +6,14 @@ class AdvertisementItem extends StatelessWidget {
     required this.imagePath,
     super.key,
     this.link,
+    required this.title,
+    required this.author,
   });
+
   final String imagePath;
   final String? link;
+  final String title;
+  final String author;
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +25,54 @@ class AdvertisementItem extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Container(
-          height: 200, // 고정된 높이 설정
-          width: double.infinity, // 가로로 최대한 넓게 설정
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            image: DecorationImage(
-              image: NetworkImage(imagePath),
-              fit: BoxFit.cover, // 이미지를 카드에 꽉 차게 조정
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-          ),
+            const SizedBox(height: 14), // 제목과 사진 사이에 약간의 거리 추가
+            Container(
+              height: 330,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                image: DecorationImage(
+                  image: NetworkImage(imagePath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16), // 사진과 게시자 사이에 약간의 거리 추가
+            Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.verified,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    author,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

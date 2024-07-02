@@ -29,13 +29,13 @@ class _CourseReviewDetailsViewState extends State<CourseReviewDetailsView> {
         listener: (context, state) {
           if (state is CourseReviewDeleted) {
             Navigator.pop(context);
-            CoreUtils.showSnackBar(context, '삭제되었습니다.');
+            CoreUtils.showSnackBar(context, '削除されました.');
           }
         },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: TitleText(text: widget.review.courseName),
+              title: const Text('授業レビュー詳細'),
               actions: [
                 if (context.read<UserProvider>().user!.uid == widget.review.uid)
                   IconButton(
@@ -43,11 +43,11 @@ class _CourseReviewDetailsViewState extends State<CourseReviewDetailsView> {
                     onPressed: () {
                       CoreUtils.showConfirmationDialog(
                         context,
-                        text: '삭제',
-                        title: '리뷰 삭제',
-                        content: '리뷰가 삭제됩니다',
-                        actionText: '삭제',
-                        cancelText: '취소',
+                        text: '削除',
+                        title: 'レビューを削除',
+                        content: '授業レビューを削除します',
+                        actionText: '削除',
+                        cancelText: 'キャンセル',
                       ).then((value) {
                         if (value != null && value) {
                           context
@@ -84,14 +84,26 @@ class _CourseReviewDetailsViewState extends State<CourseReviewDetailsView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      _buildDetailRow('講義名', widget.review.courseName),
+                      const SizedBox(height: 16),
+                      _buildDetailRow('投稿者', widget.review.author),
+                      _buildDetailRow('専攻', widget.review.department),
+                      _buildDetailRow('受講時期', widget.review.year),
+                      _buildDetailRow('出欠確認方法', widget.review.attendanceMethod),
+                      _buildDetailRow(
+                          '成績評価方法', widget.review.evaluationMethods.join(' ')),
+                      _buildStarRatingRow(
+                          '授業の満足度', widget.review.contentSatisfaction),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '#${widget.review.courseName}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.orange,
+                          const Text(
+                            'コメント',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
                           ),
                           Text(
@@ -101,44 +113,16 @@ class _CourseReviewDetailsViewState extends State<CourseReviewDetailsView> {
                                 .substring(0, 16),
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey,
+                              color: Colors.black,
                             ),
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        widget.review.courseName,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _buildDetailRow('작성자', widget.review.author),
-                      _buildDetailRow('학부', widget.review.department),
-                      _buildDetailRow('수강 시기', widget.review.year),
-                      _buildDetailRow(
-                          '출결 확인 방법', widget.review.attendanceMethod),
-                      _buildDetailRow('성적 평가 방법',
-                          widget.review.evaluationMethods.join(', ')),
-                      _buildStarRatingRow(
-                          '내용 충실도', widget.review.contentSatisfaction),
-                      const SizedBox(height: 16),
-                      Text(
-                        '코멘트',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         widget.review.comments,
                         style:
-                            const TextStyle(fontSize: 16, color: Colors.grey),
+                            const TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ],
                   ),

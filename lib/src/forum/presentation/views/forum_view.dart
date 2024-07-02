@@ -53,16 +53,16 @@ class _ForumViewState extends State<ForumView> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ListTile(
-                    leading: Icon(Icons.article_outlined),
-                    title: Text('게시물 작성'),
+                    leading: const Icon(Icons.article_outlined),
+                    title: const Text('投稿を作成'),
                     onTap: () {
                       Navigator.pop(context);
                       _navigateToAddPost(context);
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.rate_review_outlined),
-                    title: Text('강의 리뷰 작성'),
+                    leading: const Icon(Icons.rate_review_outlined),
+                    title: const Text('授業レビューを作成'),
                     onTap: () {
                       Navigator.pop(context);
                       _navigateToAddCourseReview(context);

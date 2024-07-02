@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uniberry/core/common/widgets/i_field.dart';
 import 'package:uniberry/src/timetable/presentation/widgets/select_school_tile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddCourseReviewForm extends StatefulWidget {
   const AddCourseReviewForm({
@@ -17,6 +17,7 @@ class AddCourseReviewForm extends StatefulWidget {
     required this.commentController,
     required this.formKey,
     required this.tagController,
+    required this.onSave,
     super.key,
   });
 
@@ -30,6 +31,7 @@ class AddCourseReviewForm extends StatefulWidget {
   final TextEditingController commentController;
   final ValueNotifier<int> tagController;
   final GlobalKey<FormState> formKey;
+  final VoidCallback onSave;
 
   @override
   State<AddCourseReviewForm> createState() => _AddCourseReviewFormState();
@@ -37,17 +39,17 @@ class AddCourseReviewForm extends StatefulWidget {
 
 class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
   String _selectedYear = DateTime.now().year.toString();
-  String _selectedTerm = '봄';
-  final List<String> _terms = ['봄', '가을', '통年', '여름집중', '가을집중', '기타'];
+  String _selectedTerm = '春セメスター';
+  final List<String> _terms = ['春セメスター', '가을', '通年', '夏集中', '秋集中', 'その他'];
   final List<String> _attendanceOptions = [
-    '카드리더(학생증)',
-    '마나바(출석번호, QR코드)',
-    '직접호명',
-    '그외'
+    'カードリーダー(学生証)',
+    'マナバ(出席番号, QRコード)',
+    '直接点呼',
+    'その他'
   ];
-  final List<String> _evaluationOptions = ['소테스트', '레포트', '정기시험', '발표', '그외'];
+  final List<String> _evaluationOptions = ['小テスト', 'レポート', '定期試験', '発表', 'その他'];
   final List<String> _atmosphereOptions = ['全て対面', 'ハイブリッド', '全てオンライン'];
-  String _selectedAtmosphere = '全て対面';
+  String? _selectedAtmosphere; // 초기 상태를 null로 설정
 
   @override
   void initState() {
@@ -103,7 +105,7 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('취소'),
+                    child: const Text('取消'),
                   ),
                   TextButton(
                     onPressed: () {
@@ -115,7 +117,7 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
                       });
                       Navigator.pop(context);
                     },
-                    child: const Text('저장'),
+                    child: const Text('保存'),
                   ),
                 ],
               ),
@@ -132,111 +134,128 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
     });
   }
 
+  void _saveReview() {
+    if (widget.formKey.currentState!.validate() &&
+        widget.departmentController.text.isNotEmpty &&
+        widget.yearController.text.isNotEmpty &&
+        widget.attendanceController.text.isNotEmpty &&
+        widget.evaluationController.text.isNotEmpty &&
+        widget.tagController.value != 0 &&
+        _selectedAtmosphere != null) {
+      widget.onSave();
+    } else {
+      // 필수 입력값이 누락된 경우 스낵바 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            '필수 입력값을 모두 입력해주세요',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.white,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey,
-      child: Column(
-        children: [
-          Row(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: () async {
-                    final selectedSchool = await Navigator.push<String>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SelectSchoolTile(
-                          currentSchool: widget.departmentController.text,
-                        ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () async {
+                        final selectedSchool = await Navigator.push<String>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SelectSchoolTile(
+                              currentSchool: widget.departmentController.text,
+                            ),
+                          ),
+                        );
+                        if (selectedSchool != null) {
+                          setState(() {
+                            widget.departmentController.text = selectedSchool;
+                          });
+                        }
+                      },
+                      child: Text(
+                        widget.departmentController.text.isEmpty
+                            ? '専攻を選択'
+                            : widget.departmentController.text,
+                        style: TextStyle(
+                            color: widget.departmentController.text.isEmpty
+                                ? Colors.black
+                                : Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
                       ),
-                    );
-                    if (selectedSchool != null) {
-                      setState(() {
-                        widget.departmentController.text = selectedSchool;
-                      });
-                    }
-                  },
-                  child: Text(
-                    widget.departmentController.text.isEmpty
-                        ? '학부를 선택하세요'
-                        : widget.departmentController.text,
-                    style: TextStyle(
-                      color: widget.departmentController.text.isEmpty
-                          ? Colors.grey
-                          : Colors.black,
-                      fontSize: 16,
                     ),
                   ),
-                ),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => _showYearTermPicker(context),
+                      child: Text(
+                        widget.yearController.text.isEmpty
+                            ? '受講時期を選択'
+                            : widget.yearController.text,
+                        style: TextStyle(
+                            color: widget.yearController.text.isEmpty
+                                ? Colors.black
+                                : Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: TextButton(
-                  onPressed: () => _showYearTermPicker(context),
-                  child: Text(
-                    widget.yearController.text.isEmpty
-                        ? '수강시기를 선택하세요'
-                        : widget.yearController.text,
-                    style: TextStyle(
-                      color: widget.yearController.text.isEmpty
-                          ? Colors.grey
-                          : Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+              const SizedBox(height: 5),
+              IField(
+                controller: widget.titleController,
+                hintText: '授業名を入力してください',
+                filled: true,
+                fillColour: Colors.white,
+              ),
+              const SizedBox(height: 5),
+              IField(
+                controller: widget.contentController,
+                hintText: '教授名を入力してください',
+                filled: true,
+                fillColour: Colors.white,
+              ),
+              const SizedBox(height: 5),
+              _buildDropdownField(
+                '出席確認方法',
+                _attendanceOptions,
+                widget.attendanceController,
+              ),
+              const SizedBox(height: 5),
+              _buildMultiSelectField(
+                '成績評価方法',
+                _evaluationOptions,
+                widget.evaluationController,
+              ),
+              const SizedBox(height: 5),
+              _buildStarRating('授業の満足度', widget.tagController.value),
+              const SizedBox(height: 5),
+              _buildAtmosphereOptions(),
+              const SizedBox(height: 5),
+              _buildTextAreaField(
+                '授業の内容や学べたこと',
+                '人身攻撃、悪口などは禁止です。授業に関連した内容のみ記入してください。',
+                widget.commentController,
               ),
             ],
           ),
-          const SizedBox(height: 5),
-          IField(
-            controller: widget.titleController,
-            hintText: '과목명을 입력하세요',
-            filled: true,
-            fillColour: Colors.white,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return '과목명은 필수 입력 항목입니다.';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 5),
-          IField(
-            controller: widget.contentController,
-            hintText: '교수명을 입력하세요',
-            filled: true,
-            fillColour: Colors.white,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return '교수명은 필수 입력 항목입니다.';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 5),
-          _buildDropdownField(
-            '출결 확인 방법',
-            _attendanceOptions,
-            widget.attendanceController,
-          ),
-          const SizedBox(height: 5),
-          _buildMultiSelectField(
-            '성적 평가 방법',
-            _evaluationOptions,
-            widget.evaluationController,
-          ),
-          const SizedBox(height: 5),
-          _buildStarRating('내용 충실도', widget.tagController.value),
-          const SizedBox(height: 5),
-          _buildAtmosphereOptions(),
-          const SizedBox(height: 5),
-          _buildTextAreaField(
-            '授業の内容や学べたこと',
-            '인신모독, 욕설 등은 제재 대상입니다. 수업과 관련된 내용에 대해서만 작성 부탁드립니다.',
-            widget.commentController,
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -247,7 +266,7 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,6 +282,15 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
             );
           }),
         ),
+        if (widget.tagController.value == 0)
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Text(
+              '授業の満足度は必須項目です。',
+              style: TextStyle(
+                  color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ),
       ],
     );
   }
@@ -271,7 +299,7 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           '授業形態',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
@@ -290,6 +318,15 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
             );
           }),
         ),
+        if (_selectedAtmosphere == null)
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Text(
+              '授業形態は必須項目です。',
+              style: TextStyle(
+                  color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ),
       ],
     );
   }
@@ -301,7 +338,7 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 5),
         TextFormField(
@@ -309,16 +346,10 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
           maxLines: 5,
           decoration: InputDecoration(
             hintText: hint,
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
             filled: true,
             fillColor: Colors.white,
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return '내용을 입력하세요.';
-            }
-            return null;
-          },
         ),
       ],
     );
@@ -331,7 +362,7 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 5),
         DropdownButtonFormField<String>(
@@ -347,14 +378,14 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
               controller.text = value!;
             });
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
             fillColor: Colors.white,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return '필수 항목입니다.';
+              return '入力必須です';
             }
             return null;
           },
@@ -370,7 +401,7 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 5),
         Wrap(
@@ -395,6 +426,15 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
             );
           }).toList(),
         ),
+        if (controller.text.isEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              '$labelは必須項目です。',
+              style: const TextStyle(
+                  color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ),
       ],
     );
   }
