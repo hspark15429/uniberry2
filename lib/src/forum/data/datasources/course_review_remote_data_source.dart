@@ -354,7 +354,6 @@ class CourseReviewRemoteDataSourceImplementation
     try {
       final reviews = await _cloudStoreClient
           .collection('course_reviews')
-          .where('uid', isEqualTo: userId)
           .orderBy('createdAt', descending: true)
           .get();
       return reviews.docs
