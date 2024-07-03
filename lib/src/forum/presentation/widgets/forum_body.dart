@@ -10,12 +10,12 @@ import 'package:uniberry/core/utils/typedefs.dart';
 import 'package:uniberry/src/auth/domain/entities/user.dart';
 import 'package:uniberry/src/forum/data/models/post_model.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
-
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:uniberry/src/forum/presentation/widgets/announcement_card.dart';
 import 'package:uniberry/src/forum/presentation/widgets/forum_body_subheader1.dart';
 import 'package:uniberry/src/forum/presentation/widgets/forum_body_subheader2.dart';
 import 'package:uniberry/src/forum/presentation/widgets/post_card.dart';
+import 'package:uniberry/src/forum/presentation/views/course_review_view.dart'; // Import CourseReviewView
 
 class ForumBody extends StatefulWidget {
   const ForumBody({
@@ -95,20 +95,36 @@ class _ForumBodyState extends State<ForumBody> {
             child: const ForumBodySubHeader2(),
           ),
         ),
-        const SliverToBoxAdapter(
+        SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.diversity_3, color: Colors.black, size: 38),
-                SizedBox(width: 8),
-                Text(
-                  '学内掲示板',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
+                const Row(
+                  children: [
+                    Icon(Icons.diversity_3, color: Colors.black, size: 38),
+                    SizedBox(width: 8),
+                    Text(
+                      '学内掲示板',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CourseReviewView()),
+                    );
+                  },
+                  child: const Text('授業レビュー'),
                 ),
               ],
             ),

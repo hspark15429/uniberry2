@@ -76,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
                           ? IconlyBold.profile
                           : IconlyLight.profile,
                       color: controller.currentIndex == 4
-                          ? const Color.fromARGB(255, 0, 0, 0)
+                          ? const Color.fromARGB(255, 0, 72, 17)
                           : Colors.grey,
                     ),
                     label: '',

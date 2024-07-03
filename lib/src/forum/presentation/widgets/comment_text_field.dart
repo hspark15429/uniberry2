@@ -13,6 +13,7 @@ class CommentTextField extends StatelessWidget {
     required this.replyCommentController,
     required this.widget,
     super.key,
+    required Null Function() onCommentSubmit,
   });
 
   final TextEditingController commentContentController;

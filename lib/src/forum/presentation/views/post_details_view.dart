@@ -67,7 +67,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
         listener: (context, state) {
           if (state is PostDeleted) {
             Navigator.pop(context);
-            CoreUtils.showSnackBar(context, '削除されました。');
+            CoreUtils.showSnackBar(context, '削除されました');
           }
         },
         builder: (context, state) {
@@ -294,6 +294,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                           commentContentController: commentContentController,
                           replyCommentController: replyCommentController,
                           widget: widget,
+                          onCommentSubmit: () {},
                         ),
                       ),
                     );

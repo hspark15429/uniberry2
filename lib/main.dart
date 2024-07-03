@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,6 +15,7 @@ import 'package:uniberry/core/services/injection_container.dart';
 import 'package:uniberry/core/services/router.dart';
 import 'package:uniberry/firebase_options.dart';
 import 'package:uniberry/src/dashboard/presentation/providers/dashboard_controller.dart';
+import 'package:uniberry/src/forum/presentation/cubit/course_review_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        BlocProvider(
+            create: (_) => sl<CourseReviewCubit>()), // CourseReviewCubit 추가
       ],
       child: MaterialApp(
         localizationsDelegates: [
@@ -62,10 +66,8 @@ class MyApp extends StatelessWidget {
             elevation: 0,
             centerTitle: true,
           ),
-
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colours.primaryBlack,
-            // accentColor: Colors.black,
           ),
           scaffoldBackgroundColor: Colors.white, // 배경색을 흰색으로 설정
         ),

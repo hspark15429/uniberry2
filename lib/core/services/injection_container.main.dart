@@ -9,6 +9,7 @@ Future<void> init() async {
   await initTimetable();
   await initForum();
   await initComment();
+  await initCourseReview(); // 추가된 부분
 }
 
 Future<void> initComment() async {
@@ -168,4 +169,43 @@ Future<void> initAuthentication() async {
     ..registerLazySingleton(() => FirebaseAuth.instance)
     ..registerLazySingleton(() => FirebaseFirestore.instance)
     ..registerLazySingleton(() => FirebaseStorage.instance);
+}
+
+Future<void> initCourseReview() async {
+  // cubit
+  sl
+    ..registerFactory(
+      () => CourseReviewCubit(
+        createCourseReview: sl(),
+        readCourseReview: sl(),
+        readCourseReviews: sl(),
+        getCourseReviewsByUserId: sl(),
+        updateCourseReview: sl(),
+        deleteCourseReview: sl(),
+        searchCourseReviews: sl(),
+        searchCourseReviewsWithPageKey: sl(),
+      ),
+    )
+    // usecases
+    ..registerLazySingleton(() => CreateCourseReview(sl()))
+    ..registerLazySingleton(() => ReadCourseReview(sl()))
+    ..registerLazySingleton(() => ReadCourseReviews(sl()))
+    ..registerLazySingleton(() => GetCourseReviewsByUserId(sl()))
+    ..registerLazySingleton(() => UpdateCourseReview(sl()))
+    ..registerLazySingleton(() => DeleteCourseReview(sl()))
+    ..registerLazySingleton(() => SearchCourseReviews(sl()))
+    ..registerLazySingleton(() => SearchCourseReviewsWithPageKey(sl()))
+    // repo impl
+    ..registerLazySingleton<CourseReviewRepository>(
+      () => CourseReviewRepositoryImplementation(sl()),
+    )
+    // datasource impl
+    ..registerLazySingleton<CourseReviewRemoteDataSource>(
+      () => CourseReviewRemoteDataSourceImplementation(
+        cloudStoreClient: sl(),
+        dbClient: sl(),
+        authClient: sl(),
+        typesenseClient: sl(),
+      ),
+    );
 }

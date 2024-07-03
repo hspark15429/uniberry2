@@ -62,6 +62,8 @@ class TimetablePeriod extends Equatable {
   final DayOfWeek day;
   final Period period;
 
+  static var all;
+
   @override
   String toString() {
     return '${day.name}.${period.name}';

@@ -63,7 +63,7 @@ class _AddPostFormState extends State<AddPostForm> {
         children: [
           IField(
             controller: widget.titleController,
-            hintText: 'タイトル。 不適切なコンテンツや不快なコンテンツを投稿する場合は、制裁を受けることができます。',
+            hintText: 'タイトル',
             filled: true,
             fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
           ),
@@ -135,7 +135,7 @@ class _AddPostFormState extends State<AddPostForm> {
           if (widget.typeController.value == 0)
             IField(
               controller: widget.contentController,
-              hintText: '内容。不適切なコンテンツや不快なコンテンツを投稿する場合は、制裁を受けることができます。',
+              hintText: '不適切なコンテンツや不快なコンテンツを投稿、利用規約に違反した場合、利用制限がかかることがあります。',
               maxlines: 15,
               filled: true,
               fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정

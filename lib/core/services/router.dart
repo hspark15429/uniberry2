@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fui;
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uniberry/core/providers/user_provider.dart';
 import 'package:uniberry/core/services/injection_container.dart';
@@ -14,11 +14,11 @@ import 'package:uniberry/src/dashboard/presentation/utils/dashboard_utils.dart';
 import 'package:uniberry/src/dashboard/presentation/views/dashboard.dart';
 import 'package:uniberry/src/forum/domain/entities/post.dart';
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/src/forum/presentation/views/add_course_review_view.dart';
 import 'package:uniberry/src/forum/presentation/views/add_post_view.dart';
 import 'package:uniberry/src/forum/presentation/views/post_details_view.dart';
 import 'package:uniberry/src/timetable/data/models/timetable_model.dart';
 import 'package:uniberry/src/timetable/presentation/cubit/timetable_cubit.dart';
-
 import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -94,6 +94,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           ],
           child: PostDetailsView(settings.arguments! as Post),
         ),
+      );
+    case AddCourseReviewView.id:
+      final args = settings.arguments as Map<String, dynamic>?;
+      final reviewId = args?['reviewId'] as String?;
+      return MaterialPageRoute(
+        builder: (_) => AddCourseReviewView(reviewId: reviewId),
       );
     default:
       return MaterialPageRoute(builder: (_) => const Placeholder());

@@ -37,7 +37,7 @@ class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
               color: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
-                side: BorderSide(color: Colors.white, width: 10),
+                side: const BorderSide(color: Colors.white, width: 10),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -45,7 +45,7 @@ class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      height: 330, // 카드 크기를 키우기 위해 높이를 조정
+                      height: 450,
                       child: PageView.builder(
                         itemCount: posts.length,
                         onPageChanged: (index) {
@@ -56,8 +56,10 @@ class _ForumBodySubHeaderState extends State<ForumBodySubHeader2> {
                         itemBuilder: (context, index) {
                           final post = posts[index];
                           return AdvertisementItem(
+                            title: post.title,
                             imagePath: post.content!,
                             link: post.link,
+                            author: post.author,
                           );
                         },
                       ),
