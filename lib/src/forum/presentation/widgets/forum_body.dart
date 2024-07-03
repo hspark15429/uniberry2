@@ -97,11 +97,12 @@ class _ForumBodyState extends State<ForumBody> {
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(Icons.diversity_3, color: Colors.black, size: 38),
                     SizedBox(width: 8),
@@ -120,10 +121,10 @@ class _ForumBodyState extends State<ForumBody> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CourseReviewView()),
+                          builder: (context) => const CourseReviewView()),
                     );
                   },
-                  child: Text('授業レビュアー'),
+                  child: const Text('授業レビュー'),
                 ),
               ],
             ),

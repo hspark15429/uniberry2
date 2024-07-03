@@ -40,14 +40,22 @@ class AddCourseReviewForm extends StatefulWidget {
 class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
   String _selectedYear = DateTime.now().year.toString();
   String _selectedTerm = '春セメスター';
-  final List<String> _terms = ['春セメスター', '가을', '通年', '夏集中', '秋集中', 'その他'];
+  final List<String> _terms = ['春セメスター', '秋セメスター', '通年', '夏集中', '秋集中', 'その他'];
   final List<String> _attendanceOptions = [
     'カードリーダー(学生証)',
-    'マナバ(出席番号, QRコード)',
+    'MANABA(出席番号, QRコード)',
     '直接点呼',
-    'その他'
+    'その他',
+    'なし'
   ];
-  final List<String> _evaluationOptions = ['小テスト', 'レポート', '定期試験', '発表', 'その他'];
+  final List<String> _evaluationOptions = [
+    '小テスト',
+    'レポート',
+    '定期試験',
+    '発表',
+    'その他',
+    'なし'
+  ];
   final List<String> _atmosphereOptions = ['全て対面', 'ハイブリッド', '全てオンライン'];
   String? _selectedAtmosphere; // 초기 상태를 null로 설정
 

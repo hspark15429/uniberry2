@@ -29,7 +29,7 @@ class _CourseReviewDetailsViewState extends State<CourseReviewDetailsView> {
         listener: (context, state) {
           if (state is CourseReviewDeleted) {
             Navigator.pop(context);
-            CoreUtils.showSnackBar(context, '削除されました.');
+            CoreUtils.showSnackBar(context, '削除されました');
           }
         },
         builder: (context, state) {
