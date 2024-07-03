@@ -26,6 +26,7 @@ import 'package:uniberry/src/comment/presentation/cubit/comment_cubit.dart';
 import 'package:uniberry/src/forum/data/datasources/post_remote_data_source.dart';
 import 'package:uniberry/src/forum/data/repositories/post_repository_implementation.dart';
 import 'package:uniberry/src/forum/domain/repository/post_repository.dart';
+import 'package:uniberry/src/forum/domain/usecases/course_review/get_course_reviews_all.dart';
 import 'package:uniberry/src/forum/domain/usecases/course_review/read_couse_reviews.dart';
 import 'package:uniberry/src/forum/domain/usecases/create_post.dart';
 import 'package:uniberry/src/forum/domain/usecases/create_post_with_image.dart';

@@ -15,8 +15,7 @@ class CourseReviewView extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.read<UserProvider>().user!;
     return BlocProvider(
-      create: (context) =>
-          sl<CourseReviewCubit>()..getCourseReviewsByUserId(user.uid),
+      create: (context) => sl<CourseReviewCubit>()..getCourseReviewsAll(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('授業レビュー'),

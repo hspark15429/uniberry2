@@ -61,6 +61,16 @@ class CourseReviewRepositoryImplementation implements CourseReviewRepository {
   }
 
   @override
+  ResultFuture<List<CourseReview>> getCourseReviewsAll() async {
+    try {
+      final result = await _remoteDataSource.getCourseReviewsAll();
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
   ResultFuture<List<CourseReview>> getCourseReviewsByUserId(
       String userId) async {
     try {

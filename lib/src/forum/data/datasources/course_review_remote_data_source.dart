@@ -24,6 +24,7 @@ abstract class CourseReviewRemoteDataSource {
   });
   Future<CourseReviewModel> readCourseReview(String reviewId);
   Future<List<CourseReviewModel>> readCourseReviews(List<String> reviewIds);
+  Future<List<CourseReviewModel>> getCourseReviewsAll();
   Future<List<CourseReviewModel>> getCourseReviewsByUserId(String userId);
   Future<void> updateCourseReview({
     required String reviewId,
@@ -351,6 +352,31 @@ class CourseReviewRemoteDataSourceImplementation
   @override
   Future<List<CourseReviewModel>> getCourseReviewsByUserId(
       String userId) async {
+    try {
+      final reviews = await _cloudStoreClient
+          .collection('course_reviews')
+          .where('uid', isEqualTo: userId)
+          .orderBy('createdAt', descending: true)
+          .get();
+      return reviews.docs
+          .map((review) => CourseReviewModel.fromMap(review.data()))
+          .toList();
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(
+        message: e.message ?? 'Error Occurred',
+        statusCode: e.code,
+      );
+    } catch (e, s) {
+      debugPrint(e.toString());
+      throw ServerException(
+        message: e.toString(),
+        statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<List<CourseReviewModel>> getCourseReviewsAll() async {
     try {
       final reviews = await _cloudStoreClient
           .collection('course_reviews')

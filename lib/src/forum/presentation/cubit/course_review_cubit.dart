@@ -4,6 +4,7 @@ import 'package:uniberry/core/enums/update_course_review_enum.dart';
 import 'package:uniberry/src/forum/domain/entities/course_review.dart';
 import 'package:uniberry/src/forum/domain/usecases/course_review/create_course_review.dart';
 import 'package:uniberry/src/forum/domain/usecases/course_review/delete_course_review.dart';
+import 'package:uniberry/src/forum/domain/usecases/course_review/get_course_reviews_all.dart';
 import 'package:uniberry/src/forum/domain/usecases/course_review/get_course_reviews_by_user_id.dart';
 import 'package:uniberry/src/forum/domain/usecases/course_review/read_course_review.dart';
 import 'package:uniberry/src/forum/domain/usecases/course_review/read_couse_reviews.dart';
@@ -20,6 +21,7 @@ class CourseReviewCubit extends Cubit<CourseReviewState> {
     required ReadCourseReview readCourseReview,
     required ReadCourseReviews readCourseReviews,
     required GetCourseReviewsByUserId getCourseReviewsByUserId,
+    required GetCourseReviewsAll getCourseReviewsAll,
     required UpdateCourseReview updateCourseReview,
     required DeleteCourseReview deleteCourseReview,
     required SearchCourseReviews searchCourseReviews,
@@ -28,6 +30,7 @@ class CourseReviewCubit extends Cubit<CourseReviewState> {
         _readCourseReview = readCourseReview,
         _readCourseReviews = readCourseReviews,
         _getCourseReviewsByUserId = getCourseReviewsByUserId,
+        _getCourseReviewsAll = getCourseReviewsAll,
         _updateCourseReview = updateCourseReview,
         _deleteCourseReview = deleteCourseReview,
         _searchCourseReviews = searchCourseReviews,
@@ -38,6 +41,7 @@ class CourseReviewCubit extends Cubit<CourseReviewState> {
   final ReadCourseReview _readCourseReview;
   final ReadCourseReviews _readCourseReviews;
   final GetCourseReviewsByUserId _getCourseReviewsByUserId;
+  final GetCourseReviewsAll _getCourseReviewsAll;
   final UpdateCourseReview _updateCourseReview;
   final DeleteCourseReview _deleteCourseReview;
   final SearchCourseReviews _searchCourseReviews;
@@ -73,6 +77,15 @@ class CourseReviewCubit extends Cubit<CourseReviewState> {
   Future<void> getCourseReviewsByUserId(String userId) async {
     emit(CourseReviewLoading());
     final result = await _getCourseReviewsByUserId(userId);
+    result.fold(
+      (failure) => emit(CourseReviewError(failure.message)),
+      (reviews) => emit(CourseReviewsRead(reviews)),
+    );
+  }
+
+  Future<void> getCourseReviewsAll() async {
+    emit(CourseReviewLoading());
+    final result = await _getCourseReviewsAll();
     result.fold(
       (failure) => emit(CourseReviewError(failure.message)),
       (reviews) => emit(CourseReviewsRead(reviews)),

@@ -180,6 +180,7 @@ Future<void> initCourseReview() async {
         readCourseReview: sl(),
         readCourseReviews: sl(),
         getCourseReviewsByUserId: sl(),
+        getCourseReviewsAll: sl(),
         updateCourseReview: sl(),
         deleteCourseReview: sl(),
         searchCourseReviews: sl(),
@@ -191,6 +192,7 @@ Future<void> initCourseReview() async {
     ..registerLazySingleton(() => ReadCourseReview(sl()))
     ..registerLazySingleton(() => ReadCourseReviews(sl()))
     ..registerLazySingleton(() => GetCourseReviewsByUserId(sl()))
+    ..registerLazySingleton(() => GetCourseReviewsAll(sl()))
     ..registerLazySingleton(() => UpdateCourseReview(sl()))
     ..registerLazySingleton(() => DeleteCourseReview(sl()))
     ..registerLazySingleton(() => SearchCourseReviews(sl()))

@@ -13,6 +13,7 @@ abstract class CourseReviewRepository {
   });
   ResultFuture<CourseReview> readCourseReview(String reviewId);
   ResultFuture<List<CourseReview>> readCourseReviews(List<String> reviewIds);
+  ResultFuture<List<CourseReview>> getCourseReviewsAll();
   ResultFuture<List<CourseReview>> getCourseReviewsByUserId(String userId);
   ResultFuture<void> updateCourseReview({
     required String reviewId,
