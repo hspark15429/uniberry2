@@ -92,9 +92,18 @@ class CourseReviewView extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              // const SizedBox(height: 4),
+                              // Text(
+                              //   review.atmosphere,
+                              //   style: const TextStyle(
+                              //     fontSize: 14,
+                              //     color: Colors.grey,
+                              //   ),
+                              //   overflow: TextOverflow.ellipsis,
+                              // ),
                               const SizedBox(height: 4),
                               Text(
-                                review.atmosphere,
+                                review.attendanceMethod,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
