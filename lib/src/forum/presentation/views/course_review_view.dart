@@ -19,6 +19,9 @@ class CourseReviewView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('授業レビュー'),
+          backgroundColor: Colors.black,
+          iconTheme: const IconThemeData(color: Colors.white),
+          titleTextStyle: const TextStyle(color: Colors.white, fontSize: 18),
         ),
         body: BlocConsumer<CourseReviewCubit, CourseReviewState>(
           listener: (context, state) {
