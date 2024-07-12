@@ -101,7 +101,7 @@ class PostCard extends StatelessWidget {
                           backgroundColor: Colors.grey[300],
                           borderRadius: 12,
                           removeElevation: false,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(blurRadius: 3, color: Colors.grey)
                           ],
                         ),
@@ -137,10 +137,10 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (!(post.uid == context.read<UserProvider>().user!.uid))
-                  Expanded(
-                    child: FlagButton(item: post),
-                  ),
+                // if (!(post.uid == context.read<UserProvider>().user!.uid))
+                //   Expanded(
+                //     child: FlagButton(item: post),
+                //   ),
               ],
             ),
           ],

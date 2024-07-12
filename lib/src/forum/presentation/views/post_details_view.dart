@@ -16,6 +16,7 @@ import 'package:uniberry/src/forum/domain/entities/post.dart';
 import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
 import 'package:intl/intl.dart';
 import 'package:uniberry/src/forum/presentation/widgets/comment_text_field.dart';
+import 'package:uniberry/core/common/widgets/flag_button.dart'; // 신고 버튼 import
 
 class PostDetailsView extends StatefulWidget {
   const PostDetailsView(this.post, {super.key});
@@ -71,11 +72,13 @@ class _PostDetailsViewState extends State<PostDetailsView> {
           }
         },
         builder: (context, state) {
+          final currentUserUid = context.read<UserProvider>().user!.uid;
+          final isAuthor = currentUserUid == widget.post.uid;
           return Scaffold(
             appBar: AppBar(
               title: TitleText(text: widget.post.title),
               actions: [
-                if (context.read<UserProvider>().user!.uid == widget.post.uid)
+                if (isAuthor)
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.white),
                     onPressed: () {
@@ -95,6 +98,7 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                       });
                     },
                   ),
+                if (!isAuthor) FlagButton(item: widget.post), // 신고 버튼 추가
               ],
               backgroundColor: Colors.black,
               iconTheme: const IconThemeData(color: Colors.white),
@@ -175,12 +179,10 @@ class _PostDetailsViewState extends State<PostDetailsView> {
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                           ),
-                          bodyStyle: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                          ),
-                          errorBody: '내용 미리보기가 없습니다.',
-                          errorTitle: '제목 미리보기가 없습니다.',
+                          bodyStyle:
+                              const TextStyle(color: Colors.grey, fontSize: 12),
+                          errorBody: '내용 미리보기가ありません。',
+                          errorTitle: '제목 미리보기가ありません。',
                           errorWidget: Container(
                             color: Colors.grey[300],
                             child: const Text('Oops!'),

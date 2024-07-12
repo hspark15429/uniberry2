@@ -111,7 +111,17 @@ class _SignInScreenState extends State<SignInScreen> {
                                   SignUpScreen.routeName,
                                 );
                               },
-                              child: const Text('アカウントを作成する'),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.person_add, // 계정 생성 아이콘
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 8), // 아이콘과 텍스트 사이의 간격
+                                  Text('アカウントを作成する'),
+                                ],
+                              ),
                             ),
                           ),
                         ),

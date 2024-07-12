@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uniberry/core/common/widgets/i_field.dart';
@@ -61,11 +60,15 @@ class _AddPostFormState extends State<AddPostForm> {
       key: widget.formKey,
       child: Column(
         children: [
-          IField(
+          TextField(
             controller: widget.titleController,
-            hintText: 'タイトル',
-            filled: true,
-            fillColour: Colors.white, // 입력 필드 배경색을 흰색으로 설정
+            decoration: InputDecoration(
+              hintText: 'タイトル',
+              filled: true,
+              fillColor: Colors.white, // 입력 필드 배경색을 흰색으로 설정
+              border: OutlineInputBorder(),
+            ),
+            maxLines: null, // 텍스트 필드가 자동으로 확장되도록 설정
           ),
           const SizedBox(height: 5),
           SizedBox(
