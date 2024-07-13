@@ -116,7 +116,7 @@ class _ForumBodyState extends State<ForumBody> {
                     ),
                   ],
                 ),
-                ElevatedButton(
+                ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -124,7 +124,19 @@ class _ForumBodyState extends State<ForumBody> {
                           builder: (context) => const CourseReviewView()),
                     );
                   },
-                  child: const Text('授業レビュー'),
+                  icon: const Icon(Icons.rate_review_outlined),
+                  label: const Text('授業レビュー'),
+                  style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
               ],
             ),

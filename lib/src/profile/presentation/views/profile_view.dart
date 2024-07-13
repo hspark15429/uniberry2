@@ -48,7 +48,7 @@ class _ProfileViewState extends State<ProfileView> {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            title: const TitleText(text: 'Profile'),
+            title: const TitleText(text: 'マイページ'),
             actions: [
               PopupMenuButton(
                 offset: const Offset(0, 50),

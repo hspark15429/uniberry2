@@ -82,7 +82,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           fullNameController.addListener(() => refresh(() {}));
                           return Icon(
                             Icons.check,
-                            color: nothingChanged ? Colors.grey : Colors.black,
+                            color: nothingChanged ? Colors.grey : Colors.white,
                           );
                         },
                       ),

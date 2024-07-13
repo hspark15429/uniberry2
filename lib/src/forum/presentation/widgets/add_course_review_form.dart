@@ -253,12 +253,12 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
               ),
               const SizedBox(height: 5),
               _buildStarRating('授業の満足度', widget.tagController.value),
-              const SizedBox(height: 5),
-              _buildAtmosphereOptions(),
+              // const SizedBox(height: 5),
+              // _buildAtmosphereOptions(),
               const SizedBox(height: 5),
               _buildTextAreaField(
-                '授業の内容や学べたこと',
-                '人身攻撃、悪口などは禁止です。授業に関連した内容のみ記入してください。',
+                '授業の内容や学んだこと',
+                '悪意のコメントや特定の人を傷つけるような発言はお控えください。',
                 widget.commentController,
               ),
             ],
@@ -303,41 +303,41 @@ class _AddCourseReviewFormState extends State<AddCourseReviewForm> {
     );
   }
 
-  Widget _buildAtmosphereOptions() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '授業形態',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          children: List.generate(_atmosphereOptions.length, (index) {
-            return ChoiceChip(
-              label: Text(_atmosphereOptions[index]),
-              selected: _selectedAtmosphere == _atmosphereOptions[index],
-              onSelected: (selected) {
-                setState(() {
-                  _selectedAtmosphere = _atmosphereOptions[index];
-                });
-              },
-            );
-          }),
-        ),
-        if (_selectedAtmosphere == null)
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: Text(
-              '授業形態は必須項目です。',
-              style: TextStyle(
-                  color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-          ),
-      ],
-    );
-  }
+  // Widget _buildAtmosphereOptions() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const Text(
+  //         '授業形態',
+  //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  //       ),
+  //       Wrap(
+  //         spacing: 8.0,
+  //         runSpacing: 4.0,
+  //         children: List.generate(_atmosphereOptions.length, (index) {
+  //           return ChoiceChip(
+  //             label: Text(_atmosphereOptions[index]),
+  //             selected: _selectedAtmosphere == _atmosphereOptions[index],
+  //             onSelected: (selected) {
+  //               setState(() {
+  //                 _selectedAtmosphere = _atmosphereOptions[index];
+  //               });
+  //             },
+  //           );
+  //         }),
+  //       ),
+  //       if (_selectedAtmosphere == null)
+  //         const Padding(
+  //           padding: EdgeInsets.only(top: 8.0),
+  //           child: Text(
+  //             '授業形態は必須項目です。',
+  //             style: TextStyle(
+  //                 color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
+  //           ),
+  //         ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildTextAreaField(
       String label, String hint, TextEditingController controller) {

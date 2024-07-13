@@ -39,81 +39,110 @@ class PostCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              post.title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 4),
-            if (post.type == 'text')
-              Text(
-                post.content!,
-                style: const TextStyle(fontSize: 14, color: Colors.grey),
-              )
-            else if (post.type == 'image')
-              CachedNetworkImage(
-                imageUrl: post.content!,
-                fit: BoxFit.cover,
-                errorWidget: (context, error, stackTrace) {
-                  return const Icon(Icons.error);
-                },
-              )
-            else if (post.type == 'link')
-              AnyLinkPreview(
-                link: post.link!,
-                displayDirection: UIDirection.uiDirectionHorizontal,
-                showMultimedia: true,
-                bodyMaxLines: 5,
-                bodyTextOverflow: TextOverflow.ellipsis,
-                titleStyle: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-                bodyStyle: const TextStyle(color: Colors.grey, fontSize: 12),
-                errorBody: '내용 미리보기가 없습니다.',
-                errorTitle: '제목 미리보기가 없습니다.',
-                errorWidget: Container(
-                  color: Colors.grey[300],
-                  child: Text('Oops!'),
-                ),
-                errorImage: "https://google.com/",
-                cache: Duration(days: 7),
-                backgroundColor: Colors.grey[300],
-                borderRadius: 12,
-                removeElevation: false,
-                boxShadow: [BoxShadow(blurRadius: 3, color: Colors.grey)],
-                // onTap: () {}, // This disables tap event
-              ),
             Row(
               children: [
-                const Icon(
-                  Icons.person,
-                  color: Colors.black,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.person,
+                            color: Colors.black,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${post.author}#${post.uid.trim().substring(0, 5)}',
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        post.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      if (post.type == 'text')
+                        Text(
+                          post.content!,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        )
+                      else if (post.type == 'link')
+                        AnyLinkPreview(
+                          link: post.link!,
+                          displayDirection: UIDirection.uiDirectionHorizontal,
+                          showMultimedia: true,
+                          bodyMaxLines: 5,
+                          bodyTextOverflow: TextOverflow.ellipsis,
+                          titleStyle: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                          bodyStyle:
+                              const TextStyle(color: Colors.grey, fontSize: 12),
+                          errorBody: '내용 미리보기가 없습니다.',
+                          errorTitle: '제목 미리보기가 없습니다.',
+                          errorWidget: Container(
+                            color: Colors.grey[300],
+                            child: Text('Oops!'),
+                          ),
+                          errorImage: "https://google.com/",
+                          cache: Duration(days: 7),
+                          backgroundColor: Colors.grey[300],
+                          borderRadius: 12,
+                          removeElevation: false,
+                          boxShadow: const [
+                            BoxShadow(blurRadius: 3, color: Colors.grey)
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
-                Text(
-                  '${post.author}#${post.uid.trim().substring(0, 5)}',
-                  style: const TextStyle(fontSize: 14, color: Colors.black),
-                ),
-                const Spacer(),
-                if (!(post.uid == context.read<UserProvider>().user!.uid))
-                  FlagButton(item: post),
-                const SizedBox(width: 4),
-                const Icon(
-                  IconlyBold.chat,
-                  color: Colors.green,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  post.commentCount.toString(),
-                  style: const TextStyle(fontSize: 14, color: Colors.green),
-                ),
+                if (post.type == 'image')
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: post.content!,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, error, stackTrace) {
+                        return const Icon(Icons.error);
+                      },
+                    ),
+                  ),
               ],
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(IconlyBold.chat,
+                        color: Colors.green, size: 16),
+                    label: Text(
+                      post.commentCount.toString(),
+                      style: const TextStyle(fontSize: 14, color: Colors.green),
+                    ),
+                  ),
+                ),
+                // if (!(post.uid == context.read<UserProvider>().user!.uid))
+                //   Expanded(
+                //     child: FlagButton(item: post),
+                //   ),
+              ],
+            ),
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+// timetable_view.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +14,9 @@ import 'package:uniberry/src/timetable/domain/entities/timetable.dart';
 import 'package:uniberry/src/timetable/presentation/cubit/timetable_cubit.dart';
 import 'package:uniberry/src/timetable/presentation/views/newViews/course_details_view.dart';
 import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_search_sheet.dart';
-
+import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_settings_sheet.dart';
 import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_update_list_sheet.dart';
 import 'package:uniberry/src/timetable/presentation/widgets/select_school_tile.dart';
-import 'package:uniberry/src/timetable/presentation/views/newViews/timetable_settings_sheet.dart';
 import 'package:uniberry/src/timetable/presentation/widgets/timetable_header_widget.dart';
 
 class TimetableView extends StatefulWidget {
@@ -91,63 +92,49 @@ class _TimetableViewState extends State<TimetableView> {
               currentTimetable = newTimetable;
             }
           },
-          child: TitleText(text: _currentTimetable.name),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.arrow_drop_down),
+              const SizedBox(width: 8),
+              TitleText(text: _currentTimetable.name),
+            ],
+          ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.save,
-              color: isEditted ? Colors.white : Colors.grey,
+          PopupMenuButton<int>(
+            icon: const Icon(Icons.more_vert),
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            onPressed: () async {
-              if (isEditted == true) {
-                await context.read<TimetableCubit>().updateTimetable(
-                      timetableId: currentTimetable.timetableId,
-                      timetable: currentTimetable,
-                    );
-                setState(() {
-                  isEditted = false;
-                });
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.school),
-            onPressed: () async {
-              final result = await showModalBottomSheet<String>(
-                context: context,
-                builder: (context) {
-                  return SelectSchoolTile(currentSchool: school);
-                },
-              );
-              if (result != null) {
-                school = result;
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () async {
-              final result = await showModalBottomSheet<SelectTermSheetParams>(
-                context: context,
-                builder: (context) {
-                  return TimetableSettingsSheet(
-                    params: SelectTermSheetParams(
-                      term: term,
-                      numOfPeriods: currentTimetable.numOfPeriods,
-                      numOfDays: currentTimetable.numOfDays,
-                    ),
-                  );
-                },
-              );
-              if (result != null) {
-                term = result.term;
-                currentTimetable = currentTimetable.copyWith(
-                  numOfDays: result.numOfDays,
-                  numOfPeriods: result.numOfPeriods,
-                );
-              }
-            },
+            onSelected: (item) => _onSelected(context, item),
+            itemBuilder: (context) => [
+              PopupMenuItem<int>(
+                value: 0,
+                child: ListTile(
+                  leading: Icon(Icons.save,
+                      color: isEditted ? Colors.black : Colors.grey),
+                  title: Text('時間割を保存',
+                      style: TextStyle(
+                          color: isEditted ? Colors.black : Colors.grey)),
+                ),
+              ),
+              const PopupMenuItem<int>(
+                value: 1,
+                child: ListTile(
+                  leading: Icon(Icons.school, color: Colors.black),
+                  title: Text('専攻を選択', style: TextStyle(color: Colors.black)),
+                ),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: ListTile(
+                  leading: Icon(Icons.settings, color: Colors.black),
+                  title: Text('保存', style: TextStyle(color: Colors.black)),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -185,8 +172,6 @@ class _TimetableViewState extends State<TimetableView> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        // _buildGradeStatusCard(),
-                        // const SizedBox(height: 300),
                       ],
                     );
                   } else if (state is TimetableLoading) {
@@ -202,8 +187,6 @@ class _TimetableViewState extends State<TimetableView> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        // _buildGradeStatusCard(),
-                        // const SizedBox(height: 300),
                       ],
                     );
                   }
@@ -214,6 +197,60 @@ class _TimetableViewState extends State<TimetableView> {
         ],
       ),
     );
+  }
+
+  void _onSelected(BuildContext context, int item) {
+    switch (item) {
+      case 0:
+        if (isEditted) {
+          context.read<TimetableCubit>().updateTimetable(
+                timetableId: currentTimetable.timetableId,
+                timetable: currentTimetable,
+              );
+          setState(() {
+            isEditted = false;
+          });
+        }
+        break;
+      case 1:
+        showModalBottomSheet<String>(
+          context: context,
+          builder: (context) {
+            return SelectSchoolTile(currentSchool: school);
+          },
+        ).then((result) {
+          if (result != null) {
+            setState(() {
+              school = result;
+            });
+          }
+        });
+        break;
+      case 2:
+        showModalBottomSheet<SelectTermSheetParams>(
+          context: context,
+          builder: (context) {
+            return TimetableSettingsSheet(
+              params: SelectTermSheetParams(
+                term: term,
+                numOfPeriods: currentTimetable.numOfPeriods,
+                numOfDays: currentTimetable.numOfDays,
+              ),
+            );
+          },
+        ).then((result) {
+          if (result != null) {
+            setState(() {
+              term = result.term;
+              currentTimetable = currentTimetable.copyWith(
+                numOfDays: result.numOfDays,
+                numOfPeriods: result.numOfPeriods,
+              );
+            });
+          }
+        });
+        break;
+    }
   }
 
   Widget _buildPeriodRow({
@@ -277,7 +314,7 @@ class _TimetableViewState extends State<TimetableView> {
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       color: course != null
-                          ? Color.fromARGB(255, 252, 120, 120)
+                          ? const Color.fromARGB(255, 252, 120, 120)
                           : Colors.white10,
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -349,36 +386,6 @@ class _TimetableViewState extends State<TimetableView> {
                 ),
               );
             },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGradeStatusCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-          ),
-        ],
-      ),
-      child: const Column(
-        children: [
-          Text(
-            '이수상황',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16),
-          Placeholder(
-            fallbackHeight: 200,
-            color: Colors.grey,
           ),
         ],
       ),

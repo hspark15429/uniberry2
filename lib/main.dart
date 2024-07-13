@@ -3,7 +3,6 @@ import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart'; // 로케일 초기화를 위한 import 추가
@@ -16,6 +15,7 @@ import 'package:uniberry/core/services/router.dart';
 import 'package:uniberry/firebase_options.dart';
 import 'package:uniberry/src/dashboard/presentation/providers/dashboard_controller.dart';
 import 'package:uniberry/src/forum/presentation/cubit/course_review_cubit.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,6 +72,32 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white, // 배경색을 흰색으로 설정
         ),
         onGenerateRoute: generateRoute,
+      ),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    // Firebase In-App Messaging 이벤트 트리거
+    FirebaseInAppMessaging.instance.triggerEvent('test_event');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Firebase In-App Messaging Demo'),
+      ),
+      body: const Center(
+        child: Text('Hello, Firebase In-App Messaging!'),
       ),
     );
   }

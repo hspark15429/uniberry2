@@ -102,11 +102,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               SignInScreen.routeName,
                             );
                           },
-                          child: const Text('既にアカウントをお持ちですか?'),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.login,
+                                size: 20,
+                              ),
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text('既にアカウントをお持ちですか?'),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 10),
+
                     SignUpForm(
                       emailController: emailController,
                       passwordController: passwordController,
@@ -122,7 +136,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: CircularProgressIndicator(),
                             )
                           : RoundedButton(
-                              label: '会員登録',
+                              label: '認証メールを送る',
                               onPressed: () {
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 if (formKey.currentState!.validate()) {
@@ -137,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               },
                             ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 30),
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
@@ -182,6 +196,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const TextSpan(
                             text: 'ポリシーに同意したことになります。',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10), // 필요한 경우 여백 추가
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: '5分が経過しても認証メールが届かない場合は、',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                        children: [
+                          const TextSpan(
+                            text: '恐れ入りますが、',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'こちら',
+                            style: const TextStyle(
+                              color: Colors.purple,
+                              fontSize: 14,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                CoreUtils.launchWebpage(
+                                  Uri.parse(kHelpWebUrl),
+                                );
+                              },
+                          ),
+                          const TextSpan(
+                            text: 'までご連絡ください。',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,

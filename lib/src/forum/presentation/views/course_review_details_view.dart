@@ -94,6 +94,7 @@ class _CourseReviewDetailsViewState extends State<CourseReviewDetailsView> {
                           '成績評価方法', widget.review.evaluationMethods.join(' ')),
                       _buildStarRatingRow(
                           '授業の満足度', widget.review.contentSatisfaction),
+                      // _buildDetailRow('授業形態', widget.review.atmosphere),
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

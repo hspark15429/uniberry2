@@ -9,7 +9,7 @@ class ForumAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const TitleText(text: 'Home'),
+      title: const TitleText(text: 'ホーム'),
       // backgroundColor: Colors.black, // AppBar 배경색을 검정색으로 설정
       actions: [
         IconButton(

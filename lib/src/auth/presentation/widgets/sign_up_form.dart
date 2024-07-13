@@ -41,20 +41,20 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: 25),
           IField(
-            controller: widget.emailController,
-            hintText: '大学のメールアドレス',
-            fillColour: Colors.grey.withOpacity(0.2),
-            prefixIcon: const Icon(Icons.mail_outline, color: Colors.black),
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'メールアドレスを入力してください';
-              } else if (!value.contains('@ed.ritsumei.ac.jp')) {
-                return '学校のメールアドレスである必要があります';
-              }
-              return null;
-            },
-          ),
+              controller: widget.emailController,
+              hintText: '大学のメールアドレス',
+              fillColour: Colors.grey.withOpacity(0.2),
+              prefixIcon: const Icon(Icons.mail_outline, color: Colors.black),
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'メールアドレスを入力してください';
+                } else if (!value.endsWith('@ed.ritsumei.ac.jp') &&
+                    !value.endsWith('@fc.ritsumei.ac.jp')) {
+                  return '有効な学校のメールアドレスを入力してください';
+                }
+                return null;
+              }),
           const SizedBox(height: 25),
           IField(
             controller: widget.passwordController,
