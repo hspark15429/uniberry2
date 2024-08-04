@@ -1,20 +1,29 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:dartz/dartz.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
-import 'package:uniberry2/src/forum/domain/usecases/create_post.dart';
-import 'package:uniberry2/src/forum/domain/usecases/delete_post.dart';
-import 'package:uniberry2/src/forum/domain/usecases/read_post.dart';
-import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
-import 'package:uniberry2/src/forum/domain/usecases/update_post.dart';
-import 'package:uniberry2/src/forum/presentation/cubit/post_cubit.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
+import 'package:uniberry/src/forum/domain/usecases/create_post.dart';
+import 'package:uniberry/src/forum/domain/usecases/create_post_with_image.dart';
+import 'package:uniberry/src/forum/domain/usecases/delete_post.dart';
+import 'package:uniberry/src/forum/domain/usecases/get_posts_by_user_id.dart';
+import 'package:uniberry/src/forum/domain/usecases/read_post.dart';
+import 'package:uniberry/src/forum/domain/usecases/read_posts.dart';
+import 'package:uniberry/src/forum/domain/usecases/search_posts.dart';
+import 'package:uniberry/src/forum/domain/usecases/search_posts_with_page_key.dart';
+import 'package:uniberry/src/forum/domain/usecases/update_post.dart';
+import 'package:uniberry/src/forum/presentation/cubit/post_cubit.dart';
 
 class MockCreatePost extends Mock implements CreatePost {}
 
+class MockCreatePostWithImage extends Mock implements CreatePostWithImage {}
+
 class MockReadPost extends Mock implements ReadPost {}
+
+class MockReadPosts extends Mock implements ReadPosts {}
+
+class MockGetPostsByUserId extends Mock implements GetPostsByUserId {}
 
 class MockUpdatePost extends Mock implements UpdatePost {}
 
@@ -22,28 +31,43 @@ class MockDeletePost extends Mock implements DeletePost {}
 
 class MockSearchPosts extends Mock implements SearchPosts {}
 
+class MockSearchPostsWithPageKey extends Mock
+    implements SearchPostsWithPageKey {}
+
 void main() {
   late CreatePost createPost;
+  late CreatePostWithImage createPostWithImage;
   late ReadPost readPost;
+  late ReadPosts readPosts;
+  late GetPostsByUserId getPostsByUserId;
   late UpdatePost updatePost;
   late DeletePost deletePost;
   late SearchPosts searchPosts;
+  late SearchPostsWithPageKey searchPostsWithPageKey;
   late PostCubit cubit;
 
   final tPost = PostModel.empty();
 
   setUp(() {
     createPost = MockCreatePost();
+    createPostWithImage = MockCreatePostWithImage();
     readPost = MockReadPost();
+    readPosts = MockReadPosts();
+    getPostsByUserId = MockGetPostsByUserId();
     updatePost = MockUpdatePost();
     deletePost = MockDeletePost();
     searchPosts = MockSearchPosts();
+    searchPostsWithPageKey = MockSearchPostsWithPageKey();
     cubit = PostCubit(
       updatePost: updatePost,
       createPost: createPost,
+      createPostWithImage: createPostWithImage,
       readPost: readPost,
+      readPosts: readPosts,
+      getPostsByUserId: getPostsByUserId,
       deletePost: deletePost,
       searchPosts: searchPosts,
+      searchPostsWithPageKey: searchPostsWithPageKey,
     );
     registerFallbackValue(PostModel.empty());
     registerFallbackValue(const UpdatePostParams.empty());
@@ -65,16 +89,11 @@ void main() {
             .thenAnswer((_) async => const Right(null));
         return cubit;
       },
-      act: (cubit) => cubit.createPost(
-        title: tPost.title,
-        content: tPost.content,
-        author: tPost.author,
-        updatedAt: tPost.updatedAt,
-        createdAt: tPost.createdAt,
-      ),
+      act: (cubit) => cubit.createPost(tPost),
       expect: () => [PostLoading(), PostCreated()],
       verify: (_) {
-        verify(() => createPost(tPost.copyWith(postId: ''))).called(1);
+        verify(() => createPost(tPost.copyWith(postId: '_empty.postId')))
+            .called(1);
         verifyNoMoreInteractions(createPost);
       },
     );

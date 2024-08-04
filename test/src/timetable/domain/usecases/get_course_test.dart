@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/errors/failures.dart';
-import 'package:uniberry2/src/timetable/domain/entities/course.dart';
-import 'package:uniberry2/src/timetable/domain/repository/timetable_repository.dart';
-import 'package:uniberry2/src/timetable/domain/usecases/get_course.dart';
+import 'package:uniberry/core/errors/failures.dart';
+import 'package:uniberry/src/timetable/domain/entities/course.dart';
+import 'package:uniberry/src/timetable/domain/repository/timetable_repository.dart';
+import 'package:uniberry/src/timetable/domain/usecases/get_course.dart';
 
 import 'timetable_repository.mock.dart';
 
@@ -18,8 +18,7 @@ void main() {
   });
 
   const tCourseCode = '';
-  final tFailure =
-      ServerFailure(message: 'message', statusCode: 'statusCode');
+  final tFailure = ServerFailure(message: 'message', statusCode: 'statusCode');
 
   test('should call [TimetableRepository.getCourse] and return [Course]',
       () async {

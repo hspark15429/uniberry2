@@ -1,14 +1,21 @@
 {
     "postId": "_empty.postId",
     "title": "_empty.title",
-    "content": "_empty.content",
+    "upvotes": [],
+    "downvotes": [],
+    "commentCount": 0,
     "author": "_empty.author",
+    "uid": "_empty.uid",
+    "type": "image",
     "createdAt": {
         "_seconds": 1677483548,
         "_nanoseconds": 123456000
-      },
-      "updatedAt": {
-        "_seconds": 1677483548,
-        "_nanoseconds": 123456000
-      }
+    },
+    "updatedAt": {
+      "_seconds": 1677483548,
+      "_nanoseconds": 123456000
+    },
+    "content": null,
+    "link": null,
+    "tags": []
 }

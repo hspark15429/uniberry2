@@ -1,5 +1,5 @@
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/timetable/domain/entities/course.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/timetable/domain/entities/course.dart';
 
 class CourseModel extends Course {
   const CourseModel({

@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/core/errors/exceptions.dart';
-import 'package:uniberry2/core/errors/failures.dart';
-import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
-import 'package:uniberry2/src/forum/data/repositories/post_repository_implementation.dart';
-import 'package:uniberry2/src/forum/domain/entities/post.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/core/errors/exceptions.dart';
+import 'package:uniberry/core/errors/failures.dart';
+import 'package:uniberry/src/forum/data/datasources/post_remote_data_source.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
+import 'package:uniberry/src/forum/data/repositories/post_repository_implementation.dart';
+import 'package:uniberry/src/forum/domain/entities/post.dart';
 
 class MockPostRemoteDataSource extends Mock implements PostRemoteDataSource {}
 

@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
-import 'package:uniberry2/src/forum/domain/usecases/search_posts.dart';
+import 'package:uniberry/src/forum/domain/repository/post_repository.dart';
+import 'package:uniberry/src/forum/domain/usecases/search_posts.dart';
 
-import 'post_repository.mock.dart';
+import 'repository.mock.dart';
 
 void main() {
   late PostRepository repo;

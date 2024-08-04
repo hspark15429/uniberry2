@@ -1,6 +1,6 @@
 {
-    "name": "uniberry2",
-    "short_name": "uniberry2",
+    "name": "uniberry",
+    "short_name": "uniberry",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

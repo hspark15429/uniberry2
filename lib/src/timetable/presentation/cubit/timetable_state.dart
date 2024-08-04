@@ -9,7 +9,9 @@ sealed class TimetableState extends Equatable {
 
 final class TimetableInitial extends TimetableState {}
 
-class TimetableLoading extends TimetableState {}
+class TimetableLoading extends TimetableState {
+  const TimetableLoading();
+}
 
 class CourseFetched extends TimetableState {
   const CourseFetched(this.course);
@@ -36,6 +38,36 @@ class CourseIdsSearched extends TimetableState {
 
   @override
   List<Object?> get props => [courseIds];
+}
+
+class TimetableCreated extends TimetableState {
+  const TimetableCreated();
+}
+
+class TimetableRead extends TimetableState {
+  const TimetableRead(this.timetable);
+
+  final Timetable timetable;
+
+  @override
+  List<Object?> get props => [timetable];
+}
+
+class TimetableUpdateCompleted extends TimetableState {
+  const TimetableUpdateCompleted();
+}
+
+class TimetableDeleted extends TimetableState {
+  const TimetableDeleted();
+}
+
+class TimetablesFetched extends TimetableState {
+  const TimetablesFetched(this.timetables);
+
+  final List<Timetable> timetables;
+
+  @override
+  List<Object?> get props => [timetables];
 }
 
 class TimetableError extends TimetableState {

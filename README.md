@@ -1,4 +1,4 @@
-# uniberry2
+# uniberry
 
 A new Flutter project.
 

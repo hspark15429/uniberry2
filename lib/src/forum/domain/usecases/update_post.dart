@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/core/usecases/usecases.dart';
-import 'package:uniberry2/core/utils/typedefs.dart';
-import 'package:uniberry2/src/forum/domain/repository/post_repository.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/core/usecases/usecases.dart';
+import 'package:uniberry/core/utils/typedefs.dart';
+import 'package:uniberry/src/forum/domain/repository/post_repository.dart';
 
 class UpdatePost implements UsecaseWithParams<void, UpdatePostParams> {
   const UpdatePost(this._repo);

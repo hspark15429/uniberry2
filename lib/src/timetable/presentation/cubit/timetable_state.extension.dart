@@ -1,9 +1,9 @@
 part of 'timetable_cubit.dart';
 
 class SchoolsLoaded extends TimetableState {
-  final List<String> schools;
 
   const SchoolsLoaded(this.schools);
+  final List<String> schools;
 
   @override
   List<Object?> get props => [schools];
@@ -11,9 +11,9 @@ class SchoolsLoaded extends TimetableState {
 
 // 전공선택
 class SchoolSelected extends TimetableState {
-  final String? selectedSchool;
 
   const SchoolSelected(this.selectedSchool);
+  final String? selectedSchool;
 
   @override
   List<Object?> get props => [selectedSchool];
@@ -21,13 +21,13 @@ class SchoolSelected extends TimetableState {
 
 // 학기변경
 class SemesterSelected extends TimetableState {
-  final String? selectedSchool;
-  final String semester;
 
   const SemesterSelected({
     required this.selectedSchool,
     required this.semester,
   });
+  final String? selectedSchool;
+  final String semester;
 
   @override
   List<Object?> get props => [selectedSchool, semester];
@@ -35,9 +35,9 @@ class SemesterSelected extends TimetableState {
 
 // 시간표 저장
 class CoursesUpdated extends TimetableState {
-  final Map<String, Course?> timetable;
 
   const CoursesUpdated(this.timetable);
+  final Map<String, Course?> timetable;
 
   @override
   List<Object?> get props => [timetable];
@@ -45,10 +45,6 @@ class CoursesUpdated extends TimetableState {
 
 // 새로운 상태 추가
 class TimetableUpdated extends TimetableState {
-  final int periods;
-  final bool includeSaturday;
-  final bool includeSunday;
-  final List<String> timetables;
 
   const TimetableUpdated({
     required this.periods,
@@ -56,6 +52,10 @@ class TimetableUpdated extends TimetableState {
     required this.includeSunday,
     required this.timetables,
   });
+  final int periods;
+  final bool includeSaturday;
+  final bool includeSunday;
+  final List<String> timetables;
 
   @override
   List<Object?> get props =>

@@ -22,6 +22,15 @@ class PostRead extends PostState {
   List<Object> get props => [post];
 }
 
+class PostsRead extends PostState {
+  const PostsRead(this.posts);
+
+  final List<Post> posts;
+
+  @override
+  List<Object> get props => [posts];
+}
+
 class PostUpdated extends PostState {}
 
 class PostDeleted extends PostState {}
@@ -33,6 +42,15 @@ class PostsSearched extends PostState {
 
   @override
   List<Object> get props => [postIds];
+}
+
+class PostsSearchedWithPagekey extends PostState {
+  const PostsSearchedWithPagekey(this.searchResult);
+
+  final SearchPostsWithPageKeyResult searchResult;
+
+  @override
+  List<Object> get props => [searchResult];
 }
 
 class PostError extends PostState {

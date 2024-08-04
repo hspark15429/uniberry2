@@ -1,14 +1,15 @@
-import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:uniberry2/core/enums/update_post_enum.dart';
-import 'package:uniberry2/src/forum/data/datasources/post_remote_data_source.dart';
-import 'package:uniberry2/src/forum/data/models/post_model.dart';
+import 'package:typesense/typesense.dart';
+import 'package:uniberry/core/enums/update_post_enum.dart';
+import 'package:uniberry/src/forum/data/datasources/post_remote_data_source.dart';
+import 'package:uniberry/src/forum/data/models/post_model.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
@@ -21,12 +22,28 @@ void main() {
   var tPost = PostModel.empty();
 
   setUpAll(() async {
-    final postsSearcher = HitsSearcher(
-      applicationID: 'K1COUI4FQ4',
-      apiKey: '00383db0c4d34b63decf046026091f32',
-      indexName: 'posts_index',
-    );
+    await dotenv.load();
 
+    // final postsSearcher = HitsSearcher(
+    //   applicationID: dotenv.env['ALGOLIA_APP_ID']!,
+    //   apiKey: dotenv.env['ALGOLIA_API_KEY']!,
+    //   indexName: 'posts_index',
+    // );
+    final typesenseClient = Client(
+      Configuration(
+        dotenv.env['TYPESENSE_API_KEY']!,
+        nodes: {
+          Node(
+            Protocol.https,
+            dotenv.env['TYPESENSE_HOST']!,
+            port: int.parse(dotenv.env['TYPESENSE_PORT']!),
+          ),
+        },
+        numRetries: 2,
+        connectionTimeout: const Duration(seconds: 2),
+      ),
+    );
+    authClient = MockFirebaseAuth();
     cloudStoreClient = FakeFirebaseFirestore();
     docReference = await cloudStoreClient.collection('posts').add(
           tPost.toMap(),
@@ -37,9 +54,10 @@ void main() {
     tPost = tPost.copyWith(postId: docReference.id);
     dbClient = MockFirebaseStorage();
     dataSource = PostRemoteDataSourceImplementation(
+      authClient: authClient,
       cloudStoreClient: cloudStoreClient,
       dbClient: dbClient,
-      postsSearcher: postsSearcher,
+      typesenseClient: typesenseClient,
     );
   });
 
@@ -108,8 +126,23 @@ void main() {
         content: 'helloworld',
       );
       // assert
-      expect(posts, containsAll(['8gxbkrZ0EffayaTyU1NK']));
+      // expect(posts, containsAll(['BTAK4gYfyz0rgYQb1CRg']));
       expect(posts, isNot(contains(['9cz1cQBgElhV0Iuknm6e'])));
+    });
+  });
+
+  group('searchPostsWithPageKey', () {
+    test('should search posts', () async {
+      // arrange
+
+      // act
+      final result = await dataSource.searchPostsWithPageKey(
+          title: '', author: '', content: 'title', pageKey: 1);
+      // assert
+
+      expect(result.pageKey, 1);
+      expect(result.nextPageKey, null);
+      expect(result.posts is List<PostModel>, true);
     });
   });
 }

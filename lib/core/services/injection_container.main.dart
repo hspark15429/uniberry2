@@ -3,8 +3,46 @@ part of 'injection_container.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+  await initAuthentication();
   await initTimetable();
   await initForum();
+  await initComment();
+  await initCourseReview(); // 추가된 부분
+}
+
+Future<void> initComment() async {
+  // cubit
+  sl
+    ..registerFactory(
+      () => CommentCubit(
+        createComment: sl(),
+        getCommentsByPostId: sl(),
+        getCommentsByUserId: sl(),
+        getCommentsByParentCommentId: sl(),
+        updateComment: sl(),
+        deleteComment: sl(),
+      ),
+    )
+    // usecases
+    ..registerLazySingleton(() => CreateComment(sl()))
+    ..registerLazySingleton(() => GetCommentsByPostId(sl()))
+    ..registerLazySingleton(() => GetCommentsByUserId(sl()))
+    ..registerLazySingleton(() => GetCommentsByParentCommentId(sl()))
+    ..registerLazySingleton(() => UpdateComment(sl()))
+    ..registerLazySingleton(() => DeleteComment(sl()))
+    // repo impl
+    ..registerLazySingleton<CommentRepository>(
+      () => CommentRepositoryImplementation(sl()),
+    )
+    // datasource impl
+    ..registerLazySingleton<CommentRemoteDataSource>(
+      () => CommentRemoteDataSourceImplementation(
+        cloudStoreClient: sl(),
+        dbClient: sl(),
+      ),
+    );
 }
 
 Future<void> initTimetable() async {
@@ -13,30 +51,49 @@ Future<void> initTimetable() async {
     ..registerFactory(
       () => TimetableCubit(
         getCourse: sl(),
-        searchCourses: sl(instanceName: 'coursesSearcher'),
+        searchCourses: sl(),
+        createTimetable: sl(),
+        readTimetable: sl(),
+        updateTimetable: sl(),
+        deleteTimetable: sl(),
       ),
     )
     // usecases
     ..registerLazySingleton(() => GetCourse(sl()))
     ..registerLazySingleton(() => SearchCourses(sl()))
+    ..registerLazySingleton(() => CreateTimetable(sl()))
+    ..registerLazySingleton(() => ReadTimetable(sl()))
+    ..registerLazySingleton(() => UpdateTimetable(sl()))
+    ..registerLazySingleton(() => DeleteTimetable(sl()))
     // repo impl
     ..registerLazySingleton<TimetableRepository>(
       () => TimetableRepositoryImplementation(sl()),
     )
-
     // data source impl
     ..registerLazySingleton<TimetableRemoteDataSource>(
-      () =>
-          TimetableRemoteDataSourceImplementationAlgolia(coursesSearcher: sl()),
+      () => TimetableRemoteDataSourceImplementationTypesense(
+        typesenseClient: sl(),
+        authClient: sl(),
+        cloudStoreClient: sl(),
+        dbClient: sl(),
+      ),
     )
     // external
-    ..registerLazySingleton(
-      () => HitsSearcher(
-        applicationID: 'K1COUI4FQ4',
-        apiKey: '00383db0c4d34b63decf046026091f32',
-        indexName: 'courses_index',
+    ..registerLazySingleton<Client>(
+      () => Client(
+        Configuration(
+          dotenv.env['TYPESENSE_API_KEY']!,
+          nodes: {
+            Node(
+              Protocol.https,
+              dotenv.env['TYPESENSE_HOST']!,
+              port: int.parse(dotenv.env['TYPESENSE_PORT']!),
+            ),
+          },
+          numRetries: 2,
+          connectionTimeout: const Duration(seconds: 2),
+        ),
       ),
-      instanceName: 'coursesSearcher',
     );
 }
 
@@ -46,18 +103,26 @@ Future<void> initForum() async {
     ..registerFactory(
       () => PostCubit(
         createPost: sl(),
+        createPostWithImage: sl(),
         readPost: sl(),
+        readPosts: sl(),
+        getPostsByUserId: sl(),
         updatePost: sl(),
         deletePost: sl(),
         searchPosts: sl(),
+        searchPostsWithPageKey: sl(),
       ),
     )
     // usecases
     ..registerLazySingleton(() => CreatePost(sl()))
+    ..registerLazySingleton(() => CreatePostWithImage(sl()))
     ..registerLazySingleton(() => ReadPost(sl()))
+    ..registerLazySingleton(() => ReadPosts(sl()))
+    ..registerLazySingleton(() => GetPostsByUserId(sl()))
     ..registerLazySingleton(() => UpdatePost(sl()))
     ..registerLazySingleton(() => DeletePost(sl()))
     ..registerLazySingleton(() => SearchPosts(sl()))
+    ..registerLazySingleton(() => SearchPostsWithPageKey(sl()))
     // repo impl
     ..registerLazySingleton<PostRepository>(
       () => PostRepositoryImplementation(sl()),
@@ -65,21 +130,84 @@ Future<void> initForum() async {
     // datasource impl
     ..registerLazySingleton<PostRemoteDataSource>(
       () => PostRemoteDataSourceImplementation(
+        authClient: sl(),
         cloudStoreClient: sl(),
         dbClient: sl(),
-        postsSearcher: sl(instanceName: 'postsSearcher'),
+        typesenseClient: sl(),
+      ),
+    );
+}
+
+Future<void> initAuthentication() async {
+  // cubit
+  sl
+    ..registerFactory(
+      () => AuthenticationCubit(
+        forgotPassword: sl(),
+        signIn: sl(),
+        signUp: sl(),
+        updateUser: sl(),
       ),
     )
-    // external
+    // usecases
+    ..registerLazySingleton(() => SignIn(sl()))
+    ..registerLazySingleton(() => SignUp(sl()))
+    ..registerLazySingleton(() => ForgotPassword(sl()))
+    ..registerLazySingleton(() => UpdateUser(sl()))
+    // repo impl
+    ..registerLazySingleton<AuthenticationRepository>(
+      () => AuthenticationRepositoryImplementation(sl()),
+    )
+    // data source impl
+    ..registerLazySingleton<AuthenticationRemoteDataSource>(
+      () => AuthenticationRemoteDataSourceImplementation(
+        authClient: sl(),
+        cloudStoreClient: sl(),
+        dbClient: sl(),
+      ),
+    )
     ..registerLazySingleton(() => FirebaseAuth.instance)
     ..registerLazySingleton(() => FirebaseFirestore.instance)
-    ..registerLazySingleton(() => FirebaseStorage.instance)
-    // external
-    ..registerLazySingleton(
-        () => HitsSearcher(
-              applicationID: 'K1COUI4FQ4',
-              apiKey: '00383db0c4d34b63decf046026091f32',
-              indexName: 'posts_index',
-            ),
-        instanceName: 'postsSearcher');
+    ..registerLazySingleton(() => FirebaseStorage.instance);
+}
+
+Future<void> initCourseReview() async {
+  // cubit
+  sl
+    ..registerFactory(
+      () => CourseReviewCubit(
+        createCourseReview: sl(),
+        readCourseReview: sl(),
+        readCourseReviews: sl(),
+        getCourseReviewsByUserId: sl(),
+        getCourseReviewsAll: sl(),
+        updateCourseReview: sl(),
+        deleteCourseReview: sl(),
+        searchCourseReviews: sl(),
+        searchCourseReviewsWithPageKey: sl(),
+      ),
+    )
+    // usecases
+    ..registerLazySingleton(() => CreateCourseReview(sl()))
+    ..registerLazySingleton(() => ReadCourseReview(sl()))
+    ..registerLazySingleton(() => ReadCourseReviews(sl()))
+    ..registerLazySingleton(() => GetCourseReviewsByUserId(sl()))
+    ..registerLazySingleton(() => GetCourseReviewsAll(sl()))
+    ..registerLazySingleton(() => UpdateCourseReview(sl()))
+    ..registerLazySingleton(() => DeleteCourseReview(sl()))
+    ..registerLazySingleton(() => SearchCourseReviews(sl()))
+    ..registerLazySingleton(() => SearchCourseReviewsWithPageKey(sl()))
+    // repo impl
+    ..registerLazySingleton<CourseReviewRepository>(
+      () => CourseReviewRepositoryImplementation(sl()),
+    )
+    // datasource impl
+    ..registerLazySingleton<CourseReviewRemoteDataSource>(
+      () => CourseReviewRemoteDataSourceImplementation(
+        cloudStoreClient: sl(),
+        dbClient: sl(),
+        authClient: sl(),
+        typesenseClient: sl(),
+      ),
+    );
 }

@@ -1,0 +1,10 @@
+{
+    "timetableId" : "_empty.timetableId",
+    "uid" : "_empty.uid",
+    "name" : "_empty.name",
+    "timetableMap" : {
+        "monday.period1" : "_empty.courseId"
+    },
+    "numOfDays" : 5,
+    "numOfPeriods" : 7
+}
