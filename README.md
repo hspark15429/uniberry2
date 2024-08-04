@@ -1,16 +1,46 @@
-# uniberry
 
-A new Flutter project.
+<img src="https://github.com/hspark15429/uniberry/blob/main/assets/icon.png" width="300">
 
-## Getting Started
+[Website](https://www.uniberry.site)
 
-This project is a starting point for a Flutter application.
+[![Install](assets/appstoredownload.svg)](https://apps.apple.com/jp/app/uniberry/id6456405384)
+[![Install](assets/playstoredownload.png)](https://play.google.com/store/apps/details?id=com.uniberry.gtk_flutter)
 
-A few resources to get you started if this is your first Flutter project:
+# Uniberry
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This university student assistant app that incorporates the school's knowledgebase and student-generated contents to provide a comprehensive set of tools such as AI-based targeted chatbots, community forums, AI personal assistant and more to come. Make your school life easier and faster with Uniberry.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Tech Stack
+
+**Front-End:** Flutter
+
+**Back-End:** Python, Firebase
+
+
+## Contributing
+
+Contributions are always welcome!
+
+`Uniberry` welcomes fixes, improvements, and feature additions. If you'd like to contribute, open a pull request with a detailed description of your changes.
+
+Please adhere to this project's `code of conduct`.
+
+
+## Authors
+
+- [@hspark15429](https://github.com/hspark15429)
+- [@sixantsroom4](https://github.com/sixantsroom4)
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Features
+
+- Light/dark mode toggle
+- Fullscreen mode
+- Cross platform
+
