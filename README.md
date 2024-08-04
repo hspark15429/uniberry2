@@ -3,8 +3,7 @@
 
 [Website](https://www.uniberry.site)
 
-[![Install](assets/appstoredownload.svg)](https://apps.apple.com/jp/app/uniberry/id6456405384)
-[![Install](assets/playstoredownload.png)](https://play.google.com/store/apps/details?id=com.uniberry.gtk_flutter)
+[App Store](https://apps.apple.com/jp/app/uniberry/id6456405384)
 
 # Uniberry
 
@@ -15,7 +14,7 @@ This university student assistant app that incorporates the school's knowledgeba
 
 **Front-End:** Flutter
 
-**Back-End:** Python, Firebase
+**Back-End:** Dart, Python, Firebase, Typesense, Cloud Functions, Python Playwright
 
 
 ## Contributing
